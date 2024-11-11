@@ -1,0 +1,16 @@
+from pathlib import Path
+from typing import Protocol, Self
+
+from pbs_parse.snippets.indexed_string.model import IndexedStringTD
+
+
+class IndexedStringProtocol(Protocol):
+    @property
+    def idx(self) -> int: ...
+    @property
+    def txt(self) -> str: ...
+    @classmethod
+    def from_dict(cls, data: IndexedStringTD) -> Self: ...
+    @classmethod
+    def from_file(cls, file_path: Path) -> Self: ...
+    def to_file(self, path_out: Path, overwrite: bool, indent: int = 1): ...

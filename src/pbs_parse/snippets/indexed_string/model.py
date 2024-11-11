@@ -1,7 +1,7 @@
 import json
 from dataclasses import asdict, dataclass
 from pathlib import Path
-from typing import Protocol, Self, Tuple, TypedDict
+from typing import Self, Tuple, TypedDict
 
 from pbs_parse.snippets.file.validate_file_out import validate_file_out
 
@@ -59,8 +59,3 @@ class IndexedStrings:
     def to_file(self, path_out: Path, overwrite: bool, indent: int = 1):
         validate_file_out(path_out, overwrite=overwrite, ensure_parent=True)
         path_out.write_text(json.dumps(asdict(self), indent=indent))
-
-
-class IndexedStringProtocol(Protocol):
-    idx: int
-    txt: str
