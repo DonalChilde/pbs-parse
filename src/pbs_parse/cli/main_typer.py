@@ -1,13 +1,10 @@
 """Command-line interface."""
 
-from hashlib import md5
 from pathlib import Path
 from time import perf_counter_ns
 from typing import Annotated
 
 import typer
-
-from pbs_parse.snippets.hash.file_hash import hash_file
 
 
 def default_options(
@@ -28,11 +25,10 @@ app = typer.Typer(callback=default_options)
 
 
 @app.command()
-def hash_md5(
+def hello(
     ctx: typer.Context, path_in: Annotated[Path, typer.Argument(help="file to hash.")]
 ):
-    hashcode = hash_file(path_in, md5())
-    typer.echo(f"{hashcode}  {path_in.name}")
+    typer.echo(f"hello  {path_in.name}")
 
 
 if __name__ == "__main__":
