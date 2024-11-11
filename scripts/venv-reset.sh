@@ -16,4 +16,4 @@ python3 -m venv ./.venv
 # export PIP_REQUIRE_VIRTUALENV=true
 ./.venv/bin/pip install -U pip wheel
 # Install project dependencies
-./.venv/bin/pip install -e .[dev,lint,doc,vscode,testing]
+./.venv/bin/pip install -e .[dev,doc,vscode,testing]
