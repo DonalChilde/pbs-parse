@@ -1,12 +1,41 @@
 from pathlib import Path
 from types import TracebackType
-from typing import Optional, Type
+from typing import Optional, Self, Type
 
 from pbs_parse.snippets.indexed_string.state_parser.model import ParseResults
 from pbs_parse.snippets.indexed_string.state_parser.protocols import (
     ParseContextProtocol,
     ParseResultProtocol,
 )
+
+
+class CollectResults:
+    def __init__(self) -> None:
+        self.results: ParseResults = ParseResults()
+
+    def __enter__(self) -> Self:
+        return self
+
+    def __exit__(
+        self,
+        exc_type: Optional[Type[BaseException]],
+        exc_value: Optional[BaseException],
+        traceback: Optional[TracebackType],
+    ) -> Optional[bool]:
+        pass
+
+    def handle_result(
+        self,
+        ctx: ParseContextProtocol,
+        parse_result: ParseResultProtocol,
+    ) -> None:
+        """
+        Handle the result of a successful parse.
+
+        Args:
+            parse_result: The result of a successful parse.
+        """
+        self.results.results.append(parse_result)
 
 
 class SaveResultsToFile:
@@ -20,7 +49,8 @@ class SaveResultsToFile:
         self.results: ParseResults = ParseResults()
         self.overwrite = overwrite
 
-    def __enter__(self) -> None: ...
+    def __enter__(self) -> Self:
+        return self
 
     def __exit__(
         self,

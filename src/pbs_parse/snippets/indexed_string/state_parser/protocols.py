@@ -7,7 +7,7 @@ parsers based on the results of the previous successfully parsed string.
 """
 
 from types import TracebackType
-from typing import Iterable, Optional, Protocol, Sequence, Type
+from typing import Any, Iterable, Optional, Protocol, Self, Sequence, Type
 
 from pbs_parse.snippets.indexed_string.protocols import IndexedStringProtocol
 
@@ -15,7 +15,7 @@ from pbs_parse.snippets.indexed_string.protocols import IndexedStringProtocol
 class ParsedIndexedStringProtocol(Protocol):
     id: str
     indexed_string: IndexedStringProtocol
-    data: dict[str, str]
+    data: dict[str, Any]
 
 
 class ParseResultProtocol(Protocol):
@@ -30,8 +30,10 @@ class ParseContextProtocol(Protocol):
 class IndexedStringParserProtocol(Protocol):
     """Parse an IndexedString."""
 
+    state: str
+
     def parse(
-        self, ctx: ParseContextProtocol, data: IndexedStringProtocol
+        self, ctx: ParseContextProtocol, input: IndexedStringProtocol
     ) -> ParseResultProtocol:
         """
         A parse function that matches an IndexedString.
@@ -60,7 +62,7 @@ class ResultHandlerProtocol(Protocol):
     Use as a context manager allows setup and trear down of assets if needed.
     """
 
-    def __enter__(self) -> None: ...
+    def __enter__(self) -> Self: ...
 
     def __exit__(
         self,

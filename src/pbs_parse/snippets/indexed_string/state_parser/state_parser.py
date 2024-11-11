@@ -49,8 +49,9 @@ class StateParser:
         Raises:
             error: Signals a failure of the overall parse job.
         """
-        for result in self._parse_indexed_strings(ctx=ctx, data=data):
-            self.result_handler.handle_result(ctx=ctx, parse_result=result)
+        with self.result_handler as handler:
+            for result in self._parse_indexed_strings(ctx=ctx, data=data):
+                handler.handle_result(ctx=ctx, parse_result=result)
 
     def _parse_indexed_strings(
         self, ctx: ParseContextProtocol, data: Iterable[IndexedStringProtocol]
@@ -113,7 +114,7 @@ class StateParser:
         """
         for parser in parsers:
             try:
-                parse_result = parser.parse(data=indexed_string, ctx=ctx)
+                parse_result = parser.parse(input=indexed_string, ctx=ctx)
                 ctx.current_state = parse_result.current_state
                 return parse_result
             except SingleParserFail as error:
