@@ -23,5 +23,5 @@
   "editor.quickSuggestions": {
     "comments": "on"
   },
-  "python.analysis.typeCheckingMode": "basic"
+  "python.analysis.typeCheckingMode": "strict"
 }
