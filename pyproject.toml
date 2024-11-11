@@ -1,5 +1,5 @@
 [build-system]
-requires = ["flit_core >=3.4,<4"]
+requires = ["flit_core >=3.10,<4"]
 build-backend = "flit_core.buildapi"
 
 [project]
@@ -14,12 +14,10 @@ classifiers = [
     "License :: OSI Approved :: MIT License",
 
 ]
-authors = [
-    { name = "Chad Lowe", email = "pfmsoft.dev@gmail.com" },
-]
+authors = [{ name = "Chad Lowe", email = "pfmsoft.dev@gmail.com" }]
 name = "pbs-parse"
 readme = "README.md"
-requires-python = ">=3.11"
+requires-python = ">=3.13"
 license = { file = "LICENSE" }
 dynamic = ["version", "description"]
 # https://chrisholdgraf.com/blog/2022/install-github-from-pyproject/
@@ -28,7 +26,7 @@ dynamic = ["version", "description"]
 dependencies = ["typer"]
 
 [project.scripts]
-pbs-parse_typer = "pbs_parse.cli.main_typer:app"
+pbs-parse = "pbs_parse.cli.main_typer:app"
 
 [project.urls]
 Documentation = "https://github.com/DonalChilde/pbs-parse#readme"
@@ -45,14 +43,13 @@ dev = [
     "pre-commit",
 
     # Linting and Formatting
-    "black",
-    "isort",
+    "ruff",
+    "mypy",
 
     # Tools
     "pysnooper",
     "scriv",
 ]
-lint = ["pylint", "mypy"]
 doc = [
     # Documentation
     "Sphinx",
@@ -65,14 +62,18 @@ doc = [
 vscode = ["esbonio", "rst2html", "rstcheck"]
 testing = ["pytest", "coverage[toml]", "pytest-cov"]
 
+[tool.ruff]
+target-version = "py313"
 
-[tool.isort]
-profile = "black"
-src_paths = ["src", "test"]
+[tool.ruff.format]
+docstring-code-format = true
+# [tool.isort]
+# profile = "black"
+# src_paths = ["src", "test"]
 
-[tool.black]
-line-length = 88
-target-version = ['py313']
+# [tool.black]
+# line-length = 88
+# target-version = ['py313']
 
 # https://pylint.pycqa.org/en/latest/user_guide/usage/run.html#command-line-options
 # https://pylint.pycqa.org/en/latest/user_guide/configuration/all-options.html#standard-checkers
@@ -89,9 +90,9 @@ target-version = ['py313']
 #     "use-symbolic-message-instead"
 # ]
 
-[tool.pylint.format]
-# for black compatability
-max-line-length = "95"
+# [tool.pylint.format]
+# # for black compatability
+# max-line-length = "95"
 
 [tool.pytest.ini_options]
 pythonpath = "src"
