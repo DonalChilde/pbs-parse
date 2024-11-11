@@ -3,7 +3,23 @@ from pathlib import Path
 import pytest
 from typer.testing import CliRunner
 
-# Add an option to mark slow tests, so that they don't run every time.
+
+@pytest.fixture
+def runner() -> CliRunner:
+    """Fixture for invoking command-line interfaces."""
+    return CliRunner()
+
+
+@pytest.fixture(scope="session", name="test_output_dir")
+def test_output_dir_(tmp_path_factory) -> Path:
+    """make a temp directory for output data."""
+    test_app_data_dir = tmp_path_factory.mktemp("pdf2txt")
+    return test_app_data_dir
+
+
+########################################################################
+# Add an option to mark slow tests, so that they don't run every time. #
+########################################################################
 
 
 def pytest_addoption(parser):
@@ -26,10 +42,3 @@ def pytest_collection_modifyitems(config, items):
     for item in items:
         if "slow" in item.keywords:
             item.add_marker(skip_slow)
-
-
-@pytest.fixture(scope="session", name="test_output_dir")
-def test_output_dir_(tmp_path_factory) -> Path:
-    """make a temp directory for output data."""
-    test_app_data_dir = tmp_path_factory.mktemp("pdf2txt")
-    return test_app_data_dir
