@@ -67,32 +67,6 @@ target-version = "py313"
 
 [tool.ruff.format]
 docstring-code-format = true
-# [tool.isort]
-# profile = "black"
-# src_paths = ["src", "test"]
-
-# [tool.black]
-# line-length = 88
-# target-version = ['py313']
-
-# https://pylint.pycqa.org/en/latest/user_guide/usage/run.html#command-line-options
-# https://pylint.pycqa.org/en/latest/user_guide/configuration/all-options.html#standard-checkers
-# pylint --generate-toml-config > ./pylint-toml-example.toml
-# [tool.pylint.messages_control]
-# disable = [
-#     "raw-checker-failed",
-#     "bad-inline-option",
-#     "locally-disabled",
-#     "file-ignored",
-#     "suppressed-message",
-#     "useless-suppression",
-#     "deprecated-pragma",
-#     "use-symbolic-message-instead"
-# ]
-
-# [tool.pylint.format]
-# # for black compatability
-# max-line-length = "95"
 
 [tool.pytest.ini_options]
 pythonpath = "src"

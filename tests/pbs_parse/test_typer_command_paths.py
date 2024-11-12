@@ -1,10 +1,13 @@
 """Test cases for the console module."""
 
+import logging
+
 import pytest
 from typer.testing import CliRunner
 
 from pbs_parse.cli.main_typer import app
 
+logger = logging.getLogger(__name__)
 DATA_FILE_NAME = "ipsum_1.txt"
 DATA_FILE_PATH = "files_1"
 DATA_FILE_ANCHOR = f"{DATA_FILE_PATH}/{DATA_FILE_NAME}"
