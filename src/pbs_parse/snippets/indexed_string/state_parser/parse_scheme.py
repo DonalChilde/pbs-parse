@@ -9,8 +9,8 @@ from pbs_parse.snippets.indexed_string.state_parser.protocols import (
 class ParseScheme:
     def __init__(
         self,
-        beginning_state: str,
         parser_lookup: dict[str, Sequence[IndexedStringParserProtocol]],
+        beginning_state: str = "start",
     ) -> None:
         self.beginning_state = beginning_state
         self.parser_lookup = parser_lookup
