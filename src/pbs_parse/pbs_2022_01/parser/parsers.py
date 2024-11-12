@@ -198,6 +198,7 @@ class PriorMonthDeadhead(ParserABC):
 class DutyPeriodReport(PyparsingParser):
     def __init__(self, state: str) -> None:
         super().__init__(state)
+        self.p_parser = grammar.DutyPeriodReport
 
     def parse(
         self, ctx: ParseContextProtocol, input: IndexedStringProtocol
