@@ -1,14 +1,13 @@
 import json
 from dataclasses import asdict, dataclass, field
 from pathlib import Path
-from typing import Any, Self, Sequence, TypedDict
+from typing import Any, Self, TypedDict
 
 from pbs_parse.snippets.file.validate_file_out import validate_file_out
 from pbs_parse.snippets.indexed_string.model import IndexedString, IndexedStringTD
 from pbs_parse.snippets.indexed_string.protocols import IndexedStringProtocol
 from pbs_parse.snippets.indexed_string.state_parser.protocols import (
     ParsedIndexedStringProtocol,
-    ParseResultProtocol,
 )
 
 
@@ -58,7 +57,7 @@ class ParsedIndexedString:
 
 @dataclass
 class ParsedIndexedStrings:
-    parsed_strings: Sequence[ParsedIndexedString] = field(default_factory=list)
+    parsed_strings: list[ParsedIndexedString] = field(default_factory=list)
 
     def to_file(self, path_out: Path, overwrite: bool, indent: int = 1):
         validate_file_out(path_out, overwrite=overwrite, ensure_parent=True)
@@ -105,7 +104,7 @@ class ParseResult:
 
 @dataclass
 class ParseResults:
-    results: Sequence[ParseResultProtocol] = field(default_factory=list)
+    results: list[ParseResult] = field(default_factory=list)
 
     def to_file(self, path_out: Path, overwrite: bool, indent: int = 1):
         validate_file_out(path_out, overwrite=overwrite, ensure_parent=True)
@@ -125,3 +124,7 @@ class ParseResults:
         return cls(
             results=parse_results,
         )
+
+    def data(self) -> ParsedIndexedStrings:
+        parsed = [x.result for x in self.results]
+        return ParsedIndexedStrings(parsed_strings=parsed)  # type: ignore
