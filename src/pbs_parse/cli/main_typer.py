@@ -1,10 +1,11 @@
 """Command-line interface."""
 
-from pathlib import Path
 from time import perf_counter_ns
 from typing import Annotated
 
 import typer
+
+from pbs_parse.cli import parse_trips_cli
 
 
 def default_options(
@@ -22,13 +23,7 @@ def default_options(
 
 
 app = typer.Typer(callback=default_options)
-
-
-@app.command()
-def hello(
-    ctx: typer.Context, path_in: Annotated[Path, typer.Argument(help="file to hash.")]
-):
-    typer.echo(f"hello  {path_in.name}")
+app.add_typer(parse_trips_cli.app, name="parse")
 
 
 if __name__ == "__main__":
