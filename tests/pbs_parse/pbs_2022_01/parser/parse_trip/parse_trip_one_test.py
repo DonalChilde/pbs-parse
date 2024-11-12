@@ -1,5 +1,4 @@
 from importlib import resources
-from logging import Logger
 from pathlib import Path
 
 import pytest
@@ -31,9 +30,7 @@ PARSE_ONLY = False
 
 
 @pytest.mark.parametrize("parse_trips_one", items)
-def test_parse_trips(
-    logger: Logger, test_output_dir: Path, parse_trips_one: ParseTripTest
-):
+def test_parse_trips(test_output_dir: Path, parse_trips_one: ParseTripTest):
     indexed_file = resources.files(parse_trips_one.indexed_anchor).joinpath(
         parse_trips_one.indexed_filename
     )

@@ -89,7 +89,7 @@ items = [
 
 
 @pytest.mark.parametrize("test_data", items)
-def test_parser(logger: logging.Logger, test_data: ParserTest):
+def test_parser(test_data: ParserTest):
     ctx = ParseContext()
     parse_result = parser.parse(ctx=ctx, input=test_data.input)
     logger.info(f"{parse_result!r}")
