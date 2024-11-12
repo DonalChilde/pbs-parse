@@ -1,0 +1,418 @@
+{
+ "results": [
+  {
+   "current_state": "page_header_1",
+   "result": {
+    "id": "page_header_1",
+    "indexed_string": {
+     "idx": 2112,
+     "txt": "\f   DAY          \u2212\u2212DEPARTURE\u2212\u2212    \u2212\u2212\u2212ARRIVAL\u2212\u2212\u2212                GRND/        REST/\n"
+    },
+    "data": {}
+   }
+  },
+  {
+   "current_state": "page_header_2",
+   "result": {
+    "id": "page_header_2",
+    "indexed_string": {
+     "idx": 2113,
+     "txt": "DP D/A EQ FLT#  STA DLCL/DHBT ML STA ALCL/AHBT  BLOCK  SYNTH   TPAY   DUTY  TAFB   FDP CALENDAR 11/01\u221212/01\n"
+    },
+    "data": {
+     "from_date": [
+      "11",
+      "/",
+      "01"
+     ],
+     "to_date": [
+      "12",
+      "/",
+      "01"
+     ]
+    }
+   }
+  },
+  {
+   "current_state": "trip_header",
+   "result": {
+    "id": "trip_header",
+    "indexed_string": {
+     "idx": 2144,
+     "txt": "SEQ 345     1 OPS   POSN CA FO                                                         MO TU WE TH FR SA SU \n"
+    },
+    "data": {
+     "number": "345",
+     "ops_count": "1",
+     "positions": [
+      "CA",
+      "FO"
+     ],
+     "operations": [],
+     "qualifications": []
+    }
+   }
+  },
+  {
+   "current_state": "duty_period_report",
+   "result": {
+    "id": "duty_period_report",
+    "indexed_string": {
+     "idx": 2145,
+     "txt": "                RPT 1535/1535                                                                      \u2212\u2212 \u2212\u2212 \u2212\u2212 \n"
+    },
+    "data": {
+     "report": "1535/1535",
+     "calendar_entries": [
+      "\u2212\u2212",
+      "\u2212\u2212",
+      "\u2212\u2212"
+     ]
+    }
+   }
+  },
+  {
+   "current_state": "flight",
+   "result": {
+    "id": "flight",
+    "indexed_string": {
+     "idx": 2146,
+     "txt": "1  1/1 82 1489  DFW 1635/1635  D MIA 2010/1910   2.35                                  \u2212\u2212 \u2212\u2212 \u2212\u2212 \u2212\u2212 \u2212\u2212 \u2212\u2212 \u2212\u2212 \n"
+    },
+    "data": {
+     "dutyperiod": "1",
+     "day_of_sequence": "1/1",
+     "equipment_code": "82",
+     "flight_number": "1489",
+     "departure_station": "DFW",
+     "departure_time": "1635/1635",
+     "crew_meal": "D",
+     "arrival_station": "MIA",
+     "arrival_time": "2010/1910",
+     "block": "2.35",
+     "ground": "0.00",
+     "equipment_change": "",
+     "calendar_entries": [
+      "\u2212\u2212",
+      "\u2212\u2212",
+      "\u2212\u2212",
+      "\u2212\u2212",
+      "\u2212\u2212",
+      "\u2212\u2212",
+      "\u2212\u2212"
+     ]
+    }
+   }
+  },
+  {
+   "current_state": "duty_period_release",
+   "result": {
+    "id": "duty_period_release",
+    "indexed_string": {
+     "idx": 2147,
+     "txt": "                                 RLS 2040/1940   2.35   0.00   2.35   4.05        3.35 \u2212\u2212 \u2212\u2212 \u2212\u2212 \u2212\u2212 \u2212\u2212 \u2212\u2212 \u2212\u2212 \n"
+    },
+    "data": {
+     "release_time": "2040/1940",
+     "block": "2.35",
+     "synth": "0.00",
+     "total_pay": "2.35",
+     "duty": "4.05",
+     "flight_duty": "3.35",
+     "calendar_entries": [
+      "\u2212\u2212",
+      "\u2212\u2212",
+      "\u2212\u2212",
+      "\u2212\u2212",
+      "\u2212\u2212",
+      "\u2212\u2212",
+      "\u2212\u2212"
+     ]
+    }
+   }
+  },
+  {
+   "current_state": "layover",
+   "result": {
+    "id": "layover",
+    "indexed_string": {
+     "idx": 2148,
+     "txt": "                MIA MARRIOTT AIRPORT                        13056495000    12.20       \u2212\u2212 \u2212\u2212 \u2212\u2212 \u2212\u2212 \u2212\u2212 23 \u2212\u2212 \n"
+    },
+    "data": {
+     "layover_city": "MIA",
+     "hotel": "MARRIOTT AIRPORT",
+     "hotel_phone": "13056495000",
+     "rest": "12.20",
+     "calendar_entries": [
+      "\u2212\u2212",
+      "\u2212\u2212",
+      "\u2212\u2212",
+      "\u2212\u2212",
+      "\u2212\u2212",
+      "23",
+      "\u2212\u2212"
+     ]
+    }
+   }
+  },
+  {
+   "current_state": "transportation",
+   "result": {
+    "id": "transportation",
+    "indexed_string": {
+     "idx": 2149,
+     "txt": "                    SHUTTLE                                                            \u2212\u2212 \u2212\u2212 \u2212\u2212 \u2212\u2212 \u2212\u2212 \u2212\u2212 \u2212\u2212 \n"
+    },
+    "data": {
+     "transportation": "SHUTTLE",
+     "calendar_entries": [
+      "\u2212\u2212",
+      "\u2212\u2212",
+      "\u2212\u2212",
+      "\u2212\u2212",
+      "\u2212\u2212",
+      "\u2212\u2212",
+      "\u2212\u2212"
+     ]
+    }
+   }
+  },
+  {
+   "current_state": "duty_period_report",
+   "result": {
+    "id": "duty_period_report",
+    "indexed_string": {
+     "idx": 2150,
+     "txt": "                RPT 0900/0800                                                                               \n"
+    },
+    "data": {
+     "report": "0900/0800",
+     "calendar_entries": []
+    }
+   }
+  },
+  {
+   "current_state": "flight",
+   "result": {
+    "id": "flight",
+    "indexed_string": {
+     "idx": 2151,
+     "txt": "2  2/2 82 3055  MIA 1000/0900  L DFW 1218/1218   3.18          3.02X                                        \n"
+    },
+    "data": {
+     "dutyperiod": "2",
+     "day_of_sequence": "2/2",
+     "equipment_code": "82",
+     "flight_number": "3055",
+     "departure_station": "MIA",
+     "departure_time": "1000/0900",
+     "crew_meal": "L",
+     "arrival_station": "DFW",
+     "arrival_time": "1218/1218",
+     "block": "3.18",
+     "ground": "3.02",
+     "equipment_change": "X",
+     "calendar_entries": []
+    }
+   }
+  },
+  {
+   "current_state": "flight",
+   "result": {
+    "id": "flight",
+    "indexed_string": {
+     "idx": 2152,
+     "txt": "2  2/2 63  410D DFW 1520/1520    PHL 1921/1821    AA    3.01                                                \n"
+    },
+    "data": {
+     "dutyperiod": "2",
+     "day_of_sequence": "2/2",
+     "equipment_code": "63",
+     "flight_number": "410",
+     "deadhead": "D",
+     "departure_station": "DFW",
+     "departure_time": "1520/1520",
+     "crew_meal": "",
+     "arrival_station": "PHL",
+     "arrival_time": "1921/1821",
+     "deadhead_block": "AA",
+     "synth": "3.01",
+     "ground": "0.00",
+     "equipment_change": "",
+     "calendar_entries": []
+    }
+   }
+  },
+  {
+   "current_state": "duty_period_release",
+   "result": {
+    "id": "duty_period_release",
+    "indexed_string": {
+     "idx": 2153,
+     "txt": "                                 RLS 1951/1851   3.18   3.01   6.19  10.51        4.18                      \n"
+    },
+    "data": {
+     "release_time": "1951/1851",
+     "block": "3.18",
+     "synth": "3.01",
+     "total_pay": "6.19",
+     "duty": "10.51",
+     "flight_duty": "4.18",
+     "calendar_entries": []
+    }
+   }
+  },
+  {
+   "current_state": "layover",
+   "result": {
+    "id": "layover",
+    "indexed_string": {
+     "idx": 2154,
+     "txt": "                PHL MARRIOTT PHL AIRPORT                    12154929000    12.09                            \n"
+    },
+    "data": {
+     "layover_city": "PHL",
+     "hotel": "MARRIOTT PHL AIRPORT",
+     "hotel_phone": "12154929000",
+     "rest": "12.09",
+     "calendar_entries": []
+    }
+   }
+  },
+  {
+   "current_state": "transportation",
+   "result": {
+    "id": "transportation",
+    "indexed_string": {
+     "idx": 2155,
+     "txt": "                    SHUTTLE                                                                                 \n"
+    },
+    "data": {
+     "transportation": "SHUTTLE"
+    }
+   }
+  },
+  {
+   "current_state": "duty_period_report",
+   "result": {
+    "id": "duty_period_report",
+    "indexed_string": {
+     "idx": 2156,
+     "txt": "                RPT 0800/0700                                                                               \n"
+    },
+    "data": {
+     "report": "0800/0700",
+     "calendar_entries": []
+    }
+   }
+  },
+  {
+   "current_state": "flight",
+   "result": {
+    "id": "flight",
+    "indexed_string": {
+     "idx": 2157,
+     "txt": "3  3/3 83  310  PHL 0900/0800  B MIA 1157/1057   2.57          1.28X                                        \n"
+    },
+    "data": {
+     "dutyperiod": "3",
+     "day_of_sequence": "3/3",
+     "equipment_code": "83",
+     "flight_number": "310",
+     "departure_station": "PHL",
+     "departure_time": "0900/0800",
+     "crew_meal": "B",
+     "arrival_station": "MIA",
+     "arrival_time": "1157/1057",
+     "block": "2.57",
+     "ground": "1.28",
+     "equipment_change": "X",
+     "calendar_entries": []
+    }
+   }
+  },
+  {
+   "current_state": "flight",
+   "result": {
+    "id": "flight",
+    "indexed_string": {
+     "idx": 2158,
+     "txt": "3  3/3 45 2038D MIA 1325/1225    DFW 1552/1552    AA    3.27                                                \n"
+    },
+    "data": {
+     "dutyperiod": "3",
+     "day_of_sequence": "3/3",
+     "equipment_code": "45",
+     "flight_number": "2038",
+     "deadhead": "D",
+     "departure_station": "MIA",
+     "departure_time": "1325/1225",
+     "crew_meal": "",
+     "arrival_station": "DFW",
+     "arrival_time": "1552/1552",
+     "deadhead_block": "AA",
+     "synth": "3.27",
+     "ground": "0.00",
+     "equipment_change": "",
+     "calendar_entries": []
+    }
+   }
+  },
+  {
+   "current_state": "duty_period_release",
+   "result": {
+    "id": "duty_period_release",
+    "indexed_string": {
+     "idx": 2159,
+     "txt": "                                 RLS 1622/1622   2.57   3.27   6.24   9.22        3.57                      \n"
+    },
+    "data": {
+     "release_time": "1622/1622",
+     "block": "2.57",
+     "synth": "3.27",
+     "total_pay": "6.24",
+     "duty": "9.22",
+     "flight_duty": "3.57",
+     "calendar_entries": []
+    }
+   }
+  },
+  {
+   "current_state": "trip_footer",
+   "result": {
+    "id": "trip_footer",
+    "indexed_string": {
+     "idx": 2160,
+     "txt": "TTL                                              8.50   6.55  15.45        48.47                            \n"
+    },
+    "data": {
+     "block": "8.50",
+     "synth": "6.55",
+     "total_pay": "15.45",
+     "tafb": "48.47",
+     "calendar_entries": []
+    }
+   }
+  },
+  {
+   "current_state": "page_footer",
+   "result": {
+    "id": "page_footer",
+    "indexed_string": {
+     "idx": 2185,
+     "txt": "COCKPIT  ISSUED 09OCT2024  EFF 01NOV2024               DFW 777  INTL                             PAGE   823\n"
+    },
+    "data": {
+     "issued": "09OCT2024",
+     "effective": "01NOV2024",
+     "base": "DFW",
+     "satelite_base": "",
+     "equipment": "777",
+     "division": "INTL",
+     "internal_page": "823"
+    }
+   }
+  }
+ ]
+}
