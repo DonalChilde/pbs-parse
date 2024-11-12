@@ -51,7 +51,7 @@ def test_parse(test_output_dir: Path):
     parse_scheme = ParseScheme(beginning_state="start", parser_lookup=scheme)
     parser = StateParser(parse_scheme=parse_scheme, result_handler=result_handler)
     string_factory = index_strings(strings=DATA.split("\n"), index_start=1)
-    ctx = ParseContext(beginning_state=parse_scheme.beginning_state)
+    ctx = ParseContext()
     parser.parse(ctx=ctx, data=string_factory)
 
     print(f"{len(result_handler.results.results)}")

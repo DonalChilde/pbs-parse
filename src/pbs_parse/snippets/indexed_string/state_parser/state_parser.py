@@ -49,6 +49,7 @@ class StateParser:
         Raises:
             error: Signals a failure of the overall parse job.
         """
+        ctx.current_state = self.parse_scheme.beginning_state
         with self.result_handler as handler:
             for result in self._parse_indexed_strings(ctx=ctx, data=data):
                 handler.handle_result(ctx=ctx, parse_result=result)

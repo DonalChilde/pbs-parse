@@ -44,10 +44,13 @@ class SaveResultsToFile:
     Use as a context manager allows setup and trear down of assets if needed.
     """
 
-    def __init__(self, path_out: Path, overwrite: bool = False) -> None:
+    def __init__(
+        self, path_out: Path, overwrite: bool = False, only_save_parsed: bool = False
+    ) -> None:
         self.path_out = path_out
         self.results: ParseResults = ParseResults()
         self.overwrite = overwrite
+        self.only_save_parsed = only_save_parsed
 
     def __enter__(self) -> Self:
         return self
@@ -58,7 +61,12 @@ class SaveResultsToFile:
         exc_value: Optional[BaseException],
         traceback: Optional[TracebackType],
     ) -> Optional[bool]:
-        self.results.to_file(path_out=self.path_out, overwrite=self.overwrite)
+        if self.only_save_parsed:
+            self.results.data().to_file(
+                path_out=self.path_out, overwrite=self.overwrite
+            )
+        else:
+            self.results.to_file(path_out=self.path_out, overwrite=self.overwrite)
 
     def handle_result(
         self,

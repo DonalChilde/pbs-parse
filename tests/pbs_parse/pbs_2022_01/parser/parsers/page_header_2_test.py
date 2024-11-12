@@ -26,7 +26,7 @@ items = [
 
 @pytest.mark.parametrize("test_data", items)
 def test_parser(logger: logging.Logger, test_data: ParserTest):
-    ctx = ParseContext(beginning_state="start")
+    ctx = ParseContext()
     parse_result = parser.parse(ctx=ctx, input=test_data.input)
     logger.info(f"{parse_result!r}")
     assert parse_result.current_state == parser.state
