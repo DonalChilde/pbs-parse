@@ -42,6 +42,8 @@ class IndexedString:
         path_out.write_text(json.dumps(asdict(self), indent=indent))
 
 
+# TODO drop IndexedStrings
+# TODO unify IndexedString snippet code
 @dataclass(slots=True, frozen=True)
 class IndexedStrings:
     strings: Tuple[IndexedString, ...] = ()

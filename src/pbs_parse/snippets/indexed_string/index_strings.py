@@ -29,7 +29,7 @@ def index_strings(
         yield indexed_string
 
 
-def index_file_line(
+def index_file_by_line(
     file_path: Path,
     string_filter: Callable[[IndexedStringProtocol], bool] | None = None,
     index_start: int = 0,

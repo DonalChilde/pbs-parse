@@ -22,8 +22,13 @@ license = { file = "LICENSE" }
 dynamic = ["version", "description"]
 # https://chrisholdgraf.com/blog/2022/install-github-from-pyproject/
 # https://peps.python.org/pep-0508/#examples
-# "pfmsoft-snippets@git+https://github.com/donalchilde/pfmsoft-snippets@0.0.1"
-dependencies = ["typer", "pyparsing"]
+# "pfmsoft-snippets-indexed-string@git+https://github.com/donalchilde/pfmsoft-snippets-indexed-string@dev"
+dependencies = [
+    "typer",
+    "pyparsing",
+    "pfmsoft-snippets-state-parser@git+https://github.com/donalchilde/pfmsoft-snippets-state-parser@dev",
+    "pbs-split@git+https://github.com/donalchilde/pbs-split@dev",
+]
 
 [project.scripts]
 pbs-parse = "pbs_parse.cli.main_typer:app"
