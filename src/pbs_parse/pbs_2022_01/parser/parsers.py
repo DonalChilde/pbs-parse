@@ -8,7 +8,7 @@ from pfmsoft.snippets.state_parser.abc import ParseContextABC, ParserABC
 from pfmsoft.snippets.state_parser.model import ParsedIndexedString, ParseResult
 from pfmsoft.snippets.state_parser.parse_exception import SingleParserFail
 
-from pbs_parse.pbs_2022_01.models import models_TD as TD
+from pbs_parse.pbs_2022_01.models import parsed_lines_TD as TD
 from pbs_parse.pbs_2022_01.parser import grammar
 
 logger = logging.getLogger(__name__)
