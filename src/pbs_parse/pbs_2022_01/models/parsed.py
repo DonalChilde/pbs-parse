@@ -1,10 +1,36 @@
-from dataclasses import dataclass
+from dataclasses import dataclass, field
+from typing import TypedDict
 
-from pbs_parse.snippets.indexed_string.state_parser.model import ParsedIndexedString
+from pfmsoft.snippets.simple_serializer import DataclassSerializer
+from pfmsoft.snippets.state_parser import model
 
 
-@dataclass
+class ParsedTripTD(TypedDict):
+    uuid: str
+    source: str
+    parsed_lines: list[model.ParsedIndexedStringTD]
+
+
+@dataclass(slots=True)
 class ParsedTrip:
     uuid: str
     source: str
-    parsed_lines: list[ParsedIndexedString]
+    parsed_lines: list[model.ParsedIndexedString] = field(default_factory=list)
+
+    @staticmethod
+    def from_simple(simple_obj: ParsedTripTD) -> "ParsedTrip":
+        result = ParsedTrip(
+            uuid=simple_obj["uuid"],
+            source=simple_obj["source"],
+            parsed_lines=[
+                model.ParsedIndexedString.from_simple(x)
+                for x in simple_obj["parsed_lines"]
+            ],
+        )
+        return result
+
+
+def parsed_trip_serializer() -> DataclassSerializer[ParsedTrip, ParsedTripTD]:
+    return DataclassSerializer[ParsedTrip, ParsedTripTD](
+        complex_factory=ParsedTrip.from_simple
+    )

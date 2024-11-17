@@ -3,21 +3,12 @@ import re
 from typing import Any
 
 import pyparsing as pp
+from pfmsoft.snippets.indexed_string.model import IndexedString
+from pfmsoft.snippets.state_parser.abc import ParseContextABC, ParserABC
+from pfmsoft.snippets.state_parser.model import ParsedIndexedString, ParseResult
+from pfmsoft.snippets.state_parser.parse_exception import SingleParserFail
 
 from pbs_parse.pbs_2022_01.parser import grammar
-from pbs_parse.snippets.indexed_string.protocols import IndexedStringProtocol
-from pbs_parse.snippets.indexed_string.state_parser.model import (
-    ParsedIndexedString,
-    ParseResult,
-)
-from pbs_parse.snippets.indexed_string.state_parser.parse_exception import (
-    SingleParserFail,
-)
-from pbs_parse.snippets.indexed_string.state_parser.parsers import ParserABC
-from pbs_parse.snippets.indexed_string.state_parser.protocols import (
-    ParseContextProtocol,
-    ParseResultProtocol,
-)
 
 logger = logging.getLogger(__name__)
 logger.addHandler(logging.NullHandler())
@@ -29,21 +20,19 @@ class PyparsingParser(ParserABC):
 
     p_parser: pp.ParserElement
 
-    def get_result(self, indexed_string: IndexedStringProtocol) -> dict[str, Any]:
+    def get_result(self, indexed_string: IndexedString) -> dict[str, Any]:
         try:
             result = self.p_parser.parse_string(indexed_string.txt)
             result_dict: dict[str, Any] = result.as_dict()  # type: ignore
         except pp.ParseException as error:
             raise SingleParserFail(
                 f"{error}",
-                parser=self,
+                parser_name=self.__class__.__name__,
                 indexed_string=indexed_string,
             ) from error
         return result_dict
 
-    def parse(
-        self, ctx: ParseContextProtocol, input: IndexedStringProtocol
-    ) -> ParseResultProtocol:
+    def parse(self, ctx: ParseContextABC, input: IndexedString) -> ParseResult:
         raise NotImplementedError
 
 
@@ -51,17 +40,15 @@ class PageHeader1(ParserABC):
     def __init__(self, state: str) -> None:
         super().__init__(state)
 
-    def parse(
-        self, ctx: ParseContextProtocol, input: IndexedStringProtocol
-    ) -> ParseResultProtocol:
+    def parse(self, ctx: ParseContextABC, input: IndexedString) -> ParseResult:
         _ = ctx
         if "DEPARTURE" in input.txt:
             result = ParsedIndexedString(id=self.state, indexed_string=input, data={})
-            return ParseResult(current_state=self.state, result=result)
+            return ParseResult(current_state=self.state, parsed_indexed_string=result)
 
         raise SingleParserFail(
             f"'DEPARTURE' not found in {input!r}.",
-            parser=self,
+            parser_name=self.__class__.__name__,
             indexed_string=input,
         )
 
@@ -71,9 +58,7 @@ class PageHeader2(PyparsingParser):
         super().__init__(state)
         self.p_parser = grammar.PageHeader2
 
-    def parse(
-        self, ctx: ParseContextProtocol, input: IndexedStringProtocol
-    ) -> ParseResultProtocol:
+    def parse(self, ctx: ParseContextABC, input: IndexedString) -> ParseResult:
         _ = ctx
         result_dict = self.get_result(indexed_string=input)
         # parsed_data = models.PageHeader2(
@@ -83,24 +68,22 @@ class PageHeader2(PyparsingParser):
         result = ParsedIndexedString(
             id=self.state, indexed_string=input, data=result_dict
         )
-        return ParseResult(current_state=self.state, result=result)
+        return ParseResult(current_state=self.state, parsed_indexed_string=result)
 
 
 class HeaderSeparator(ParserABC):
     def __init__(self, state: str) -> None:
         super().__init__(state)
 
-    def parse(
-        self, ctx: ParseContextProtocol, input: IndexedStringProtocol
-    ) -> ParseResultProtocol:
+    def parse(self, ctx: ParseContextABC, input: IndexedString) -> ParseResult:
         _ = ctx
         if "-" * 5 in input.txt or "\u2212" * 5 in input.txt:
             # parsed_data = models.HeaderSeparator()
             result = ParsedIndexedString(id=self.state, indexed_string=input, data={})
-            return ParseResult(current_state=self.state, result=result)
+            return ParseResult(current_state=self.state, parsed_indexed_string=result)
         raise SingleParserFail(
             "'-----' not found in line.",
-            parser=self,
+            parser_name=self.__class__.__name__,
             indexed_string=input,
         )
 
@@ -109,9 +92,7 @@ class TripSeparator(ParserABC):
     def __init__(self, state: str) -> None:
         super().__init__(state)
 
-    def parse(
-        self, ctx: ParseContextProtocol, input: IndexedStringProtocol
-    ) -> ParseResultProtocol:
+    def parse(self, ctx: ParseContextABC, input: IndexedString) -> ParseResult:
         _ = ctx
         if "-" * 5 in input.txt or "\u2212" * 5 in input.txt:
             # parsed_data = models.TripSeparator()
@@ -119,10 +100,10 @@ class TripSeparator(ParserABC):
             #     id=self.state, indexed_string=input, data=result_dict
             # )
             result = ParsedIndexedString(id=self.state, indexed_string=input, data={})
-            return ParseResult(current_state=self.state, result=result)
+            return ParseResult(current_state=self.state, parsed_indexed_string=result)
         raise SingleParserFail(
             "'-----' not found in line.",
-            parser=self,
+            parser_name=self.__class__.__name__,
             indexed_string=input,
         )
 
@@ -132,9 +113,7 @@ class BaseEquipment(PyparsingParser):
         super().__init__(state)
         self.p_parser = grammar.BaseEquipment
 
-    def parse(
-        self, ctx: ParseContextProtocol, input: IndexedStringProtocol
-    ) -> ParseResultProtocol:
+    def parse(self, ctx: ParseContextABC, input: IndexedString) -> ParseResult:
         _ = ctx
         result_dict = self.get_result(indexed_string=input)
 
@@ -146,7 +125,7 @@ class BaseEquipment(PyparsingParser):
         result = ParsedIndexedString(
             id=self.state, indexed_string=input, data=result_dict
         )
-        return ParseResult(current_state=self.state, result=result)
+        return ParseResult(current_state=self.state, parsed_indexed_string=result)
 
 
 class TripHeader(PyparsingParser):
@@ -156,9 +135,7 @@ class TripHeader(PyparsingParser):
         # loop over list of possibles, take first match
         self.p_parser = grammar.TripHeader
 
-    def parse(
-        self, ctx: ParseContextProtocol, input: IndexedStringProtocol
-    ) -> ParseResultProtocol:
+    def parse(self, ctx: ParseContextABC, input: IndexedString) -> ParseResult:
         _ = ctx
         result_dict = self.get_result(indexed_string=input)
         # parsed_data = models.TripHeader(
@@ -172,7 +149,7 @@ class TripHeader(PyparsingParser):
         result = ParsedIndexedString(
             id=self.state, indexed_string=input, data=result_dict
         )
-        return ParseResult(current_state=self.state, result=result)
+        return ParseResult(current_state=self.state, parsed_indexed_string=result)
 
 
 # TODO is this parser neeed?
@@ -180,17 +157,15 @@ class PriorMonthDeadhead(ParserABC):
     def __init__(self, state: str) -> None:
         super().__init__(state)
 
-    def parse(
-        self, ctx: ParseContextProtocol, input: IndexedStringProtocol
-    ) -> ParseResultProtocol:
+    def parse(self, ctx: ParseContextABC, input: IndexedString) -> ParseResult:
         _ = ctx
         if "PRIOR" in input.txt:
             # parsed_data = models.PriorMonthDeadhead()
             result = ParsedIndexedString(id=self.state, indexed_string=input, data={})
-            return ParseResult(current_state=self.state, result=result)
+            return ParseResult(current_state=self.state, parsed_indexed_string=result)
         raise SingleParserFail(
             "'PRIOR' not found in line.",
-            parser=self,
+            parser_name=self.__class__.__name__,
             indexed_string=input,
         )
 
@@ -200,9 +175,7 @@ class DutyPeriodReport(PyparsingParser):
         super().__init__(state)
         self.p_parser = grammar.DutyPeriodReport
 
-    def parse(
-        self, ctx: ParseContextProtocol, input: IndexedStringProtocol
-    ) -> ParseResultProtocol:
+    def parse(self, ctx: ParseContextABC, input: IndexedString) -> ParseResult:
         _ = ctx
         result_dict = self.get_result(indexed_string=input)
         # parsed_data = models.DutyPeriodReport(
@@ -213,7 +186,7 @@ class DutyPeriodReport(PyparsingParser):
         result = ParsedIndexedString(
             id=self.state, indexed_string=input, data=result_dict
         )
-        return ParseResult(current_state=self.state, result=result)
+        return ParseResult(current_state=self.state, parsed_indexed_string=result)
 
 
 # 4  4/4 64 2578D MIA 1949/1649    SAN 2220/2220    AA    5.31
@@ -225,9 +198,7 @@ class Flight(PyparsingParser):
         super().__init__(state)
         self.p_parser = grammar.Flight
 
-    def parse(
-        self, ctx: ParseContextProtocol, input: IndexedStringProtocol
-    ) -> ParseResultProtocol:
+    def parse(self, ctx: ParseContextABC, input: IndexedString) -> ParseResult:
         _ = ctx
         result_dict = self.get_result(indexed_string=input)
         # parsed_data = models.Flight(
@@ -250,7 +221,7 @@ class Flight(PyparsingParser):
         result = ParsedIndexedString(
             id=self.state, indexed_string=input, data=result_dict
         )
-        return ParseResult(current_state=self.state, result=result)
+        return ParseResult(current_state=self.state, parsed_indexed_string=result)
 
 
 # 4  4/4 64 2578D MIA 1949/1649    SAN 2220/2220    AA    5.31
@@ -260,9 +231,7 @@ class FlightDeadhead(PyparsingParser):
         super().__init__(state)
         self.p_parser = grammar.FlightDeadhead
 
-    def parse(
-        self, ctx: ParseContextProtocol, input: IndexedStringProtocol
-    ) -> ParseResultProtocol:
+    def parse(self, ctx: ParseContextABC, input: IndexedString) -> ParseResult:
         _ = ctx
         result_dict = self.get_result(indexed_string=input)
         # parsed_data = models.Flight(
@@ -285,7 +254,7 @@ class FlightDeadhead(PyparsingParser):
         result = ParsedIndexedString(
             id=self.state, indexed_string=input, data=result_dict
         )
-        return ParseResult(current_state=self.state, result=result)
+        return ParseResult(current_state=self.state, parsed_indexed_string=result)
 
 
 class DutyPeriodRelease(PyparsingParser):
@@ -293,9 +262,7 @@ class DutyPeriodRelease(PyparsingParser):
         super().__init__(state)
         self.p_parser = grammar.DutyPeriodRelease
 
-    def parse(
-        self, ctx: ParseContextProtocol, input: IndexedStringProtocol
-    ) -> ParseResultProtocol:
+    def parse(self, ctx: ParseContextABC, input: IndexedString) -> ParseResult:
         _ = ctx
         result_dict = self.get_result(indexed_string=input)
         # parsed_data = models.DutyPeriodRelease(
@@ -310,7 +277,7 @@ class DutyPeriodRelease(PyparsingParser):
         result = ParsedIndexedString(
             id=self.state, indexed_string=input, data=result_dict
         )
-        return ParseResult(current_state=self.state, result=result)
+        return ParseResult(current_state=self.state, parsed_indexed_string=result)
 
 
 class Layover(PyparsingParser):
@@ -318,9 +285,7 @@ class Layover(PyparsingParser):
         super().__init__(state)
         self.p_parser = grammar.Layover
 
-    def parse(
-        self, ctx: ParseContextProtocol, input: IndexedStringProtocol
-    ) -> ParseResultProtocol:
+    def parse(self, ctx: ParseContextABC, input: IndexedString) -> ParseResult:
         _ = ctx
         result_dict = self.get_result(indexed_string=input)
         # parsed_data = models.Layover(
@@ -333,7 +298,7 @@ class Layover(PyparsingParser):
         result = ParsedIndexedString(
             id=self.state, indexed_string=input, data=result_dict
         )
-        return ParseResult(current_state=self.state, result=result)
+        return ParseResult(current_state=self.state, parsed_indexed_string=result)
 
 
 class HotelAdditional(PyparsingParser):
@@ -341,9 +306,7 @@ class HotelAdditional(PyparsingParser):
         super().__init__(state)
         self.p_parser = grammar.HotelAdditional
 
-    def parse(
-        self, ctx: ParseContextProtocol, input: IndexedStringProtocol
-    ) -> ParseResultProtocol:
+    def parse(self, ctx: ParseContextABC, input: IndexedString) -> ParseResult:
         _ = ctx
         result_dict = self.get_result(indexed_string=input)
         # parsed_data = models.HotelAdditional(
@@ -355,7 +318,7 @@ class HotelAdditional(PyparsingParser):
         result = ParsedIndexedString(
             id=self.state, indexed_string=input, data=result_dict
         )
-        return ParseResult(current_state=self.state, result=result)
+        return ParseResult(current_state=self.state, parsed_indexed_string=result)
 
 
 class Transportation(PyparsingParser):
@@ -363,9 +326,7 @@ class Transportation(PyparsingParser):
         super().__init__(state)
         self.p_parser = grammar.Transportation
 
-    def parse(
-        self, ctx: ParseContextProtocol, input: IndexedStringProtocol
-    ) -> ParseResultProtocol:
+    def parse(self, ctx: ParseContextABC, input: IndexedString) -> ParseResult:
         _ = ctx
         result_dict = self.get_result(indexed_string=input)
         # parsed_data = models.Transportation(
@@ -376,7 +337,7 @@ class Transportation(PyparsingParser):
         result = ParsedIndexedString(
             id=self.state, indexed_string=input, data=result_dict
         )
-        return ParseResult(current_state=self.state, result=result)
+        return ParseResult(current_state=self.state, parsed_indexed_string=result)
 
 
 class TransportationAdditional(PyparsingParser):
@@ -384,9 +345,7 @@ class TransportationAdditional(PyparsingParser):
         super().__init__(state)
         self.p_parser = grammar.TransportationAdditional
 
-    def parse(
-        self, ctx: ParseContextProtocol, input: IndexedStringProtocol
-    ) -> ParseResultProtocol:
+    def parse(self, ctx: ParseContextABC, input: IndexedString) -> ParseResult:
         _ = ctx
 
         result_dict = self.get_result(indexed_string=input)
@@ -405,7 +364,7 @@ class TransportationAdditional(PyparsingParser):
         result = ParsedIndexedString(
             id=self.state, indexed_string=input, data=result_dict
         )
-        return ParseResult(current_state=self.state, result=result)
+        return ParseResult(current_state=self.state, parsed_indexed_string=result)
 
 
 class TripFooter(PyparsingParser):
@@ -413,9 +372,7 @@ class TripFooter(PyparsingParser):
         super().__init__(state)
         self.p_parser = grammar.TripFooter
 
-    def parse(
-        self, ctx: ParseContextProtocol, input: IndexedStringProtocol
-    ) -> ParseResultProtocol:
+    def parse(self, ctx: ParseContextABC, input: IndexedString) -> ParseResult:
         _ = ctx
         result_dict = self.get_result(indexed_string=input)
         # parsed_data = models.TripFooter(
@@ -428,7 +385,7 @@ class TripFooter(PyparsingParser):
         result = ParsedIndexedString(
             id=self.state, indexed_string=input, data=result_dict
         )
-        return ParseResult(current_state=self.state, result=result)
+        return ParseResult(current_state=self.state, parsed_indexed_string=result)
 
 
 class CalendarOnly(PyparsingParser):
@@ -436,16 +393,14 @@ class CalendarOnly(PyparsingParser):
         super().__init__(state)
         self.p_parser = grammar.CalendarOnly
 
-    def parse(
-        self, ctx: ParseContextProtocol, input: IndexedStringProtocol
-    ) -> ParseResultProtocol:
+    def parse(self, ctx: ParseContextABC, input: IndexedString) -> ParseResult:
         _ = ctx
         expected_len = 20
         ws_len = len(get_leading_whitespace(input.txt))
         if ws_len < expected_len:
             raise SingleParserFail(
                 f"Expected at least {expected_len} leading whitespace characters, got {ws_len}",
-                parser=self,
+                parser_name=self.__class__.__name__,
                 indexed_string=input,
             )
         result_dict = self.get_result(indexed_string=input)
@@ -455,7 +410,7 @@ class CalendarOnly(PyparsingParser):
         result = ParsedIndexedString(
             id=self.state, indexed_string=input, data=result_dict
         )
-        return ParseResult(current_state=self.state, result=result)
+        return ParseResult(current_state=self.state, parsed_indexed_string=result)
 
 
 def get_leading_whitespace(txt: str) -> str:
@@ -472,9 +427,7 @@ class PageFooter(PyparsingParser):
         super().__init__(state)
         self.p_parser = grammar.PageFooter
 
-    def parse(
-        self, ctx: ParseContextProtocol, input: IndexedStringProtocol
-    ) -> ParseResultProtocol:
+    def parse(self, ctx: ParseContextABC, input: IndexedString) -> ParseResult:
         _ = ctx
         result_dict = self.get_result(indexed_string=input)
         # parsed_data = models.PageFooter(
@@ -489,4 +442,4 @@ class PageFooter(PyparsingParser):
         result = ParsedIndexedString(
             id=self.state, indexed_string=input, data=result_dict
         )
-        return ParseResult(current_state=self.state, result=result)
+        return ParseResult(current_state=self.state, parsed_indexed_string=result)

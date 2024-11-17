@@ -1,13 +1,12 @@
 from typing import Dict, Sequence
 
+from pfmsoft.snippets.state_parser.abc import ParserABC
+
 from pbs_parse.pbs_2022_01.parser import parsers
-from pbs_parse.snippets.indexed_string.state_parser.protocols import (
-    IndexedStringParserProtocol,
-)
 
 
-def parse_table() -> Dict[str, Sequence[IndexedStringParserProtocol]]:
-    scheme: Dict[str, Sequence[IndexedStringParserProtocol]] = {
+def parse_table() -> Dict[str, Sequence[ParserABC]]:
+    scheme: Dict[str, Sequence[ParserABC]] = {
         "start": [
             parsers.PageHeader1(state="page_header_1"),
         ],

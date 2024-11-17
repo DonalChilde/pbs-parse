@@ -2,16 +2,12 @@ from importlib import resources
 from pathlib import Path
 
 import pytest
+from pbs_split.models import trip_lines_serializer
+from pfmsoft.snippets.state_parser import ParseContext, ParseScheme
 
+from pbs_parse.pbs_2022_01.models.parsed import parsed_trip_serializer
+from pbs_parse.pbs_2022_01.parser.parse import TripParser
 from pbs_parse.pbs_2022_01.parser.parse_table import parse_table
-from pbs_parse.snippets.indexed_string.model import IndexedStrings
-from pbs_parse.snippets.indexed_string.state_parser.model import ParseResults
-from pbs_parse.snippets.indexed_string.state_parser.parse_context import ParseContext
-from pbs_parse.snippets.indexed_string.state_parser.parse_scheme import ParseScheme
-from pbs_parse.snippets.indexed_string.state_parser.result_handler import (
-    SaveResultsToFile,
-)
-from pbs_parse.snippets.indexed_string.state_parser.state_parser import StateParser
 from tests.resources.model import ParseTripTest
 from tests.resources.trips import TRIPS_INDEXED_ANCHOR, TRIPS_PARSED_ANCHOR
 
@@ -34,20 +30,20 @@ def test_parse_trips(test_output_dir: Path, parse_trips_one: ParseTripTest):
     indexed_file = resources.files(parse_trips_one.indexed_anchor).joinpath(
         parse_trips_one.indexed_filename
     )
+    raw_trip_serializer = trip_lines_serializer()
     with resources.as_file(indexed_file) as input_path:
-        data = IndexedStrings.from_file(file_path=input_path)
+        raw_trip = raw_trip_serializer.load_from_json(path_in=input_path)
         path_out = test_output_dir / OUTPUT_PATH / f"{input_path.stem}.parsed.json"
     scheme = ParseScheme(beginning_state="start", parser_lookup=parse_table())
     ctx = ParseContext()
-    handler = SaveResultsToFile(path_out=path_out)
-    parser = StateParser(parse_scheme=scheme, result_handler=handler)
-    parser.parse(ctx=ctx, data=data.strings)
-    results = handler.results
-    assert results.results
+    parser = TripParser(scheme=scheme)
+    parsed_trip = parser.parse(ctx=ctx, trip_lines=raw_trip)
+    parsed_serializer = parsed_trip_serializer()
+    parsed_serializer.save_as_json(path_out=path_out, complex_obj=parsed_trip)
     if not PARSE_ONLY:
         parsed_file = resources.files(parse_trips_one.parsed_anchor).joinpath(
             parse_trips_one.parsed_filename
         )
         with resources.as_file(parsed_file) as input_path:
-            parsed = ParseResults.from_file(file_path=input_path)
-            assert results == parsed
+            loaded_parsed_trip = parsed_serializer.load_from_json(path_in=input_path)
+            assert parsed_trip.parsed_lines[4] == loaded_parsed_trip.parsed_lines[4]

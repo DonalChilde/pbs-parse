@@ -3,6 +3,7 @@ from pathlib import Path
 from typing import Annotated
 
 import typer
+from pfmsoft.snippets.state_parser import ParseContext
 from rich.progress import (
     BarColumn,
     FileSizeColumn,
@@ -13,8 +14,8 @@ from rich.progress import (
     TotalFileSizeColumn,
 )
 
+from pbs_parse.pbs_2022_01.models.parsed import parsed_trip_serializer
 from pbs_parse.pbs_2022_01.parser.parse import TripParser
-from pbs_parse.snippets.indexed_string.state_parser.parse_context import ParseContext
 
 app = typer.Typer()
 
@@ -50,10 +51,13 @@ def parse_trips_rich(jobs: ParseTripJobs):
         task = progress.add_task(f"1 of {file_count}", total=jobs.total_size_of_files())
         total_trips = 0
         parser = TripParser()
+        serializer = parsed_trip_serializer()
         for idx, job in enumerate(jobs.jobs, start=1):
             ctx = ParseContext()
-            parsed = parser.parse_file(ctx=ctx, path_in=job.path_in)
-            parsed.to_file(path_out=job.path_out, overwrite=job.overwrite)
+            parsed_trip = parser.parse_file(ctx=ctx, path_in=job.path_in)
+            serializer.save_as_json(
+                path_out=job.path_out, complex_obj=parsed_trip, overwrite=job.overwrite
+            )
             total_trips += 1
             progress.update(
                 task,

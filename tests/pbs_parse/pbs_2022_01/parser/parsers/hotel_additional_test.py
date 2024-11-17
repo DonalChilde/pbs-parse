@@ -1,10 +1,10 @@
 import logging
 
 import pytest
+from pfmsoft.snippets.indexed_string.model import IndexedString
+from pfmsoft.snippets.state_parser import ParseContext
 
 from pbs_parse.pbs_2022_01.parser import parsers
-from pbs_parse.snippets.indexed_string.model import IndexedString
-from pbs_parse.snippets.indexed_string.state_parser.parse_context import ParseContext
 from tests.resources.model import ParserTest
 
 logger = logging.getLogger(__name__)
@@ -49,7 +49,7 @@ def test_parser(test_data: ParserTest):
     logger.info(f"{parse_result!r}")
     assert parse_result.current_state == parser.state
     assert parse_result.current_state == result_id
-    assert parse_result.result.id == parser.state
-    assert parse_result.result.id == result_id
-    assert parse_result.result.data == test_data.data
-    assert parse_result.result.indexed_string == test_data.input
+    assert parse_result.parsed_indexed_string.id == parser.state
+    assert parse_result.parsed_indexed_string.id == result_id
+    assert parse_result.parsed_indexed_string.data == test_data.data
+    assert parse_result.parsed_indexed_string.indexed_string == test_data.input
