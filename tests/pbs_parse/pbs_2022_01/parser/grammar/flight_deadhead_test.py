@@ -1,7 +1,11 @@
+import logging
+
 import pytest
 
 from pbs_parse.pbs_2022_01.parser import grammar
 from tests.resources.model import GrammarTest
+
+logger = logging.getLogger(__name__)
 
 Items = [
     GrammarTest(
@@ -17,7 +21,7 @@ Items = [
             "crew_meal": "",
             "arrival_station": "AUS",
             "arrival_time": "1741/1741",
-            "deadhead_block": "AA",
+            "deadhead_code": "AA",
             "synth": "1.06",
             "ground": "0.00",
             "equipment_change": "",
@@ -32,12 +36,13 @@ Items = [
             "equipment_code": "45",
             "flight_number": "1614",
             "deadhead": "D",
+            "deadhead_code": "AA",
             "departure_station": "MCI",
             "departure_time": "1607/1407",
             "crew_meal": "",
             "arrival_station": "DFW",
             "arrival_time": "1800/1600",
-            "deadhead_block": "AA",
+            # "deadhead_block": "AA",
             "synth": "1.53",
             "ground": "1.27",
             "equipment_change": "X",
@@ -52,12 +57,13 @@ Items = [
             "equipment_code": "64",
             "flight_number": "2578",
             "deadhead": "D",
+            "deadhead_code": "AA",
             "departure_station": "MIA",
             "departure_time": "1949/1649",
             "crew_meal": "",
             "arrival_station": "SAN",
             "arrival_time": "2220/2220",
-            "deadhead_block": "AA",
+            # "deadhead_block": "AA",
             "synth": "5.31",
             "ground": "0.00",
             "equipment_change": "",
@@ -72,6 +78,7 @@ parser = grammar.FlightDeadhead
 def test_grammar(test_data: GrammarTest):
     parse_result = parser.parse_string(test_data.txt)
     result = parse_result.as_dict()  # type: ignore
-    print(f"{parse_result}")
-    print(f"{result!r}")
+    logger.info(f"parse result: {parse_result!r}")
+    logger.info(f"result as_dict: {result!r}")
+    logger.info(f"test_data: {test_data.result!r}")
     assert result == test_data.result

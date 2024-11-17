@@ -21,9 +21,9 @@ items = [
         result_id=result_id,
         data={
             "layover_city": "PHL",
-            "hotel": "MARRIOTT OLD CITY",
-            "hotel_phone": "12152386000",
-            "calendar_entries": [],
+            "name": "MARRIOTT OLD CITY",
+            "phone": "12152386000",
+            "calendar": [],
         },
     ),
     ParserTest(
@@ -34,9 +34,9 @@ items = [
         result_id=result_id,
         data={
             "layover_city": "PHL",
-            "hotel": "CAMBRIA HOTEL AND SUITES",
-            "hotel_phone": "12157325500",
-            "calendar_entries": [],
+            "name": "CAMBRIA HOTEL AND SUITES",
+            "phone": "12157325500",
+            "calendar": [],
         },
     ),
 ]

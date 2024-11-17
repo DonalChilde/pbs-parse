@@ -8,6 +8,7 @@ from pfmsoft.snippets.state_parser.abc import ParseContextABC, ParserABC
 from pfmsoft.snippets.state_parser.model import ParsedIndexedString, ParseResult
 from pfmsoft.snippets.state_parser.parse_exception import SingleParserFail
 
+from pbs_parse.pbs_2022_01.models import models_TD as TD
 from pbs_parse.pbs_2022_01.parser import grammar
 
 logger = logging.getLogger(__name__)
@@ -20,17 +21,20 @@ class PyparsingParser(ParserABC):
 
     p_parser: pp.ParserElement
 
-    def get_result(self, indexed_string: IndexedString) -> dict[str, Any]:
+    def get_parsed_data(self, indexed_string: IndexedString) -> dict[str, Any]:
         try:
             result = self.p_parser.parse_string(indexed_string.txt)
-            result_dict: dict[str, Any] = result.as_dict()  # type: ignore
+            parsed_data: dict[str, Any] = result.as_dict()  # type: ignore
         except pp.ParseException as error:
             raise SingleParserFail(
                 f"{error}",
                 parser_name=self.__class__.__name__,
                 indexed_string=indexed_string,
             ) from error
-        return result_dict
+        return parsed_data
+
+    def translate_result(self, parsed_data: dict[str, Any]) -> dict[str, Any]:
+        raise NotImplementedError
 
     def parse(self, ctx: ParseContextABC, input: IndexedString) -> ParseResult:
         raise NotImplementedError
@@ -60,15 +64,19 @@ class PageHeader2(PyparsingParser):
 
     def parse(self, ctx: ParseContextABC, input: IndexedString) -> ParseResult:
         _ = ctx
-        result_dict = self.get_result(indexed_string=input)
-        # parsed_data = models.PageHeader2(
-        #     from_date="".join(result_dict.get("from_date", "")),
-        #     to_date="".join(result_dict.get("to_date", "")),
-        # )
-        result = ParsedIndexedString(
-            id=self.state, indexed_string=input, data=result_dict
-        )
+        result_dict = self.get_parsed_data(indexed_string=input)
+        data = self.translate_result(parsed_data=result_dict)
+        result = ParsedIndexedString(id=self.state, indexed_string=input, data=data)
         return ParseResult(current_state=self.state, parsed_indexed_string=result)
+
+    def translate_result(self, parsed_data: dict[str, Any]) -> dict[str, Any]:
+        data = TD.PageHeader2(
+            from_date="".join(parsed_data.get("from_date", "")),
+            to_date="".join(parsed_data.get("to_date", "")),
+            # from_date=parsed_data.get("from_date", ""),
+            # to_date=parsed_data.get("to_date", ""),
+        )
+        return data  # type: ignore
 
 
 class HeaderSeparator(ParserABC):
@@ -115,17 +123,18 @@ class BaseEquipment(PyparsingParser):
 
     def parse(self, ctx: ParseContextABC, input: IndexedString) -> ParseResult:
         _ = ctx
-        result_dict = self.get_result(indexed_string=input)
-
-        # parsed_data = models.BaseEquipment(
-        #     base=result_dict.get("base", ""),
-        #     satellite_base=result_dict.get("satelite_base", ""),
-        #     equipment=result_dict.get("equipment", ""),
-        # )
-        result = ParsedIndexedString(
-            id=self.state, indexed_string=input, data=result_dict
-        )
+        result_dict = self.get_parsed_data(indexed_string=input)
+        data = self.translate_result(parsed_data=result_dict)
+        result = ParsedIndexedString(id=self.state, indexed_string=input, data=data)
         return ParseResult(current_state=self.state, parsed_indexed_string=result)
+
+    def translate_result(self, parsed_data: dict[str, Any]) -> dict[str, Any]:
+        data = TD.BaseEquipment(
+            base=parsed_data.get("base", ""),
+            satellite_base=parsed_data.get("satellite_base", ""),
+            equipment=parsed_data.get("equipment", ""),
+        )
+        return data  # type: ignore
 
 
 class TripHeader(PyparsingParser):
@@ -137,19 +146,21 @@ class TripHeader(PyparsingParser):
 
     def parse(self, ctx: ParseContextABC, input: IndexedString) -> ParseResult:
         _ = ctx
-        result_dict = self.get_result(indexed_string=input)
-        # parsed_data = models.TripHeader(
-        #     number=result_dict.get("number", ""),
-        #     ops_count=result_dict.get("ops_count", ""),
-        #     positions=" ".join(result_dict.get("positions", "")),
-        #     operations=" ".join(result_dict.get("operations", "")),
-        #     qualifications=" ".join(result_dict.get("qualifications", "")),
-        #     # calendar="",
-        # )
-        result = ParsedIndexedString(
-            id=self.state, indexed_string=input, data=result_dict
-        )
+        result_dict = self.get_parsed_data(indexed_string=input)
+        data = self.translate_result(parsed_data=result_dict)
+        result = ParsedIndexedString(id=self.state, indexed_string=input, data=data)
         return ParseResult(current_state=self.state, parsed_indexed_string=result)
+
+    def translate_result(self, parsed_data: dict[str, Any]) -> dict[str, Any]:
+        data = TD.TripHeader(
+            number=parsed_data.get("number", ""),
+            ops_count=parsed_data.get("ops_count", ""),
+            positions=parsed_data.get("positions", []),
+            operations=parsed_data.get("operations", []),
+            qualifications=parsed_data.get("qualifications", []),
+            # calendar="",
+        )
+        return data  # type: ignore
 
 
 # TODO is this parser neeed?
@@ -177,16 +188,17 @@ class DutyPeriodReport(PyparsingParser):
 
     def parse(self, ctx: ParseContextABC, input: IndexedString) -> ParseResult:
         _ = ctx
-        result_dict = self.get_result(indexed_string=input)
-        # parsed_data = models.DutyPeriodReport(
-        #     report=result_dict.get("report", ""),
-        #     calendar=result_dict.get("calendar_entries", []),
-        # )
-        # parsed_data.calendar.extend(result_dict.get("calendar_entries", []))
-        result = ParsedIndexedString(
-            id=self.state, indexed_string=input, data=result_dict
-        )
+        result_dict = self.get_parsed_data(indexed_string=input)
+        data = self.translate_result(parsed_data=result_dict)
+        result = ParsedIndexedString(id=self.state, indexed_string=input, data=data)
         return ParseResult(current_state=self.state, parsed_indexed_string=result)
+
+    def translate_result(self, parsed_data: dict[str, Any]) -> dict[str, Any]:
+        data = TD.DutyPeriodReport(
+            report=parsed_data.get("report", ""),
+            calendar=parsed_data.get("calendar_entries", []),
+        )
+        return data  # type: ignore
 
 
 # 4  4/4 64 2578D MIA 1949/1649    SAN 2220/2220    AA    5.31
@@ -200,28 +212,31 @@ class Flight(PyparsingParser):
 
     def parse(self, ctx: ParseContextABC, input: IndexedString) -> ParseResult:
         _ = ctx
-        result_dict = self.get_result(indexed_string=input)
-        # parsed_data = models.Flight(
-        #     dutyperiod_idx=result_dict.get("dutyperiod", ""),
-        #     dep_arr_day=result_dict.get("day_of_sequence", ""),
-        #     eq_code=result_dict.get("equipment_code", ""),
-        #     flight_number=result_dict.get("flight_number", ""),
-        #     deadhead="",
-        #     departure_station=result_dict.get("departure_station", ""),
-        #     departure_time=result_dict.get("departure_time", ""),
-        #     meal=result_dict.get("crew_meal", ""),
-        #     arrival_station=result_dict.get("arrival_station", ""),
-        #     arrival_time=result_dict.get("arrival_time", ""),
-        #     block=result_dict.get("block", ""),
-        #     synth="0.00",
-        #     ground=result_dict.get("ground", ""),
-        #     equipment_change=result_dict.get("equipment_change", ""),
-        #     calendar=result_dict.get("calendar_entries", []),
-        # )
-        result = ParsedIndexedString(
-            id=self.state, indexed_string=input, data=result_dict
-        )
+        result_dict = self.get_parsed_data(indexed_string=input)
+        data = self.translate_result(parsed_data=result_dict)
+        result = ParsedIndexedString(id=self.state, indexed_string=input, data=data)
         return ParseResult(current_state=self.state, parsed_indexed_string=result)
+
+    def translate_result(self, parsed_data: dict[str, Any]) -> dict[str, Any]:
+        data = TD.Flight(
+            dutyperiod_idx=parsed_data.get("dutyperiod", ""),
+            dep_arr_day=parsed_data.get("day_of_sequence", ""),
+            eq_code=parsed_data.get("equipment_code", ""),
+            flight_number=parsed_data.get("flight_number", ""),
+            deadhead="",
+            deadhead_code="",
+            departure_station=parsed_data.get("departure_station", ""),
+            departure_time=parsed_data.get("departure_time", ""),
+            crew_meal=parsed_data.get("crew_meal", ""),
+            arrival_station=parsed_data.get("arrival_station", ""),
+            arrival_time=parsed_data.get("arrival_time", ""),
+            block=parsed_data.get("block", ""),
+            synth=parsed_data.get("synth", ""),
+            ground=parsed_data.get("ground", ""),
+            equipment_change=parsed_data.get("equipment_change", ""),
+            calendar=parsed_data.get("calendar_entries", []),
+        )
+        return data  # type: ignore
 
 
 # 4  4/4 64 2578D MIA 1949/1649    SAN 2220/2220    AA    5.31
@@ -233,28 +248,31 @@ class FlightDeadhead(PyparsingParser):
 
     def parse(self, ctx: ParseContextABC, input: IndexedString) -> ParseResult:
         _ = ctx
-        result_dict = self.get_result(indexed_string=input)
-        # parsed_data = models.Flight(
-        #     dutyperiod_idx=result_dict.get("dutyperiod", ""),
-        #     dep_arr_day=result_dict.get("day_of_sequence", ""),
-        #     eq_code=result_dict.get("equipment_code", ""),
-        #     flight_number=result_dict.get("flight_number", ""),
-        #     deadhead=result_dict.get("deadhead", ""),
-        #     departure_station=result_dict.get("departure_station", ""),
-        #     departure_time=result_dict.get("departure_time", ""),
-        #     meal=result_dict.get("crew_meal", ""),
-        #     arrival_station=result_dict.get("arrival_station", ""),
-        #     arrival_time=result_dict.get("arrival_time", ""),
-        #     block="0.00",
-        #     synth=result_dict.get("synth", ""),
-        #     ground=result_dict.get("ground", ""),
-        #     equipment_change=result_dict.get("equipment_change", ""),
-        #     calendar=result_dict.get("calendar_entries", []),
-        # )
-        result = ParsedIndexedString(
-            id=self.state, indexed_string=input, data=result_dict
-        )
+        result_dict = self.get_parsed_data(indexed_string=input)
+        data = self.translate_result(parsed_data=result_dict)
+        result = ParsedIndexedString(id=self.state, indexed_string=input, data=data)
         return ParseResult(current_state=self.state, parsed_indexed_string=result)
+
+    def translate_result(self, parsed_data: dict[str, Any]) -> dict[str, Any]:
+        data = TD.Flight(
+            dutyperiod_idx=parsed_data.get("dutyperiod", ""),
+            dep_arr_day=parsed_data.get("day_of_sequence", ""),
+            eq_code=parsed_data.get("equipment_code", ""),
+            flight_number=parsed_data.get("flight_number", ""),
+            deadhead=parsed_data.get("deadhead", ""),
+            deadhead_code=parsed_data.get("deadhead_code", ""),
+            departure_station=parsed_data.get("departure_station", ""),
+            departure_time=parsed_data.get("departure_time", ""),
+            crew_meal=parsed_data.get("crew_meal", ""),
+            arrival_station=parsed_data.get("arrival_station", ""),
+            arrival_time=parsed_data.get("arrival_time", ""),
+            block="0.00",
+            synth=parsed_data.get("synth", ""),
+            ground=parsed_data.get("ground", ""),
+            equipment_change=parsed_data.get("equipment_change", ""),
+            calendar=parsed_data.get("calendar_entries", []),
+        )
+        return data  # type: ignore
 
 
 class DutyPeriodRelease(PyparsingParser):
@@ -264,20 +282,22 @@ class DutyPeriodRelease(PyparsingParser):
 
     def parse(self, ctx: ParseContextABC, input: IndexedString) -> ParseResult:
         _ = ctx
-        result_dict = self.get_result(indexed_string=input)
-        # parsed_data = models.DutyPeriodRelease(
-        #     release=result_dict.get("release_time", ""),
-        #     block=result_dict.get("block", ""),
-        #     synth=result_dict.get("synth", ""),
-        #     total_pay=result_dict.get("total_pay", ""),
-        #     duty=result_dict.get("duty", ""),
-        #     flight_duty=result_dict.get("flight_duty", ""),
-        #     calendar=result_dict.get("calendar_entries", []),
-        # )
-        result = ParsedIndexedString(
-            id=self.state, indexed_string=input, data=result_dict
-        )
+        result_dict = self.get_parsed_data(indexed_string=input)
+        data = self.translate_result(parsed_data=result_dict)
+        result = ParsedIndexedString(id=self.state, indexed_string=input, data=data)
         return ParseResult(current_state=self.state, parsed_indexed_string=result)
+
+    def translate_result(self, parsed_data: dict[str, Any]) -> dict[str, Any]:
+        data = TD.DutyPeriodRelease(
+            release=parsed_data.get("release_time", ""),
+            block=parsed_data.get("block", ""),
+            synth=parsed_data.get("synth", ""),
+            total_pay=parsed_data.get("total_pay", ""),
+            duty=parsed_data.get("duty", ""),
+            flight_duty=parsed_data.get("flight_duty", ""),
+            calendar=parsed_data.get("calendar_entries", []),
+        )
+        return data  # type: ignore
 
 
 class Layover(PyparsingParser):
@@ -287,18 +307,20 @@ class Layover(PyparsingParser):
 
     def parse(self, ctx: ParseContextABC, input: IndexedString) -> ParseResult:
         _ = ctx
-        result_dict = self.get_result(indexed_string=input)
-        # parsed_data = models.Layover(
-        #     layover_city=result_dict.get("layover_city", ""),
-        #     name=result_dict.get("hotel", ""),
-        #     phone=result_dict.get("hotel_phone", ""),
-        #     rest=result_dict.get("rest", ""),
-        #     calendar=result_dict.get("calendar_entries", []),
-        # )
-        result = ParsedIndexedString(
-            id=self.state, indexed_string=input, data=result_dict
-        )
+        result_dict = self.get_parsed_data(indexed_string=input)
+        data = self.translate_result(parsed_data=result_dict)
+        result = ParsedIndexedString(id=self.state, indexed_string=input, data=data)
         return ParseResult(current_state=self.state, parsed_indexed_string=result)
+
+    def translate_result(self, parsed_data: dict[str, Any]) -> dict[str, Any]:
+        data = TD.Layover(
+            layover_city=parsed_data.get("layover_city", ""),
+            name=parsed_data.get("hotel", ""),
+            phone=parsed_data.get("hotel_phone", ""),
+            rest=parsed_data.get("rest", ""),
+            calendar=parsed_data.get("calendar_entries", []),
+        )
+        return data  # type: ignore
 
 
 class HotelAdditional(PyparsingParser):
@@ -308,17 +330,19 @@ class HotelAdditional(PyparsingParser):
 
     def parse(self, ctx: ParseContextABC, input: IndexedString) -> ParseResult:
         _ = ctx
-        result_dict = self.get_result(indexed_string=input)
-        # parsed_data = models.HotelAdditional(
-        #     layover_city=result_dict.get("layover_city", ""),
-        #     name=result_dict.get("hotel", ""),
-        #     phone=result_dict.get("hotel_phone", ""),
-        #     calendar=result_dict.get("calendar_entries", []),
-        # )
-        result = ParsedIndexedString(
-            id=self.state, indexed_string=input, data=result_dict
-        )
+        result_dict = self.get_parsed_data(indexed_string=input)
+        data = self.translate_result(parsed_data=result_dict)
+        result = ParsedIndexedString(id=self.state, indexed_string=input, data=data)
         return ParseResult(current_state=self.state, parsed_indexed_string=result)
+
+    def translate_result(self, parsed_data: dict[str, Any]) -> dict[str, Any]:
+        data = TD.HotelAdditional(
+            layover_city=parsed_data.get("layover_city", ""),
+            name=parsed_data.get("hotel", ""),
+            phone=parsed_data.get("hotel_phone", ""),
+            calendar=parsed_data.get("calendar_entries", []),
+        )
+        return data  # type: ignore
 
 
 class Transportation(PyparsingParser):
@@ -328,16 +352,18 @@ class Transportation(PyparsingParser):
 
     def parse(self, ctx: ParseContextABC, input: IndexedString) -> ParseResult:
         _ = ctx
-        result_dict = self.get_result(indexed_string=input)
-        # parsed_data = models.Transportation(
-        #     name=result_dict.get("transportation", ""),
-        #     phone=result_dict.get("phone", ""),
-        #     calendar=result_dict.get("calendar_entries", []),
-        # )
-        result = ParsedIndexedString(
-            id=self.state, indexed_string=input, data=result_dict
-        )
+        result_dict = self.get_parsed_data(indexed_string=input)
+        data = self.translate_result(parsed_data=result_dict)
+        result = ParsedIndexedString(id=self.state, indexed_string=input, data=data)
         return ParseResult(current_state=self.state, parsed_indexed_string=result)
+
+    def translate_result(self, parsed_data: dict[str, Any]) -> dict[str, Any]:
+        data = TD.Transportation(
+            name=parsed_data.get("transportation", ""),
+            phone=parsed_data.get("phone", ""),
+            calendar=parsed_data.get("calendar_entries", []),
+        )
+        return data  # type: ignore
 
 
 class TransportationAdditional(PyparsingParser):
@@ -348,7 +374,7 @@ class TransportationAdditional(PyparsingParser):
     def parse(self, ctx: ParseContextABC, input: IndexedString) -> ParseResult:
         _ = ctx
 
-        result_dict = self.get_result(indexed_string=input)
+        result_dict = self.get_parsed_data(indexed_string=input)
         # try:
         #     parsed_data = models.TransportationAdditional(
         #         name=result_dict.get("transportation", ""),
@@ -361,10 +387,17 @@ class TransportationAdditional(PyparsingParser):
         #         parser=self,
         #         indexed_string=input,
         #     ) from error
-        result = ParsedIndexedString(
-            id=self.state, indexed_string=input, data=result_dict
-        )
+        data = self.translate_result(parsed_data=result_dict)
+        result = ParsedIndexedString(id=self.state, indexed_string=input, data=data)
         return ParseResult(current_state=self.state, parsed_indexed_string=result)
+
+    def translate_result(self, parsed_data: dict[str, Any]) -> dict[str, Any]:
+        data = TD.TransportationAdditional(
+            name=parsed_data.get("transportation", ""),
+            phone=parsed_data.get("phone", ""),
+            calendar=parsed_data.get("calendar_entries", []),
+        )
+        return data  # type: ignore
 
 
 class TripFooter(PyparsingParser):
@@ -374,18 +407,20 @@ class TripFooter(PyparsingParser):
 
     def parse(self, ctx: ParseContextABC, input: IndexedString) -> ParseResult:
         _ = ctx
-        result_dict = self.get_result(indexed_string=input)
-        # parsed_data = models.TripFooter(
-        #     block=result_dict.get("block", ""),
-        #     synth=result_dict.get("synth", ""),
-        #     total_pay=result_dict.get("total_pay", ""),
-        #     tafb=result_dict.get("tafb", ""),
-        #     calendar=result_dict.get("calendar_entries", []),
-        # )
-        result = ParsedIndexedString(
-            id=self.state, indexed_string=input, data=result_dict
-        )
+        result_dict = self.get_parsed_data(indexed_string=input)
+        data = self.translate_result(parsed_data=result_dict)
+        result = ParsedIndexedString(id=self.state, indexed_string=input, data=data)
         return ParseResult(current_state=self.state, parsed_indexed_string=result)
+
+    def translate_result(self, parsed_data: dict[str, Any]) -> dict[str, Any]:
+        data = TD.TripFooter(
+            block=parsed_data.get("block", ""),
+            synth=parsed_data.get("synth", ""),
+            total_pay=parsed_data.get("total_pay", ""),
+            tafb=parsed_data.get("tafb", ""),
+            calendar=parsed_data.get("calendar_entries", []),
+        )
+        return data  # type: ignore
 
 
 class CalendarOnly(PyparsingParser):
@@ -403,14 +438,16 @@ class CalendarOnly(PyparsingParser):
                 parser_name=self.__class__.__name__,
                 indexed_string=input,
             )
-        result_dict = self.get_result(indexed_string=input)
-        # parsed_data = models.CalendarOnly(
-        #     calendar=result_dict.get("calendar_entries", []),
-        # )
-        result = ParsedIndexedString(
-            id=self.state, indexed_string=input, data=result_dict
-        )
+        result_dict = self.get_parsed_data(indexed_string=input)
+        data = self.translate_result(parsed_data=result_dict)
+        result = ParsedIndexedString(id=self.state, indexed_string=input, data=data)
         return ParseResult(current_state=self.state, parsed_indexed_string=result)
+
+    def translate_result(self, parsed_data: dict[str, Any]) -> dict[str, Any]:
+        data = TD.CalendarOnly(
+            calendar=parsed_data.get("calendar_entries", []),
+        )
+        return data  # type: ignore
 
 
 def get_leading_whitespace(txt: str) -> str:
@@ -429,17 +466,19 @@ class PageFooter(PyparsingParser):
 
     def parse(self, ctx: ParseContextABC, input: IndexedString) -> ParseResult:
         _ = ctx
-        result_dict = self.get_result(indexed_string=input)
-        # parsed_data = models.PageFooter(
-        #     issued=result_dict.get("issued", ""),
-        #     effective=result_dict.get("effective", ""),
-        #     base=result_dict.get("base", ""),
-        #     satelite_base=result_dict.get("satelite_base", ""),
-        #     equipment=result_dict.get("equipment", ""),
-        #     division=result_dict.get("division", ""),
-        #     page=result_dict.get("internal_page", ""),
-        # )
-        result = ParsedIndexedString(
-            id=self.state, indexed_string=input, data=result_dict
-        )
+        result_dict = self.get_parsed_data(indexed_string=input)
+        data = self.translate_result(parsed_data=result_dict)
+        result = ParsedIndexedString(id=self.state, indexed_string=input, data=data)
         return ParseResult(current_state=self.state, parsed_indexed_string=result)
+
+    def translate_result(self, parsed_data: dict[str, Any]) -> dict[str, Any]:
+        data = TD.PageFooter(
+            issued=parsed_data.get("issued", ""),
+            effective=parsed_data.get("effective", ""),
+            base=parsed_data.get("base", ""),
+            satellite_base=parsed_data.get("satellite_base", ""),
+            equipment=parsed_data.get("equipment", ""),
+            division=parsed_data.get("division", ""),
+            page=parsed_data.get("internal_page", ""),
+        )
+        return data  # type: ignore

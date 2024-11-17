@@ -16,7 +16,7 @@ items = [
     ParserTest(
         input=IndexedString(idx=1, txt="BOS 737"),
         result_id=result_id,
-        data={"base": "BOS", "equipment": "737"},
+        data={"base": "BOS", "satellite_base": "", "equipment": "737"},
     ),
     ParserTest(
         input=IndexedString(idx=2, txt="LAX SAN 737"),

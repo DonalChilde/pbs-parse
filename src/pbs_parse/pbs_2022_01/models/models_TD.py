@@ -23,9 +23,9 @@ class BaseEquipment(TypedDict):
 class TripHeader(TypedDict):
     number: str
     ops_count: str
-    positions: str
-    operations: str
-    qualifications: str
+    positions: list[str]
+    operations: list[str]
+    qualifications: list[str]
 
 
 class PriorMonthDeadhead(TypedDict):
@@ -43,9 +43,10 @@ class Flight(TypedDict):
     eq_code: str
     flight_number: str
     deadhead: str
+    deadhead_code: str
     departure_station: str
     departure_time: str
-    meal: str
+    crew_meal: str
     arrival_station: str
     arrival_time: str
     block: str
@@ -112,7 +113,7 @@ class PageFooter(TypedDict):
     issued: str
     effective: str
     base: str
-    satelite_base: str
+    satellite_base: str
     equipment: str
     division: str
     page: str

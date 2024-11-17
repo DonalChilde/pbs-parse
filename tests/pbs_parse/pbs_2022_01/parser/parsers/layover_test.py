@@ -21,10 +21,10 @@ items = [
         result_id=result_id,
         data={
             "layover_city": "MIA",
-            "hotel": "SONESTA MIAMI AIRPORT",
-            "hotel_phone": "13054469000",
+            "name": "SONESTA MIAMI AIRPORT",
+            "phone": "13054469000",
             "rest": "11.27",
-            "calendar_entries": ["−−", "−−", "−−", "−−", "−−", "−−", "−−"],
+            "calendar": ["−−", "−−", "−−", "−−", "−−", "−−", "−−"],
         },
     ),
     ParserTest(
@@ -35,10 +35,10 @@ items = [
         result_id=result_id,
         data={
             "layover_city": "LHR",
-            "hotel": "PARK PLAZA WESTMINSTER BRIDGE LONDON",
-            "hotel_phone": "443334006112",
+            "name": "PARK PLAZA WESTMINSTER BRIDGE LONDON",
+            "phone": "443334006112",
             "rest": "24.00",
-            "calendar_entries": ["−−", "−−", "−−", "−−", "−−", "−−", "−−"],
+            "calendar": ["−−", "−−", "−−", "−−", "−−", "−−", "−−"],
         },
     ),
     ParserTest(
@@ -49,9 +49,10 @@ items = [
         result_id=result_id,
         data={
             "layover_city": "JFK",
-            "hotel": "HOTEL INFO IN CCI/CREW PORTAL",
+            "name": "HOTEL INFO IN CCI/CREW PORTAL",
+            "phone": "",
             "rest": "19.37",
-            "calendar_entries": [],
+            "calendar": [],
         },
     ),
 ]

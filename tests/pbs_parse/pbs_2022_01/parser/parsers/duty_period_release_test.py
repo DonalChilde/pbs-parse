@@ -20,13 +20,13 @@ items = [
         ),
         result_id=result_id,
         data={
-            "release_time": "0739/0439",
+            "release": "0739/0439",
             "block": "4.49",
             "synth": "0.00",
             "total_pay": "4.49",
             "duty": "6.19",
             "flight_duty": "5.49",
-            "calendar_entries": ["−−", "−−", "−−", "−−", "−−", "−−", "−−"],
+            "calendar": ["−−", "−−", "−−", "−−", "−−", "−−", "−−"],
         },
     ),
     ParserTest(
@@ -36,13 +36,13 @@ items = [
         ),
         result_id=result_id,
         data={
-            "release_time": "2252/2252",
+            "release": "2252/2252",
             "block": "0.00",
             "synth": "5.46",
             "total_pay": "5.46",
             "duty": "6.46",
             "flight_duty": "0.00",
-            "calendar_entries": [],
+            "calendar": [],
         },
     ),
 ]

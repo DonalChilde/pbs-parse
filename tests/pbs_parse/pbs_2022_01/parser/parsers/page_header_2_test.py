@@ -19,7 +19,7 @@ items = [
             txt="DP D/A EQ FLT#  STA DLCL/DHBT ML STA ALCL/AHBT  BLOCK  SYNTH   TPAY   DUTY  TAFB   FDP CALENDAR 05/02−06/01",
         ),
         result_id=result_id,
-        data={"from_date": ["05", "/", "02"], "to_date": ["06", "/", "01"]},
+        data={"from_date": "05/02", "to_date": "06/01"},
     ),
 ]
 

@@ -20,9 +20,9 @@ items = [
         ),
         result_id=result_id,
         data={
-            "transportation": "SIN FIN DE SERVICIOS",
+            "name": "SIN FIN DE SERVICIOS",
             "phone": "3331223240",
-            "calendar_entries": [],
+            "calendar": [],
         },
     ),
     ParserTest(
@@ -32,9 +32,9 @@ items = [
         ),
         result_id=result_id,
         data={
-            "transportation": "VIP TRANSPORTATION− OGG",
+            "name": "VIP TRANSPORTATION− OGG",
             "phone": "8088712702",
-            "calendar_entries": ["−−", "−−", "−−"],
+            "calendar": ["−−", "−−", "−−"],
         },
     ),
     ParserTest(
@@ -44,9 +44,9 @@ items = [
         ),
         result_id=result_id,
         data={
-            "transportation": "COMET CAR HIRE (CCH) LTD",
+            "name": "COMET CAR HIRE (CCH) LTD",
             "phone": "442088979984",
-            "calendar_entries": ["−−", "−−", "−−"],
+            "calendar": ["−−", "−−", "−−"],
         },
     ),
 ]

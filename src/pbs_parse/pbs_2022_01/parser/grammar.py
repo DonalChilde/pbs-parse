@@ -200,7 +200,7 @@ FlightDeadhead = (
     + pp.Opt(pp.Word(pp.alphas, exact=1, as_keyword=True), default="")("crew_meal")
     + CITY("arrival_station")
     + DUALTIME("arrival_time")
-    + pp.Word(pp.alphas, exact=2)("deadhead_block")
+    + pp.Word(pp.alphas, exact=2)("deadhead_code")
     + DURATION("synth")
     + pp.Opt(DURATION("ground"), default="0.00")
     + pp.Opt("X", default="")("equipment_change")

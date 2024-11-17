@@ -20,9 +20,9 @@ items = [
         ),
         result_id=result_id,
         data={
-            "transportation": "SKY TRANSPORTATION SERVICE, LLC",
+            "name": "SKY TRANSPORTATION SERVICE, LLC",
             "phone": "8566169633",
-            "calendar_entries": [],
+            "calendar": [],
         },
     ),
     ParserTest(
@@ -32,9 +32,9 @@ items = [
         ),
         result_id=result_id,
         data={
-            "transportation": "DESERT COACH",
+            "name": "DESERT COACH",
             "phone": "6022866161",
-            "calendar_entries": [],
+            "calendar": [],
         },
     ),
 ]

@@ -24,7 +24,7 @@ items = [
             "synth": "0.00",
             "total_pay": "7.50",
             "tafb": "10.20",
-            "calendar_entries": ["−−", "−−", "−−"],
+            "calendar": ["−−", "−−", "−−"],
         },
     ),
 ]

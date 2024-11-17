@@ -19,7 +19,7 @@ items = [
             txt="                                                                                       −− 17 18 19 20 21 22",
         ),
         result_id=result_id,
-        data={"calendar_entries": ["−−", "17", "18", "19", "20", "21", "22"]},
+        data={"calendar": ["−−", "17", "18", "19", "20", "21", "22"]},
     ),
     ParserTest(
         input=IndexedString(
@@ -27,7 +27,7 @@ items = [
             txt="                                                                                       23 24 25 26 27 28 29",
         ),
         result_id=result_id,
-        data={"calendar_entries": ["23", "24", "25", "26", "27", "28", "29"]},
+        data={"calendar": ["23", "24", "25", "26", "27", "28", "29"]},
     ),
 ]
 
