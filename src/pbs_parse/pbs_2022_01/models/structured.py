@@ -171,3 +171,8 @@ class Trip:
 
 def structured_trip_serializer() -> DataclassSerializer[Trip, TD.Trip]:
     return DataclassSerializer[Trip, TD.Trip](complex_factory=Trip.from_simple)
+
+
+def default_file_name(path_name: str) -> str:
+    new_name = path_name.removesuffix(".parsed.json")
+    return f"{new_name}.structured.json"

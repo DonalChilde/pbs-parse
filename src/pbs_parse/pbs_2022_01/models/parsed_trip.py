@@ -1,4 +1,5 @@
 from dataclasses import dataclass, field
+from pathlib import Path
 from typing import TypedDict
 
 from pfmsoft.snippets.simple_serializer import DataclassSerializer
@@ -34,3 +35,7 @@ def parsed_trip_serializer() -> DataclassSerializer[ParsedTrip, ParsedTripTD]:
     return DataclassSerializer[ParsedTrip, ParsedTripTD](
         complex_factory=ParsedTrip.from_simple
     )
+
+
+def default_file_name(path_name: str) -> str:
+    return f"{Path(path_name).stem}.parsed.json"

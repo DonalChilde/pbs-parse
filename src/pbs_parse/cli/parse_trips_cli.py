@@ -14,7 +14,10 @@ from rich.progress import (
     TotalFileSizeColumn,
 )
 
-from pbs_parse.pbs_2022_01.models.parsed_trip import parsed_trip_serializer
+from pbs_parse.pbs_2022_01.models.parsed_trip import (
+    default_file_name,
+    parsed_trip_serializer,
+)
 from pbs_parse.pbs_2022_01.parser.trip_lines_parser import TripLinesParser
 
 app = typer.Typer()
@@ -66,10 +69,6 @@ def parse_trips_rich(jobs: ParseTripJobs):
             )
 
 
-def output_file_name(path_in: Path) -> str:
-    return f"{path_in.stem}.parsed.json"
-
-
 @app.command()
 def trip(
     ctx: typer.Context,
@@ -100,7 +99,7 @@ def trip(
     if file_name is not None:
         dest_path = path_out / file_name
     else:
-        dest_path = path_out / f"{output_file_name(path_in=path_in)}"
+        dest_path = path_out / default_file_name(path_name=path_in.name)
 
     jobs = ParseTripJobs()
     jobs.jobs.append(
@@ -139,7 +138,7 @@ def trips(
             )
     jobs = ParseTripJobs()
     for input_file in files:
-        dest_path = path_out / f"{output_file_name(path_in=input_file)}"
+        dest_path = path_out / default_file_name(path_name=input_file.name)
         jobs.jobs.append(
             ParseTripJob(path_in=input_file, path_out=dest_path, overwrite=overwrite)
         )
