@@ -3,10 +3,10 @@ import re
 from typing import Any
 
 import pyparsing as pp
-from pfmsoft.snippets.indexed_string.model import IndexedString
-from pfmsoft.snippets.state_parser.abc import ParseContextABC, ParserABC
-from pfmsoft.snippets.state_parser.model import ParsedIndexedString, ParseResult
-from pfmsoft.snippets.state_parser.parse_exception import SingleParserFail
+from pfmsoft.indexed_string.model import IndexedString
+from pfmsoft.state_parser.abc import ParseContextABC, ParserABC
+from pfmsoft.state_parser.model import ParsedIndexedString, ParseResult
+from pfmsoft.state_parser.parse_exception import SingleParserFail
 
 from pbs_parse.pbs_2022_01.models import parsed_lines_TD as TD
 from pbs_parse.pbs_2022_01.parser import grammar

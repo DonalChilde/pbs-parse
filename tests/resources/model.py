@@ -1,7 +1,7 @@
 from dataclasses import dataclass, field
 from typing import Any
 
-from pfmsoft.snippets.indexed_string.model import IndexedString
+from pfmsoft.indexed_string.model import IndexedString
 
 
 @dataclass

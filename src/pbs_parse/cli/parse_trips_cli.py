@@ -3,7 +3,7 @@ from pathlib import Path
 from typing import Annotated
 
 import typer
-from pfmsoft.snippets.state_parser import ParseContext
+from pfmsoft.state_parser import ParseContext
 from rich.progress import (
     BarColumn,
     FileSizeColumn,

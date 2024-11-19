@@ -3,7 +3,7 @@ from pathlib import Path
 
 import pytest
 from pbs_split.models import trip_lines_serializer
-from pfmsoft.snippets.state_parser import ParseContext, ParseScheme
+from pfmsoft.state_parser import ParseContext, ParseScheme
 
 from pbs_parse.pbs_2022_01.models.parsed_trip import parsed_trip_serializer
 from pbs_parse.pbs_2022_01.parser.parse_table import parse_table

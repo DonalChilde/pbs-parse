@@ -1,6 +1,6 @@
 from typing import Dict, Sequence
 
-from pfmsoft.snippets.state_parser.abc import ParserABC
+from pfmsoft.state_parser.abc import ParserABC
 
 from pbs_parse.pbs_2022_01.parser import parsers
 

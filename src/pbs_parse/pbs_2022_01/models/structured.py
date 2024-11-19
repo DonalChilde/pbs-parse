@@ -5,7 +5,7 @@ Structured model of a parsed trip, no translations from strings.
 from dataclasses import dataclass, field
 from typing import Optional
 
-from pfmsoft.snippets.simple_serializer import DataclassSerializer
+from pfmsoft.simple_serializer import DataclassSerializer
 
 from pbs_parse.pbs_2022_01.models import structured_TD as TD
 

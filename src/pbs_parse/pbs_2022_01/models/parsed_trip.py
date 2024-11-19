@@ -2,8 +2,8 @@ from dataclasses import dataclass, field
 from pathlib import Path
 from typing import TypedDict
 
-from pfmsoft.snippets.simple_serializer import DataclassSerializer
-from pfmsoft.snippets.state_parser import model
+from pfmsoft.simple_serializer import DataclassSerializer
+from pfmsoft.state_parser import model
 
 
 class ParsedTripTD(TypedDict):

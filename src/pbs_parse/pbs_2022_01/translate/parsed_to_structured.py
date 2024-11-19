@@ -4,7 +4,7 @@ from pathlib import Path
 from typing import Any, Optional
 from uuid import uuid4
 
-from pfmsoft.snippets.state_parser.model import ParsedIndexedString
+from pfmsoft.state_parser.model import ParsedIndexedString
 
 from pbs_parse.pbs_2022_01.models import parsed_lines_TD as linesTD
 from pbs_parse.pbs_2022_01.models import structured

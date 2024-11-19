@@ -1,8 +1,8 @@
 import logging
 
 import pytest
-from pfmsoft.snippets.indexed_string.model import IndexedString
-from pfmsoft.snippets.state_parser import ParseContext
+from pfmsoft.indexed_string.model import IndexedString
+from pfmsoft.state_parser import ParseContext
 
 from pbs_parse.pbs_2022_01.parser import parsers
 from tests.resources.model import ParserTest
