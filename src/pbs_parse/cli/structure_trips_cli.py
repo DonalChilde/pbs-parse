@@ -3,7 +3,6 @@ from pathlib import Path
 from typing import Annotated
 
 import typer
-from pfmsoft.snippets.state_parser import ParseContext
 from rich.progress import (
     BarColumn,
     FileSizeColumn,
@@ -14,22 +13,24 @@ from rich.progress import (
     TotalFileSizeColumn,
 )
 
-from pbs_parse.pbs_2022_01.models.parsed_trip import parsed_trip_serializer
-from pbs_parse.pbs_2022_01.parser.trip_lines_parser import TripLinesParser
+from pbs_parse.pbs_2022_01.models.structured import structured_trip_serializer
+from pbs_parse.pbs_2022_01.translate.parsed_to_structured import translate_file
 
 app = typer.Typer()
 
 
 @dataclass
-class ParseTripJob:
+class StructureTripJob:
     path_in: Path
     path_out: Path
     overwrite: bool = False
+    effective_from: str = ""
+    effective_to: str = ""
 
 
 @dataclass
-class ParseTripJobs:
-    jobs: list[ParseTripJob] = field(default_factory=list)
+class StructureTripJobs:
+    jobs: list[StructureTripJob] = field(default_factory=list)
 
     def total_size_of_files(self) -> int:
         total = 0
@@ -38,7 +39,7 @@ class ParseTripJobs:
         return total
 
 
-def parse_trips_rich(jobs: ParseTripJobs):
+def structure_trips_rich(jobs: StructureTripJobs):
     file_count = len(jobs.jobs)
     with Progress(
         TextColumn("[progress.description]{task.description}"),
@@ -50,13 +51,19 @@ def parse_trips_rich(jobs: ParseTripJobs):
     ) as progress:
         task = progress.add_task(f"1 of {file_count}", total=jobs.total_size_of_files())
         total_trips = 0
-        parser = TripLinesParser()
-        serializer = parsed_trip_serializer()
+        serializer = structured_trip_serializer()
         for idx, job in enumerate(jobs.jobs, start=1):
-            ctx = ParseContext()
-            parsed_trip = parser.parse_file(ctx=ctx, path_in=job.path_in)
+            external_data = {
+                "effective_from": job.effective_from,
+                "effective_to": job.effective_to,
+            }
+            structured_trip = translate_file(
+                path_in=job.path_in, external_data=external_data
+            )
             serializer.save_as_json(
-                path_out=job.path_out, complex_obj=parsed_trip, overwrite=job.overwrite
+                path_out=job.path_out,
+                complex_obj=structured_trip,
+                overwrite=job.overwrite,
             )
             total_trips += 1
             progress.update(
@@ -67,7 +74,7 @@ def parse_trips_rich(jobs: ParseTripJobs):
 
 
 def output_file_name(path_in: Path) -> str:
-    return f"{path_in.stem}.parsed.json"
+    return f"{path_in.stem}.structured.json"
 
 
 @app.command()
@@ -76,11 +83,11 @@ def trip(
     path_in: Annotated[
         Path,
         typer.Argument(
-            help="source IndexedStrings.json file.", exists=True, file_okay=True
+            help="source parsed trip .json file.", exists=True, file_okay=True
         ),
     ],
     path_out: Annotated[
-        Path, typer.Argument(help="destination directory for parsed trip.")
+        Path, typer.Argument(help="destination directory for structured trip.")
     ],
     file_name: Annotated[
         Path | None,
@@ -102,21 +109,26 @@ def trip(
     else:
         dest_path = path_out / f"{output_file_name(path_in=path_in)}"
 
-    jobs = ParseTripJobs()
+    jobs = StructureTripJobs()
     jobs.jobs.append(
-        ParseTripJob(path_in=path_in, path_out=dest_path, overwrite=overwrite)
+        StructureTripJob(path_in=path_in, path_out=dest_path, overwrite=overwrite)
     )
-    parse_trips_rich(jobs=jobs)
+    structure_trips_rich(jobs=jobs)
 
 
 @app.command()
 def trips(
     ctx: typer.Context,
     path_in: Annotated[
-        Path, typer.Argument(help="source pdf file.", exists=True, file_okay=False)
+        Path,
+        typer.Argument(
+            help="directory containing parsed trip .json files.",
+            exists=True,
+            file_okay=False,
+        ),
     ],
     path_out: Annotated[
-        Path, typer.Argument(help="destination directory for text file.")
+        Path, typer.Argument(help="destination directory for structured trips files.")
     ],
     overwrite: Annotated[
         bool, typer.Option(help="Overwrite existing output file.")
@@ -125,7 +137,7 @@ def trips(
         bool, typer.Option(help="Suppress task status messages.")
     ] = False,
 ):
-    glob = "*.trip_*"
+    glob = "*.parsed.json*"
     files = []
     if path_in.is_file():
         raise typer.BadParameter("PATH_IN is a file and should be a directory.")
@@ -137,10 +149,12 @@ def trips(
             raise typer.BadParameter(
                 f"No files found in directory. files are expected to match {glob}"
             )
-    jobs = ParseTripJobs()
+    jobs = StructureTripJobs()
     for input_file in files:
         dest_path = path_out / f"{output_file_name(path_in=input_file)}"
         jobs.jobs.append(
-            ParseTripJob(path_in=input_file, path_out=dest_path, overwrite=overwrite)
+            StructureTripJob(
+                path_in=input_file, path_out=dest_path, overwrite=overwrite
+            )
         )
-    parse_trips_rich(jobs=jobs)
+    structure_trips_rich(jobs=jobs)

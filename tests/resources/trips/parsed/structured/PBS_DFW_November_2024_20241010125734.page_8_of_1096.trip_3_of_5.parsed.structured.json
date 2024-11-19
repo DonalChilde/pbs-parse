@@ -1,0 +1,119 @@
+{
+ "uuid": "5f827d20-3e50-4b40-a14b-3f6b7c26a23d",
+ "number": "345",
+ "ops_count": "1",
+ "block": "8.50",
+ "synth": "6.55",
+ "total_pay": "15.45",
+ "tafb": "48.47",
+ "external": {
+  "effective_from": "foo",
+  "effective_to": "bar"
+ },
+ "page_header": {
+  "from_date": "11/01",
+  "to_date": "12/01"
+ },
+ "page_footer": {
+  "issued": "09OCT2024",
+  "effective": "01NOV2024",
+  "base": "DFW",
+  "satellite_base": "",
+  "equipment": "777",
+  "division": "INTL",
+  "page": "823"
+ },
+ "positions": [
+  "CA",
+  "FO"
+ ],
+ "operations": [],
+ "qualifications": [],
+ "dutyperiods": [
+  {
+   "uuid": "f8904ebf-7a7d-4807-ade2-ed2b76476426",
+   "idx": "1",
+   "report_time": "0800/0700",
+   "release_time": "1622/1622",
+   "block": "2.57",
+   "synth": "3.27",
+   "total_pay": "6.24",
+   "duty": "9.22",
+   "flight_duty": "3.57",
+   "layover": null,
+   "flights": [
+    {
+     "uuid": "5c6a58bc-ecfa-4bbd-aca2-8340b1a52e22",
+     "dutyperiod_idx": "3",
+     "idx": "1",
+     "dep_arr_day": "3/3",
+     "eq_code": "83",
+     "flight_number": "310",
+     "deadhead": "",
+     "deadhead_code": "",
+     "departure_station": "PHL",
+     "departure_time": "0900/0800",
+     "crew_meal": "B",
+     "arrival_station": "MIA",
+     "arrival_time": "1157/1057",
+     "block": "2.57",
+     "synth": "",
+     "ground": "1.28",
+     "equipment_change": "X"
+    },
+    {
+     "uuid": "46f51544-388c-4c6d-9def-e42c7c83b902",
+     "dutyperiod_idx": "3",
+     "idx": "2",
+     "dep_arr_day": "3/3",
+     "eq_code": "45",
+     "flight_number": "2038",
+     "deadhead": "D",
+     "deadhead_code": "AA",
+     "departure_station": "MIA",
+     "departure_time": "1325/1225",
+     "crew_meal": "",
+     "arrival_station": "DFW",
+     "arrival_time": "1552/1552",
+     "block": "0.00",
+     "synth": "3.27",
+     "ground": "0.00",
+     "equipment_change": ""
+    }
+   ]
+  }
+ ],
+ "calendar": [
+  "\u2212\u2212",
+  "\u2212\u2212",
+  "\u2212\u2212",
+  "\u2212\u2212",
+  "\u2212\u2212",
+  "\u2212\u2212",
+  "\u2212\u2212",
+  "\u2212\u2212",
+  "\u2212\u2212",
+  "\u2212\u2212",
+  "\u2212\u2212",
+  "\u2212\u2212",
+  "\u2212\u2212",
+  "\u2212\u2212",
+  "\u2212\u2212",
+  "\u2212\u2212",
+  "\u2212\u2212",
+  "\u2212\u2212",
+  "\u2212\u2212",
+  "\u2212\u2212",
+  "\u2212\u2212",
+  "\u2212\u2212",
+  "23",
+  "\u2212\u2212",
+  "\u2212\u2212",
+  "\u2212\u2212",
+  "\u2212\u2212",
+  "\u2212\u2212",
+  "\u2212\u2212",
+  "\u2212\u2212",
+  "\u2212\u2212"
+ ]
+}

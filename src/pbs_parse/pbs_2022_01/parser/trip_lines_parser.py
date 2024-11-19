@@ -7,11 +7,11 @@ from pfmsoft.snippets.state_parser import ParseContext, ParseScheme, StateParser
 from pfmsoft.snippets.state_parser.parse_exception import ParseException
 from pfmsoft.snippets.state_parser.result_handler import CollectResults
 
-from pbs_parse.pbs_2022_01.models.parsed import ParsedTrip
+from pbs_parse.pbs_2022_01.models.parsed_trip import ParsedTrip
 from pbs_parse.pbs_2022_01.parser.parse_table import parse_table
 
 
-class TripParser:
+class TripLinesParser:
     def __init__(self, scheme: Optional[ParseScheme] = None) -> None:
         if scheme is None:
             scheme = ParseScheme(parser_lookup=parse_table())

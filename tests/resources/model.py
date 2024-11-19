@@ -20,8 +20,8 @@ class GrammarTest:
 
 
 @dataclass
-class ParseTripTest:
-    indexed_anchor: str
-    indexed_filename: str
-    parsed_anchor: str
-    parsed_filename: str
+class FileBasedTest:
+    input_anchor: str
+    input_filename: str
+    comparison_anchor: str
+    comparison_filename: str

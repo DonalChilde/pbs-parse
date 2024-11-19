@@ -17,10 +17,6 @@ def parse_table() -> Dict[str, Sequence[ParserABC]]:
             parsers.TripHeader(state="trip_header"),
             parsers.BaseEquipment("base_equipment"),
         ],
-        # "HeaderSeparator": [
-        #     parsers.TripHeader(),
-        #     parsers.BaseEquipment(),
-        # ],
         "base_equipment": [
             parsers.TripHeader(state="trip_header"),
         ],
@@ -65,15 +61,8 @@ def parse_table() -> Dict[str, Sequence[ParserABC]]:
             parsers.PageFooter(state="page_footer"),
             parsers.CalendarOnly(state="calendar_only"),
         ],
-        # "CalendarOnly": [
-        #     parsers.TripSeparator(state="calendar_only"),
-        # ],
-        # "TripSeparator": [
-        #     parsers.TripHeader(state=),
-        #     parsers.PageFooter(state=),
-        # ],
-        # "PageFooter": [
-        #     parsers.PageHeader1(state=),
-        # ],
+        "calendar_only": [
+            parsers.PageFooter(state="page_footer"),
+        ],
     }
     return scheme
