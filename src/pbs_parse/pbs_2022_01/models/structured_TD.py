@@ -79,7 +79,7 @@ class ExternalData(TypedDict):
     effective_to: str
 
 
-class Trip(TypedDict):
+class StructuredTripTD(TypedDict):
     uuid: str
     number: str
     ops_count: str

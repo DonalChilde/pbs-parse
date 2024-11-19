@@ -1,3 +1,4 @@
+from datetime import date
 from importlib import resources
 from pathlib import Path
 
@@ -6,6 +7,7 @@ import pytest
 from pbs_parse.pbs_2022_01.models.parsed_trip import parsed_trip_serializer
 from pbs_parse.pbs_2022_01.models.structured import structured_trip_serializer
 from pbs_parse.pbs_2022_01.translate.parsed_to_structured import translate
+from pbs_parse.pbs_2022_01.validate.validate_structured import validate_files
 from tests.resources.model import FileBasedTest
 from tests.resources.trips import TRIPS_PARSED_ANCHOR, TRIPS_STRUCTURED_ANCHOR
 
@@ -34,7 +36,13 @@ def test_structure_trips(test_output_dir: Path, structure_trips_data: FileBasedT
         path_out = test_output_dir / OUTPUT_PATH / f"{input_path.stem}.structured.json"
     structured_trip = translate(
         parsed_trip=parsed_trip,
-        external_data={"effective_from": "foo", "effective_to": "bar"},
+        effective_from=date(2024, 11, 1),
+        effective_to=date(2024, 12, 1),
     )
     structured_serializer = structured_trip_serializer()
     structured_serializer.save_as_json(path_out=path_out, complex_obj=structured_trip)
+    ctx = validate_files(parsed_trip_path=input_path, structured_trip_path=path_out)
+    if ctx.errors:
+        errors_out = path_out.parent / f"{path_out.stem}.errors.txt"
+        errors_out.write_text("\n".join(ctx.errors))
+        assert False

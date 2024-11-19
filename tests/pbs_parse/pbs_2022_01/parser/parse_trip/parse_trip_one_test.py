@@ -40,6 +40,7 @@ def test_parse_trips(test_output_dir: Path, parse_trips_one: FileBasedTest):
     parsed_trip = parser.parse(ctx=ctx, trip_lines=raw_trip)
     parsed_serializer = parsed_trip_serializer()
     parsed_serializer.save_as_json(path_out=path_out, complex_obj=parsed_trip)
+    path_out.with_suffix(".txt").write_text(str(parsed_trip))
     if not PARSE_ONLY:
         parsed_file = resources.files(parse_trips_one.comparison_anchor).joinpath(
             parse_trips_one.comparison_filename

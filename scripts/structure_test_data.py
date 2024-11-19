@@ -1,12 +1,18 @@
 import shutil
 import subprocess
+from datetime import date, datetime
 from pathlib import Path
 from typing import Annotated
 
 import typer
 
+from pbs_parse.cli.structure_trips_cli import (
+    build_jobs_from_directory,
+    structure_trips_rich,
+)
+
 app = typer.Typer()
-# typer ./scripts/structure_test_data.py run structure-trips ~/projects/tmp/pbs-data/2024.11.01-2024.12.01
+# typer ./scripts/structure_test_data.py run structure-trips ~/projects/tmp/pbs-data/2024.11.01-2024.12.01 2024-11-01 2024-12-01
 # typer ./scripts/structure_test_data.py run reset ~/projects/tmp/pbs-data/2024.11.01-2024.12.01
 
 
@@ -51,22 +57,36 @@ def split_trip_dir_from_source_path(source_file: Path) -> Path:
     return trip_dir
 
 
-def structure_trips_from_files(source_paths: list[Path]):
+def structure_trips_from_files(
+    source_paths: list[Path], effective_from: date, effective_to: date
+):
     for source_file in source_paths:
-        path_in = parsed_trip_dir_from_source_file(source_file)
-        path_out = structured_trip_dir_from_source_file(source_file)
-        path_out.mkdir(parents=True)
-        args = [
-            "pbs-parse",
-            "structure",
-            "trips",
-            "--no-overwrite",
-            f"{path_in}",
-            f"{path_out}",
-        ]
-        result = subprocess.run(args, capture_output=True, check=True)
-        typer.echo(result.stdout)
-        typer.echo(result.stderr)
+        jobs = build_jobs_from_directory(
+            path_in=parsed_trip_dir_from_source_file(source_file),
+            path_out=structured_trip_dir_from_source_file(source_file),
+            effective_from=effective_from,
+            effective_to=effective_to,
+            overwrite=False,
+        )
+        structure_trips_rich(jobs=jobs)
+
+    # for source_file in source_paths:
+    #     path_in = parsed_trip_dir_from_source_file(source_file)
+    #     path_out = structured_trip_dir_from_source_file(source_file)
+    #     path_out.mkdir(parents=True)
+    #     args = [
+    #         "pbs-parse",
+    #         "structure",
+    #         "trips",
+    #         "--no-overwrite",
+    #         f"{path_in}",
+    #         f"{path_out}",
+    #         effective_from,
+    #         effective_to,
+    #     ]
+    #     result = subprocess.run(args, capture_output=True, check=True)
+    #     typer.echo(result.stdout)
+    #     typer.echo(result.stderr)
 
 
 def parse_trips_from_files(source_paths: list[Path]):
@@ -121,8 +141,18 @@ def structure_trips(
             dir_okay=True,
         ),
     ],
+    effective_from: Annotated[
+        datetime, typer.Argument(help="Effective From date for bid package.")
+    ],
+    effective_to: Annotated[
+        datetime, typer.Argument(help="Effective To date for bid package")
+    ],
 ):
     """translate the trips found in the `parsed` dir to the `structured` data directory."""
     source_files = get_text_source_files(path_in=path_in)
-    structure_trips_from_files(source_paths=source_files)
+    structure_trips_from_files(
+        source_paths=source_files,
+        effective_from=effective_from.date(),
+        effective_to=effective_to.date(),
+    )
     typer.echo(f"Structured trips for {len(source_files)} bid packages from {path_in}")

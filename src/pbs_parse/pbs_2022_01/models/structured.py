@@ -130,7 +130,7 @@ class ExternalData:
 
 
 @dataclass(slots=True)
-class Trip:
+class StructuredTrip:
     uuid: str
     number: str
     ops_count: str
@@ -148,8 +148,8 @@ class Trip:
     calendar: list[str] = field(default_factory=list)
 
     @staticmethod
-    def from_simple(simple_obj: TD.Trip) -> "Trip":
-        result = Trip(
+    def from_simple(simple_obj: TD.StructuredTripTD) -> "StructuredTrip":
+        result = StructuredTrip(
             uuid=simple_obj["uuid"],
             number=simple_obj["number"],
             ops_count=simple_obj["ops_count"],
@@ -169,8 +169,12 @@ class Trip:
         return result
 
 
-def structured_trip_serializer() -> DataclassSerializer[Trip, TD.Trip]:
-    return DataclassSerializer[Trip, TD.Trip](complex_factory=Trip.from_simple)
+def structured_trip_serializer() -> (
+    DataclassSerializer[StructuredTrip, TD.StructuredTripTD]
+):
+    return DataclassSerializer[StructuredTrip, TD.StructuredTripTD](
+        complex_factory=StructuredTrip.from_simple
+    )
 
 
 def default_file_name(path_name: str) -> str:

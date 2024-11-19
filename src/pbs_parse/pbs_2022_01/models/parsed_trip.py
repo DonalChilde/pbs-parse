@@ -30,6 +30,21 @@ class ParsedTrip:
         )
         return result
 
+    def __str__(self) -> str:
+        lines: list[str] = []
+        lines.append(f"uuid: {self.uuid}")
+        lines.append(f"source: {self.source}")
+        lines.append("Text Input:")
+        lines.extend((f"{x.indexed_string}" for x in self.parsed_lines))
+        lines.append("Parsed Data:")
+        lines.extend(
+            (
+                f"ID: {x.id} {x.indexed_string.idx}: {x.data!r}"
+                for x in self.parsed_lines
+            )
+        )
+        return "\n".join(lines)
+
 
 def parsed_trip_serializer() -> DataclassSerializer[ParsedTrip, ParsedTripTD]:
     return DataclassSerializer[ParsedTrip, ParsedTripTD](

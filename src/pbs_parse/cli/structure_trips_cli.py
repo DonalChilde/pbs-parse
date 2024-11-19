@@ -1,4 +1,5 @@
 from dataclasses import dataclass, field
+from datetime import date, datetime
 from pathlib import Path
 from typing import Annotated
 
@@ -15,6 +16,7 @@ from rich.progress import (
 
 from pbs_parse.pbs_2022_01.models.structured import structured_trip_serializer
 from pbs_parse.pbs_2022_01.translate.parsed_to_structured import translate_file
+from pbs_parse.pbs_2022_01.validate.validate_structured import validate_files
 
 app = typer.Typer()
 
@@ -23,9 +25,9 @@ app = typer.Typer()
 class StructureTripJob:
     path_in: Path
     path_out: Path
+    effective_from: date
+    effective_to: date
     overwrite: bool = False
-    effective_from: str = ""
-    effective_to: str = ""
 
 
 @dataclass
@@ -51,26 +53,41 @@ def structure_trips_rich(jobs: StructureTripJobs):
     ) as progress:
         task = progress.add_task(f"1 of {file_count}", total=jobs.total_size_of_files())
         total_trips = 0
+        total_errors = 0
+        trips_with_errors = 0
         serializer = structured_trip_serializer()
+
         for idx, job in enumerate(jobs.jobs, start=1):
-            external_data = {
-                "effective_from": job.effective_from,
-                "effective_to": job.effective_to,
-            }
             structured_trip = translate_file(
-                path_in=job.path_in, external_data=external_data
+                path_in=job.path_in,
+                effective_from=job.effective_from,
+                effective_to=job.effective_to,
             )
             serializer.save_as_json(
                 path_out=job.path_out,
                 complex_obj=structured_trip,
                 overwrite=job.overwrite,
             )
+            trans_ctx = validate_files(
+                parsed_trip_path=job.path_in, structured_trip_path=job.path_out
+            )
+            if trans_ctx.errors:
+                error_out = job.path_out.parent / f"{job.path_out.stem}.errors.txt"
+                error_out.write_text("\n".join(trans_ctx.errors))
+                trips_with_errors += 1
+                total_errors += len(trans_ctx.errors)
+                progress.console.print(
+                    f"Found {len(trans_ctx.errors)} errors in {job.path_out.name}"
+                )
             total_trips += 1
             progress.update(
                 task,
                 advance=job.path_in.stat().st_size,
                 description=f"{idx} of {file_count}, {total_trips} trips found.",
             )
+        if trips_with_errors > 0:
+            progress.console.print(f"Found errors in {trips_with_errors} trips.")
+    typer.echo("\n")
 
 
 def output_file_name(path_in: Path) -> str:
@@ -88,6 +105,12 @@ def trip(
     ],
     path_out: Annotated[
         Path, typer.Argument(help="destination directory for structured trip.")
+    ],
+    effective_from: Annotated[
+        datetime, typer.Argument(help="Effective From date for bid package.")
+    ],
+    effective_to: Annotated[
+        datetime, typer.Argument(help="Effective To date for bid package")
     ],
     file_name: Annotated[
         Path | None,
@@ -111,7 +134,13 @@ def trip(
 
     jobs = StructureTripJobs()
     jobs.jobs.append(
-        StructureTripJob(path_in=path_in, path_out=dest_path, overwrite=overwrite)
+        StructureTripJob(
+            path_in=path_in,
+            path_out=dest_path,
+            overwrite=overwrite,
+            effective_from=effective_from.date(),
+            effective_to=effective_to.date(),
+        )
     )
     structure_trips_rich(jobs=jobs)
 
@@ -130,6 +159,12 @@ def trips(
     path_out: Annotated[
         Path, typer.Argument(help="destination directory for structured trips files.")
     ],
+    effective_from: Annotated[
+        datetime, typer.Argument(help="Effective From date for bid package.")
+    ],
+    effective_to: Annotated[
+        datetime, typer.Argument(help="Effective To date for bid package")
+    ],
     overwrite: Annotated[
         bool, typer.Option(help="Overwrite existing output file.")
     ] = False,
@@ -137,6 +172,23 @@ def trips(
         bool, typer.Option(help="Suppress task status messages.")
     ] = False,
 ):
+    jobs = build_jobs_from_directory(
+        path_in=path_in,
+        path_out=path_out,
+        effective_from=effective_from.date(),
+        effective_to=effective_to.date(),
+        overwrite=overwrite,
+    )
+    structure_trips_rich(jobs=jobs)
+
+
+def build_jobs_from_directory(
+    path_in: Path,
+    path_out: Path,
+    effective_from: date,
+    effective_to: date,
+    overwrite: bool,
+) -> StructureTripJobs:
     glob = "*.parsed.json*"
     files = []
     if path_in.is_file():
@@ -154,7 +206,11 @@ def trips(
         dest_path = path_out / f"{output_file_name(path_in=input_file)}"
         jobs.jobs.append(
             StructureTripJob(
-                path_in=input_file, path_out=dest_path, overwrite=overwrite
+                path_in=input_file,
+                path_out=dest_path,
+                overwrite=overwrite,
+                effective_from=effective_from,
+                effective_to=effective_to,
             )
         )
-    structure_trips_rich(jobs=jobs)
+    return jobs

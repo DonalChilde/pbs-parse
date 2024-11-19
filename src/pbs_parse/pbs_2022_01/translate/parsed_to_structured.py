@@ -1,5 +1,6 @@
 import logging
 from dataclasses import dataclass, field
+from datetime import date
 from pathlib import Path
 from typing import Any, Optional
 from uuid import uuid4
@@ -36,18 +37,27 @@ class TripLines:
     duty_periods: list[DutyPeriodLines] = field(default_factory=list)
 
 
-def translate_file(path_in: Path, external_data: dict[str, str]) -> structured.Trip:
+def translate_file(
+    path_in: Path, effective_from: date, effective_to: date
+) -> structured.StructuredTrip:
     parsed_trip = parsed_trip_serializer().load_from_json(path_in=path_in)
-    return translate(parsed_trip=parsed_trip, external_data=external_data)
+    return translate(
+        parsed_trip=parsed_trip,
+        effective_from=effective_from,
+        effective_to=effective_to,
+    )
 
 
 def translate(
-    parsed_trip: ParsedTrip, external_data: dict[str, str]
-) -> structured.Trip:
+    parsed_trip: ParsedTrip, effective_from: date, effective_to: date
+) -> structured.StructuredTrip:
     trip_lines = _organize_lines(parsed_trip=parsed_trip)
     calendar = _collect_calendar(parsed_trip=parsed_trip)
     trip = _translate_trip(
-        trip_lines=trip_lines, calendar=calendar, external_data=external_data
+        trip_lines=trip_lines,
+        calendar=calendar,
+        effective_from=effective_from,
+        effective_to=effective_to,
     )
     return trip
 
@@ -143,15 +153,16 @@ def _translate_hotels(
 
 
 def _translate_trip(
-    trip_lines: TripLines, calendar: list[str], external_data: dict[str, str]
-) -> structured.Trip:
+    trip_lines: TripLines, calendar: list[str], effective_from: date, effective_to: date
+) -> structured.StructuredTrip:
     dutyperiods: list[structured.DutyPeriod] = [
         _translate_dutyperiod(x, idx)
         for idx, x in enumerate(trip_lines.duty_periods, start=1)
     ]
+    assert isinstance(effective_from, date)
     external = structured.ExternalData(
-        effective_from=external_data["effective_from"],
-        effective_to=external_data["effective_to"],
+        effective_from=effective_from.isoformat(),
+        effective_to=effective_to.isoformat(),
     )
     page_header = structured.PageHeader(
         from_date=trip_lines.page_header_2.data["from_date"],
@@ -166,7 +177,7 @@ def _translate_trip(
         division=trip_lines.page_footer.data["division"],
         page=trip_lines.page_footer.data["page"],
     )
-    trip = structured.Trip(
+    trip = structured.StructuredTrip(
         uuid=str(uuid4()),
         number=trip_lines.trip_header.data["number"],
         ops_count=trip_lines.trip_header.data["ops_count"],
@@ -197,6 +208,8 @@ def _collect_calendar(parsed_trip: ParsedTrip) -> list[str]:
 
 def _organize_lines(parsed_trip: ParsedTrip) -> TripLines:
     trip_line_dict: dict[str, Any] = {}
+    dp_list: list[dict[str, Any]] = []
+    trip_line_dict["duty_periods"] = dp_list
     for parsed_line in parsed_trip.parsed_lines:
         match parsed_line.id:
             case "page_header_2":
@@ -204,9 +217,7 @@ def _organize_lines(parsed_trip: ParsedTrip) -> TripLines:
             case "trip_header":
                 trip_line_dict["trip_header"] = parsed_line
             case "duty_period_report":
-                dp_list: list[dict[str, Any]] = []
                 flights: list[ParsedIndexedString] = []
-                trip_line_dict["duty_periods"] = dp_list
                 trip_line_dict["duty_periods"].append(
                     {"report": parsed_line, "flights": flights, "layover": None}
                 )
@@ -220,15 +231,15 @@ def _organize_lines(parsed_trip: ParsedTrip) -> TripLines:
                     "lines": [],
                 }
             case "transportation":
-                trip_line_dict["duty_periods"][-1]["layover"]["lines"].append(
+                trip_line_dict["duty_periods"][-1]["layover"]["lines"].append(  # type: ignore
                     parsed_line
                 )
             case "hotel_additional":
-                trip_line_dict["duty_periods"][-1]["layover"]["lines"].append(
+                trip_line_dict["duty_periods"][-1]["layover"]["lines"].append(  # type: ignore
                     parsed_line
                 )
             case "transportation_additional":
-                trip_line_dict["duty_periods"][-1]["layover"]["lines"].append(
+                trip_line_dict["duty_periods"][-1]["layover"]["lines"].append(  # type: ignore
                     parsed_line
                 )
             case "trip_footer":
