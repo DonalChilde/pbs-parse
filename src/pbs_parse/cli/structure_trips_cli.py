@@ -194,6 +194,7 @@ def build_jobs_from_directory(
     if path_in.is_file():
         raise typer.BadParameter("PATH_IN is a file and should be a directory.")
     if path_in.is_dir():
+        typer.echo("\nStructuring Trips.....")
         typer.echo(f"Looking for files in {path_in}")
         files = [f for f in path_in.glob(glob) if f.is_file()]
         typer.echo(f"Found {len(files)} files")

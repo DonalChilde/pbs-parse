@@ -1,9 +1,10 @@
 import shutil
-import subprocess
 from pathlib import Path
 from typing import Annotated
 
 import typer
+
+from pbs_parse.cli.parse_trips_cli import build_jobs_from_directory, parse_trips_rich
 
 app = typer.Typer()
 # typer ./scripts/parse_test_data.py run parse-trips ~/projects/tmp/pbs-data/2024.11.01-2024.12.01
@@ -40,20 +41,27 @@ def split_trip_dir_from_source_path(source_file: Path) -> Path:
 
 def parse_trips_from_files(source_paths: list[Path]):
     for source_file in source_paths:
-        path_in = split_trip_dir_from_source_path(source_file)
-        path_out = parsed_trip_dir_from_source_file(source_file)
-        path_out.mkdir(parents=True)
-        args = [
-            "pbs-parse",
-            "parse",
-            "trips",
-            "--no-overwrite",
-            f"{path_in}",
-            f"{path_out}",
-        ]
-        result = subprocess.run(args, capture_output=True, check=True)
-        typer.echo(result.stdout)
-        typer.echo(result.stderr)
+        jobs = build_jobs_from_directory(
+            path_in=split_trip_dir_from_source_path(source_file),
+            path_out=parsed_trip_dir_from_source_file(source_file),
+            overwrite=False,
+        )
+        parse_trips_rich(jobs=jobs)
+    # for source_file in source_paths:
+    #     path_in = split_trip_dir_from_source_path(source_file)
+    #     path_out = parsed_trip_dir_from_source_file(source_file)
+    #     path_out.mkdir(parents=True)
+    #     args = [
+    #         "pbs-parse",
+    #         "parse",
+    #         "trips",
+    #         "--no-overwrite",
+    #         f"{path_in}",
+    #         f"{path_out}",
+    #     ]
+    #     result = subprocess.run(args, capture_output=True, check=True)
+    #     typer.echo(result.stdout)
+    #     typer.echo(result.stderr)
 
 
 @app.command()

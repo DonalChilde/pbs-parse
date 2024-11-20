@@ -68,6 +68,7 @@ def _validate(ctx: Context) -> None:
 
 
 def _calendar_starts_count(ctx: Context) -> None:
+    """Check if whole calendar was captured."""
     if len(ctx.structured_trip.calendar) != len(ctx.external_start_dates):
         msg = (
             f"len(ctx.structured_trip.calendar) != len(ctx.external_start_dates)\n"

@@ -61,7 +61,6 @@ def parse_trips_rich(jobs: ParseTripJobs):
             ctx = ParseContext()
             parsed_trip = parser.parse_file(ctx=ctx, path_in=job.path_in)
             if check_for_prior_month(parsed_trip=parsed_trip):
-                progress.console.print("found prior month trip")
                 output_path = (
                     job.path_out.parent / job.path_out.stem / ".prior_month.json"
                 )
@@ -75,7 +74,7 @@ def parse_trips_rich(jobs: ParseTripJobs):
             progress.update(
                 task,
                 advance=job.path_in.stat().st_size,
-                description=f"{idx} of {file_count}, {total_trips} trips found, with{prior_trips} prior month trips.",
+                description=f"{idx} of {file_count}, {total_trips} trips found, with {prior_trips} prior month trips.",
             )
 
 
@@ -142,11 +141,23 @@ def trips(
         bool, typer.Option(help="Suppress task status messages.")
     ] = False,
 ):
+    jobs = build_jobs_from_directory(
+        path_in=path_in, path_out=path_out, overwrite=overwrite
+    )
+    parse_trips_rich(jobs=jobs)
+
+
+def build_jobs_from_directory(
+    path_in: Path,
+    path_out: Path,
+    overwrite: bool,
+) -> ParseTripJobs:
     glob = "*.trip_*"
     files = []
     if path_in.is_file():
         raise typer.BadParameter("PATH_IN is a file and should be a directory.")
     if path_in.is_dir():
+        typer.echo("\nParsing Trips.....")
         typer.echo(f"Looking for files in {path_in}")
         files = [f for f in path_in.glob(glob) if f.is_file()]
         typer.echo(f"Found {len(files)} files")
@@ -160,4 +171,4 @@ def trips(
         jobs.jobs.append(
             ParseTripJob(path_in=input_file, path_out=dest_path, overwrite=overwrite)
         )
-    parse_trips_rich(jobs=jobs)
+    return jobs
