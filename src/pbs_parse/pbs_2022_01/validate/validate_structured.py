@@ -71,6 +71,7 @@ def _calendar_starts_count(ctx: Context) -> None:
     if len(ctx.structured_trip.calendar) != len(ctx.external_start_dates):
         msg = (
             f"len(ctx.structured_trip.calendar) != len(ctx.external_start_dates)\n"
+            f"\t{len(ctx.structured_trip.calendar)} != {len(ctx.external_start_dates)}\n"
             f"\tctx.structured_trip.calendar -> {ctx.structured_trip.calendar!r}\n"
             f"\tctx.external_start_dates -> {ctx.external_start_dates}\n"
         )

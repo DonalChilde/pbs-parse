@@ -15,6 +15,7 @@ from rich.progress import (
 )
 
 from pbs_parse.pbs_2022_01.models.parsed_trip import (
+    ParsedTrip,
     default_file_name,
     parsed_trip_serializer,
 )
@@ -53,20 +54,37 @@ def parse_trips_rich(jobs: ParseTripJobs):
     ) as progress:
         task = progress.add_task(f"1 of {file_count}", total=jobs.total_size_of_files())
         total_trips = 0
+        prior_trips = 0
         parser = TripLinesParser()
         serializer = parsed_trip_serializer()
         for idx, job in enumerate(jobs.jobs, start=1):
             ctx = ParseContext()
             parsed_trip = parser.parse_file(ctx=ctx, path_in=job.path_in)
+            if check_for_prior_month(parsed_trip=parsed_trip):
+                progress.console.print("found prior month trip")
+                output_path = (
+                    job.path_out.parent / job.path_out.stem / ".prior_month.json"
+                )
+                prior_trips += 1
+            else:
+                output_path = job.path_out
             serializer.save_as_json(
-                path_out=job.path_out, complex_obj=parsed_trip, overwrite=job.overwrite
+                path_out=output_path, complex_obj=parsed_trip, overwrite=job.overwrite
             )
             total_trips += 1
             progress.update(
                 task,
                 advance=job.path_in.stat().st_size,
-                description=f"{idx} of {file_count}, {total_trips} trips found.",
+                description=f"{idx} of {file_count}, {total_trips} trips found, with{prior_trips} prior month trips.",
             )
+
+
+def check_for_prior_month(parsed_trip: ParsedTrip) -> bool:
+    for line in parsed_trip.parsed_lines:
+        if "trip_header" == line.id:
+            if "prior" in line.indexed_string.txt:
+                return True
+    return False
 
 
 @app.command()

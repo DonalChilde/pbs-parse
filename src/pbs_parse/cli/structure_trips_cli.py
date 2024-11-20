@@ -73,7 +73,7 @@ def structure_trips_rich(jobs: StructureTripJobs):
             )
             if trans_ctx.errors:
                 error_out = job.path_out.parent / f"{job.path_out.stem}.errors.txt"
-                error_out.write_text("\n".join(trans_ctx.errors))
+                error_out.write_text(str(trans_ctx))
                 trips_with_errors += 1
                 total_errors += len(trans_ctx.errors)
                 progress.console.print(
