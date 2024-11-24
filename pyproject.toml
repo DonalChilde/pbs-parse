@@ -67,8 +67,15 @@ doc = [
 vscode = ["esbonio", "rst2html", "rstcheck"]
 testing = ["pytest", "coverage[toml]", "pytest-cov"]
 
-[tool.ruff]
-target-version = "py313"
+
+[tool.ruff.lint]
+select = ["B", "UP", "D", "DOC"]
+# non-imperative-mood (D401) 
+exclude = ["D401"]
+
+
+[tool.ruff.lint.pydocstyle]
+convention = "google"
 
 [tool.ruff.format]
 docstring-code-format = true
