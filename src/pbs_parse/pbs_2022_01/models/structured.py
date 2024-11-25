@@ -1,13 +1,14 @@
-"""
-Structured model of a parsed trip, no translations from strings.
-"""
+"""Structured model of a parsed trip, no translations from strings to more complex data."""
 
-from dataclasses import dataclass, field
+from dataclasses import asdict, dataclass, field
 from typing import Optional
+from uuid import NAMESPACE_DNS, UUID, uuid5
 
 from pfmsoft.simple_serializer import DataclassSerializer
 
 from pbs_parse.pbs_2022_01.models import structured_TD as TD
+
+STRUCTURED_TRIP_NS = uuid5(NAMESPACE_DNS, "pbs_parse.pbs_2022_01.structured_trip")
 
 
 @dataclass(slots=True)
@@ -131,7 +132,7 @@ class ExternalData:
 
 @dataclass(slots=True)
 class StructuredTrip:
-    uuid: str
+    source: str
     number: str
     ops_count: str
     block: str
@@ -141,16 +142,35 @@ class StructuredTrip:
     external: ExternalData
     page_header: PageHeader
     page_footer: PageFooter
+    uuid: str = ""
     positions: list[str] = field(default_factory=list)
     operations: list[str] = field(default_factory=list)
     qualifications: list[str] = field(default_factory=list)
     dutyperiods: list[DutyPeriod] = field(default_factory=list)
     calendar: list[str] = field(default_factory=list)
 
+    def __post_init__(self):
+        """Init the uuid if missing, validate if not missing."""
+        current_uuid_str = str(self.make_uuid())
+        if self.uuid == "":
+            self.uuid = current_uuid_str
+            return
+        if self.uuid != current_uuid_str:
+            raise ValueError(
+                f"Supplied uuid: {self.uuid} does not match calculated uuid: {current_uuid_str}"
+            )
+
+    def make_uuid(self) -> UUID:
+        """Make a uuid from a namespace and the repr of asdict(self), minus the uuid field."""
+        data = asdict(self)
+        data.pop("uuid", None)
+        return uuid5(STRUCTURED_TRIP_NS, repr(data))
+
     @staticmethod
     def from_simple(simple_obj: TD.StructuredTripTD) -> "StructuredTrip":
         result = StructuredTrip(
             uuid=simple_obj["uuid"],
+            source=simple_obj["source"],
             number=simple_obj["number"],
             ops_count=simple_obj["ops_count"],
             block=simple_obj["block"],

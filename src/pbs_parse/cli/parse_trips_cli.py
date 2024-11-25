@@ -1,4 +1,6 @@
-from dataclasses import dataclass, field
+import logging
+from collections.abc import Sequence
+from dataclasses import dataclass
 from pathlib import Path
 from typing import Annotated
 
@@ -21,6 +23,7 @@ from pbs_parse.pbs_2022_01.models.parsed_trip import (
 )
 from pbs_parse.pbs_2022_01.parser.trip_lines_parser import TripLinesParser
 
+logger = logging.getLogger(__name__)
 app = typer.Typer()
 
 
@@ -31,19 +34,26 @@ class ParseTripJob:
     overwrite: bool = False
 
 
-@dataclass
-class ParseTripJobs:
-    jobs: list[ParseTripJob] = field(default_factory=list)
-
-    def total_size_of_files(self) -> int:
-        total = 0
-        for job in self.jobs:
-            total += job.path_in.stat().st_size
-        return total
+# @dataclass
+# class ParseTripJobs:
+#     jobs: list[ParseTripJob] = field(default_factory=list)
 
 
-def parse_trips_rich(jobs: ParseTripJobs):
-    file_count = len(jobs.jobs)
+#     def total_size_of_files(self) -> int:
+#         total = 0
+#         for job in self.jobs:
+#             total += job.path_in.stat().st_size
+#         return total
+def total_size_of_files(jobs: Sequence[ParseTripJob]) -> int:
+    """Get total file size of jobs."""
+    total = 0
+    for job in jobs:
+        total += job.path_in.stat().st_size
+    return total
+
+
+def parse_trips_rich(jobs: Sequence[ParseTripJob]):
+    file_count = len(jobs)
     with Progress(
         TextColumn("[progress.description]{task.description}"),
         BarColumn(),
@@ -52,12 +62,14 @@ def parse_trips_rich(jobs: ParseTripJobs):
         TotalFileSizeColumn(),
         TimeElapsedColumn(),
     ) as progress:
-        task = progress.add_task(f"1 of {file_count}", total=jobs.total_size_of_files())
+        task = progress.add_task(
+            f"1 of {file_count}", total=total_size_of_files(jobs=jobs)
+        )
         total_trips = 0
         prior_trips = 0
         parser = TripLinesParser()
         serializer = parsed_trip_serializer()
-        for idx, job in enumerate(jobs.jobs, start=1):
+        for idx, job in enumerate(jobs, start=1):
             ctx = ParseContext()
             parsed_trip = parser.parse_file(ctx=ctx, path_in=job.path_in)
             if check_for_prior_month(parsed_trip=parsed_trip):
@@ -118,10 +130,8 @@ def trip(
     else:
         dest_path = path_out / default_file_name(path_name=path_in.name)
 
-    jobs = ParseTripJobs()
-    jobs.jobs.append(
-        ParseTripJob(path_in=path_in, path_out=dest_path, overwrite=overwrite)
-    )
+    jobs: Sequence[ParseTripJob] = []
+    jobs.append(ParseTripJob(path_in=path_in, path_out=dest_path, overwrite=overwrite))
     parse_trips_rich(jobs=jobs)
 
 
@@ -151,7 +161,7 @@ def build_jobs_from_directory(
     path_in: Path,
     path_out: Path,
     overwrite: bool,
-) -> ParseTripJobs:
+) -> Sequence[ParseTripJob]:
     glob = "*.trip_*"
     files = []
     if path_in.is_file():
@@ -165,10 +175,10 @@ def build_jobs_from_directory(
             raise typer.BadParameter(
                 f"No files found in directory. files are expected to match {glob}"
             )
-    jobs = ParseTripJobs()
+    jobs: Sequence[ParseTripJob] = []
     for input_file in files:
         dest_path = path_out / default_file_name(path_name=input_file.name)
-        jobs.jobs.append(
+        jobs.append(
             ParseTripJob(path_in=input_file, path_out=dest_path, overwrite=overwrite)
         )
     return jobs

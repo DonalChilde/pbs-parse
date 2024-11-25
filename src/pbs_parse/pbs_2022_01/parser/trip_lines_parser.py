@@ -1,6 +1,5 @@
 from pathlib import Path
 from typing import Optional
-from uuid import uuid4
 
 from pbs_split.models import TripLines, trip_lines_serializer
 from pfmsoft.state_parser import ParseContext, ParseScheme, StateParser
@@ -31,7 +30,6 @@ class TripLinesParser:
             print(e)
 
         trip = ParsedTrip(
-            uuid=str(uuid4()),
             source=trip_lines.uuid,
             parsed_lines=[x.parsed_indexed_string for x in handler.results],
         )

@@ -1,4 +1,5 @@
-from dataclasses import dataclass, field
+from collections.abc import Sequence
+from dataclasses import dataclass
 from datetime import date, datetime
 from pathlib import Path
 from typing import Annotated
@@ -20,6 +21,10 @@ from pbs_parse.pbs_2022_01.validate.validate_structured import validate_files
 
 app = typer.Typer()
 
+import logging
+
+logger = logging.getLogger(__name__)
+
 
 @dataclass
 class StructureTripJob:
@@ -30,19 +35,16 @@ class StructureTripJob:
     overwrite: bool = False
 
 
-@dataclass
-class StructureTripJobs:
-    jobs: list[StructureTripJob] = field(default_factory=list)
-
-    def total_size_of_files(self) -> int:
-        total = 0
-        for job in self.jobs:
-            total += job.path_in.stat().st_size
-        return total
+def total_size_of_files(jobs: Sequence[StructureTripJob]) -> int:
+    """Get total file size of jobs."""
+    total = 0
+    for job in jobs:
+        total += job.path_in.stat().st_size
+    return total
 
 
-def structure_trips_rich(jobs: StructureTripJobs):
-    file_count = len(jobs.jobs)
+def structure_trips_rich(jobs: Sequence[StructureTripJob]):
+    file_count = len(jobs)
     with Progress(
         TextColumn("[progress.description]{task.description}"),
         BarColumn(),
@@ -51,13 +53,15 @@ def structure_trips_rich(jobs: StructureTripJobs):
         TotalFileSizeColumn(),
         TimeElapsedColumn(),
     ) as progress:
-        task = progress.add_task(f"1 of {file_count}", total=jobs.total_size_of_files())
+        task = progress.add_task(
+            f"1 of {file_count}", total=total_size_of_files(jobs=jobs)
+        )
         total_trips = 0
         total_errors = 0
         trips_with_errors = 0
         serializer = structured_trip_serializer()
 
-        for idx, job in enumerate(jobs.jobs, start=1):
+        for idx, job in enumerate(jobs, start=1):
             structured_trip = translate_file(
                 path_in=job.path_in,
                 effective_from=job.effective_from,
@@ -132,8 +136,8 @@ def trip(
     else:
         dest_path = path_out / f"{output_file_name(path_in=path_in)}"
 
-    jobs = StructureTripJobs()
-    jobs.jobs.append(
+    jobs: list[StructureTripJob] = []
+    jobs.append(
         StructureTripJob(
             path_in=path_in,
             path_out=dest_path,
@@ -188,7 +192,7 @@ def build_jobs_from_directory(
     effective_from: date,
     effective_to: date,
     overwrite: bool,
-) -> StructureTripJobs:
+) -> Sequence[StructureTripJob]:
     glob = "*.parsed.json*"
     files = []
     if path_in.is_file():
@@ -202,10 +206,10 @@ def build_jobs_from_directory(
             raise typer.BadParameter(
                 f"No files found in directory. files are expected to match {glob}"
             )
-    jobs = StructureTripJobs()
+    jobs: list[StructureTripJob] = []
     for input_file in files:
         dest_path = path_out / f"{output_file_name(path_in=input_file)}"
-        jobs.jobs.append(
+        jobs.append(
             StructureTripJob(
                 path_in=input_file,
                 path_out=dest_path,

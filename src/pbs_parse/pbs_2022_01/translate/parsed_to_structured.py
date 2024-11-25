@@ -58,6 +58,7 @@ def translate(
         calendar=calendar,
         effective_from=effective_from,
         effective_to=effective_to,
+        source_uuid=parsed_trip.uuid,
     )
     return trip
 
@@ -153,7 +154,11 @@ def _translate_hotels(
 
 
 def _translate_trip(
-    trip_lines: TripLines, calendar: list[str], effective_from: date, effective_to: date
+    trip_lines: TripLines,
+    calendar: list[str],
+    effective_from: date,
+    effective_to: date,
+    source_uuid: str,
 ) -> structured.StructuredTrip:
     dutyperiods: list[structured.DutyPeriod] = [
         _translate_dutyperiod(x, idx)
@@ -178,7 +183,7 @@ def _translate_trip(
         page=trip_lines.page_footer.data["page"],
     )
     trip = structured.StructuredTrip(
-        uuid=str(uuid4()),
+        source=source_uuid,
         number=trip_lines.trip_header.data["number"],
         ops_count=trip_lines.trip_header.data["ops_count"],
         positions=trip_lines.trip_header.data["positions"],
