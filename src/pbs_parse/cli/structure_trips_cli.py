@@ -1,3 +1,6 @@
+"""Cli to translate parsed to structured trips."""
+
+# ruff: noqa: D101 D102 D103
 from collections.abc import Sequence
 from dataclasses import dataclass
 from datetime import date, datetime
@@ -45,6 +48,7 @@ def total_size_of_files(jobs: Sequence[StructureTripJob]) -> int:
 
 def structure_trips_rich(jobs: Sequence[StructureTripJob]):
     file_count = len(jobs)
+    typer.echo("Structuring parsed trips.....")
     with Progress(
         TextColumn("[progress.description]{task.description}"),
         BarColumn(),
@@ -198,7 +202,7 @@ def build_jobs_from_directory(
     if path_in.is_file():
         raise typer.BadParameter("PATH_IN is a file and should be a directory.")
     if path_in.is_dir():
-        typer.echo("\nStructuring Trips.....")
+        typer.echo("\nCollecting parsed trips.....")
         typer.echo(f"Looking for files in {path_in}")
         files = [f for f in path_in.glob(glob) if f.is_file()]
         typer.echo(f"Found {len(files)} files")

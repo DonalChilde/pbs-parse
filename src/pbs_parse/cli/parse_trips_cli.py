@@ -1,3 +1,6 @@
+"""Cli to translate split to parsed trips."""
+
+# ruff: noqa: D101 D102 D103
 import logging
 from collections.abc import Sequence
 from dataclasses import dataclass
@@ -34,16 +37,6 @@ class ParseTripJob:
     overwrite: bool = False
 
 
-# @dataclass
-# class ParseTripJobs:
-#     jobs: list[ParseTripJob] = field(default_factory=list)
-
-
-#     def total_size_of_files(self) -> int:
-#         total = 0
-#         for job in self.jobs:
-#             total += job.path_in.stat().st_size
-#         return total
 def total_size_of_files(jobs: Sequence[ParseTripJob]) -> int:
     """Get total file size of jobs."""
     total = 0
@@ -54,6 +47,7 @@ def total_size_of_files(jobs: Sequence[ParseTripJob]) -> int:
 
 def parse_trips_rich(jobs: Sequence[ParseTripJob]):
     file_count = len(jobs)
+    typer.echo("Parsing split trips.....")
     with Progress(
         TextColumn("[progress.description]{task.description}"),
         BarColumn(),
@@ -69,6 +63,7 @@ def parse_trips_rich(jobs: Sequence[ParseTripJob]):
         prior_trips = 0
         parser = TripLinesParser()
         serializer = parsed_trip_serializer()
+
         for idx, job in enumerate(jobs, start=1):
             ctx = ParseContext()
             parsed_trip = parser.parse_file(ctx=ctx, path_in=job.path_in)
@@ -139,10 +134,13 @@ def trip(
 def trips(
     ctx: typer.Context,
     path_in: Annotated[
-        Path, typer.Argument(help="source pdf file.", exists=True, file_okay=False)
+        Path,
+        typer.Argument(
+            help="Directory of trip lines files.", exists=True, file_okay=False
+        ),
     ],
     path_out: Annotated[
-        Path, typer.Argument(help="destination directory for text file.")
+        Path, typer.Argument(help="Destination directory for parsed trips.")
     ],
     overwrite: Annotated[
         bool, typer.Option(help="Overwrite existing output file.")
@@ -167,7 +165,7 @@ def build_jobs_from_directory(
     if path_in.is_file():
         raise typer.BadParameter("PATH_IN is a file and should be a directory.")
     if path_in.is_dir():
-        typer.echo("\nParsing Trips.....")
+        typer.echo("\nCollecting split trips.....")
         typer.echo(f"Looking for files in {path_in}")
         files = [f for f in path_in.glob(glob) if f.is_file()]
         typer.echo(f"Found {len(files)} files")
