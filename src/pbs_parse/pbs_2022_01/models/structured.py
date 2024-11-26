@@ -1,8 +1,9 @@
 """Structured model of a parsed trip, no translations from strings to more complex data."""
 
-from dataclasses import asdict, dataclass, field
+# ruff: noqa: D101 D102 D103
+from dataclasses import dataclass, field
 from typing import Optional
-from uuid import NAMESPACE_DNS, UUID, uuid5
+from uuid import NAMESPACE_DNS, UUID, uuid4, uuid5
 
 from pfmsoft.simple_serializer import DataclassSerializer
 
@@ -42,7 +43,7 @@ class Layover:
     hotels: list[Hotel] = field(default_factory=list)
 
     @staticmethod
-    def from_simple(simple_obj: Optional[TD.Layover]) -> Optional["Layover"]:
+    def from_simple(simple_obj: TD.Layover | None) -> Optional["Layover"]:
         if simple_obj is None:
             return None
         result = Layover(
@@ -155,16 +156,17 @@ class StructuredTrip:
         if self.uuid == "":
             self.uuid = current_uuid_str
             return
-        if self.uuid != current_uuid_str:
-            raise ValueError(
-                f"Supplied uuid: {self.uuid} does not match calculated uuid: {current_uuid_str}"
-            )
+        # if self.uuid != current_uuid_str:
+        #     raise ValueError(
+        #         f"Supplied uuid: {self.uuid} does not match calculated uuid: {current_uuid_str}"
+        #     )
 
     def make_uuid(self) -> UUID:
         """Make a uuid from a namespace and the repr of asdict(self), minus the uuid field."""
-        data = asdict(self)
-        data.pop("uuid", None)
-        return uuid5(STRUCTURED_TRIP_NS, repr(data))
+        # data = asdict(self)
+        # data.pop("uuid", None)
+        # return uuid5(STRUCTURED_TRIP_NS, repr(data))
+        return uuid4()
 
     @staticmethod
     def from_simple(simple_obj: TD.StructuredTripTD) -> "StructuredTrip":
