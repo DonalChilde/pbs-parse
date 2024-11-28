@@ -24,7 +24,7 @@ from pbs_parse.pbs_2022_01.models.parsed_trip import (
     default_file_name,
     parsed_trip_serializer,
 )
-from pbs_parse.pbs_2022_01.parser.trip_lines_parser import TripLinesParser
+from pbs_parse.pbs_2022_01.parse.trip_lines_parser import TripLinesParser
 
 logger = logging.getLogger(__name__)
 app = typer.Typer()
