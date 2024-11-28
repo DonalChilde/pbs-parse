@@ -2,12 +2,14 @@
 
 # ruff: noqa: D101 D102 D103
 from dataclasses import dataclass, field
+from datetime import date
 from typing import Optional
 from uuid import NAMESPACE_DNS, UUID, uuid4, uuid5
 
 from pfmsoft.simple_serializer import DataclassSerializer
 
 from pbs_parse.pbs_2022_01.models import structured_TD as TD
+from pbs_parse.snippets.date.date_range import date_range
 
 STRUCTURED_TRIP_NS = uuid5(NAMESPACE_DNS, "pbs_parse.pbs_2022_01.structured_trip")
 
@@ -202,3 +204,27 @@ def structured_trip_serializer() -> (
 def default_file_name(path_name: str) -> str:
     new_name = path_name.removesuffix(".parsed.json")
     return f"{new_name}.structured.json"
+
+
+def build_start_dates(
+    effective_from: date, effective_to: date, calendar: list[str]
+) -> list[date]:
+    """Gets the full date for a calendar entry.
+
+    Raises:
+        ValueError if full date cannot be found.
+    """
+    effective_dates = list(date_range(start_date=effective_from, end_date=effective_to))
+    if len(effective_dates) != len(calendar):
+        raise ValueError(
+            f"The length of effective_dates {effective_dates!r} does not match the length of calendar {calendar!r}"
+        )
+    result: list[date] = []
+    for idx, item in enumerate(calendar):
+        if item.isnumeric():
+            if effective_dates[idx].day != int(item):
+                raise ValueError(
+                    f"Calendar item {item} does not have the same day as {effective_dates[idx]}"
+                )
+            result.append(effective_dates[idx])
+    return result
