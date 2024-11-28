@@ -1,6 +1,4 @@
-"""
-This model ios used during parsing to provide a guaranteed output format for parsed data
-"""
+"""This model is used during parsing to provide a guaranteed output format for parsed data."""
 
 from typing import TypedDict
 

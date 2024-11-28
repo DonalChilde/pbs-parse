@@ -1,12 +1,12 @@
 from pathlib import Path
 from typing import Optional
 
-from pbs_split.models import TripLines, trip_lines_serializer
 from pfmsoft.state_parser import ParseContext, ParseScheme, StateParser
 from pfmsoft.state_parser.parse_exception import ParseException
 from pfmsoft.state_parser.result_handler import CollectResults
 
 from pbs_parse.pbs_2022_01.models.parsed_trip import ParsedTrip
+from pbs_parse.pbs_2022_01.models.split import TripLines, trip_lines_serializer
 from pbs_parse.pbs_2022_01.parser.parse_table import parse_table
 
 

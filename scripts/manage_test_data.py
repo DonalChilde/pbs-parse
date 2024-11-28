@@ -8,9 +8,9 @@ from pathlib import Path
 from typing import Annotated
 
 import typer
-from pbs_split.cli import split_pages_cli, split_trips_cli
 
 from pbs_parse.cli import parse_trips_cli as parse
+from pbs_parse.cli import split_pages_cli, split_trips_cli
 from pbs_parse.cli import structure_trips_cli as structure
 
 # typer ./scripts/manage_test_data.py run parse-source-all ~/projects/tmp/pbs-data/2024.11.01-2024.12.01 2024-11-01 2024-12-01

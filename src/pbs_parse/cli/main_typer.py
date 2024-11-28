@@ -8,7 +8,12 @@ from typing import Annotated
 
 import typer
 
-from pbs_parse.cli import parse_trips_cli, structure_trips_cli
+from pbs_parse.cli import (
+    parse_trips_cli,
+    split_pages_cli,
+    split_trips_cli,
+    structure_trips_cli,
+)
 
 logger = logging.getLogger(__name__)
 
@@ -45,7 +50,8 @@ def default_options(
 app = typer.Typer(callback=default_options)
 app.add_typer(parse_trips_cli.app, name="parse")
 app.add_typer(structure_trips_cli.app, name="structure")
-
+app.add_typer(split_pages_cli.app, name="pages")
+app.add_typer(split_trips_cli.app, name="trips")
 
 if __name__ == "__main__":
     app()

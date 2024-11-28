@@ -2,10 +2,10 @@ from importlib import resources
 from pathlib import Path
 
 import pytest
-from pbs_split.models import trip_lines_serializer
 from pfmsoft.state_parser import ParseContext, ParseScheme
 
 from pbs_parse.pbs_2022_01.models.parsed_trip import parsed_trip_serializer
+from pbs_parse.pbs_2022_01.models.split import trip_lines_serializer
 from pbs_parse.pbs_2022_01.parser.parse_table import parse_table
 from pbs_parse.pbs_2022_01.parser.trip_lines_parser import TripLinesParser
 from tests.resources.model import FileBasedTest

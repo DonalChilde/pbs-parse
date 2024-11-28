@@ -441,7 +441,8 @@ name = "pbs-parse"
 version = "0.0.0"
 source = { editable = "." }
 dependencies = [
-    { name = "pbs-split" },
+    { name = "pfmsoft-indexed-string" },
+    { name = "pfmsoft-simple-serializer" },
     { name = "pfmsoft-state-parser" },
     { name = "pyparsing" },
     { name = "typer" },
@@ -475,7 +476,8 @@ vscode-doc = [
 
 [package.metadata]
 requires-dist = [
-    { name = "pbs-split", git = "https://github.com/donalchilde/pbs-split?rev=dev" },
+    { name = "pfmsoft-indexed-string", git = "https://github.com/donalchilde/pfmsoft-indexed-string?rev=dev" },
+    { name = "pfmsoft-simple-serializer", git = "https://github.com/donalchilde/pfmsoft-simple-serializer?rev=dev" },
     { name = "pfmsoft-state-parser", git = "https://github.com/donalchilde/pfmsoft-state-parser?rev=dev" },
     { name = "pyparsing" },
     { name = "typer" },
@@ -505,16 +507,6 @@ vscode-doc = [
     { name = "esbonio" },
     { name = "rst2html" },
     { name = "rstcheck" },
-]
-
-[[package]]
-name = "pbs-split"
-version = "0.0.0"
-source = { git = "https://github.com/donalchilde/pbs-split?rev=dev#a1ad0edb794d3a98be2d0fcea4eb52e43b46654a" }
-dependencies = [
-    { name = "pfmsoft-indexed-string" },
-    { name = "pfmsoft-simple-serializer" },
-    { name = "typer" },
 ]
 
 [[package]]
