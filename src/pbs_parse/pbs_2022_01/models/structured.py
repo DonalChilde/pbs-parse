@@ -2,16 +2,18 @@
 
 # ruff: noqa: D101 D102 D103
 from dataclasses import dataclass, field
-from datetime import date
+from datetime import date, timedelta
 from typing import Optional
 from uuid import NAMESPACE_DNS, UUID, uuid4, uuid5
 
 from pfmsoft.simple_serializer import DataclassSerializer
 
 from pbs_parse.pbs_2022_01.models import structured_TD as TD
-from pbs_parse.snippets.date.date_range import date_range
+from pbs_parse.snippets.datetime.date_range import date_range
+from pbs_parse.snippets.datetime.duration_regex import pattern_HHHMM
 
 STRUCTURED_TRIP_NS = uuid5(NAMESPACE_DNS, "pbs_parse.pbs_2022_01.structured_trip")
+DURATION_REGEX = pattern_HHHMM(".")
 
 
 @dataclass(slots=True)
@@ -228,3 +230,15 @@ def build_start_dates(
                 )
             result.append(effective_dates[idx])
     return result
+
+
+def parse_duration(duration_string: str) -> timedelta:
+    match = DURATION_REGEX.fullmatch(duration_string)
+    if match is None:
+        raise ValueError(
+            f"No match found for {duration_string} does it match the pattern HHH.MM?"
+        )
+    data = match.groupdict()
+    hours = int(data["hours"])
+    minutes = int(data["minutes"])
+    return timedelta(hours=hours, minutes=minutes)

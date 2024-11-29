@@ -4,7 +4,7 @@
 import logging
 from datetime import date, datetime
 
-from pbs_parse.snippets.date.date_range import date_range
+from pbs_parse.snippets.datetime.date_range import date_range
 
 logger = logging.getLogger(__name__)
 
