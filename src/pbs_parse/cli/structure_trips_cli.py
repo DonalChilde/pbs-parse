@@ -154,7 +154,7 @@ def trip(
 
 
 @app.command()
-def trips(
+def all(
     ctx: typer.Context,
     path_in: Annotated[
         Path,

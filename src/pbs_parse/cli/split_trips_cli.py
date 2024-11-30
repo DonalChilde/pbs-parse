@@ -41,7 +41,7 @@ def total_size_of_files(jobs: Sequence[SplitTripJob]) -> int:
 
 
 @app.command()
-def split(
+def trip(
     ctx: typer.Context,
     path_in: Annotated[
         Path,
@@ -69,7 +69,7 @@ def split(
 
 
 @app.command()
-def split_all(
+def all(
     ctx: typer.Context,
     path_in: Annotated[
         Path,

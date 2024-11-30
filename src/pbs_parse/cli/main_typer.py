@@ -50,8 +50,10 @@ def default_options(
 app = typer.Typer(callback=default_options)
 app.add_typer(parse_trips_cli.app, name="parse", help="Parse split trips.")
 app.add_typer(structure_trips_cli.app, name="structure", help="Structure parsed trips.")
-app.add_typer(split_pages_cli.app, name="pages", help="Split pages from a bid package.")
-app.add_typer(split_trips_cli.app, name="trips", help="Split trips from pages.")
+app.add_typer(
+    split_pages_cli.app, name="split-pages", help="Split pages from a bid package."
+)
+app.add_typer(split_trips_cli.app, name="split-trips", help="Split trips from pages.")
 
 if __name__ == "__main__":
     app()

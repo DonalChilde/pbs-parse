@@ -17,7 +17,7 @@ def test_split_pages_to_trips(runner: CliRunner, test_output_dir: Path, capsys):
     path_out = test_output_dir / "cli" / "pages_to_trips"
     with resources.as_file(file_resource) as input_path:
         result = runner.invoke(
-            app, ["trips", "split-all", str(input_path), str(path_out)]
+            app, ["split-trips", "all", str(input_path), str(path_out)]
         )
         if result.stderr_bytes is not None:
             print(result.stderr)

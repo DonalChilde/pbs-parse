@@ -16,7 +16,7 @@ def test_app(runner: CliRunner) -> None:
 
 
 def test_default_options(runner: CliRunner) -> None:
-    result = runner.invoke(app, ["-vvv", "pages", "--help"])
+    result = runner.invoke(app, ["-vvv", "split-pages", "--help"])
     assert "Verbosity: 3" in result.stdout
     assert "Debug" in result.stdout
     print(result.stdout)
@@ -27,7 +27,7 @@ def test_default_options(runner: CliRunner) -> None:
 
 def test_pages(runner: CliRunner) -> None:
     """It exits with a status code of zero."""
-    result = runner.invoke(app, ["pages", "--help"])
+    result = runner.invoke(app, ["split-pages", "--help"])
     print(result.stdout)
     if result.stderr_bytes is not None:
         print(result.stderr)
@@ -36,7 +36,7 @@ def test_pages(runner: CliRunner) -> None:
 
 def test_trips(runner: CliRunner) -> None:
     """It exits with a status code of zero."""
-    result = runner.invoke(app, ["trips", "--help"])
+    result = runner.invoke(app, ["split-trips", "--help"])
     print(result.stdout)
     if result.stderr_bytes is not None:
         print(result.stderr)
@@ -45,7 +45,7 @@ def test_trips(runner: CliRunner) -> None:
 
 def test_pages_split(runner: CliRunner) -> None:
     """It exits with a status code of zero."""
-    result = runner.invoke(app, ["pages", "split", "--help"])
+    result = runner.invoke(app, ["split-pages", "page", "--help"])
     print(result.stdout)
     if result.stderr_bytes is not None:
         print(result.stderr)
@@ -54,7 +54,7 @@ def test_pages_split(runner: CliRunner) -> None:
 
 def test_trips_split(runner: CliRunner) -> None:
     """It exits with a status code of zero."""
-    result = runner.invoke(app, ["trips", "split", "--help"])
+    result = runner.invoke(app, ["split-trips", "trip", "--help"])
     print(result.stdout)
     if result.stderr_bytes is not None:
         print(result.stderr)
