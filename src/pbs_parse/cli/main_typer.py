@@ -7,6 +7,7 @@ from time import perf_counter_ns
 from typing import Annotated
 
 import typer
+from pfmsoft.pdf2txt.cli import extract_txt_cli
 
 from pbs_parse.cli import (
     parse_trips_cli,
@@ -48,12 +49,16 @@ def default_options(
 
 
 app = typer.Typer(callback=default_options)
-app.add_typer(parse_trips_cli.app, name="parse", help="Parse split trips.")
-app.add_typer(structure_trips_cli.app, name="structure", help="Structure parsed trips.")
+app.add_typer(extract_txt_cli.app, name="extract", help="Extract text from pdf files.")
 app.add_typer(
     split_pages_cli.app, name="split-pages", help="Split pages from a bid package."
 )
-app.add_typer(split_trips_cli.app, name="split-trips", help="Split trips from pages.")
+app.add_typer(
+    split_trips_cli.app, name="split-trips", help="Split trips from split pages."
+)
+app.add_typer(parse_trips_cli.app, name="parse", help="Parse split trips.")
+app.add_typer(structure_trips_cli.app, name="structure", help="Structure parsed trips.")
+
 
 if __name__ == "__main__":
     app()

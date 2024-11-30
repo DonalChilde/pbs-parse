@@ -136,7 +136,10 @@ def all(
     path_in: Annotated[
         Path,
         typer.Argument(
-            help="Directory of trip lines files.", exists=True, file_okay=False
+            help="Directory of trip lines files.",
+            exists=True,
+            file_okay=False,
+            dir_okay=True,
         ),
     ],
     path_out: Annotated[
