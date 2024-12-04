@@ -5,7 +5,7 @@ import logging
 import pyparsing as pp
 
 from pbs_parse.pbs_2022_01.models import grammar_TD
-from pbs_parse.pbs_2022_01.parse.grammar_2.common import (
+from pbs_parse.pbs_2022_01.parse.grammar.common import (
     CALENDAR_LINE,
     CITY,
     DUALTIME,

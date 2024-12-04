@@ -5,12 +5,12 @@ import logging
 import pytest
 
 from pbs_parse.pbs_2022_01.models import grammar_TD
-from pbs_parse.pbs_2022_01.parse import grammar_2
+from pbs_parse.pbs_2022_01.parse import grammar
 from tests.resources.model import ParsingTest
 
 logger = logging.getLogger(__name__)
 
-parser = grammar_2.layover
+parser = grammar.layover
 result_class = grammar_TD.Layover
 test_name = "layover" + " grammar "
 test_items = [

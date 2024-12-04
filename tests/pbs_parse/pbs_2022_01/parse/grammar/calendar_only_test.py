@@ -5,22 +5,26 @@ import logging
 import pytest
 
 from pbs_parse.pbs_2022_01.models import grammar_TD
-from pbs_parse.pbs_2022_01.parse import grammar_2
+from pbs_parse.pbs_2022_01.parse import grammar
 from tests.resources.model import ParsingTest
 
 logger = logging.getLogger(__name__)
 
-parser = grammar_2.page_header_2
-result_class = grammar_TD.PageHeader2
-test_name = "page_header_2" + " grammar "
+parser = grammar.calendar_only
+result_class = grammar_TD.CalendarOnly
+test_name = "calendar_only" + " grammar "
 test_items = [
     ParsingTest[result_class](
-        txt="",
-        result=result_class,
+        txt="                                                                                       −− 17 18 19 20 21 22",
+        result=result_class(
+            calendar_entries=["−−", "17", "18", "19", "20", "21", "22"],
+        ),
     ),
     ParsingTest[result_class](
-        txt="",
-        result=result_class,
+        txt="                                                                                       23 24 25 26 27 28 29",
+        result=result_class(
+            calendar_entries=["23", "24", "25", "26", "27", "28", "29"],
+        ),
     ),
 ]
 

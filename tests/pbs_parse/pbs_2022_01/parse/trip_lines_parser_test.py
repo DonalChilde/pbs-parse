@@ -8,8 +8,8 @@ from pfmsoft.state_parser import ParseContext, ParseScheme
 
 from pbs_parse.pbs_2022_01.models.parsed_trip import PARSED_TRIP_SERIALIZER
 from pbs_parse.pbs_2022_01.models.split import TRIP_LINES_SERIALIZER
-from pbs_parse.pbs_2022_01.parse.parse_table_2 import parse_table
-from pbs_parse.pbs_2022_01.parse.trip_lines_parser_2 import TripLinesParser2
+from pbs_parse.pbs_2022_01.parse.parse_table import parse_table
+from pbs_parse.pbs_2022_01.parse.trip_lines_parser import TripLinesParser
 from tests.resources.model import FileBasedTest
 from tests.resources.trips import TRIPS_INDEXED_ANCHOR, TRIPS_PARSED_ANCHOR
 
@@ -38,7 +38,7 @@ def test_parse_trip(test_output_dir: Path, parse_trips_one: FileBasedTest):
     # setup parser
     scheme = ParseScheme(beginning_state="start", parser_lookup=parse_table())
     ctx = ParseContext()
-    parser = TripLinesParser2(scheme=scheme)
+    parser = TripLinesParser(scheme=scheme)
 
     # parse and save trip
     parsed_trip = parser.parse(ctx=ctx, trip_lines=trip_lines)

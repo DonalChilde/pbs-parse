@@ -5,25 +5,37 @@ import logging
 import pytest
 
 from pbs_parse.pbs_2022_01.models import grammar_TD
-from pbs_parse.pbs_2022_01.parse import grammar_2
+from pbs_parse.pbs_2022_01.parse import grammar
 from tests.resources.model import ParsingTest
 
 logger = logging.getLogger(__name__)
 
-parser = grammar_2.calendar_only
-result_class = grammar_TD.CalendarOnly
-test_name = "calendar_only" + " grammar "
+parser = grammar.page_footer
+result_class = grammar_TD.PageFooter
+test_name = "page_footer" + " grammar "
 test_items = [
     ParsingTest[result_class](
-        txt="                                                                                       −− 17 18 19 20 21 22",
+        txt="COCKPIT  ISSUED 08APR2022  EFF 02MAY2022               LAX 737  DOM                              PAGE   644",
         result=result_class(
-            calendar_entries=["−−", "17", "18", "19", "20", "21", "22"],
+            issued="08APR2022",
+            effective="02MAY2022",
+            base="LAX",
+            satellite_base="",
+            equipment="737",
+            division="DOM",
+            page="644",
         ),
     ),
     ParsingTest[result_class](
-        txt="                                                                                       23 24 25 26 27 28 29",
+        txt="COCKPIT  ISSUED 08APR2022  EFF 02MAY2022               LAX 320  INTL                             PAGE  1178",
         result=result_class(
-            calendar_entries=["23", "24", "25", "26", "27", "28", "29"],
+            issued="08APR2022",
+            effective="02MAY2022",
+            base="LAX",
+            satellite_base="",
+            equipment="320",
+            division="INTL",
+            page="1178",
         ),
     ),
 ]

@@ -5,12 +5,12 @@ import logging
 import pytest
 
 from pbs_parse.pbs_2022_01.models import grammar_TD
-from pbs_parse.pbs_2022_01.parse import grammar_2
+from pbs_parse.pbs_2022_01.parse import grammar
 from tests.resources.model import ParsingTest
 
 logger = logging.getLogger(__name__)
 
-parser = grammar_2.flight_deadhead
+parser = grammar.flight_deadhead
 result_class = grammar_TD.Flight
 test_name = "flight_deadhead" + " grammar "
 test_items = [

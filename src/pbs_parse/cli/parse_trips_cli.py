@@ -26,7 +26,7 @@ from pbs_parse.pbs_2022_01.models.parsed_trip import (
 )
 
 # from pbs_parse.pbs_2022_01.parse.trip_lines_parser import TripLinesParser
-from pbs_parse.pbs_2022_01.parse.trip_lines_parser_2 import TripLinesParser2
+from pbs_parse.pbs_2022_01.parse.trip_lines_parser import TripLinesParser
 
 logger = logging.getLogger(__name__)
 app = typer.Typer()
@@ -63,7 +63,7 @@ def parse_trips_rich(jobs: Sequence[ParseTripJob]):
         )
         total_trips = 0
         prior_trips = 0
-        parser = TripLinesParser2()
+        parser = TripLinesParser()
 
         for idx, job in enumerate(jobs, start=1):
             ctx = ParseContext()

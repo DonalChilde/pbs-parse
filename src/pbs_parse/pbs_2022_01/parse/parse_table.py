@@ -4,9 +4,9 @@ from collections.abc import Sequence
 
 from pfmsoft.state_parser.abc import ParserABC
 
-from pbs_parse.pbs_2022_01.parse import grammar_2 as G
-from pbs_parse.pbs_2022_01.parse.parsers_2 import PageHeader1
-from pbs_parse.pbs_2022_01.parse.parsers_2 import SimplePyparsingParser as SPP
+from pbs_parse.pbs_2022_01.parse import grammar as G
+from pbs_parse.pbs_2022_01.parse.parsers import PageHeader1
+from pbs_parse.pbs_2022_01.parse.parsers import SimplePyparsingParser as SPP
 
 
 def parse_table() -> dict[str, Sequence[ParserABC]]:

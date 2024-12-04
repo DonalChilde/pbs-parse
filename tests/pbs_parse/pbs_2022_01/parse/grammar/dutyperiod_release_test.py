@@ -5,35 +5,37 @@ import logging
 import pytest
 
 from pbs_parse.pbs_2022_01.models import grammar_TD
-from pbs_parse.pbs_2022_01.parse import grammar_2
+from pbs_parse.pbs_2022_01.parse import grammar
 from tests.resources.model import ParsingTest
 
 logger = logging.getLogger(__name__)
 
-parser = grammar_2.flight
-result_class = grammar_TD.Flight
-test_name = "flight" + " grammar "
+parser = grammar.dutyperiod_release
+result_class = grammar_TD.DutyPeriodRelease
+test_name = "dutyperiod_release" + " grammar "
 test_items = [
     ParsingTest[result_class](
-        txt="1  1/1 65 2131  SAN 1337/1337    ORD 1935/1735   3.58          1.10X                   −− −− −− −− −− −− −−",
+        txt="                                 RLS 0739/0439   4.49   0.00   4.49   6.19        5.49 −− −− −− −− −− −− −−",
         result=result_class(
-            dutyperiod_idx="1",
-            depart_day="1",
-            arrive_day="1",
-            equipment_code="65",
-            flight_number="2131",
-            deadhead=False,
-            deadhead_code="",
-            departure_station="SAN",
-            departure_time=grammar_TD.DualTime(lcl="1337", hbt="1337"),
-            crew_meal="",
-            arrival_station="ORD",
-            arrival_time=grammar_TD.DualTime(lcl="1935", hbt="1735"),
-            block="3.58",
+            release=grammar_TD.DualTime(lcl="0739", hbt="0439"),
+            block="4.49",
             synth="0.00",
-            ground="1.10",
-            equipment_change=True,
+            total_pay="4.49",
+            duty="6.19",
+            flight_duty="5.49",
             calendar_entries=["−−", "−−", "−−", "−−", "−−", "−−", "−−"],
+        ),
+    ),
+    ParsingTest[result_class](
+        txt="                                 RLS 2252/2252   0.00   5.46   5.46   6.46        0.00",
+        result=result_class(
+            release=grammar_TD.DualTime(lcl="2252", hbt="2252"),
+            block="0.00",
+            synth="5.46",
+            total_pay="5.46",
+            duty="6.46",
+            flight_duty="0.00",
+            calendar_entries=[],
         ),
     ),
 ]

@@ -5,38 +5,43 @@ import logging
 import pytest
 
 from pbs_parse.pbs_2022_01.models import grammar_TD
-from pbs_parse.pbs_2022_01.parse import grammar_2
+from pbs_parse.pbs_2022_01.parse import grammar
 from tests.resources.model import ParsingTest
 
 logger = logging.getLogger(__name__)
 
-parser = grammar_2.hotel_additional
-result_class = grammar_TD.HotelAdditional
-test_name = "hotel_additional" + " grammar "
+parser = grammar.transportation
+result_class = grammar_TD.Transportation
+test_name = "transportation" + " grammar "
 test_items = [
     ParsingTest[result_class](
-        txt="               +PHL MARRIOTT OLD CITY                       12152386000     12 −− −− −− −− −− −−",
+        txt="                    SIN FIN DE SERVICIOS                    3331223240",
         result=result_class(
-            layover_city="PHL",
-            name="MARRIOTT OLD CITY",
-            phone="12152386000",
-            calendar_entries=["12", "−−", "−−", "−−", "−−", "−−", "−−"],
+            name="SIN FIN DE SERVICIOS",
+            phone="3331223240",
+            calendar_entries=[],
         ),
     ),
     ParsingTest[result_class](
-        txt="               +PHL MARRIOTT OLD CITY                                       12 −− −− −− −− −− −−",
+        txt="                    VIP TRANSPORTATION− OGG                 8088712702                 −− −− −−",
         result=result_class(
-            layover_city="PHL",
-            name="MARRIOTT OLD CITY",
+            name="VIP TRANSPORTATION− OGG",
+            phone="8088712702",
+            calendar_entries=["−−", "−−", "−−"],
+        ),
+    ),
+    ParsingTest[result_class](
+        txt="                    VIP TRANSPORTATION− OGG                                  −− −− −−",
+        result=result_class(
+            name="VIP TRANSPORTATION− OGG",
             phone="",
-            calendar_entries=["12", "−−", "−−", "−−", "−−", "−−", "−−"],
+            calendar_entries=["−−", "−−", "−−"],
         ),
     ),
     ParsingTest[result_class](
-        txt="               +PHL MARRIOTT OLD CITY                                                           ",
+        txt="                    VIP TRANSPORTATION− OGG                                  ",
         result=result_class(
-            layover_city="PHL",
-            name="MARRIOTT OLD CITY",
+            name="VIP TRANSPORTATION− OGG",
             phone="",
             calendar_entries=[],
         ),

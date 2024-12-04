@@ -5,12 +5,12 @@ import logging
 import pytest
 
 from pbs_parse.pbs_2022_01.models import grammar_TD
-from pbs_parse.pbs_2022_01.parse import grammar_2
+from pbs_parse.pbs_2022_01.parse import grammar
 from tests.resources.model import ParsingTest
 
 logger = logging.getLogger(__name__)
 
-parser = grammar_2.dutyperiod_report
+parser = grammar.dutyperiod_report
 result_class = grammar_TD.DutyperiodReport
 test_name = "duty_period_report" + " grammar "
 test_items = [

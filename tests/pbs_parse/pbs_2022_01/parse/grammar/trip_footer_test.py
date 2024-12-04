@@ -5,37 +5,33 @@ import logging
 import pytest
 
 from pbs_parse.pbs_2022_01.models import grammar_TD
-from pbs_parse.pbs_2022_01.parse import grammar_2
+from pbs_parse.pbs_2022_01.parse import grammar
 from tests.resources.model import ParsingTest
 
 logger = logging.getLogger(__name__)
 
-parser = grammar_2.page_footer
-result_class = grammar_TD.PageFooter
-test_name = "page_footer" + " grammar "
+parser = grammar.trip_footer
+result_class = grammar_TD.TripFooter
+test_name = "trip_footer" + " grammar "
 test_items = [
     ParsingTest[result_class](
-        txt="COCKPIT  ISSUED 08APR2022  EFF 02MAY2022               LAX 737  DOM                              PAGE   644",
+        txt="TTL                                              7.50   0.00   7.50        10.20       −− −− −−",
         result=result_class(
-            issued="08APR2022",
-            effective="02MAY2022",
-            base="LAX",
-            satellite_base="",
-            equipment="737",
-            division="DOM",
-            page="644",
+            block="7.50",
+            synth="0.00",
+            total_pay="7.50",
+            tafb="10.20",
+            calendar_entries=["−−", "−−", "−−"],
         ),
     ),
     ParsingTest[result_class](
-        txt="COCKPIT  ISSUED 08APR2022  EFF 02MAY2022               LAX 320  INTL                             PAGE  1178",
+        txt="TTL                                              7.50   0.00   7.50        10.20       ",
         result=result_class(
-            issued="08APR2022",
-            effective="02MAY2022",
-            base="LAX",
-            satellite_base="",
-            equipment="320",
-            division="INTL",
-            page="1178",
+            block="7.50",
+            synth="0.00",
+            total_pay="7.50",
+            tafb="10.20",
+            calendar_entries=[],
         ),
     ),
 ]
