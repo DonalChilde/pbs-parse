@@ -1,3 +1,5 @@
+"""Tests for trip header parser."""
+
 import logging
 
 import pytest
@@ -24,7 +26,7 @@ items = [
             "ops_count": "1",
             "positions": ["CA", "FO"],
             "operations": [],
-            "qualifications": [],
+            "special_qual": False,
         },
     ),
     ParserTest(
@@ -38,7 +40,7 @@ items = [
             "ops_count": "1",
             "positions": ["CA", "FO"],
             "operations": ["SPANISH"],
-            "qualifications": [],
+            "special_qual": False,
         },
     ),
     ParserTest(
@@ -52,13 +54,13 @@ items = [
             "ops_count": "1",
             "positions": ["CA", "FO"],
             "operations": [],
-            "qualifications": ["SPECIAL"],
+            "special_qual": True,
         },
     ),
     ParserTest(
         input=IndexedString(
             idx=3,
-            txt="SEQ 25018   2 OPS   POSN CA FO                MEXICO QUALIFICATION                     MO TU WE TH FR SA SU",
+            txt="SEQ 25018   2 OPS   POSN CA FO                SPECIAL QUALIFICATION                     MO TU WE TH FR SA SU",
         ),
         result_id=result_id,
         data={
@@ -66,7 +68,7 @@ items = [
             "ops_count": "2",
             "positions": ["CA", "FO"],
             "operations": [],
-            "qualifications": ["MEXICO"],
+            "special_qual": True,
         },
     ),
     ParserTest(
@@ -80,7 +82,7 @@ items = [
             "ops_count": "1",
             "positions": ["CA", "FO"],
             "operations": [],
-            "qualifications": [],
+            "special_qual": False,
         },
     ),
     ParserTest(
@@ -94,7 +96,7 @@ items = [
             "ops_count": "1",
             "positions": ["CA", "FO"],
             "operations": [],
-            "qualifications": [],
+            "special_qual": False,
         },
     ),
     ParserTest(
@@ -108,7 +110,7 @@ items = [
             "ops_count": "1",
             "positions": ["CA", "FO"],
             "operations": ["ST.", "THOMAS"],
-            "qualifications": [],
+            "special_qual": False,
         },
     ),
     ParserTest(
@@ -122,7 +124,7 @@ items = [
             "ops_count": "10",
             "positions": ["FB"],
             "operations": ["GERMAN"],
-            "qualifications": [],
+            "special_qual": False,
         },
     ),
     ParserTest(
@@ -136,7 +138,7 @@ items = [
             "ops_count": "4",
             "positions": ["FB"],
             "operations": [],
-            "qualifications": [],
+            "special_qual": False,
         },
     ),
     ParserTest(
@@ -150,7 +152,7 @@ items = [
             "ops_count": "2",
             "positions": ["FO", "C"],
             "operations": [],
-            "qualifications": [],
+            "special_qual": False,
         },
     ),
     ParserTest(
@@ -164,7 +166,7 @@ items = [
             "ops_count": "1",
             "positions": ["FB"],
             "operations": ["JAPANESE"],
-            "qualifications": [],
+            "special_qual": False,
         },
     ),
 ]

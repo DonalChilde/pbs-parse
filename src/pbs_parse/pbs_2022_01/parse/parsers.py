@@ -152,12 +152,16 @@ class TripHeader(PyparsingParser):
         return ParseResult(current_state=self.state, parsed_indexed_string=result)
 
     def translate_result(self, parsed_data: dict[str, Any]) -> dict[str, Any]:
+        if parsed_data.get("special_qual", [])[0] == False:
+            special_qual = False
+        else:
+            special_qual = True
         data = TD.TripHeader(
             number=parsed_data.get("number", ""),
             ops_count=parsed_data.get("ops_count", ""),
             positions=parsed_data.get("positions", []),
             operations=parsed_data.get("operations", []),
-            qualifications=parsed_data.get("qualifications", []),
+            special_qual=special_qual,
             # calendar="",
         )
         return data  # type: ignore

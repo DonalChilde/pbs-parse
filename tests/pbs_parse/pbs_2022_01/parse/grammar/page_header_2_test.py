@@ -12,7 +12,11 @@ Items = [
 parser = grammar.PageHeader2
 
 
-@pytest.mark.parametrize("test_data", Items)
+def idfn(val: GrammarTest) -> str:
+    return "PageHeader2"
+
+
+@pytest.mark.parametrize("test_data", Items, ids=idfn)
 def test_grammar(test_data: GrammarTest):
     parse_result = parser.parse_string(test_data.txt)
     result = parse_result.as_dict()  # type: ignore

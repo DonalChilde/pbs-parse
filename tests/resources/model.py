@@ -1,3 +1,5 @@
+"""Models used in testing."""
+
 from dataclasses import dataclass, field
 from typing import Any
 
@@ -6,6 +8,9 @@ from pfmsoft.indexed_string.model import IndexedString
 
 @dataclass
 class ParserTest:
+    """Parser test."""
+
+    # update to generic?
     input: IndexedString
     result_id: str
     data: dict[str, Any] = field(default_factory=dict)
@@ -13,7 +18,19 @@ class ParserTest:
 
 
 @dataclass
+class ParserTest2[T]:
+    """Parser test."""
+
+    input: IndexedString
+    result_id: str
+    data: T
+    description: str = ""
+
+
+@dataclass
 class GrammarTest:
+    """Old style grammar test."""
+
     txt: str
     description: str = ""
     result: dict[str, Any] = field(default_factory=dict)
@@ -21,7 +38,18 @@ class GrammarTest:
 
 @dataclass
 class FileBasedTest:
+    """Info needed to locate two files."""
+
     input_anchor: str
     input_filename: str
     comparison_anchor: str
     comparison_filename: str
+
+
+@dataclass
+class ParsingTest[T]:
+    """Contains input and result data for a test."""
+
+    txt: str
+    result: T
+    description: str = ""

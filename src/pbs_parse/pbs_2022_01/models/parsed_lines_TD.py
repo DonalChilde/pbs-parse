@@ -27,7 +27,7 @@ class TripHeader(TypedDict):
     ops_count: str
     positions: list[str]
     operations: list[str]
-    qualifications: list[str]
+    special_qual: bool
 
 
 class PriorMonthDeadhead(TypedDict):

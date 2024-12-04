@@ -11,7 +11,7 @@ Items = [
             "ops_count": "1",
             "positions": ["CA", "FO"],
             "operations": [],
-            "qualifications": [],
+            "special_qual": [False],
         },
     ),
     GrammarTest(
@@ -21,7 +21,7 @@ Items = [
             "ops_count": "1",
             "positions": ["CA", "FO"],
             "operations": ["SPANISH"],
-            "qualifications": [],
+            "special_qual": [False],
         },
     ),
     GrammarTest(
@@ -31,17 +31,17 @@ Items = [
             "ops_count": "1",
             "positions": ["CA", "FO"],
             "operations": [],
-            "qualifications": ["SPECIAL"],
+            "special_qual": ["SPECIAL", "QUALIFICATION"],
         },
     ),
     GrammarTest(
-        txt="SEQ 25018   2 OPS   POSN CA FO                MEXICO QUALIFICATION                     MO TU WE TH FR SA SU",
+        txt="SEQ 25018   2 OPS   POSN CA FO                HAITIAN CREOLE OPERATION                     MO TU WE TH FR SA SU",
         result={
             "number": "25018",
             "ops_count": "2",
             "positions": ["CA", "FO"],
-            "operations": [],
-            "qualifications": ["MEXICO"],
+            "operations": ["HAITIAN", "CREOLE"],
+            "special_qual": [False],
         },
     ),
     GrammarTest(
@@ -51,7 +51,7 @@ Items = [
             "ops_count": "1",
             "positions": ["CA", "FO"],
             "operations": [],
-            "qualifications": [],
+            "special_qual": [False],
         },
     ),
     GrammarTest(
@@ -61,7 +61,7 @@ Items = [
             "ops_count": "1",
             "positions": ["CA", "FO"],
             "operations": [],
-            "qualifications": [],
+            "special_qual": [False],
         },
     ),
     GrammarTest(
@@ -71,7 +71,7 @@ Items = [
             "ops_count": "1",
             "positions": ["CA", "FO"],
             "operations": ["ST.", "THOMAS"],
-            "qualifications": [],
+            "special_qual": [False],
         },
     ),
     GrammarTest(
@@ -81,7 +81,7 @@ Items = [
             "ops_count": "10",
             "positions": ["FB"],
             "operations": ["GERMAN"],
-            "qualifications": [],
+            "special_qual": [False],
         },
     ),
     GrammarTest(
@@ -91,7 +91,7 @@ Items = [
             "ops_count": "4",
             "positions": ["FB"],
             "operations": [],
-            "qualifications": [],
+            "special_qual": [False],
         },
     ),
     GrammarTest(
@@ -101,7 +101,7 @@ Items = [
             "ops_count": "2",
             "positions": ["FO", "C"],
             "operations": [],
-            "qualifications": [],
+            "special_qual": [False],
         },
     ),
     GrammarTest(
@@ -111,17 +111,22 @@ Items = [
             "ops_count": "1",
             "positions": ["FB"],
             "operations": ["JAPANESE"],
-            "qualifications": [],
+            "special_qual": [False],
         },
     ),
 ]
 parser = grammar.TripHeader
 
 
-@pytest.mark.parametrize("test_data", Items)
+def idfn(val: GrammarTest) -> str:
+    return "TripHeader"
+
+
+@pytest.mark.parametrize("test_data", Items, ids=idfn)
 def test_grammar(test_data: GrammarTest):
     parse_result = parser.parse_string(test_data.txt)
     result = parse_result.as_dict()  # type: ignore
-    print(f"{parse_result}")
-    print(f"{result!r}")
+    print(f"Parsed Result: {parse_result}")
+    print(f"Result as dict:{result!r}")
+    print(f"Expected Result:{test_data!r}")
     assert result == test_data.result

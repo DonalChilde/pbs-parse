@@ -1,6 +1,9 @@
+"""Pyparsing grammar for parsing lines."""
+
 import pyparsing as pp
 
 CALENDAR_HEADER = pp.Literal("MO") + "TU" + "WE" + "TH" + "FR" + "SA" + "SU"
+SPECIAL_QUAL = pp.Literal("SPECIAL") + "QUALIFICATION"
 MONTH_NUMERAL = pp.Word(pp.nums, exact=2)
 DAY_NUMERAL = pp.Word(pp.nums, exact=2)
 SHORT_MONTH = pp.Word(pp.alphas, exact=3)
@@ -11,7 +14,6 @@ HYPHEN_MINUS = "\u002d"
 DASH_UNICODE = "\u002d\u2212"
 PUNCT_UNICODE = "\u2019"
 ADDS_UNICODE = "Ã©"
-# DAY_NUMERAL = pp.Word(pp.nums, exact=2)
 YEAR = pp.Word(pp.nums, exact=4)
 DATE_DDMMMYY = pp.Combine(DAY_NUMERAL + SHORT_MONTH + YEAR)
 PHONE_NUMBER = pp.Word(pp.nums, min=4, as_keyword=True)
@@ -94,11 +96,15 @@ TripHeader = (
         + pp.Suppress("OPERATION"),
         default=list(),
     )("operations")
-    + pp.Opt(
-        pp.ZeroOrMore(pp.Word(pp.printables, as_keyword=True), stop_on="QUALIFICATION")
-        + pp.Suppress("QUALIFICATION"),
-        default=list(),
-    )("qualifications")
+    # + pp.Opt(SPECIAL_QUAL, default=False)("special_qual").set_parse_action(
+    #     lambda tokens: bool(tokens.as_dict().get("special_qual", False))
+    # )
+    + pp.Opt(SPECIAL_QUAL, default=False)("special_qual")
+    # + pp.Opt(
+    #     pp.ZeroOrMore(pp.Word(pp.printables, as_keyword=True), stop_on="QUALIFICATION")
+    #     + pp.Suppress("QUALIFICATION"),
+    #     default=list(),
+    # )("special_qual")
     + pp.MatchFirst(
         [
             CALENDAR_HEADER,

@@ -188,7 +188,7 @@ def _translate_trip(
         ops_count=trip_lines.trip_header.data["ops_count"],
         positions=trip_lines.trip_header.data["positions"],
         operations=trip_lines.trip_header.data["operations"],
-        qualifications=trip_lines.trip_header.data["qualifications"],
+        special_qual=trip_lines.trip_header.data["qualifications"],
         block=trip_lines.trip_footer.data["block"],
         synth=trip_lines.trip_footer.data["synth"],
         total_pay=trip_lines.trip_footer.data["total_pay"],

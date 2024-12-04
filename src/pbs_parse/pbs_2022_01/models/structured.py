@@ -140,6 +140,7 @@ class StructuredTrip:
     source: str
     number: str
     ops_count: str
+    special_qual: bool
     block: str
     synth: str
     total_pay: str
@@ -150,7 +151,6 @@ class StructuredTrip:
     uuid: str = ""
     positions: list[str] = field(default_factory=list)
     operations: list[str] = field(default_factory=list)
-    qualifications: list[str] = field(default_factory=list)
     dutyperiods: list[DutyPeriod] = field(default_factory=list)
     calendar: list[str] = field(default_factory=list)
 
@@ -188,7 +188,7 @@ class StructuredTrip:
             page_footer=PageFooter(**simple_obj["page_footer"]),
             positions=simple_obj["positions"],
             operations=simple_obj["operations"],
-            qualifications=simple_obj["qualifications"],
+            special_qual=simple_obj["special_qual"],
             dutyperiods=[DutyPeriod.from_simple(x) for x in simple_obj["dutyperiods"]],
             calendar=simple_obj["calendar"],
         )

@@ -93,6 +93,6 @@ class StructuredTripTD(TypedDict):
     page_footer: PageFooter
     positions: list[str]
     operations: list[str]
-    qualifications: list[str]
+    special_qual: bool
     dutyperiods: list[DutyPeriod]
     calendar: list[str]
