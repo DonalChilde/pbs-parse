@@ -79,6 +79,9 @@ def parsed_trip_serializer() -> DataclassSerializer[ParsedTrip, ParsedTripTD]:
     )
 
 
+PARSED_TRIP_SERIALIZER = parsed_trip_serializer()
+
+
 def default_file_name(path_name: str) -> str:
     """Make the default file name for ParsedTrip."""
     return f"{Path(path_name).stem}.parsed.json"

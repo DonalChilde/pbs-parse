@@ -1,10 +1,19 @@
-"""
-Structured model of a parsed trip as TypedDict, no translations from strings.
+"""Structured model of a parsed trip as TypedDict, no translations from strings.
 
 This can be used to represent imported json data, usually before conversion to the dataclass version.
 """
 
 from typing import TypedDict
+
+
+class MonthDay(TypedDict):
+    month: str
+    day: str
+
+
+class DualTime(TypedDict):
+    lcl: str
+    hbt: str
 
 
 class Transportation(TypedDict):
@@ -29,27 +38,28 @@ class Flight(TypedDict):
     uuid: str
     dutyperiod_idx: str
     idx: str
-    dep_arr_day: str
-    eq_code: str
+    depart_day: str
+    arrive_day: str
+    equipment_code: str
     flight_number: str
-    deadhead: str
+    deadhead: bool
     deadhead_code: str
     departure_station: str
-    departure_time: str
+    departure_time: DualTime
     crew_meal: str
     arrival_station: str
-    arrival_time: str
+    arrival_time: DualTime
     block: str
     synth: str
     ground: str
-    equipment_change: str
+    equipment_change: bool
 
 
 class DutyPeriod(TypedDict):
     uuid: str
     idx: str
-    report_time: str
-    release_time: str
+    report_time: DualTime
+    release_time: DualTime
     block: str
     synth: str
     total_pay: str
@@ -60,8 +70,8 @@ class DutyPeriod(TypedDict):
 
 
 class PageHeader(TypedDict):
-    from_date: str
-    to_date: str
+    from_date: MonthDay
+    to_date: MonthDay
 
 
 class PageFooter(TypedDict):

@@ -17,6 +17,12 @@ DURATION_REGEX = pattern_HHHMM(".")
 
 
 @dataclass(slots=True)
+class DualTime:
+    lcl: str
+    hbt: str
+
+
+@dataclass(slots=True)
 class Transportation:
     name: str
     phone: str
@@ -64,28 +70,54 @@ class Flight:
     uuid: str
     dutyperiod_idx: str
     idx: str
-    dep_arr_day: str
-    eq_code: str
+    depart_day: str
+    arrive_day: str
+    equipment_code: str
     flight_number: str
-    deadhead: str
+    deadhead: bool
     deadhead_code: str
     departure_station: str
-    departure_time: str
+    departure_time: DualTime
     crew_meal: str
     arrival_station: str
-    arrival_time: str
+    arrival_time: DualTime
     block: str
     synth: str
     ground: str
-    equipment_change: str
+    equipment_change: bool
+
+    @staticmethod
+    def from_simple(simple_obj: TD.Flight) -> "Flight":
+        result = Flight(
+            uuid=simple_obj["uuid"],
+            dutyperiod_idx=simple_obj["dutyperiod_idx"],
+            idx=simple_obj["idx"],
+            depart_day=simple_obj["depart_day"],
+            arrive_day=simple_obj["arrive_day"],
+            equipment_code=simple_obj["equipment_code"],
+            flight_number=simple_obj["flight_number"],
+            deadhead=simple_obj["deadhead"],
+            deadhead_code=simple_obj["deadhead_code"],
+            departure_station=simple_obj["departure_station"],
+            departure_time=DualTime(**simple_obj["departure_time"]),
+            crew_meal=simple_obj["crew_meal"],
+            arrival_station=simple_obj["arrival_station"],
+            arrival_time=DualTime(**simple_obj["arrival_time"]),
+            block=simple_obj["block"],
+            synth=simple_obj["synth"],
+            ground=simple_obj["ground"],
+            equipment_change=simple_obj["equipment_change"],
+        )
+
+        return result
 
 
 @dataclass(slots=True)
 class DutyPeriod:
     uuid: str
     idx: str
-    report_time: str
-    release_time: str
+    report_time: DualTime
+    release_time: DualTime
     block: str
     synth: str
     total_pay: str
@@ -99,23 +131,37 @@ class DutyPeriod:
         result = DutyPeriod(
             uuid=simple_obj["uuid"],
             idx=simple_obj["idx"],
-            report_time=simple_obj["report_time"],
-            release_time=simple_obj["release_time"],
+            report_time=DualTime(**simple_obj["report_time"]),
+            release_time=DualTime(**simple_obj["release_time"]),
             block=simple_obj["block"],
             synth=simple_obj["synth"],
             total_pay=simple_obj["total_pay"],
             duty=simple_obj["duty"],
             flight_duty=simple_obj["flight_duty"],
             layover=Layover.from_simple(simple_obj["layover"]),
-            flights=[Flight(**x) for x in simple_obj["flights"]],
+            flights=[Flight.from_simple(x) for x in simple_obj["flights"]],
         )
         return result
 
 
 @dataclass(slots=True)
+class MonthDay:
+    month: str
+    day: str
+
+
+@dataclass(slots=True)
 class PageHeader:
-    from_date: str
-    to_date: str
+    from_date: MonthDay
+    to_date: MonthDay
+
+    @staticmethod
+    def from_simple(simple_obj: TD.PageHeader) -> "PageHeader":
+        result = PageHeader(
+            from_date=MonthDay(**simple_obj["from_date"]),
+            to_date=MonthDay(**simple_obj["to_date"]),
+        )
+        return result
 
 
 @dataclass(slots=True)
@@ -184,7 +230,7 @@ class StructuredTrip:
             total_pay=simple_obj["total_pay"],
             tafb=simple_obj["total_pay"],
             external=ExternalData(**simple_obj["external"]),
-            page_header=PageHeader(**simple_obj["page_header"]),
+            page_header=PageHeader.from_simple(simple_obj=simple_obj["page_header"]),
             page_footer=PageFooter(**simple_obj["page_footer"]),
             positions=simple_obj["positions"],
             operations=simple_obj["operations"],
@@ -201,6 +247,9 @@ def structured_trip_serializer() -> (
     return DataclassSerializer[StructuredTrip, TD.StructuredTripTD](
         complex_factory=StructuredTrip.from_simple
     )
+
+
+STRUCTURED_TRIP_SERIALIZER = structured_trip_serializer()
 
 
 def default_file_name(path_name: str) -> str:

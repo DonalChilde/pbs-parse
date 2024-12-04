@@ -105,3 +105,7 @@ def trip_lines_serializer() -> DataclassSerializer[TripLines, TripLinesTD]:
     return DataclassSerializer[TripLines, TripLinesTD](
         complex_factory=TripLines.from_simple
     )
+
+
+PAGE_LINES_SERIALIZER = page_lines_serializer()
+TRIP_LINES_SERIALIZER = trip_lines_serializer()

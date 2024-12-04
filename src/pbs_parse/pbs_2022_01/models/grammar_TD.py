@@ -18,7 +18,7 @@ class PageHeader2(TypedDict):
 
 
 class BaseEquipment(TypedDict):
-    """Matches the base quipment line/section.
+    """Matches the base equipment line/section.
 
     This data can be found on the base equipment line on the first page of each
     section, and also as part of the page footer.

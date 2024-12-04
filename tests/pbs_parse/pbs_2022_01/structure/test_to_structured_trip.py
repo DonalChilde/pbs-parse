@@ -6,7 +6,7 @@ import pytest
 
 from pbs_parse.pbs_2022_01.models.parsed_trip import parsed_trip_serializer
 from pbs_parse.pbs_2022_01.models.structured import structured_trip_serializer
-from pbs_parse.pbs_2022_01.structure.parsed_to_structured import translate
+from pbs_parse.pbs_2022_01.structure.parsed_to_structured_2 import translate
 from pbs_parse.pbs_2022_01.validate.validate_structured import validate_files
 from tests.resources.model import FileBasedTest
 from tests.resources.trips import TRIPS_PARSED_ANCHOR, TRIPS_STRUCTURED_ANCHOR

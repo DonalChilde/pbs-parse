@@ -20,11 +20,13 @@ from rich.progress import (
 )
 
 from pbs_parse.pbs_2022_01.models.parsed_trip import (
+    PARSED_TRIP_SERIALIZER,
     ParsedTrip,
     default_file_name,
-    parsed_trip_serializer,
 )
-from pbs_parse.pbs_2022_01.parse.trip_lines_parser import TripLinesParser
+
+# from pbs_parse.pbs_2022_01.parse.trip_lines_parser import TripLinesParser
+from pbs_parse.pbs_2022_01.parse.trip_lines_parser_2 import TripLinesParser2
 
 logger = logging.getLogger(__name__)
 app = typer.Typer()
@@ -61,8 +63,7 @@ def parse_trips_rich(jobs: Sequence[ParseTripJob]):
         )
         total_trips = 0
         prior_trips = 0
-        parser = TripLinesParser()
-        serializer = parsed_trip_serializer()
+        parser = TripLinesParser2()
 
         for idx, job in enumerate(jobs, start=1):
             ctx = ParseContext()
@@ -74,7 +75,7 @@ def parse_trips_rich(jobs: Sequence[ParseTripJob]):
                 prior_trips += 1
             else:
                 output_path = job.path_out
-            serializer.save_as_json(
+            PARSED_TRIP_SERIALIZER.save_as_json(
                 path_out=output_path, complex_obj=parsed_trip, overwrite=job.overwrite
             )
             total_trips += 1

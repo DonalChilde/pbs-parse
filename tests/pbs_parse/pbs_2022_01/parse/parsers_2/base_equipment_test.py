@@ -8,13 +8,14 @@ from pfmsoft.state_parser import ParseContext
 from pfmsoft.state_parser.model import ParsedIndexedString, ParseResult
 
 from pbs_parse.pbs_2022_01.models import grammar_TD
+from pbs_parse.pbs_2022_01.parse import grammar_2 as G
 from pbs_parse.pbs_2022_01.parse import parsers_2
 from tests.resources.model import ParserTest2
 
 logger = logging.getLogger(__name__)
 
 state = "BaseEquipment"
-parser = parsers_2.BaseEquipment(state=state)
+parser = parsers_2.SimplePyparsingParser(state=state, string_parser=G.base_equipment)
 result_class = grammar_TD.BaseEquipment
 test_name = f"{state} parser "
 test_items = [

@@ -1,7 +1,7 @@
 import logging
+from collections.abc import Iterator
 from datetime import date, timedelta
 from pathlib import Path
-from typing import Iterator, Optional
 
 from pbs_parse.pbs_2022_01.models import parsed_trip as PT
 from pbs_parse.pbs_2022_01.models import structured as ST
@@ -13,7 +13,7 @@ logger = logging.getLogger(__name__)
 def validate(
     parsed_trip: PT.ParsedTrip,
     structured_trip: ST.StructuredTrip,
-    ctx: Optional[Context] = None,
+    ctx: Context | None = None,
 ) -> Context:
     if ctx is None:
         ctx = Context(parsed_trip=parsed_trip, structured_trip=structured_trip)
@@ -23,10 +23,10 @@ def validate(
 
 
 def validate_files(parsed_trip_path: Path, structured_trip_path: Path) -> Context:
-    parsed_serializer = PT.parsed_trip_serializer()
-    structured_serializer = ST.structured_trip_serializer()
-    parsed_trip = parsed_serializer.load_from_json(path_in=parsed_trip_path)
-    structured_trip = structured_serializer.load_from_json(path_in=structured_trip_path)
+    parsed_trip = PT.PARSED_TRIP_SERIALIZER.load_from_json(path_in=parsed_trip_path)
+    structured_trip = ST.STRUCTURED_TRIP_SERIALIZER.load_from_json(
+        path_in=structured_trip_path
+    )
     ctx = Context(
         parsed_trip=parsed_trip,
         structured_trip=structured_trip,

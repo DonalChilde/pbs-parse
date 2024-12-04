@@ -1,6 +1,6 @@
 {
- "uuid": "dbb6a393-76ec-4e2d-af89-750e03989f05",
  "source": "baaf7c74-d9b3-48b4-8211-3a914fe135af",
+ "uuid": "43f0569b-ed7a-46c4-9b58-72113040f3a0",
  "parsed_lines": [
   {
    "id": "page_header_1",
@@ -17,8 +17,14 @@
     "txt": "DP D/A EQ FLT#  STA DLCL/DHBT ML STA ALCL/AHBT  BLOCK  SYNTH   TPAY   DUTY  TAFB   FDP CALENDAR 11/01\u221212/01\n"
    },
    "data": {
-    "from_date": "11/01",
-    "to_date": "12/01"
+    "from_date": {
+     "month": "11",
+     "day": "01"
+    },
+    "to_date": {
+     "month": "12",
+     "day": "01"
+    }
    }
   },
   {
@@ -28,14 +34,15 @@
     "txt": "SEQ 345     1 OPS   POSN CA FO                                                         MO TU WE TH FR SA SU \n"
    },
    "data": {
-    "number": "345",
+    "trip_number": "345",
     "ops_count": "1",
     "positions": [
      "CA",
      "FO"
     ],
     "operations": [],
-    "qualifications": []
+    "special_qual": false,
+    "prior_month_trip": false
    }
   },
   {
@@ -45,8 +52,11 @@
     "txt": "                RPT 1535/1535                                                                      \u2212\u2212 \u2212\u2212 \u2212\u2212 \n"
    },
    "data": {
-    "report": "1535/1535",
-    "calendar": [
+    "report": {
+     "lcl": "1535",
+     "hbt": "1535"
+    },
+    "calendar_entries": [
      "\u2212\u2212",
      "\u2212\u2212",
      "\u2212\u2212"
@@ -61,21 +71,28 @@
    },
    "data": {
     "dutyperiod_idx": "1",
-    "dep_arr_day": "1/1",
-    "eq_code": "82",
+    "depart_day": "1",
+    "arrive_day": "1",
+    "equipment_code": "82",
     "flight_number": "1489",
-    "deadhead": "",
+    "deadhead": false,
     "deadhead_code": "",
     "departure_station": "DFW",
-    "departure_time": "1635/1635",
-    "crew_meal": "D",
+    "departure_time": {
+     "lcl": "1635",
+     "hbt": "1635"
+    },
+    "crew_meal": "",
     "arrival_station": "MIA",
-    "arrival_time": "2010/1910",
+    "arrival_time": {
+     "lcl": "2010",
+     "hbt": "1910"
+    },
     "block": "2.35",
-    "synth": "",
+    "synth": "0.00",
     "ground": "0.00",
-    "equipment_change": "",
-    "calendar": [
+    "equipment_change": false,
+    "calendar_entries": [
      "\u2212\u2212",
      "\u2212\u2212",
      "\u2212\u2212",
@@ -93,13 +110,16 @@
     "txt": "                                 RLS 2040/1940   2.35   0.00   2.35   4.05        3.35 \u2212\u2212 \u2212\u2212 \u2212\u2212 \u2212\u2212 \u2212\u2212 \u2212\u2212 \u2212\u2212 \n"
    },
    "data": {
-    "release": "2040/1940",
+    "release": {
+     "lcl": "2040",
+     "hbt": "1940"
+    },
     "block": "2.35",
     "synth": "0.00",
     "total_pay": "2.35",
     "duty": "4.05",
     "flight_duty": "3.35",
-    "calendar": [
+    "calendar_entries": [
      "\u2212\u2212",
      "\u2212\u2212",
      "\u2212\u2212",
@@ -118,10 +138,10 @@
    },
    "data": {
     "layover_city": "MIA",
-    "name": "MARRIOTT AIRPORT",
-    "phone": "13056495000",
+    "hotel_name": "MARRIOTT AIRPORT",
+    "hotel_phone": "13056495000",
     "rest": "12.20",
-    "calendar": [
+    "calendar_entries": [
      "\u2212\u2212",
      "\u2212\u2212",
      "\u2212\u2212",
@@ -141,7 +161,7 @@
    "data": {
     "name": "SHUTTLE",
     "phone": "",
-    "calendar": [
+    "calendar_entries": [
      "\u2212\u2212",
      "\u2212\u2212",
      "\u2212\u2212",
@@ -159,8 +179,11 @@
     "txt": "                RPT 0900/0800                                                                               \n"
    },
    "data": {
-    "report": "0900/0800",
-    "calendar": []
+    "report": {
+     "lcl": "0900",
+     "hbt": "0800"
+    },
+    "calendar_entries": []
    }
   },
   {
@@ -171,21 +194,28 @@
    },
    "data": {
     "dutyperiod_idx": "2",
-    "dep_arr_day": "2/2",
-    "eq_code": "82",
+    "depart_day": "2",
+    "arrive_day": "2",
+    "equipment_code": "82",
     "flight_number": "3055",
-    "deadhead": "",
+    "deadhead": false,
     "deadhead_code": "",
     "departure_station": "MIA",
-    "departure_time": "1000/0900",
-    "crew_meal": "L",
+    "departure_time": {
+     "lcl": "1000",
+     "hbt": "0900"
+    },
+    "crew_meal": "",
     "arrival_station": "DFW",
-    "arrival_time": "1218/1218",
+    "arrival_time": {
+     "lcl": "1218",
+     "hbt": "1218"
+    },
     "block": "3.18",
-    "synth": "",
+    "synth": "0.00",
     "ground": "3.02",
-    "equipment_change": "X",
-    "calendar": []
+    "equipment_change": true,
+    "calendar_entries": []
    }
   },
   {
@@ -196,21 +226,28 @@
    },
    "data": {
     "dutyperiod_idx": "2",
-    "dep_arr_day": "2/2",
-    "eq_code": "63",
+    "depart_day": "2",
+    "arrive_day": "2",
+    "equipment_code": "63",
     "flight_number": "410",
-    "deadhead": "D",
+    "deadhead": true,
     "deadhead_code": "AA",
     "departure_station": "DFW",
-    "departure_time": "1520/1520",
+    "departure_time": {
+     "lcl": "1520",
+     "hbt": "1520"
+    },
     "crew_meal": "",
     "arrival_station": "PHL",
-    "arrival_time": "1921/1821",
+    "arrival_time": {
+     "lcl": "1921",
+     "hbt": "1821"
+    },
     "block": "0.00",
     "synth": "3.01",
     "ground": "0.00",
-    "equipment_change": "",
-    "calendar": []
+    "equipment_change": false,
+    "calendar_entries": []
    }
   },
   {
@@ -220,13 +257,16 @@
     "txt": "                                 RLS 1951/1851   3.18   3.01   6.19  10.51        4.18                      \n"
    },
    "data": {
-    "release": "1951/1851",
+    "release": {
+     "lcl": "1951",
+     "hbt": "1851"
+    },
     "block": "3.18",
     "synth": "3.01",
     "total_pay": "6.19",
     "duty": "10.51",
     "flight_duty": "4.18",
-    "calendar": []
+    "calendar_entries": []
    }
   },
   {
@@ -237,10 +277,10 @@
    },
    "data": {
     "layover_city": "PHL",
-    "name": "MARRIOTT PHL AIRPORT",
-    "phone": "12154929000",
+    "hotel_name": "MARRIOTT PHL AIRPORT",
+    "hotel_phone": "12154929000",
     "rest": "12.09",
-    "calendar": []
+    "calendar_entries": []
    }
   },
   {
@@ -252,7 +292,7 @@
    "data": {
     "name": "SHUTTLE",
     "phone": "",
-    "calendar": []
+    "calendar_entries": []
    }
   },
   {
@@ -262,8 +302,11 @@
     "txt": "                RPT 0800/0700                                                                               \n"
    },
    "data": {
-    "report": "0800/0700",
-    "calendar": []
+    "report": {
+     "lcl": "0800",
+     "hbt": "0700"
+    },
+    "calendar_entries": []
    }
   },
   {
@@ -274,21 +317,28 @@
    },
    "data": {
     "dutyperiod_idx": "3",
-    "dep_arr_day": "3/3",
-    "eq_code": "83",
+    "depart_day": "3",
+    "arrive_day": "3",
+    "equipment_code": "83",
     "flight_number": "310",
-    "deadhead": "",
+    "deadhead": false,
     "deadhead_code": "",
     "departure_station": "PHL",
-    "departure_time": "0900/0800",
-    "crew_meal": "B",
+    "departure_time": {
+     "lcl": "0900",
+     "hbt": "0800"
+    },
+    "crew_meal": "",
     "arrival_station": "MIA",
-    "arrival_time": "1157/1057",
+    "arrival_time": {
+     "lcl": "1157",
+     "hbt": "1057"
+    },
     "block": "2.57",
-    "synth": "",
+    "synth": "0.00",
     "ground": "1.28",
-    "equipment_change": "X",
-    "calendar": []
+    "equipment_change": true,
+    "calendar_entries": []
    }
   },
   {
@@ -299,21 +349,28 @@
    },
    "data": {
     "dutyperiod_idx": "3",
-    "dep_arr_day": "3/3",
-    "eq_code": "45",
+    "depart_day": "3",
+    "arrive_day": "3",
+    "equipment_code": "45",
     "flight_number": "2038",
-    "deadhead": "D",
+    "deadhead": true,
     "deadhead_code": "AA",
     "departure_station": "MIA",
-    "departure_time": "1325/1225",
+    "departure_time": {
+     "lcl": "1325",
+     "hbt": "1225"
+    },
     "crew_meal": "",
     "arrival_station": "DFW",
-    "arrival_time": "1552/1552",
+    "arrival_time": {
+     "lcl": "1552",
+     "hbt": "1552"
+    },
     "block": "0.00",
     "synth": "3.27",
     "ground": "0.00",
-    "equipment_change": "",
-    "calendar": []
+    "equipment_change": false,
+    "calendar_entries": []
    }
   },
   {
@@ -323,13 +380,16 @@
     "txt": "                                 RLS 1622/1622   2.57   3.27   6.24   9.22        3.57                      \n"
    },
    "data": {
-    "release": "1622/1622",
+    "release": {
+     "lcl": "1622",
+     "hbt": "1622"
+    },
     "block": "2.57",
     "synth": "3.27",
     "total_pay": "6.24",
     "duty": "9.22",
     "flight_duty": "3.57",
-    "calendar": []
+    "calendar_entries": []
    }
   },
   {
@@ -343,7 +403,7 @@
     "synth": "6.55",
     "total_pay": "15.45",
     "tafb": "48.47",
-    "calendar": []
+    "calendar_entries": []
    }
   },
   {

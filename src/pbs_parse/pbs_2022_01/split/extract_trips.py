@@ -4,10 +4,10 @@ from pathlib import Path
 from pfmsoft.indexed_string.model import IndexedString
 
 from pbs_parse.pbs_2022_01.models.split import (
+    PAGE_LINES_SERIALIZER,
+    TRIP_LINES_SERIALIZER,
     PageLines,
     TripLines,
-    page_lines_serializer,
-    trip_lines_serializer,
 )
 
 
@@ -31,8 +31,7 @@ def page_to_lines_of_trips(
 
 
 def parse_trips_from_file(path_in: Path) -> Iterator[TripLines]:
-    serializer = page_lines_serializer()
-    page = serializer.load_from_json(path_in=path_in)
+    page = PAGE_LINES_SERIALIZER.load_from_json(path_in=path_in)
     yield from parse_trips(page=page)
 
 
@@ -55,8 +54,7 @@ def write_trips(
         result_path = path_out / Path(
             f"{file_stem}.trip_{idx}_of_{len(trips_list)}.json"
         )
-        serializer = trip_lines_serializer()
-        serializer.save_as_json(
+        TRIP_LINES_SERIALIZER.save_as_json(
             path_out=result_path, complex_obj=trip, overwrite=overwrite
         )
         count = idx
