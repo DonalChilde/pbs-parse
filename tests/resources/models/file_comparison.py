@@ -5,7 +5,7 @@ from dataclasses import dataclass
 from .file_system_resource import FileResource
 
 
-@dataclass
+@dataclass(slots=True)
 class FileComparison:
     """Info needed to locate two files."""
 

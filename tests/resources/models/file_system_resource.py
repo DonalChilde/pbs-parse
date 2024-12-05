@@ -5,7 +5,7 @@ from importlib import resources
 from importlib.resources.abc import Traversable
 
 
-@dataclass
+@dataclass(slots=True)
 class FileResource:
     """Info needed to locate a file or directory in a package.
 
