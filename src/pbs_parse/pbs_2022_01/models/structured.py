@@ -4,7 +4,7 @@
 from dataclasses import dataclass, field
 from datetime import date, timedelta
 from typing import Optional
-from uuid import NAMESPACE_DNS, UUID, uuid4, uuid5
+from uuid import NAMESPACE_DNS, UUID, uuid5
 
 from pfmsoft.simple_serializer import DataclassSerializer
 
@@ -213,10 +213,11 @@ class StructuredTrip:
 
     def make_uuid(self) -> UUID:
         """Make a uuid from a namespace and the repr of asdict(self), minus the uuid field."""
+        return uuid5(namespace=STRUCTURED_TRIP_NS, name=self.source)
         # data = asdict(self)
         # data.pop("uuid", None)
         # return uuid5(STRUCTURED_TRIP_NS, repr(data))
-        return uuid4()
+        # return uuid4()
 
     @staticmethod
     def from_simple(simple_obj: TD.StructuredTripTD) -> "StructuredTrip":

@@ -3,8 +3,9 @@
 # ruff: noqa: D101 D102 D103
 from dataclasses import dataclass, field
 from typing import TypedDict
-from uuid import NAMESPACE_DNS, UUID, uuid4, uuid5
+from uuid import NAMESPACE_DNS, UUID, uuid5
 
+from pfmsoft.indexed_string.index_strings import make_uuid_iter
 from pfmsoft.indexed_string.model import IndexedString, IndexedStringTD
 from pfmsoft.simple_serializer import DataclassSerializer
 
@@ -43,11 +44,12 @@ class PageLines:
         #     )
 
     def make_uuid(self) -> UUID:
-        """Make a uuid from a namespace and the repr of asdict(self), minus the uuid field."""
+        """Make a uuid from a namespace and the lines."""
+        return make_uuid_iter(indexed_strings=self.lines, namespace=PAGE_LINES_NS)
         # data = asdict(self)
         # data.pop("uuid", None)
         # return uuid5(PAGE_LINES_NS, repr(data))
-        return uuid4()
+        # return uuid4()
 
     @staticmethod
     def from_simple(simple_obj: PageLinesTD) -> "PageLines":
@@ -79,10 +81,11 @@ class TripLines:
 
     def make_uuid(self) -> UUID:
         """Make a uuid from a namespace and the repr of asdict(self), minus the uuid field."""
+        return make_uuid_iter(indexed_strings=self.lines, namespace=TRIP_LINES_NS)
         # data = asdict(self)
         # data.pop("uuid", None)
         # return uuid5(TRIP_LINES_NS, repr(data))
-        return uuid4()
+        # return uuid4()
 
     @staticmethod
     def from_simple(simple_obj: TripLinesTD) -> "TripLines":
