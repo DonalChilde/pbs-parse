@@ -34,6 +34,7 @@ def test_split_package_to_pages_file(runner: CliRunner, test_output_dir: Path):
             print(result.stderr)
         assert result.exit_code == 0
         assert "4 pages found" in result.stdout
+        assert "error" not in result.stdout
 
 
 def test_split_package_to_pages_dir(runner: CliRunner, test_output_dir: Path):
@@ -52,13 +53,4 @@ def test_split_package_to_pages_dir(runner: CliRunner, test_output_dir: Path):
             print(result.stderr)
         assert result.exit_code == 0
         assert "4 pages found" in result.stdout
-
-
-# def test_parse_pages():
-#     # TODO move this test
-#     file_resource = resources.files(RESOURCES_ANCHOR).joinpath(DATA_FILE_ANCHOR)
-#     count = 0
-#     with resources.as_file(file_resource) as input_path:
-#         for idx, page in enumerate(parse_pages_from_file(path_in=input_path), start=1):
-#             count = idx
-#     assert count == 173
+        assert "error" not in result.stdout

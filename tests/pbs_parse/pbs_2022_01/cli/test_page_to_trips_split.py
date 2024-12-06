@@ -28,6 +28,7 @@ def test_split_page_to_trips_file(runner: CliRunner, test_output_dir: Path):  # 
             print(result.stderr)
         assert result.exit_code == 0
         assert "4 trips found" in result.stdout
+        assert "error" not in result.stdout
 
 
 def test_split_page_to_trips_dir(runner: CliRunner, test_output_dir: Path):  # noqa: D103
@@ -41,3 +42,4 @@ def test_split_page_to_trips_dir(runner: CliRunner, test_output_dir: Path):  # n
         print(result.stdout)
         assert result.exit_code == 0
         assert "18 trips found" in result.stdout
+        assert "error" not in result.stdout
