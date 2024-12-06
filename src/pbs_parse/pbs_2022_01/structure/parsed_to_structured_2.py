@@ -5,7 +5,6 @@ from dataclasses import dataclass, field
 from datetime import date
 from pathlib import Path
 from typing import Any
-from uuid import uuid4
 
 from pfmsoft.state_parser.model import ParsedIndexedString
 
@@ -76,7 +75,6 @@ def translate(
 
 def _translate_flight(parsed_data: linesTD.Flight, idx: int) -> structured.Flight:
     flight = structured.Flight(
-        uuid=str(uuid4()),
         idx=str(idx),
         dutyperiod_idx=parsed_data["dutyperiod_idx"],
         depart_day=parsed_data["depart_day"],
@@ -110,7 +108,6 @@ def _translate_dutyperiod(
     else:
         layover = _translate_layover(dutyperiod_lines.layover)
     dutyperiod = structured.DutyPeriod(
-        uuid=str(uuid4()),
         idx=str(idx),
         report_time=dutyperiod_lines.report.data["report"],
         release_time=dutyperiod_lines.release.data["release"],
@@ -127,7 +124,6 @@ def _translate_dutyperiod(
 
 def _translate_layover(layover_lines: LayoverLines) -> structured.Layover:
     layover = structured.Layover(
-        uuid=str(uuid4()),
         rest=layover_lines.layover.data["rest"],
         city=layover_lines.layover.data["layover_city"],
         hotels=_translate_hotels(
