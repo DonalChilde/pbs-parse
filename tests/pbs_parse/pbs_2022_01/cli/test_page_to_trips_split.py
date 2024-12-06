@@ -31,7 +31,7 @@ def test_split_page_to_trips_file(runner: CliRunner, test_output_dir: Path):  # 
 
 
 def test_split_page_to_trips_dir(runner: CliRunner, test_output_dir: Path):  # noqa: D103
-    path_out = test_output_dir / "cli" / "page_to_trips_file"
+    path_out = test_output_dir / "cli" / "page_to_trips_dir"
     with resources.as_file(DIRECTORY_TEST.traversable()) as input_path:
         result = runner.invoke(
             app, ["split-trips", "all", str(input_path), str(path_out)]

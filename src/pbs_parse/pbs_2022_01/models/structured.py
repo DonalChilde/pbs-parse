@@ -223,7 +223,7 @@ class StructuredTrip:
             block=simple_obj["block"],
             synth=simple_obj["synth"],
             total_pay=simple_obj["total_pay"],
-            tafb=simple_obj["total_pay"],
+            tafb=simple_obj["tafb"],
             external=ExternalData(**simple_obj["external"]),
             page_header=PageHeader.from_simple(simple_obj=simple_obj["page_header"]),
             page_footer=PageFooter(**simple_obj["page_footer"]),

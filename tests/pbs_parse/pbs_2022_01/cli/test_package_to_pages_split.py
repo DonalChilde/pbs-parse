@@ -18,7 +18,13 @@ DIRECTORY_TEST = FileResource(
 )
 
 
-def test_split_package_to_pages_file(runner: CliRunner, test_output_dir: Path):  # noqa: D103
+def test_split_package_to_pages_file(runner: CliRunner, test_output_dir: Path):
+    """test_split_package_to_pages_file.
+
+    Args:
+        runner (CliRunner): _description_
+        test_output_dir (Path): _description_
+    """
     path_out = test_output_dir / "cli" / "package_to_pages_file"
     with resources.as_file(SINGLE_FILE_TEST.traversable()) as input_path:
         result = runner.invoke(
@@ -30,7 +36,13 @@ def test_split_package_to_pages_file(runner: CliRunner, test_output_dir: Path): 
         assert "4 pages found" in result.stdout
 
 
-def test_split_package_to_pages_dir(runner: CliRunner, test_output_dir: Path):  # noqa: D103
+def test_split_package_to_pages_dir(runner: CliRunner, test_output_dir: Path):
+    """test_split_package_to_pages_dir.
+
+    Args:
+        runner (CliRunner): _description_
+        test_output_dir (Path): _description_
+    """
     path_out = test_output_dir / "cli" / "package_to_pages_dir"
     with resources.as_file(DIRECTORY_TEST.traversable()) as input_path:
         result = runner.invoke(
