@@ -1,26 +1,43 @@
+"""Tests for cli split pages to trips."""
+
 from importlib import resources
 from pathlib import Path
 
 from typer.testing import CliRunner
 
 from pbs_parse.cli.main_typer import app
-from tests.resources import RESOURCES_ANCHOR
+from tests.resources.models.file_system_resource import FileResource
+from tests.resources.page_lines import PAGE_LINES_ANCHOR
 
-DATA_FILE_NAME = "PBS_DCA_May_2022_20220408124308.page_1_of_173.json"
-DATA_FILE_PATH = "page"
-DATA_FILE_ANCHOR = f"{DATA_FILE_PATH}/{DATA_FILE_NAME}"
+SINGLE_FILE_TEST = FileResource(
+    anchor=PAGE_LINES_ANCHOR,
+    pathname=f"2024-11-01_2024-12-01/PBS_LAX_November_2024_20241010125833_partial.page_1_of_4.json",
+)
+DIRECTORY_TEST = FileResource(
+    anchor=PAGE_LINES_ANCHOR, pathname=f"2024-11-01_2024-12-01"
+)
 
 
-def test_split_page_to_trips(runner: CliRunner, test_output_dir: Path, capsys):
-    file_resource = resources.files(RESOURCES_ANCHOR).joinpath(DATA_FILE_ANCHOR)
-    path_out = test_output_dir / "cli" / "page_to_trips"
-    with resources.as_file(file_resource) as input_path:
+def test_split_page_to_trips_file(runner: CliRunner, test_output_dir: Path):  # noqa: D103
+    path_out = test_output_dir / "cli" / "page_to_trips_file"
+    with resources.as_file(SINGLE_FILE_TEST.traversable()) as input_path:
         result = runner.invoke(
             app, ["split-trips", "trip", str(input_path), str(path_out)]
         )
         if result.stderr_bytes is not None:
             print(result.stderr)
-        with capsys.disabled():
-            print(result.stdout)
         assert result.exit_code == 0
-        assert "7 trips found" in result.stdout
+        assert "4 trips found" in result.stdout
+
+
+def test_split_page_to_trips_dir(runner: CliRunner, test_output_dir: Path):  # noqa: D103
+    path_out = test_output_dir / "cli" / "page_to_trips_file"
+    with resources.as_file(DIRECTORY_TEST.traversable()) as input_path:
+        result = runner.invoke(
+            app, ["split-trips", "all", str(input_path), str(path_out)]
+        )
+        if result.stderr_bytes is not None:
+            print(result.stderr)
+        print(result.stdout)
+        assert result.exit_code == 0
+        assert "18 trips found" in result.stdout
