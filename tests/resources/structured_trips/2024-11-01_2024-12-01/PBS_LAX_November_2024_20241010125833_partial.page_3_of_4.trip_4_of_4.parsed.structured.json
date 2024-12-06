@@ -38,7 +38,6 @@
  "operations": [],
  "dutyperiods": [
   {
-   "uuid": "a2634e54-af04-432a-b3eb-7588a79d16a5",
    "idx": "1",
    "report_time": {
     "lcl": "2159",
@@ -54,7 +53,6 @@
    "duty": "6.16",
    "flight_duty": "5.46",
    "layover": {
-    "uuid": "a2abc133-d2f0-4354-8352-7f8d42ffc86f",
     "rest": "11.25",
     "city": "MCO",
     "hotels": [
@@ -72,7 +70,6 @@
    },
    "flights": [
     {
-     "uuid": "75e3e53a-8255-4392-b854-202cfb0f4fe6",
      "dutyperiod_idx": "1",
      "idx": "1",
      "depart_day": "1",
@@ -100,7 +97,6 @@
    ]
   },
   {
-   "uuid": "d7d338c0-73aa-494f-af2a-af63d0031416",
    "idx": "2",
    "report_time": {
     "lcl": "1840",
@@ -116,7 +112,6 @@
    "duty": "6.01",
    "flight_duty": "5.31",
    "layover": {
-    "uuid": "2e74911d-b1b9-4c64-b8f5-94bf4764409e",
     "rest": "39.56",
     "city": "PIT",
     "hotels": [
@@ -134,7 +129,6 @@
    },
    "flights": [
     {
-     "uuid": "465416d8-4279-42a1-9d4d-d1eb6c858234",
      "dutyperiod_idx": "2",
      "idx": "1",
      "depart_day": "2",
@@ -160,7 +154,6 @@
      "equipment_change": false
     },
     {
-     "uuid": "666e46cf-7b23-403d-85f5-0bbede2790e0",
      "dutyperiod_idx": "2",
      "idx": "2",
      "depart_day": "2",
@@ -188,7 +181,6 @@
    ]
   },
   {
-   "uuid": "ae0764de-8c94-4db8-a759-ad449fc3158d",
    "idx": "3",
    "report_time": {
     "lcl": "1637",
@@ -206,7 +198,6 @@
    "layover": null,
    "flights": [
     {
-     "uuid": "db9d40d0-0d39-4e6c-8464-ea885d8ee4d6",
      "dutyperiod_idx": "3",
      "idx": "1",
      "depart_day": "4",
@@ -232,7 +223,6 @@
      "equipment_change": true
     },
     {
-     "uuid": "f7816f93-4cb3-4b7b-bb20-f5dd3359579a",
      "dutyperiod_idx": "3",
      "idx": "2",
      "depart_day": "4",

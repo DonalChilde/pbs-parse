@@ -38,7 +38,6 @@
  "operations": [],
  "dutyperiods": [
   {
-   "uuid": "fc8b9b82-873d-4707-b56b-4bbbe5e7206e",
    "idx": "1",
    "report_time": {
     "lcl": "2106",
@@ -54,7 +53,6 @@
    "duty": "6.55",
    "flight_duty": "6.25",
    "layover": {
-    "uuid": "f2d9232a-7f42-4a1f-92da-e6dd5db98397",
     "rest": "12.29",
     "city": "JFK",
     "hotels": [
@@ -72,7 +70,6 @@
    },
    "flights": [
     {
-     "uuid": "05e0ac21-2461-463f-b5c0-f39f51574b1b",
      "dutyperiod_idx": "1",
      "idx": "1",
      "depart_day": "1",
@@ -100,7 +97,6 @@
    ]
   },
   {
-   "uuid": "8ad6b5ed-f587-4854-9739-0ef09171a2af",
    "idx": "2",
    "report_time": {
     "lcl": "1930",
@@ -116,7 +112,6 @@
    "duty": "8.10",
    "flight_duty": "7.40",
    "layover": {
-    "uuid": "ccde1953-2bd0-4170-b3ea-f137083e9e51",
     "rest": "34.20",
     "city": "SFO",
     "hotels": [
@@ -134,7 +129,6 @@
    },
    "flights": [
     {
-     "uuid": "c1e316b3-75b9-4f25-98c9-c42f79a761ea",
      "dutyperiod_idx": "2",
      "idx": "1",
      "depart_day": "2",
@@ -162,7 +156,6 @@
    ]
   },
   {
-   "uuid": "33e35947-1033-4df4-908f-f70c19702d71",
    "idx": "3",
    "report_time": {
     "lcl": "1100",
@@ -180,7 +173,6 @@
    "layover": null,
    "flights": [
     {
-     "uuid": "4da0dc22-98fd-4cb7-8895-e8ea62153c1f",
      "dutyperiod_idx": "3",
      "idx": "1",
      "depart_day": "4",
@@ -206,7 +198,6 @@
      "equipment_change": false
     },
     {
-     "uuid": "fffa9c3f-f50c-4130-aef7-b0321b39f6d5",
      "dutyperiod_idx": "3",
      "idx": "2",
      "depart_day": "4",

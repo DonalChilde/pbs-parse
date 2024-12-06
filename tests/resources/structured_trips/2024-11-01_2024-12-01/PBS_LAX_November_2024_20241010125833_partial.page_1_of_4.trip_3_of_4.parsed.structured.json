@@ -38,7 +38,6 @@
  "operations": [],
  "dutyperiods": [
   {
-   "uuid": "f68bfdf4-5b8e-427e-a56f-043dc2d2354c",
    "idx": "1",
    "report_time": {
     "lcl": "1035",
@@ -54,7 +53,6 @@
    "duty": "10.02",
    "flight_duty": "9.47",
    "layover": {
-    "uuid": "54c83d98-07d8-4eb5-b498-feafb829a530",
     "rest": "21.09",
     "city": "AUS",
     "hotels": [
@@ -72,7 +70,6 @@
    },
    "flights": [
     {
-     "uuid": "b3bf4935-45a9-4d67-bf08-1bc183e56b7e",
      "dutyperiod_idx": "1",
      "idx": "1",
      "depart_day": "1",
@@ -98,7 +95,6 @@
      "equipment_change": true
     },
     {
-     "uuid": "2c80cd12-9e81-4cc9-b3e8-f978e595caff",
      "dutyperiod_idx": "1",
      "idx": "2",
      "depart_day": "1",
@@ -126,7 +122,6 @@
    ]
   },
   {
-   "uuid": "00a1a47d-f5ed-477d-a6b0-acfb2401b40d",
    "idx": "2",
    "report_time": {
     "lcl": "1846",
@@ -144,7 +139,6 @@
    "layover": null,
    "flights": [
     {
-     "uuid": "63795dbb-cdd9-4d20-bba8-8b20776765f3",
      "dutyperiod_idx": "2",
      "idx": "1",
      "depart_day": "2",

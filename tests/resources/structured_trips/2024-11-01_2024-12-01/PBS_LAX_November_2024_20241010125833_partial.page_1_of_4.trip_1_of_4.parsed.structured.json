@@ -38,7 +38,6 @@
  "operations": [],
  "dutyperiods": [
   {
-   "uuid": "cd55e972-dfa2-429e-9795-0d2adedc4b64",
    "idx": "1",
    "report_time": {
     "lcl": "0640",
@@ -54,7 +53,6 @@
    "duty": "10.35",
    "flight_duty": "10.20",
    "layover": {
-    "uuid": "611e45fb-ff97-4576-9d27-a6531540e85e",
     "rest": "15.53",
     "city": "PHL",
     "hotels": [
@@ -72,7 +70,6 @@
    },
    "flights": [
     {
-     "uuid": "c279d0c1-4d76-49ea-893c-78d0fd789127",
      "dutyperiod_idx": "1",
      "idx": "1",
      "depart_day": "1",
@@ -98,7 +95,6 @@
      "equipment_change": true
     },
     {
-     "uuid": "5db873e4-6065-4f5f-85d4-3c3ae2fee4b5",
      "dutyperiod_idx": "1",
      "idx": "2",
      "depart_day": "1",
@@ -126,7 +122,6 @@
    ]
   },
   {
-   "uuid": "1d835911-63eb-4345-82ba-3d677179ee3d",
    "idx": "2",
    "report_time": {
     "lcl": "1108",
@@ -144,7 +139,6 @@
    "layover": null,
    "flights": [
     {
-     "uuid": "a901b1ab-b3d1-4325-bc41-24f1e2eb98db",
      "dutyperiod_idx": "2",
      "idx": "1",
      "depart_day": "2",
@@ -170,7 +164,6 @@
      "equipment_change": true
     },
     {
-     "uuid": "bd7d99a7-2f25-491b-acb3-fe51572de059",
      "dutyperiod_idx": "2",
      "idx": "2",
      "depart_day": "2",

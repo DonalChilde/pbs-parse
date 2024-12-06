@@ -38,7 +38,6 @@
  "operations": [],
  "dutyperiods": [
   {
-   "uuid": "a83faccd-24ac-47d1-b254-56cc19dcb12e",
    "idx": "1",
    "report_time": {
     "lcl": "2249",
@@ -54,7 +53,6 @@
    "duty": "5.26",
    "flight_duty": "5.11",
    "layover": {
-    "uuid": "84e841f2-5ddd-4445-a249-b15ba857ee57",
     "rest": "12.25",
     "city": "ORD",
     "hotels": [
@@ -72,7 +70,6 @@
    },
    "flights": [
     {
-     "uuid": "7d1f949f-34c7-402e-aea5-59085417d41d",
      "dutyperiod_idx": "1",
      "idx": "1",
      "depart_day": "1",
@@ -100,7 +97,6 @@
    ]
   },
   {
-   "uuid": "cb3e6063-e624-49cf-b1b0-ec161bcae884",
    "idx": "2",
    "report_time": {
     "lcl": "1740",
@@ -116,7 +112,6 @@
    "duty": "4.09",
    "flight_duty": "3.54",
    "layover": {
-    "uuid": "f5eb521f-eae9-4ef6-bf31-514521096df4",
     "rest": "15.52",
     "city": "TPA",
     "hotels": [
@@ -134,7 +129,6 @@
    },
    "flights": [
     {
-     "uuid": "058b5abc-2c9f-49df-9414-6398020a8692",
      "dutyperiod_idx": "2",
      "idx": "1",
      "depart_day": "2",
@@ -162,7 +156,6 @@
    ]
   },
   {
-   "uuid": "45360ebb-35db-45f4-aac7-dd7496d6eb53",
    "idx": "3",
    "report_time": {
     "lcl": "1441",
@@ -178,7 +171,6 @@
    "duty": "8.24",
    "flight_duty": "8.09",
    "layover": {
-    "uuid": "324cf073-d2b2-46ee-9431-73364f059766",
     "rest": "17.04",
     "city": "JAX",
     "hotels": [
@@ -196,7 +188,6 @@
    },
    "flights": [
     {
-     "uuid": "c2f8142e-b9f2-428d-a39a-e9c9a53d6746",
      "dutyperiod_idx": "3",
      "idx": "1",
      "depart_day": "3",
@@ -222,7 +213,6 @@
      "equipment_change": true
     },
     {
-     "uuid": "652d4578-cee1-458c-a07c-f64b5ea88711",
      "dutyperiod_idx": "3",
      "idx": "2",
      "depart_day": "3",
@@ -250,7 +240,6 @@
    ]
   },
   {
-   "uuid": "2733f8ef-f532-4316-86bc-910059287f47",
    "idx": "4",
    "report_time": {
     "lcl": "1609",
@@ -268,7 +257,6 @@
    "layover": null,
    "flights": [
     {
-     "uuid": "1ceafb32-db70-4cb3-bb3e-0e3528b4a4d2",
      "dutyperiod_idx": "4",
      "idx": "1",
      "depart_day": "4",
@@ -294,7 +282,6 @@
      "equipment_change": true
     },
     {
-     "uuid": "88cb3956-3f5f-4ffd-8b94-197df7e3cf9a",
      "dutyperiod_idx": "4",
      "idx": "2",
      "depart_day": "4",

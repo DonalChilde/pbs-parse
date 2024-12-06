@@ -38,7 +38,6 @@
  "operations": [],
  "dutyperiods": [
   {
-   "uuid": "f1c0458f-acdf-4ec2-bbf8-0c3cb4fe4e46",
    "idx": "1",
    "report_time": {
     "lcl": "1353",
@@ -56,7 +55,6 @@
    "layover": null,
    "flights": [
     {
-     "uuid": "ef0010cd-9760-453b-9986-d3f5f1c48618",
      "dutyperiod_idx": "1",
      "idx": "1",
      "depart_day": "1",
@@ -82,7 +80,6 @@
      "equipment_change": false
     },
     {
-     "uuid": "e23a492a-511b-4ca7-a457-ca799b78b148",
      "dutyperiod_idx": "1",
      "idx": "2",
      "depart_day": "1",

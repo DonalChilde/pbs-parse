@@ -38,7 +38,6 @@
  "operations": [],
  "dutyperiods": [
   {
-   "uuid": "6f39b698-b5ca-4689-b462-600e19568f83",
    "idx": "1",
    "report_time": {
     "lcl": "0711",
@@ -54,7 +53,6 @@
    "duty": "11.25",
    "flight_duty": "11.10",
    "layover": {
-    "uuid": "b421a00f-bc7f-403d-a71b-17bc8d171a39",
     "rest": "19.43",
     "city": "BNA",
     "hotels": [
@@ -72,7 +70,6 @@
    },
    "flights": [
     {
-     "uuid": "728f2117-16bb-406e-b429-fc7db63ebd0e",
      "dutyperiod_idx": "1",
      "idx": "1",
      "depart_day": "1",
@@ -98,7 +95,6 @@
      "equipment_change": true
     },
     {
-     "uuid": "4166b8ce-bdc5-425f-b0eb-87c1e44dba62",
      "dutyperiod_idx": "1",
      "idx": "2",
      "depart_day": "1",
@@ -126,7 +122,6 @@
    ]
   },
   {
-   "uuid": "40786737-7b3d-4fd2-80c9-e854ee0aa367",
    "idx": "2",
    "report_time": {
     "lcl": "1519",
@@ -142,7 +137,6 @@
    "duty": "8.56",
    "flight_duty": "8.41",
    "layover": {
-    "uuid": "4fceb69a-996d-478b-9feb-715d26f3006e",
     "rest": "16.38",
     "city": "SFO",
     "hotels": [
@@ -160,7 +154,6 @@
    },
    "flights": [
     {
-     "uuid": "89bd0698-5e33-4a21-bc7e-13abb8a936cb",
      "dutyperiod_idx": "2",
      "idx": "1",
      "depart_day": "2",
@@ -186,7 +179,6 @@
      "equipment_change": true
     },
     {
-     "uuid": "1b342bf0-01c8-46b1-9a2b-ad00bf23c38e",
      "dutyperiod_idx": "2",
      "idx": "2",
      "depart_day": "2",
@@ -214,7 +206,6 @@
    ]
   },
   {
-   "uuid": "151489d1-1f5c-4cbe-91b5-59299aa4651b",
    "idx": "3",
    "report_time": {
     "lcl": "1453",
@@ -232,7 +223,6 @@
    "layover": null,
    "flights": [
     {
-     "uuid": "bf1ec7eb-dfee-4b63-9031-90e1a99df98b",
      "dutyperiod_idx": "3",
      "idx": "1",
      "depart_day": "3",
@@ -258,7 +248,6 @@
      "equipment_change": true
     },
     {
-     "uuid": "adb9eefd-c242-4aa1-bb0a-4b43ae949227",
      "dutyperiod_idx": "3",
      "idx": "2",
      "depart_day": "3",

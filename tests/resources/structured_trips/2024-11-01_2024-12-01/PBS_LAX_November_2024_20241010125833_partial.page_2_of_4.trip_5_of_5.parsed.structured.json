@@ -38,7 +38,6 @@
  "operations": [],
  "dutyperiods": [
   {
-   "uuid": "810231ee-76b4-4451-a1e8-677d402af970",
    "idx": "1",
    "report_time": {
     "lcl": "1725",
@@ -54,7 +53,6 @@
    "duty": "12.05",
    "flight_duty": "11.35",
    "layover": {
-    "uuid": "9a0f3e26-1cc0-4b04-83f5-9ea5be0a335b",
     "rest": "21.45",
     "city": "LHR",
     "hotels": [
@@ -72,7 +70,6 @@
    },
    "flights": [
     {
-     "uuid": "c37e4e84-ef3c-4d29-bff8-3dd2c345c924",
      "dutyperiod_idx": "1",
      "idx": "1",
      "depart_day": "1",
@@ -100,7 +97,6 @@
    ]
   },
   {
-   "uuid": "5fbd8367-4907-4e87-95c1-280efb290830",
    "idx": "2",
    "report_time": {
     "lcl": "1015",
@@ -118,7 +114,6 @@
    "layover": null,
    "flights": [
     {
-     "uuid": "f46479bd-4fa2-49e3-a884-ea7dbbfb7a4c",
      "dutyperiod_idx": "2",
      "idx": "1",
      "depart_day": "3",

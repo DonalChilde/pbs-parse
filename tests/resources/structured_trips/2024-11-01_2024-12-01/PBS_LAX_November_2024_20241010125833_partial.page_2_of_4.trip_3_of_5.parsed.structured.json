@@ -38,7 +38,6 @@
  "operations": [],
  "dutyperiods": [
   {
-   "uuid": "df3c656d-8814-48a7-a7b1-afccc618f05d",
    "idx": "1",
    "report_time": {
     "lcl": "2130",
@@ -54,7 +53,6 @@
    "duty": "17.00",
    "flight_duty": "16.30",
    "layover": {
-    "uuid": "f04e4fa2-a695-4202-a481-c275a2954c41",
     "rest": "24.45",
     "city": "SYD",
     "hotels": [
@@ -72,7 +70,6 @@
    },
    "flights": [
     {
-     "uuid": "f1945c92-e011-4b46-8d34-2b74e4b29c59",
      "dutyperiod_idx": "1",
      "idx": "1",
      "depart_day": "1",
@@ -100,7 +97,6 @@
    ]
   },
   {
-   "uuid": "64fc0770-6534-4de6-9895-148dadf6a839",
    "idx": "2",
    "report_time": {
     "lcl": "1015",
@@ -118,7 +114,6 @@
    "layover": null,
    "flights": [
     {
-     "uuid": "39688838-380b-4407-b133-61a8455c9240",
      "dutyperiod_idx": "2",
      "idx": "1",
      "depart_day": "4",

@@ -38,7 +38,6 @@
  "operations": [],
  "dutyperiods": [
   {
-   "uuid": "2026dc06-b304-4428-b852-1fbf0b0611d0",
    "idx": "1",
    "report_time": {
     "lcl": "1430",
@@ -54,7 +53,6 @@
    "duty": "6.56",
    "flight_duty": "6.26",
    "layover": {
-    "uuid": "423dcca4-a8bc-443d-a086-b2940b3f4b41",
     "rest": "15.04",
     "city": "JFK",
     "hotels": [
@@ -72,7 +70,6 @@
    },
    "flights": [
     {
-     "uuid": "21af75e7-8b09-4acc-be5e-692e8ab3dacf",
      "dutyperiod_idx": "1",
      "idx": "1",
      "depart_day": "1",
@@ -100,7 +97,6 @@
    ]
   },
   {
-   "uuid": "06cf95c6-ce62-46bd-95d8-90d81fc83651",
    "idx": "2",
    "report_time": {
     "lcl": "1530",
@@ -118,7 +114,6 @@
    "layover": null,
    "flights": [
     {
-     "uuid": "6ed5425c-bbd1-4327-8274-22c2e965d5da",
      "dutyperiod_idx": "2",
      "idx": "1",
      "depart_day": "2",

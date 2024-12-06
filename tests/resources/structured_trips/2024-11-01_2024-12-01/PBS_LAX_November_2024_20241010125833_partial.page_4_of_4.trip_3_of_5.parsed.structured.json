@@ -38,7 +38,6 @@
  "operations": [],
  "dutyperiods": [
   {
-   "uuid": "799f1aee-2996-48aa-ab7e-71198283db71",
    "idx": "1",
    "report_time": {
     "lcl": "1153",
@@ -54,7 +53,6 @@
    "duty": "8.15",
    "flight_duty": "7.45",
    "layover": {
-    "uuid": "d2bb0472-7dc7-491b-ae75-f5079db0d738",
     "rest": "17.46",
     "city": "JAX",
     "hotels": [
@@ -72,7 +70,6 @@
    },
    "flights": [
     {
-     "uuid": "3c9d5bfd-1bd3-4278-8d53-de1ffc52a2a9",
      "dutyperiod_idx": "1",
      "idx": "1",
      "depart_day": "1",
@@ -98,7 +95,6 @@
      "equipment_change": true
     },
     {
-     "uuid": "61e6bed6-33cd-43fc-95e4-a42b8f416b9b",
      "dutyperiod_idx": "1",
      "idx": "2",
      "depart_day": "1",
@@ -126,7 +122,6 @@
    ]
   },
   {
-   "uuid": "68028668-6789-44b8-8402-9bf1b49934d8",
    "idx": "2",
    "report_time": {
     "lcl": "1654",
@@ -142,7 +137,6 @@
    "duty": "7.02",
    "flight_duty": "6.32",
    "layover": {
-    "uuid": "4ff59b34-faca-4931-aedb-0b0a5ef3c4d7",
     "rest": "13.10",
     "city": "IND",
     "hotels": [
@@ -170,7 +164,6 @@
    },
    "flights": [
     {
-     "uuid": "b39b7e84-b44a-4089-87c4-b3d998a9816d",
      "dutyperiod_idx": "2",
      "idx": "1",
      "depart_day": "2",
@@ -196,7 +189,6 @@
      "equipment_change": true
     },
     {
-     "uuid": "8e13c14f-8885-4b7d-816f-7d787e75a141",
      "dutyperiod_idx": "2",
      "idx": "2",
      "depart_day": "2",
@@ -224,7 +216,6 @@
    ]
   },
   {
-   "uuid": "fcc6ff83-5275-45c6-a2a4-1b306c4ed3ba",
    "idx": "3",
    "report_time": {
     "lcl": "1306",
@@ -242,7 +233,6 @@
    "layover": null,
    "flights": [
     {
-     "uuid": "71b72d48-4a32-4fae-a76f-0151ecd7bd77",
      "dutyperiod_idx": "3",
      "idx": "1",
      "depart_day": "3",
@@ -268,7 +258,6 @@
      "equipment_change": true
     },
     {
-     "uuid": "d0feaeb5-5f51-420f-976f-2d5a19df55c6",
      "dutyperiod_idx": "3",
      "idx": "2",
      "depart_day": "3",

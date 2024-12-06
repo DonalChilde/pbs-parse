@@ -40,7 +40,6 @@
  ],
  "dutyperiods": [
   {
-   "uuid": "4c1f5f30-8272-4ac2-8a79-b7c85f9d21a1",
    "idx": "1",
    "report_time": {
     "lcl": "1200",
@@ -56,7 +55,6 @@
    "duty": "4.04",
    "flight_duty": "0.00",
    "layover": {
-    "uuid": "f00a8b93-84eb-440b-9dd3-863567127e37",
     "rest": "15.11",
     "city": "DFW",
     "hotels": [
@@ -74,7 +72,6 @@
    },
    "flights": [
     {
-     "uuid": "e8a8b931-d962-432d-bf56-0378cd64c3c0",
      "dutyperiod_idx": "1",
      "idx": "1",
      "depart_day": "1",
@@ -102,7 +99,6 @@
    ]
   },
   {
-   "uuid": "73cbb8a1-4e94-4a2f-a621-ec452d492409",
    "idx": "2",
    "report_time": {
     "lcl": "0915",
@@ -118,7 +114,6 @@
    "duty": "15.45",
    "flight_duty": "15.15",
    "layover": {
-    "uuid": "5933d396-0b51-4fcc-9057-dda5579af866",
     "rest": "24.30",
     "city": "NRT",
     "hotels": [
@@ -136,7 +131,6 @@
    },
    "flights": [
     {
-     "uuid": "e06f2bcc-6d01-4213-a112-1a189919760b",
      "dutyperiod_idx": "2",
      "idx": "1",
      "depart_day": "2",
@@ -164,7 +158,6 @@
    ]
   },
   {
-   "uuid": "0b35de83-2341-4776-aa24-8f058cead370",
    "idx": "3",
    "report_time": {
     "lcl": "1630",
@@ -180,7 +173,6 @@
    "duty": "13.15",
    "flight_duty": "12.45",
    "layover": {
-    "uuid": "1787283a-7b22-4600-9aa6-5963f129a692",
     "rest": "18.09",
     "city": "DFW",
     "hotels": [
@@ -208,7 +200,6 @@
    },
    "flights": [
     {
-     "uuid": "9539d860-d622-4d48-85d6-a6fc6184bf8f",
      "dutyperiod_idx": "3",
      "idx": "1",
      "depart_day": "4",
@@ -236,7 +227,6 @@
    ]
   },
   {
-   "uuid": "42242689-6f28-4871-8bf1-95f04b561bd6",
    "idx": "4",
    "report_time": {
     "lcl": "0854",
@@ -254,7 +244,6 @@
    "layover": null,
    "flights": [
     {
-     "uuid": "efe8af16-1244-474b-b004-971dd6f809b1",
      "dutyperiod_idx": "4",
      "idx": "1",
      "depart_day": "5",
