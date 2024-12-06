@@ -1,0 +1,83 @@
+{
+ "source": "6b5e7086-b5e7-5c2b-aa41-cf0e3540f976",
+ "idx": 3,
+ "uuid": "1f3c337d-3b2b-5690-9f5e-583d946f9e80",
+ "lines": [
+  {
+   "idx": 149,
+   "txt": "\f   DAY          \u2212\u2212DEPARTURE\u2212\u2212    \u2212\u2212\u2212ARRIVAL\u2212\u2212\u2212                GRND/        REST/\n"
+  },
+  {
+   "idx": 150,
+   "txt": "DP D/A EQ FLT#  STA DLCL/DHBT ML STA ALCL/AHBT  BLOCK  SYNTH   TPAY   DUTY  TAFB   FDP CALENDAR 11/01\u221212/01\n"
+  },
+  {
+   "idx": 181,
+   "txt": "SEQ 8588    1 OPS   POSN CA FO                                                         MO TU WE TH FR SA SU\n"
+  },
+  {
+   "idx": 182,
+   "txt": "                RPT 2106/2106                                                                      \u2212\u2212 \u2212\u2212 \u2212\u2212\n"
+  },
+  {
+   "idx": 183,
+   "txt": "1  1/2 80   10  LAX 2206/2206  D JFK 0631/0331   5.25                                  \u2212\u2212 \u2212\u2212 \u2212\u2212 \u2212\u2212 \u2212\u2212 \u2212\u2212 \u2212\u2212\n"
+  },
+  {
+   "idx": 184,
+   "txt": "                                 RLS 0701/0401   5.25   0.00   5.25   6.55        6.25 \u2212\u2212 \u2212\u2212 \u2212\u2212 \u2212\u2212 \u2212\u2212 \u2212\u2212 \u2212\u2212\n"
+  },
+  {
+   "idx": 185,
+   "txt": "                JFK TWA HOTEL                               2128069000     12.29       \u2212\u2212 \u2212\u2212 \u2212\u2212 \u2212\u2212 \u2212\u2212 \u2212\u2212 \u2212\u2212\n"
+  },
+  {
+   "idx": 186,
+   "txt": "                    SHUTTLE                                                            \u2212\u2212 26 \u2212\u2212 \u2212\u2212 \u2212\u2212 \u2212\u2212 \u2212\u2212\n"
+  },
+  {
+   "idx": 187,
+   "txt": "                RPT 1930/1630\n"
+  },
+  {
+   "idx": 188,
+   "txt": "2  2/3 80  177  JFK 2030/1730  D SFO 0010/0010   6.40\n"
+  },
+  {
+   "idx": 189,
+   "txt": "                                 RLS 0040/0040   6.40   0.00   6.40   8.10        7.40\n"
+  },
+  {
+   "idx": 190,
+   "txt": "                SFO HYATT REGENCY SAN FRANCISCO             4157881234     34.20\n"
+  },
+  {
+   "idx": 191,
+   "txt": "                    SKYHOP GLOBAL                           9544000412\n"
+  },
+  {
+   "idx": 192,
+   "txt": "                RPT 1100/1100\n"
+  },
+  {
+   "idx": 193,
+   "txt": "3  4/4 64 2798  SFO 1200/1200  L DFW 1730/1530   3.30          1.15\n"
+  },
+  {
+   "idx": 194,
+   "txt": "3  4/4 64 1657  DFW 1845/1645  D LAX 2011/2011   3.26\n"
+  },
+  {
+   "idx": 195,
+   "txt": "                                 RLS 2041/2041   6.56   0.00   6.56   9.41        9.11\n"
+  },
+  {
+   "idx": 196,
+   "txt": "TTL                                             19.01   1.59  21.00        71.35\n"
+  },
+  {
+   "idx": 217,
+   "txt": "COCKPIT  ISSUED 09OCT2024  EFF 01NOV2024               LAX 320  INTL                             PAGE  2035\n"
+  }
+ ]
+}

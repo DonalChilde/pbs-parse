@@ -1,0 +1,335 @@
+{
+ "source": "2565ba54-18cd-53d1-a4d1-6155478cb42e",
+ "uuid": "dc7bc881-4c37-537b-a7bf-fe7ee7971ad4",
+ "parsed_lines": [
+  {
+   "id": "page_header_1",
+   "indexed_string": {
+    "idx": 1,
+    "txt": "\f   DAY          \u2212\u2212DEPARTURE\u2212\u2212    \u2212\u2212\u2212ARRIVAL\u2212\u2212\u2212                GRND/        REST/\n"
+   },
+   "data": {}
+  },
+  {
+   "id": "page_header_2",
+   "indexed_string": {
+    "idx": 2,
+    "txt": "DP D/A EQ FLT#  STA DLCL/DHBT ML STA ALCL/AHBT  BLOCK  SYNTH   TPAY   DUTY  TAFB   FDP CALENDAR 11/01\u221212/01\n"
+   },
+   "data": {
+    "from_date": {
+     "month": "11",
+     "day": "01"
+    },
+    "to_date": {
+     "month": "12",
+     "day": "01"
+    }
+   }
+  },
+  {
+   "id": "trip_header",
+   "indexed_string": {
+    "idx": 4,
+    "txt": "SEQ 26475   1 OPS   POSN CA FO                                                         MO TU WE TH FR SA SU\n"
+   },
+   "data": {
+    "trip_number": "26475",
+    "ops_count": "1",
+    "positions": [
+     "CA",
+     "FO"
+    ],
+    "operations": [],
+    "special_qual": false,
+    "prior_month_trip": false
+   }
+  },
+  {
+   "id": "duty_period_report",
+   "indexed_string": {
+    "idx": 5,
+    "txt": "                RPT 0640/0640                                                                      \u2212\u2212  2 \u2212\u2212\n"
+   },
+   "data": {
+    "report": {
+     "lcl": "0640",
+     "hbt": "0640"
+    },
+    "calendar_entries": [
+     "\u2212\u2212",
+     "2",
+     "\u2212\u2212"
+    ]
+   }
+  },
+  {
+   "id": "flight",
+   "indexed_string": {
+    "idx": 6,
+    "txt": "1  1/1 65  475  LAX 0740/0740  B ORD 1354/1154   4.14          3.05X                   \u2212\u2212 \u2212\u2212 \u2212\u2212 \u2212\u2212 \u2212\u2212 \u2212\u2212 \u2212\u2212\n"
+   },
+   "data": {
+    "dutyperiod_idx": "1",
+    "depart_day": "1",
+    "arrive_day": "1",
+    "equipment_code": "65",
+    "flight_number": "475",
+    "deadhead": false,
+    "deadhead_code": "",
+    "departure_station": "LAX",
+    "departure_time": {
+     "lcl": "0740",
+     "hbt": "0740"
+    },
+    "crew_meal": "",
+    "arrival_station": "ORD",
+    "arrival_time": {
+     "lcl": "1354",
+     "hbt": "1154"
+    },
+    "block": "4.14",
+    "synth": "0.00",
+    "ground": "3.05",
+    "equipment_change": true,
+    "calendar_entries": [
+     "\u2212\u2212",
+     "\u2212\u2212",
+     "\u2212\u2212",
+     "\u2212\u2212",
+     "\u2212\u2212",
+     "\u2212\u2212",
+     "\u2212\u2212"
+    ]
+   }
+  },
+  {
+   "id": "flight",
+   "indexed_string": {
+    "idx": 7,
+    "txt": "1  1/1 45  588  ORD 1659/1459    PHL 2000/1700   2.01                                  \u2212\u2212 \u2212\u2212 \u2212\u2212 \u2212\u2212 \u2212\u2212 \u2212\u2212 \u2212\u2212\n"
+   },
+   "data": {
+    "dutyperiod_idx": "1",
+    "depart_day": "1",
+    "arrive_day": "1",
+    "equipment_code": "45",
+    "flight_number": "588",
+    "deadhead": false,
+    "deadhead_code": "",
+    "departure_station": "ORD",
+    "departure_time": {
+     "lcl": "1659",
+     "hbt": "1459"
+    },
+    "crew_meal": "",
+    "arrival_station": "PHL",
+    "arrival_time": {
+     "lcl": "2000",
+     "hbt": "1700"
+    },
+    "block": "2.01",
+    "synth": "0.00",
+    "ground": "0.00",
+    "equipment_change": false,
+    "calendar_entries": [
+     "\u2212\u2212",
+     "\u2212\u2212",
+     "\u2212\u2212",
+     "\u2212\u2212",
+     "\u2212\u2212",
+     "\u2212\u2212",
+     "\u2212\u2212"
+    ]
+   }
+  },
+  {
+   "id": "duty_period_release",
+   "indexed_string": {
+    "idx": 8,
+    "txt": "                                 RLS 2015/1715   6.15   0.00   6.15  10.35       10.20 \u2212\u2212 \u2212\u2212 \u2212\u2212 \u2212\u2212 \u2212\u2212 \u2212\u2212 \u2212\u2212\n"
+   },
+   "data": {
+    "release": {
+     "lcl": "2015",
+     "hbt": "1715"
+    },
+    "block": "6.15",
+    "synth": "0.00",
+    "total_pay": "6.15",
+    "duty": "10.35",
+    "flight_duty": "10.20",
+    "calendar_entries": [
+     "\u2212\u2212",
+     "\u2212\u2212",
+     "\u2212\u2212",
+     "\u2212\u2212",
+     "\u2212\u2212",
+     "\u2212\u2212",
+     "\u2212\u2212"
+    ]
+   }
+  },
+  {
+   "id": "layover",
+   "indexed_string": {
+    "idx": 9,
+    "txt": "                PHL MARRIOTT OLD CITY                       12152386000    15.53       \u2212\u2212 \u2212\u2212 \u2212\u2212 \u2212\u2212 \u2212\u2212 \u2212\u2212 \u2212\u2212\n"
+   },
+   "data": {
+    "layover_city": "PHL",
+    "hotel_name": "MARRIOTT OLD CITY",
+    "hotel_phone": "12152386000",
+    "rest": "15.53",
+    "calendar_entries": [
+     "\u2212\u2212",
+     "\u2212\u2212",
+     "\u2212\u2212",
+     "\u2212\u2212",
+     "\u2212\u2212",
+     "\u2212\u2212",
+     "\u2212\u2212"
+    ]
+   }
+  },
+  {
+   "id": "transportation",
+   "indexed_string": {
+    "idx": 10,
+    "txt": "                    SKYHOP GLOBAL                           9544000412\n"
+   },
+   "data": {
+    "name": "SKYHOP GLOBAL",
+    "phone": "9544000412",
+    "calendar_entries": []
+   }
+  },
+  {
+   "id": "duty_period_report",
+   "indexed_string": {
+    "idx": 11,
+    "txt": "                RPT 1108/0808\n"
+   },
+   "data": {
+    "report": {
+     "lcl": "1108",
+     "hbt": "0808"
+    },
+    "calendar_entries": []
+   }
+  },
+  {
+   "id": "flight",
+   "indexed_string": {
+    "idx": 12,
+    "txt": "2  2/2 45  629  PHL 1208/0908    ORD 1332/1132   2.24          1.23X\n"
+   },
+   "data": {
+    "dutyperiod_idx": "2",
+    "depart_day": "2",
+    "arrive_day": "2",
+    "equipment_code": "45",
+    "flight_number": "629",
+    "deadhead": false,
+    "deadhead_code": "",
+    "departure_station": "PHL",
+    "departure_time": {
+     "lcl": "1208",
+     "hbt": "0908"
+    },
+    "crew_meal": "",
+    "arrival_station": "ORD",
+    "arrival_time": {
+     "lcl": "1332",
+     "hbt": "1132"
+    },
+    "block": "2.24",
+    "synth": "0.00",
+    "ground": "1.23",
+    "equipment_change": true,
+    "calendar_entries": []
+   }
+  },
+  {
+   "id": "flight",
+   "indexed_string": {
+    "idx": 13,
+    "txt": "2  2/2 65 1551  ORD 1455/1255  L LAX 1725/1725   4.30\n"
+   },
+   "data": {
+    "dutyperiod_idx": "2",
+    "depart_day": "2",
+    "arrive_day": "2",
+    "equipment_code": "65",
+    "flight_number": "1551",
+    "deadhead": false,
+    "deadhead_code": "",
+    "departure_station": "ORD",
+    "departure_time": {
+     "lcl": "1455",
+     "hbt": "1255"
+    },
+    "crew_meal": "",
+    "arrival_station": "LAX",
+    "arrival_time": {
+     "lcl": "1725",
+     "hbt": "1725"
+    },
+    "block": "4.30",
+    "synth": "0.00",
+    "ground": "0.00",
+    "equipment_change": false,
+    "calendar_entries": []
+   }
+  },
+  {
+   "id": "duty_period_release",
+   "indexed_string": {
+    "idx": 14,
+    "txt": "                                 RLS 1740/1740   6.54   0.00   6.54   9.32        9.17\n"
+   },
+   "data": {
+    "release": {
+     "lcl": "1740",
+     "hbt": "1740"
+    },
+    "block": "6.54",
+    "synth": "0.00",
+    "total_pay": "6.54",
+    "duty": "9.32",
+    "flight_duty": "9.17",
+    "calendar_entries": []
+   }
+  },
+  {
+   "id": "trip_footer",
+   "indexed_string": {
+    "idx": 15,
+    "txt": "TTL                                             13.09   0.00  13.09        36.00\n"
+   },
+   "data": {
+    "block": "13.09",
+    "synth": "0.00",
+    "total_pay": "13.09",
+    "tafb": "36.00",
+    "calendar_entries": []
+   }
+  },
+  {
+   "id": "page_footer",
+   "indexed_string": {
+    "idx": 72,
+    "txt": "COCKPIT  ISSUED 09OCT2024  EFF 01NOV2024               LAX 737  DOM                              PAGE   210\n"
+   },
+   "data": {
+    "issued": "09OCT2024",
+    "effective": "01NOV2024",
+    "base": "LAX",
+    "satellite_base": "",
+    "equipment": "737",
+    "division": "DOM",
+    "page": "210"
+   }
+  }
+ ]
+}

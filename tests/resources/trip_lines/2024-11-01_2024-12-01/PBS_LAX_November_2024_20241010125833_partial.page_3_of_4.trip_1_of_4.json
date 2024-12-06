@@ -1,0 +1,59 @@
+{
+ "source": "6b5e7086-b5e7-5c2b-aa41-cf0e3540f976",
+ "idx": 1,
+ "uuid": "ca04b243-8cb1-5a21-8b35-500d587fe92f",
+ "lines": [
+  {
+   "idx": 149,
+   "txt": "\f   DAY          \u2212\u2212DEPARTURE\u2212\u2212    \u2212\u2212\u2212ARRIVAL\u2212\u2212\u2212                GRND/        REST/\n"
+  },
+  {
+   "idx": 150,
+   "txt": "DP D/A EQ FLT#  STA DLCL/DHBT ML STA ALCL/AHBT  BLOCK  SYNTH   TPAY   DUTY  TAFB   FDP CALENDAR 11/01\u221212/01\n"
+  },
+  {
+   "idx": 152,
+   "txt": "SEQ 8585    1 OPS   POSN CA FO                                                         MO TU WE TH FR SA SU\n"
+  },
+  {
+   "idx": 153,
+   "txt": "                RPT 1430/1430                                                                      \u2212\u2212 \u2212\u2212 \u2212\u2212\n"
+  },
+  {
+   "idx": 154,
+   "txt": "1  1/1 80   32  LAX 1530/1530  L JFK 2356/2056   5.26                                  \u2212\u2212 \u2212\u2212 \u2212\u2212 \u2212\u2212 \u2212\u2212 \u2212\u2212 \u2212\u2212\n"
+  },
+  {
+   "idx": 155,
+   "txt": "                                 RLS 0026/2126   5.26   0.00   5.26   6.56        6.26 \u2212\u2212 \u2212\u2212 \u2212\u2212 \u2212\u2212 \u2212\u2212 \u2212\u2212 \u2212\u2212\n"
+  },
+  {
+   "idx": 156,
+   "txt": "                JFK TWA HOTEL                               2128069000     15.04       \u2212\u2212 \u2212\u2212 \u2212\u2212 \u2212\u2212 \u2212\u2212 \u2212\u2212 \u2212\u2212\n"
+  },
+  {
+   "idx": 157,
+   "txt": "                    SHUTTLE                                                            \u2212\u2212 26 \u2212\u2212 \u2212\u2212 \u2212\u2212 \u2212\u2212 \u2212\u2212\n"
+  },
+  {
+   "idx": 158,
+   "txt": "                RPT 1530/1230\n"
+  },
+  {
+   "idx": 159,
+   "txt": "2  2/2 80  306  JFK 1630/1330  D LAX 1950/1950   6.20\n"
+  },
+  {
+   "idx": 160,
+   "txt": "                                 RLS 2020/2020   6.20   0.00   6.20   7.50        7.20\n"
+  },
+  {
+   "idx": 161,
+   "txt": "TTL                                             11.46   0.00  11.46        29.50\n"
+  },
+  {
+   "idx": 217,
+   "txt": "COCKPIT  ISSUED 09OCT2024  EFF 01NOV2024               LAX 320  INTL                             PAGE  2035\n"
+  }
+ ]
+}

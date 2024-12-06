@@ -1,5 +1,6 @@
 """Script to generate or regenerate test data."""
 
+# typer ./tests/resources/scripts/generate_data.py run reset-data
 from datetime import date
 from pathlib import Path
 
@@ -13,7 +14,7 @@ from pbs_parse.cli import (
 )
 
 app = typer.Typer()
-RESOURCES_PATH = Path(__file__).parent
+RESOURCES_PATH = Path(__file__).parent.parent
 BIDPACKAGE_PATH = RESOURCES_PATH / "bid_package"
 PAGELINES_PATH = RESOURCES_PATH / "page_lines"
 TRIPLINES_PATH = RESOURCES_PATH / "trip_lines"
@@ -23,10 +24,12 @@ STRUCTUREDTRIPS_PATH = RESOURCES_PATH / "structured_trips"
 
 def split_bid_packages_to_pages():
     """Split the bid packages into pages."""
+    print(RESOURCES_PATH)
     eff_dates = ["2024-11-01_2024-12-01"]
     for eff_date in eff_dates:
         output_path = PAGELINES_PATH / eff_date
-        files = BIDPACKAGE_PATH.glob("*.txt")
+        input_path = BIDPACKAGE_PATH / eff_date
+        files = input_path.glob("*.txt")
         jobs: list[split_pages_cli.SplitPageJob] = []
         for file in files:
             job = split_pages_cli.SplitPageJob(
@@ -51,7 +54,7 @@ def parse_trips():
     """Parse the split trips."""
     eff_dates = ["2024-11-01_2024-12-01"]
     for eff_date in eff_dates:
-        output_path = TRIPLINES_PATH / eff_date
+        output_path = PARSEDTRIPS_PATH / eff_date
         jobs = parse_trips_cli.build_jobs_from_directory(
             path_in=TRIPLINES_PATH / eff_date, path_out=output_path, overwrite=True
         )

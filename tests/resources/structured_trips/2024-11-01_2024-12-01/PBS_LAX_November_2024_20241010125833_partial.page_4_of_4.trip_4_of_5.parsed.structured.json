@@ -1,0 +1,322 @@
+{
+ "source": "da2c6496-5d09-536c-87f0-961f1ec2888b",
+ "number": "8064",
+ "ops_count": "2",
+ "special_qual": false,
+ "block": "13.50",
+ "synth": "1.55",
+ "total_pay": "15.45",
+ "tafb": "55.10",
+ "external": {
+  "effective_from": "2024-11-01",
+  "effective_to": "2024-12-01"
+ },
+ "page_header": {
+  "from_date": {
+   "month": "11",
+   "day": "01"
+  },
+  "to_date": {
+   "month": "12",
+   "day": "01"
+  }
+ },
+ "page_footer": {
+  "issued": "09OCT2024",
+  "effective": "01NOV2024",
+  "base": "LAX",
+  "satellite_base": "ONT",
+  "equipment": "320",
+  "division": "INTL",
+  "page": "2062"
+ },
+ "uuid": "1e50cdbd-48ff-5784-8874-daefbb056dde",
+ "positions": [
+  "CA",
+  "FO"
+ ],
+ "operations": [],
+ "dutyperiods": [
+  {
+   "uuid": "5d60cc7b-8fe6-4b8b-aace-2399bb69bb76",
+   "idx": "1",
+   "report_time": {
+    "lcl": "1153",
+    "hbt": "1153"
+   },
+   "release_time": {
+    "lcl": "0050",
+    "hbt": "2150"
+   },
+   "block": "5.32",
+   "synth": "0.00",
+   "total_pay": "5.32",
+   "duty": "9.57",
+   "flight_duty": "9.27",
+   "layover": {
+    "uuid": "68504fec-58a8-4192-b45c-ad2c2f676d1c",
+    "rest": "15.42",
+    "city": "DTW",
+    "hotels": [
+     {
+      "name": "SHERATON DETROIT AP",
+      "phone": "17347292600",
+      "transportation": [
+       {
+        "name": "SHUTTLE",
+        "phone": ""
+       }
+      ]
+     }
+    ]
+   },
+   "flights": [
+    {
+     "uuid": "905a59ca-089a-4f8f-b5e7-88ef755d80ec",
+     "dutyperiod_idx": "1",
+     "idx": "1",
+     "depart_day": "1",
+     "arrive_day": "1",
+     "equipment_code": "64",
+     "flight_number": "1821",
+     "deadhead": false,
+     "deadhead_code": "",
+     "departure_station": "ONT",
+     "departure_time": {
+      "lcl": "1253",
+      "hbt": "1253"
+     },
+     "crew_meal": "",
+     "arrival_station": "DFW",
+     "arrival_time": {
+      "lcl": "1750",
+      "hbt": "1550"
+     },
+     "block": "2.57",
+     "synth": "0.00",
+     "ground": "2.55",
+     "equipment_change": true
+    },
+    {
+     "uuid": "2b45bdfb-40d4-42d9-976f-50324de85d46",
+     "dutyperiod_idx": "1",
+     "idx": "2",
+     "depart_day": "1",
+     "arrive_day": "2",
+     "equipment_code": "64",
+     "flight_number": "3078",
+     "deadhead": false,
+     "deadhead_code": "",
+     "departure_station": "DFW",
+     "departure_time": {
+      "lcl": "2045",
+      "hbt": "1845"
+     },
+     "crew_meal": "",
+     "arrival_station": "DTW",
+     "arrival_time": {
+      "lcl": "0020",
+      "hbt": "2120"
+     },
+     "block": "2.35",
+     "synth": "0.00",
+     "ground": "0.00",
+     "equipment_change": false
+    }
+   ]
+  },
+  {
+   "uuid": "7c741223-d287-41ec-bb83-c42c592fe1e5",
+   "idx": "2",
+   "report_time": {
+    "lcl": "1632",
+    "hbt": "1332"
+   },
+   "release_time": {
+    "lcl": "2118",
+    "hbt": "1918"
+   },
+   "block": "3.16",
+   "synth": "0.00",
+   "total_pay": "3.16",
+   "duty": "5.46",
+   "flight_duty": "5.16",
+   "layover": {
+    "uuid": "ae8ab7e5-c225-43f7-8ea5-f0005f009e8d",
+    "rest": "15.29",
+    "city": "MCI",
+    "hotels": [
+     {
+      "name": "SHERATON CROWN CENTER",
+      "phone": "18168411000",
+      "transportation": [
+       {
+        "name": "CONNECT",
+        "phone": "7037072028"
+       }
+      ]
+     }
+    ]
+   },
+   "flights": [
+    {
+     "uuid": "9b67d0a0-6adc-4e0a-a991-2d4047e48755",
+     "dutyperiod_idx": "2",
+     "idx": "1",
+     "depart_day": "2",
+     "arrive_day": "2",
+     "equipment_code": "92",
+     "flight_number": "3288",
+     "deadhead": false,
+     "deadhead_code": "",
+     "departure_station": "DTW",
+     "departure_time": {
+      "lcl": "1732",
+      "hbt": "1432"
+     },
+     "crew_meal": "",
+     "arrival_station": "ORD",
+     "arrival_time": {
+      "lcl": "1755",
+      "hbt": "1555"
+     },
+     "block": "1.23",
+     "synth": "0.00",
+     "ground": "1.00",
+     "equipment_change": false
+    },
+    {
+     "uuid": "f8ebb304-2cbb-4a20-8f1a-a5c6d926c90d",
+     "dutyperiod_idx": "2",
+     "idx": "2",
+     "depart_day": "2",
+     "arrive_day": "2",
+     "equipment_code": "92",
+     "flight_number": "2172",
+     "deadhead": false,
+     "deadhead_code": "",
+     "departure_station": "ORD",
+     "departure_time": {
+      "lcl": "1855",
+      "hbt": "1655"
+     },
+     "crew_meal": "",
+     "arrival_station": "MCI",
+     "arrival_time": {
+      "lcl": "2048",
+      "hbt": "1848"
+     },
+     "block": "1.53",
+     "synth": "0.00",
+     "ground": "0.00",
+     "equipment_change": false
+    }
+   ]
+  },
+  {
+   "uuid": "291e80a6-c01e-4c20-a48e-299d5895672f",
+   "idx": "3",
+   "report_time": {
+    "lcl": "1247",
+    "hbt": "1047"
+   },
+   "release_time": {
+    "lcl": "1903",
+    "hbt": "1903"
+   },
+   "block": "5.02",
+   "synth": "0.00",
+   "total_pay": "5.02",
+   "duty": "8.16",
+   "flight_duty": "7.46",
+   "layover": null,
+   "flights": [
+    {
+     "uuid": "72c42690-93c6-49af-a19c-7b0ef5f44c17",
+     "dutyperiod_idx": "3",
+     "idx": "1",
+     "depart_day": "3",
+     "arrive_day": "3",
+     "equipment_code": "64",
+     "flight_number": "2741",
+     "deadhead": false,
+     "deadhead_code": "",
+     "departure_station": "MCI",
+     "departure_time": {
+      "lcl": "1347",
+      "hbt": "1147"
+     },
+     "crew_meal": "",
+     "arrival_station": "DFW",
+     "arrival_time": {
+      "lcl": "1535",
+      "hbt": "1335"
+     },
+     "block": "1.48",
+     "synth": "0.00",
+     "ground": "1.44",
+     "equipment_change": true
+    },
+    {
+     "uuid": "9aaa580d-b780-4ab0-a68c-3f85372761c6",
+     "dutyperiod_idx": "3",
+     "idx": "2",
+     "depart_day": "3",
+     "arrive_day": "3",
+     "equipment_code": "64",
+     "flight_number": "3006",
+     "deadhead": false,
+     "deadhead_code": "",
+     "departure_station": "DFW",
+     "departure_time": {
+      "lcl": "1719",
+      "hbt": "1519"
+     },
+     "crew_meal": "",
+     "arrival_station": "ONT",
+     "arrival_time": {
+      "lcl": "1833",
+      "hbt": "1833"
+     },
+     "block": "3.14",
+     "synth": "0.00",
+     "ground": "0.00",
+     "equipment_change": false
+    }
+   ]
+  }
+ ],
+ "calendar": [
+  "\u2212\u2212",
+  "\u2212\u2212",
+  "\u2212\u2212",
+  "\u2212\u2212",
+  "\u2212\u2212",
+  "\u2212\u2212",
+  "\u2212\u2212",
+  "\u2212\u2212",
+  "\u2212\u2212",
+  "\u2212\u2212",
+  "\u2212\u2212",
+  "\u2212\u2212",
+  "\u2212\u2212",
+  "\u2212\u2212",
+  "\u2212\u2212",
+  "\u2212\u2212",
+  "\u2212\u2212",
+  "\u2212\u2212",
+  "\u2212\u2212",
+  "\u2212\u2212",
+  "\u2212\u2212",
+  "\u2212\u2212",
+  "\u2212\u2212",
+  "\u2212\u2212",
+  "25",
+  "\u2212\u2212",
+  "\u2212\u2212",
+  "\u2212\u2212",
+  "\u2212\u2212",
+  "\u2212\u2212",
+  "1"
+ ]
+}
