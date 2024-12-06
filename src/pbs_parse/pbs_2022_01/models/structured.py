@@ -47,7 +47,6 @@ class Hotel:
 
 @dataclass(slots=True)
 class Layover:
-    uuid: str
     rest: str
     city: str
     hotels: list[Hotel] = field(default_factory=list)
@@ -57,7 +56,6 @@ class Layover:
         if simple_obj is None:
             return None
         result = Layover(
-            uuid=simple_obj["uuid"],
             rest=simple_obj["rest"],
             city=simple_obj["city"],
             hotels=[Hotel.from_simple(x) for x in simple_obj["hotels"]],
@@ -67,7 +65,6 @@ class Layover:
 
 @dataclass(slots=True)
 class Flight:
-    uuid: str
     dutyperiod_idx: str
     idx: str
     depart_day: str
@@ -89,7 +86,6 @@ class Flight:
     @staticmethod
     def from_simple(simple_obj: TD.Flight) -> "Flight":
         result = Flight(
-            uuid=simple_obj["uuid"],
             dutyperiod_idx=simple_obj["dutyperiod_idx"],
             idx=simple_obj["idx"],
             depart_day=simple_obj["depart_day"],
@@ -114,7 +110,6 @@ class Flight:
 
 @dataclass(slots=True)
 class DutyPeriod:
-    uuid: str
     idx: str
     report_time: DualTime
     release_time: DualTime
@@ -129,7 +124,6 @@ class DutyPeriod:
     @staticmethod
     def from_simple(simple_obj: TD.DutyPeriod) -> "DutyPeriod":
         result = DutyPeriod(
-            uuid=simple_obj["uuid"],
             idx=simple_obj["idx"],
             report_time=DualTime(**simple_obj["report_time"]),
             release_time=DualTime(**simple_obj["release_time"]),

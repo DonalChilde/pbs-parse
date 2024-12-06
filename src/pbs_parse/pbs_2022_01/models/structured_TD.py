@@ -3,6 +3,7 @@
 This can be used to represent imported json data, usually before conversion to the dataclass version.
 """
 
+# ruff: noqa: D101
 from typing import TypedDict
 
 
@@ -28,14 +29,12 @@ class Hotel(TypedDict):
 
 
 class Layover(TypedDict):
-    uuid: str
     rest: str
     city: str
     hotels: list[Hotel]
 
 
 class Flight(TypedDict):
-    uuid: str
     dutyperiod_idx: str
     idx: str
     depart_day: str
@@ -56,7 +55,6 @@ class Flight(TypedDict):
 
 
 class DutyPeriod(TypedDict):
-    uuid: str
     idx: str
     report_time: DualTime
     release_time: DualTime
