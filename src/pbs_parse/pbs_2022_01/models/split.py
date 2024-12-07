@@ -38,18 +38,14 @@ class PageLines:
         if self.uuid == "":
             self.uuid = current_uuid_str
             return
-        # if self.uuid != current_uuid_str:
-        #     raise ValueError(
-        #         f"Supplied uuid: {self.uuid} does not match calculated uuid: {current_uuid_str}"
-        #     )
+        if self.uuid != current_uuid_str:
+            raise ValueError(
+                f"Supplied uuid: {self.uuid} does not match calculated uuid: {current_uuid_str}"
+            )
 
     def make_uuid(self) -> UUID:
         """Make a uuid from a namespace and the lines."""
         return make_uuid_iter(indexed_strings=self.lines, namespace=PAGE_LINES_NS)
-        # data = asdict(self)
-        # data.pop("uuid", None)
-        # return uuid5(PAGE_LINES_NS, repr(data))
-        # return uuid4()
 
     @staticmethod
     def from_simple(simple_obj: PageLinesTD) -> "PageLines":
@@ -74,18 +70,14 @@ class TripLines:
         if self.uuid == "":
             self.uuid = current_uuid_str
             return
-        # if self.uuid != current_uuid_str:
-        #     raise ValueError(
-        #         f"Supplied uuid: {self.uuid} does not match calculated uuid: {current_uuid_str}"
-        #     )
+        if self.uuid != current_uuid_str:
+            raise ValueError(
+                f"Supplied uuid: {self.uuid} does not match calculated uuid: {current_uuid_str}"
+            )
 
     def make_uuid(self) -> UUID:
         """Make a uuid from a namespace and the repr of asdict(self), minus the uuid field."""
         return make_uuid_iter(indexed_strings=self.lines, namespace=TRIP_LINES_NS)
-        # data = asdict(self)
-        # data.pop("uuid", None)
-        # return uuid5(TRIP_LINES_NS, repr(data))
-        # return uuid4()
 
     @staticmethod
     def from_simple(simple_obj: TripLinesTD) -> "TripLines":

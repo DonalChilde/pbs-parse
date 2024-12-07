@@ -33,18 +33,14 @@ class ParsedTrip:
         if self.uuid == "":
             self.uuid = current_uuid_str
             return
-        # if self.uuid != current_uuid_str:
-        #     raise ValueError(
-        #         f"Supplied uuid: {self.uuid} does not match calculated uuid: {current_uuid_str}"
-        #     )
+        if self.uuid != current_uuid_str:
+            raise ValueError(
+                f"Supplied uuid: {self.uuid} does not match calculated uuid: {current_uuid_str}"
+            )
 
     def make_uuid(self) -> UUID:
         """Make a uuid from a namespace and the repr of asdict(self), minus the uuid field."""
         return uuid5(namespace=PARSED_TRIP_NS, name=self.source)
-        # # data = asdict(self)
-        # # data.pop("uuid", None)
-        # # return uuid5(PARSED_TRIP_NS, repr(data))
-        # return uuid4()
 
     @staticmethod
     def from_simple(simple_obj: ParsedTripTD) -> "ParsedTrip":

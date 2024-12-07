@@ -200,18 +200,14 @@ class StructuredTrip:
         if self.uuid == "":
             self.uuid = current_uuid_str
             return
-        # if self.uuid != current_uuid_str:
-        #     raise ValueError(
-        #         f"Supplied uuid: {self.uuid} does not match calculated uuid: {current_uuid_str}"
-        #     )
+        if self.uuid != current_uuid_str:
+            raise ValueError(
+                f"Supplied uuid: {self.uuid} does not match calculated uuid: {current_uuid_str}"
+            )
 
     def make_uuid(self) -> UUID:
-        """Make a uuid from a namespace and the repr of asdict(self), minus the uuid field."""
+        """Make a uuid from a namespace and the source uuid string."""
         return uuid5(namespace=STRUCTURED_TRIP_NS, name=self.source)
-        # data = asdict(self)
-        # data.pop("uuid", None)
-        # return uuid5(STRUCTURED_TRIP_NS, repr(data))
-        # return uuid4()
 
     @staticmethod
     def from_simple(simple_obj: TD.StructuredTripTD) -> "StructuredTrip":
