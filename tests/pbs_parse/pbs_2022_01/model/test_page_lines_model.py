@@ -4,7 +4,7 @@ import json
 from importlib import resources
 from pathlib import Path
 
-from pbs_parse.pbs_2022_01.models.split import PAGE_LINES_SERIALIZER
+from pbs_parse.pbs_2022_01.models.page_lines import PAGE_LINES_SERIALIZER
 from tests.resources.models.file_system_resource import FileResource
 from tests.resources.page_lines import PAGE_LINES_ANCHOR
 

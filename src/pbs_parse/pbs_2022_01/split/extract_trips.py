@@ -1,19 +1,25 @@
+"""Extract trip lines from page lines."""
+
 from collections.abc import Iterable, Iterator
 from pathlib import Path
 
 from pfmsoft.indexed_string.model import IndexedString
 
-from pbs_parse.pbs_2022_01.models.split import (
-    PAGE_LINES_SERIALIZER,
-    TRIP_LINES_SERIALIZER,
-    PageLines,
-    TripLines,
-)
+from pbs_parse.pbs_2022_01.models.page_lines import PAGE_LINES_SERIALIZER, PageLines
+from pbs_parse.pbs_2022_01.models.trip_lines import TRIP_LINES_SERIALIZER, TripLines
 
 
-def page_to_lines_of_trips(
+def lines_of_page_to_lines_of_trips(
     lines: Iterable[IndexedString],
 ) -> Iterator[list[IndexedString]]:
+    """Extract the lines of a trip from the lines of a page.
+
+    Args:
+        lines (Iterable[IndexedString]): The lines of a page.
+
+    Yields:
+        Iterator[list[IndexedString]]: The lines of a trip.
+    """
     is_trip = False
     accumulated_lines: list[IndexedString] = []
     for indexed_line in lines:
@@ -30,13 +36,31 @@ def page_to_lines_of_trips(
             yield result
 
 
-def parse_trips_from_file(path_in: Path) -> Iterator[TripLines]:
+def parse_trip_lines_from_file(path_in: Path) -> Iterator[TripLines]:
+    """Load a PageLines from file, and split to TripLines.
+
+    Args:
+        path_in (Path): Path to a PageLines.
+
+    Yields:
+        Iterator[TripLines]: The TripLines in a PageLines.
+    """
     page = PAGE_LINES_SERIALIZER.load_from_json(path_in=path_in)
-    yield from parse_trips(page=page)
+    yield from parse_trip_lines(page=page)
 
 
-def parse_trips(page: PageLines) -> Iterator[TripLines]:
-    for idx, trip_lines in enumerate(page_to_lines_of_trips(page.lines), start=1):
+def parse_trip_lines(page: PageLines) -> Iterator[TripLines]:
+    """Split the TripLines from a PageLines.
+
+    Args:
+        page (PageLines): The PageLines.
+
+    Yields:
+        Iterator[TripLines]: The TripLines.
+    """
+    for idx, trip_lines in enumerate(
+        lines_of_page_to_lines_of_trips(page.lines), start=1
+    ):
         trip = TripLines(
             source=page.uuid,
             idx=idx,
@@ -45,9 +69,21 @@ def parse_trips(page: PageLines) -> Iterator[TripLines]:
         yield trip
 
 
-def write_trips(
+def write_trip_lines(
     file_stem: str, trips: Iterator[TripLines], path_out: Path, overwrite: bool
 ):
+    """Write TripLines to a file.
+
+    Args:
+        file_stem (str): The first part of the output file name, usually the stem of
+            the PageLines input file.
+        trips (Iterator[TripLines]): The TripLines to write to disk.
+        path_out (Path): The directory to write the TripLines to.
+        overwrite (bool): Overwrite existing files if found.
+
+    Returns:
+        int: The count of the files written.
+    """
     trips_list = list(trips)
     count = 0
     for idx, trip in enumerate(trips_list, start=1):
@@ -59,14 +95,3 @@ def write_trips(
         )
         count = idx
     return count
-
-
-# def write_trips(path_in: Path, path_out: Path, overwrite: bool) -> int:
-#     page = Page.from_file(path_in)
-#     hashed_file = make_hashed_file(path_in, hasher=md5())
-#     count = 0
-#     for idx, trip in enumerate(parse_trips(page=page, page_hash=hashed_file), start=1):
-#         result_path = path_out / Path(f"{path_in.stem}-trip_{trip.trip_index}.json")
-#         trip.to_file(path_out=result_path, overwrite=overwrite)
-#         count = idx
-#     return count

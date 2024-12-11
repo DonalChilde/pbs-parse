@@ -17,7 +17,10 @@ from rich.progress import (
     TotalFileSizeColumn,
 )
 
-from pbs_parse.pbs_2022_01.split.extract_trips import parse_trips_from_file, write_trips
+from pbs_parse.pbs_2022_01.split.extract_trips import (
+    parse_trip_lines_from_file,
+    write_trip_lines,
+)
 
 logger = logging.getLogger(__name__)
 app = typer.Typer()
@@ -99,7 +102,7 @@ def build_job_from_file(path_in: Path, path_out: Path, overwrite: bool) -> Split
     """Check for valid inputs and return a `SplitTripJob`."""
     if path_in.is_file():
         if path_in.suffix.lower() != ".json":
-            raise typer.echo(
+            raise typer.BadParameter(
                 f"Input path might not be a valid file, it does not have a .json suffix. {path_in}"
             )
     else:
@@ -175,8 +178,8 @@ def extract_trips_rich(jobs: Sequence[SplitTripJob]):
         )
         total_trips = 0
         for idx, job in enumerate(jobs, start=1):
-            trips = parse_trips_from_file(path_in=job.path_in)
-            trip_count = write_trips(
+            trips = parse_trip_lines_from_file(path_in=job.path_in)
+            trip_count = write_trip_lines(
                 file_stem=job.path_in.stem,
                 trips=trips,
                 path_out=job.path_out,

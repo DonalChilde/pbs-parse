@@ -17,7 +17,10 @@ from rich.progress import (
     TotalFileSizeColumn,
 )
 
-from pbs_parse.pbs_2022_01.split.extract_pages import parse_pages_from_file, write_pages
+from pbs_parse.pbs_2022_01.split.extract_pages import (
+    parse_page_lines_from_file,
+    write_page_lines,
+)
 
 logger = logging.getLogger(__name__)
 app = typer.Typer()
@@ -102,7 +105,7 @@ def build_job_from_file(path_in: Path, path_out: Path, overwrite: bool) -> Split
     """Check for valid inputs and return a `SplitPageJob`."""
     if path_in.is_file():
         if path_in.suffix.lower() != ".txt":
-            raise typer.echo(
+            raise typer.BadParameter(
                 f"Input path might not be a valid file, it does not have a .txt suffix. {path_in}"
             )
     else:
@@ -178,8 +181,8 @@ def extract_pages_rich(jobs: Sequence[SplitPageJob]):
         )
         total_pages = 0
         for idx, job in enumerate(jobs, start=1):
-            pages = parse_pages_from_file(path_in=job.path_in)
-            page_count = write_pages(
+            pages = parse_page_lines_from_file(path_in=job.path_in)
+            page_count = write_page_lines(
                 file_stem=job.path_in.stem,
                 pages=pages,
                 path_out=job.path_out,

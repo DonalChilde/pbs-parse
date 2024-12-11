@@ -7,7 +7,7 @@ from pfmsoft.state_parser.parse_exception import ParseException
 from pfmsoft.state_parser.result_handler import CollectResults
 
 from pbs_parse.pbs_2022_01.models.parsed_trip import ParsedTrip
-from pbs_parse.pbs_2022_01.models.split import TRIP_LINES_SERIALIZER, TripLines
+from pbs_parse.pbs_2022_01.models.trip_lines import TRIP_LINES_SERIALIZER, TripLines
 from pbs_parse.pbs_2022_01.parse.parse_table import parse_table
 
 

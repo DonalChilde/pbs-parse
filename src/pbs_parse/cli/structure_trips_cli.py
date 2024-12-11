@@ -19,7 +19,7 @@ from rich.progress import (
 )
 
 from pbs_parse.pbs_2022_01.models.structured import structured_trip_serializer
-from pbs_parse.pbs_2022_01.structure.parsed_to_structured_2 import translate_file
+from pbs_parse.pbs_2022_01.structure.parsed_to_structured import translate_file
 from pbs_parse.pbs_2022_01.validate.validate_structured import validate_files
 
 app = typer.Typer()
