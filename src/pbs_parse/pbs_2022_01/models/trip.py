@@ -6,8 +6,10 @@ from zoneinfo import ZoneInfo
 
 import pbs_parse.pbs_2022_01.models.trip_TD as TD
 from pbs_parse.airports import airport_from_iata
-from pbs_parse.snippets.datetime.parse_iso8601_duration import parse_iso8601_duration
-from pbs_parse.snippets.datetime.timedelta_to_iso8601 import timedelta_to_iso8601
+from pbs_parse.snippets.datetime.iso8601_duration import (
+    string_to_timedelta,
+    timedelta_to_isoformat,
+)
 
 
 @dataclass(slots=True)
@@ -106,10 +108,10 @@ class Flight:
             deadhead_code=self.deadhead_code,
             crewmeal=self.crewmeal,
             eq_change=self.eq_change,
-            flight_time=timedelta_to_iso8601(self.flight_time),
-            operating_time=timedelta_to_iso8601(self.operating_time),
-            soft_time=timedelta_to_iso8601(self.soft_time),
-            ground_time=timedelta_to_iso8601(self.ground_time),
+            flight_time=timedelta_to_isoformat(self.flight_time),
+            operating_time=timedelta_to_isoformat(self.operating_time),
+            soft_time=timedelta_to_isoformat(self.soft_time),
+            ground_time=timedelta_to_isoformat(self.ground_time),
         )
 
         return result
@@ -128,10 +130,10 @@ class Flight:
             deadhead_code=simple_obj["deadhead_code"],
             crewmeal=simple_obj["crewmeal"],
             eq_change=simple_obj["eq_change"],
-            flight_time=parse_iso8601_duration(simple_obj["flight_time"]),
-            operating_time=parse_iso8601_duration(simple_obj["operating_time"]),
-            soft_time=parse_iso8601_duration(simple_obj["soft_time"]),
-            ground_time=parse_iso8601_duration(simple_obj["ground_time"]),
+            flight_time=string_to_timedelta(simple_obj["flight_time"]),
+            operating_time=string_to_timedelta(simple_obj["operating_time"]),
+            soft_time=string_to_timedelta(simple_obj["soft_time"]),
+            ground_time=string_to_timedelta(simple_obj["ground_time"]),
         )
         return result
 
@@ -205,7 +207,7 @@ class Layover:
             start_utc=self.start_utc.isoformat(),
             end_utc=self.end_utc.isoformat(),
             hotels=[x.to_simple() for x in self.hotels],
-            rest=timedelta_to_iso8601(self.rest),
+            rest=timedelta_to_isoformat(self.rest),
         )
         return result
 
@@ -217,7 +219,7 @@ class Layover:
             start_utc=datetime.fromisoformat(simple_obj["start_utc"]).astimezone(UTC),
             end_utc=datetime.fromisoformat(simple_obj["end_utc"]).astimezone(UTC),
             hotels=[Hotel.from_simple(x) for x in simple_obj["hotels"]],
-            rest=parse_iso8601_duration(simple_obj["rest"]),
+            rest=string_to_timedelta(simple_obj["rest"]),
         )
         return result
 
@@ -266,11 +268,11 @@ class DutyPeriod:
             release_station=self.release_station.to_simple(),
             release_utc=self.release_utc.isoformat(),
             flights=[x.to_simple() for x in self.flights],
-            duty=timedelta_to_iso8601(self.duty),
-            flight_duty=timedelta_to_iso8601(self.flight_duty),
-            operating_time=timedelta_to_iso8601(self.operating_time),
-            flight_time=timedelta_to_iso8601(self.operating_time),
-            soft_time=timedelta_to_iso8601(self.soft_time),
+            duty=timedelta_to_isoformat(self.duty),
+            flight_duty=timedelta_to_isoformat(self.flight_duty),
+            operating_time=timedelta_to_isoformat(self.operating_time),
+            flight_time=timedelta_to_isoformat(self.operating_time),
+            soft_time=timedelta_to_isoformat(self.soft_time),
             layover=layover,
         )
         return result
@@ -306,11 +308,11 @@ class DutyPeriod:
                 UTC
             ),
             flights=[Flight.from_simple(x) for x in simple_obj["flights"]],
-            duty=parse_iso8601_duration(simple_obj["duty"]),
-            flight_duty=parse_iso8601_duration(simple_obj["flight_duty"]),
-            operating_time=parse_iso8601_duration(simple_obj["operating_time"]),
-            flight_time=parse_iso8601_duration(simple_obj["flight_time"]),
-            soft_time=parse_iso8601_duration(simple_obj["soft_time"]),
+            duty=string_to_timedelta(simple_obj["duty"]),
+            flight_duty=string_to_timedelta(simple_obj["flight_duty"]),
+            operating_time=string_to_timedelta(simple_obj["operating_time"]),
+            flight_time=string_to_timedelta(simple_obj["flight_time"]),
+            soft_time=string_to_timedelta(simple_obj["soft_time"]),
             layover=layover,
         )
         return result
@@ -350,10 +352,10 @@ class Trip:
             start_utc=datetime.fromisoformat(simple_obj["start_utc"]).astimezone(UTC),
             end_station=AirportCode(**simple_obj["end_station"]),
             end_utc=datetime.fromisoformat(simple_obj["end_utc"]).astimezone(UTC),
-            flight_time=parse_iso8601_duration(simple_obj["flight_time"]),
-            operating_time=parse_iso8601_duration(simple_obj["operating_time"]),
-            soft_time=parse_iso8601_duration(simple_obj["soft_time"]),
-            tafb=parse_iso8601_duration(simple_obj["tafb"]),
+            flight_time=string_to_timedelta(simple_obj["flight_time"]),
+            operating_time=string_to_timedelta(simple_obj["operating_time"]),
+            soft_time=string_to_timedelta(simple_obj["soft_time"]),
+            tafb=string_to_timedelta(simple_obj["tafb"]),
             dutyperiods=[DutyPeriod.from_simple(x) for x in simple_obj["dutyperiods"]],
         )
         return result
@@ -371,10 +373,10 @@ class Trip:
             start_utc=self.start_utc.isoformat(),
             end_station=self.end_station.to_simple(),
             end_utc=self.end_utc.isoformat(),
-            flight_time=timedelta_to_iso8601(self.flight_time),
-            operating_time=timedelta_to_iso8601(self.operating_time),
-            soft_time=timedelta_to_iso8601(self.soft_time),
-            tafb=timedelta_to_iso8601(self.tafb),
+            flight_time=timedelta_to_isoformat(self.flight_time),
+            operating_time=timedelta_to_isoformat(self.operating_time),
+            soft_time=timedelta_to_isoformat(self.soft_time),
+            tafb=timedelta_to_isoformat(self.tafb),
             dutyperiods=[x.to_simple() for x in self.dutyperiods],
         )
         return result
