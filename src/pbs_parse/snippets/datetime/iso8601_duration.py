@@ -157,7 +157,10 @@ def timedelta_to_isoformat(td: timedelta) -> str:
     Returns:
         str: _description_
     """
-    negative = td < timedelta(0)
+    zero_dur = timedelta(0)
+    if td == zero_dur:
+        return "PT0S"
+    negative = td < zero_dur
     abs_value = abs(td)
     days, rem = divmod(abs_value, timedelta(days=1))
     hours, rem = divmod(rem, timedelta(hours=1))
