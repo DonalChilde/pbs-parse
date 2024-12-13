@@ -57,3 +57,9 @@ def test_to_from_iso8601():
     td_from_string = ID.string_to_timedelta(dur=td_iso)
     logger.info(f"{td}, {td_iso}, {td_from_string}")
     assert td == td_from_string
+
+    td = timedelta(0)
+    td_iso = ID.timedelta_to_isoformat(td=td)
+    td_from_string = ID.string_to_timedelta(dur=td_iso)
+    logger.info(f"{td}, {td_iso}, {td_from_string}")
+    assert td == td_from_string
