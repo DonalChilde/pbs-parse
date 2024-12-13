@@ -23,8 +23,7 @@ from pbs_parse.pbs_2022_01.models.expanded import (
     EXPANDED_TRIP_SERIALIZER,
     default_file_name,
 )
-
-# from pbs_parse.pbs_2022_01.validate.validate_structured import validate_files
+from pbs_parse.pbs_2022_01.validate.validate_expanded import validate_files
 
 app = typer.Typer()
 
@@ -66,7 +65,7 @@ def expand_trips_rich(jobs: Sequence[ExpandTripJob]):
             f"1 of {file_count}", total=total_size_of_files(jobs=jobs)
         )
         total_trips = 0
-        # total_errors = 0
+        total_errors = 0
         trips_with_errors = 0
 
         for idx, job in enumerate(jobs, start=1):
@@ -77,17 +76,17 @@ def expand_trips_rich(jobs: Sequence[ExpandTripJob]):
                     path_out=path_out, complex_obj=trip
                 )
 
-            # trans_ctx = validate_files(
-            #     parsed_trip_path=job.path_in, structured_trip_path=job.path_out
-            # )
-            # if trans_ctx.errors:
-            #     error_out = job.path_out.parent / f"{job.path_out.stem}.errors.txt"
-            #     error_out.write_text(str(trans_ctx))
-            #     trips_with_errors += 1
-            #     total_errors += len(trans_ctx.errors)
-            #     progress.console.print(
-            #         f"Found {len(trans_ctx.errors)} errors in {job.path_out.name}"
-            #     )
+            validation = validate_files(
+                structured_trip_path=job.path_in, expanded_trip_path=job.path_out
+            )
+            if validation.errors:
+                error_out = job.path_out.parent / f"{job.path_out.stem}.errors.txt"
+                error_out.write_text(str(validation))
+                trips_with_errors += 1
+                total_errors += len(validation.errors)
+                progress.console.print(
+                    f"Found {len(validation.errors)} errors in {job.path_out.name}"
+                )
             total_trips += 1
             progress.update(
                 task,

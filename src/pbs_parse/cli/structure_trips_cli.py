@@ -76,16 +76,16 @@ def structure_trips_rich(jobs: Sequence[StructureTripJob]):
                 complex_obj=structured_trip,
                 overwrite=job.overwrite,
             )
-            trans_ctx = validate_files(
+            validation = validate_files(
                 parsed_trip_path=job.path_in, structured_trip_path=job.path_out
             )
-            if trans_ctx.errors:
+            if validation.errors:
                 error_out = job.path_out.parent / f"{job.path_out.stem}.errors.txt"
-                error_out.write_text(str(trans_ctx))
+                error_out.write_text(str(validation))
                 trips_with_errors += 1
-                total_errors += len(trans_ctx.errors)
+                total_errors += len(validation.errors)
                 progress.console.print(
-                    f"Found {len(trans_ctx.errors)} errors in {job.path_out.name}"
+                    f"Found {len(validation.errors)} errors in {job.path_out.name}"
                 )
             total_trips += 1
             progress.update(
