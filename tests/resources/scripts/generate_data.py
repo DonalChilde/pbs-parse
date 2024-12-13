@@ -7,6 +7,7 @@ from pathlib import Path
 import typer
 
 from pbs_parse.cli import (
+    expand_trips_cli,
     parse_trips_cli,
     split_pages_cli,
     split_trips_cli,
@@ -20,6 +21,7 @@ PAGELINES_PATH = RESOURCES_PATH / "page_lines"
 TRIPLINES_PATH = RESOURCES_PATH / "trip_lines"
 PARSEDTRIPS_PATH = RESOURCES_PATH / "parsed_trips"
 STRUCTUREDTRIPS_PATH = RESOURCES_PATH / "structured_trips"
+EXPANDEDTRIPS_PATH = RESOURCES_PATH / "expanded_trips"
 
 
 def split_bid_packages_to_pages():
@@ -76,6 +78,18 @@ def structure_parsed_trips():
         structure_trips_cli.structure_trips_rich(jobs=jobs)
 
 
+def expand_structured_trips():
+    """expand_structured_trips ."""
+    eff_dates = ["2024-11-01_2024-12-01"]
+    for eff_date in eff_dates:
+        jobs = expand_trips_cli.build_jobs_from_directory(
+            path_in=STRUCTUREDTRIPS_PATH / eff_date,
+            path_out=EXPANDEDTRIPS_PATH / eff_date,
+            overwrite=True,
+        )
+        expand_trips_cli.expand_trips_rich(jobs=jobs)
+
+
 @app.command()
 def reset_data():
     """Reset all test data."""
@@ -83,6 +97,7 @@ def reset_data():
     split_pages_to_trips()
     parse_trips()
     structure_parsed_trips()
+    expand_structured_trips()
 
 
 @app.command()
