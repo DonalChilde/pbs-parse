@@ -37,9 +37,9 @@ class Flight(TypedDict):
     eq_code: str
     number: str
     departure_station: AirportCode
-    depart_utc: str
+    departure_utc: str
     arrival_station: AirportCode
-    arrive_utc: str
+    arrival_utc: str
     deadhead: bool
     deadhead_code: str
     crewmeal: str
@@ -91,7 +91,7 @@ class DutyPeriod(TypedDict):
     layover: Layover | None
 
 
-class Trip(TypedDict):
+class ExpandedTrip(TypedDict):
     """A trip."""
 
     source: str

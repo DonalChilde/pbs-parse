@@ -10,6 +10,7 @@ import typer
 from pfmsoft.pdf2txt.cli import extract_txt_cli
 
 from pbs_parse.cli import (
+    expand_trips_cli,
     parse_trips_cli,
     split_pages_cli,
     split_trips_cli,
@@ -58,6 +59,7 @@ app.add_typer(
 )
 app.add_typer(parse_trips_cli.app, name="parse", help="Parse split trips.")
 app.add_typer(structure_trips_cli.app, name="structure", help="Structure parsed trips.")
+app.add_typer(expand_trips_cli.app, name="expand", help="Expand structured trips.")
 
 
 if __name__ == "__main__":

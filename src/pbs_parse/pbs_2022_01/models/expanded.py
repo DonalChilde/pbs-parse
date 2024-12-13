@@ -1,15 +1,20 @@
 """Data model for a `Trip`."""
 
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from datetime import UTC, datetime, timedelta
+from uuid import NAMESPACE_DNS, UUID, uuid5
 from zoneinfo import ZoneInfo
 
-import pbs_parse.pbs_2022_01.models.trip_TD as TD
+from pfmsoft.simple_serializer import DataclassSerializer
+
+import pbs_parse.pbs_2022_01.models.expanded_TD as TD
 from pbs_parse.airports import airport_from_iata
 from pbs_parse.snippets.datetime.iso8601_duration import (
     string_to_timedelta,
     timedelta_to_isoformat,
 )
+
+TRIP_NS = uuid5(NAMESPACE_DNS, "pbs_parse.pbs_2022_01.trip")
 
 
 @dataclass(slots=True)
@@ -83,9 +88,9 @@ class Flight:
     eq_code: str
     number: str
     departure_station: AirportCode
-    depart_utc: datetime
+    departure_utc: datetime
     arrival_station: AirportCode
-    arrive_utc: datetime
+    arrival_utc: datetime
     deadhead: bool
     deadhead_code: str
     crewmeal: str
@@ -101,9 +106,9 @@ class Flight:
             eq_code=self.eq_code,
             number=self.number,
             departure_station=self.departure_station.to_simple(),
-            depart_utc=self.depart_utc.isoformat(),
+            departure_utc=self.departure_utc.isoformat(),
             arrival_station=self.arrival_station.to_simple(),
-            arrive_utc=self.arrive_utc.isoformat(),
+            arrival_utc=self.arrival_utc.isoformat(),
             deadhead=self.deadhead,
             deadhead_code=self.deadhead_code,
             crewmeal=self.crewmeal,
@@ -123,9 +128,13 @@ class Flight:
             eq_code=simple_obj["eq_code"],
             number=simple_obj["number"],
             departure_station=AirportCode(**simple_obj["departure_station"]),
-            depart_utc=datetime.fromisoformat(simple_obj["depart_utc"]).astimezone(UTC),
+            departure_utc=datetime.fromisoformat(
+                simple_obj["departure_utc"]
+            ).astimezone(UTC),
             arrival_station=AirportCode(**simple_obj["arrival_station"]),
-            arrive_utc=datetime.fromisoformat(simple_obj["arrive_utc"]).astimezone(UTC),
+            arrival_utc=datetime.fromisoformat(simple_obj["arrival_utc"]).astimezone(
+                UTC
+            ),
             deadhead=simple_obj["deadhead"],
             deadhead_code=simple_obj["deadhead_code"],
             crewmeal=simple_obj["crewmeal"],
@@ -139,19 +148,19 @@ class Flight:
 
     def depart_local(self) -> datetime:
         """Depart in local timezone."""
-        return self.depart_utc.astimezone(ZoneInfo(self.departure_station.tz_name))
+        return self.departure_utc.astimezone(ZoneInfo(self.departure_station.tz_name))
 
     def arrive_local(self) -> datetime:
         """Arrive in local timezone."""
-        return self.arrive_utc.astimezone(ZoneInfo(self.arrival_station.tz_name))
+        return self.arrival_utc.astimezone(ZoneInfo(self.arrival_station.tz_name))
 
     def depart(self, tz_name: str) -> datetime:
         """Depart in timezone."""
-        return self.depart_utc.astimezone(ZoneInfo(tz_name))
+        return self.departure_utc.astimezone(ZoneInfo(tz_name))
 
     def arrive(self, tz_name: str) -> datetime:
         """Arrive in timezone."""
-        return self.arrive_utc.astimezone(ZoneInfo(tz_name))
+        return self.arrival_utc.astimezone(ZoneInfo(tz_name))
 
 
 @dataclass(slots=True)
@@ -197,8 +206,8 @@ class Layover:
     layover_station: AirportCode
     start_utc: datetime
     end_utc: datetime
-    hotels: list[Hotel]
     rest: timedelta
+    hotels: list[Hotel] = field(default_factory=list)
 
     def to_simple(self) -> TD.Layover:
         """Layover to simple."""
@@ -248,13 +257,13 @@ class DutyPeriod:
     report_utc: datetime
     release_station: AirportCode
     release_utc: datetime
-    flights: list[Flight]
     duty: timedelta
     flight_duty: timedelta
     operating_time: timedelta
     flight_time: timedelta
     soft_time: timedelta
     layover: Layover | None
+    flights: list[Flight] = field(default_factory=list)
 
     def to_simple(self) -> TD.DutyPeriod:
         """DutyPeriod to simple."""
@@ -319,14 +328,12 @@ class DutyPeriod:
 
 
 @dataclass(slots=True)
-class Trip:
+class ExpandedTrip:
     """A trip."""
 
     source: str
     trip_number: str
     base_equipment: BaseEquipment
-    positions: list[Position]
-    operations: list[Operation]
     special_qual: bool
     start_station: AirportCode
     start_utc: datetime
@@ -336,12 +343,33 @@ class Trip:
     operating_time: timedelta
     soft_time: timedelta
     tafb: timedelta
-    dutyperiods: list[DutyPeriod]
+    uuid: str = ""
+    dutyperiods: list[DutyPeriod] = field(default_factory=list)
+    positions: list[Position] = field(default_factory=list)
+    operations: list[Operation] = field(default_factory=list)
+
+    def __post_init__(self):
+        """Init the uuid if missing, validate if not missing."""
+        current_uuid_str = str(self.make_uuid())
+        if self.uuid == "":
+            self.uuid = current_uuid_str
+            return
+        if self.uuid != current_uuid_str:
+            raise ValueError(
+                f"Supplied uuid: {self.uuid} does not match calculated uuid: {current_uuid_str}"
+            )
+
+    def make_uuid(self) -> UUID:
+        """Make a uuid from a namespace and the source uuid string, start date, and trip number."""
+        return uuid5(
+            namespace=TRIP_NS,
+            name=f"{self.source}{self.start_utc.isoformat()}{self.trip_number}",
+        )
 
     @staticmethod
-    def from_simple(simple_obj: TD.Trip) -> "Trip":
+    def from_simple(simple_obj: TD.ExpandedTrip) -> "ExpandedTrip":
         """Turn simple object into Trip."""
-        result = Trip(
+        result = ExpandedTrip(
             source=simple_obj["source"],
             trip_number=simple_obj["trip_number"],
             base_equipment=BaseEquipment.from_simple(simple_obj["base_equipment"]),
@@ -360,9 +388,9 @@ class Trip:
         )
         return result
 
-    def to_simple(self) -> TD.Trip:
+    def to_simple(self) -> TD.ExpandedTrip:
         """Trip to simple object."""
-        result = TD.Trip(
+        result = TD.ExpandedTrip(
             source=self.source,
             trip_number=self.trip_number,
             base_equipment=self.base_equipment.to_simple(),
@@ -404,3 +432,29 @@ def get_airport_code_from_iata(iata: str) -> AirportCode:
     return AirportCode(
         iata=airport["iata"], icao=airport["icao"], tz_name=airport["tz"]
     )
+
+
+def trip_serializer() -> DataclassSerializer[ExpandedTrip, TD.ExpandedTrip]:
+    """Init a Trip serializer.
+
+    Returns:
+        DataclassSerializer[Trip, TD.Trip]: _description_
+    """
+    return DataclassSerializer[ExpandedTrip, TD.ExpandedTrip](
+        complex_factory=ExpandedTrip.from_simple, simple_factory=ExpandedTrip.to_simple
+    )
+
+
+EXPANDED_TRIP_SERIALIZER = trip_serializer()
+
+
+def default_file_name(trip: ExpandedTrip) -> str:
+    """Assemble a file name from trip data."""
+    ret_value: list[str] = []
+    ret_value.append(trip.start_local().date().isoformat())
+    ret_value.append(f"_{trip.base_equipment.base.iata}")
+    if trip.base_equipment.satellite_base:
+        ret_value.append(f"_{trip.base_equipment.satellite_base.iata}")
+    ret_value.append(f"_{trip.base_equipment.equipment}")
+    ret_value.append(f"_{trip.trip_number}.json")
+    return "".join(ret_value)

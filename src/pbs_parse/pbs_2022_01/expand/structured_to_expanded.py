@@ -7,18 +7,18 @@ from pathlib import Path
 from zoneinfo import ZoneInfo
 
 import pbs_parse.pbs_2022_01.models.structured as ST
-from pbs_parse.pbs_2022_01.models import trip as model
+from pbs_parse.pbs_2022_01.models import expanded as model
 
 logger = logging.getLogger(__name__)
 
 
-def translate_structured_trip_from_file(path_in: Path) -> list[model.Trip]:
+def translate_structured_trip_from_file(path_in: Path) -> list[model.ExpandedTrip]:
     """Load a pbs_2022_01 structured trip from file and translate it to Trip."""
     s_trip = ST.structured_trip_serializer().load_from_json(path_in=path_in)
     return translate_structured_trip(s_trip=s_trip)
 
 
-def translate_structured_trip(s_trip: ST.StructuredTrip) -> list[model.Trip]:
+def translate_structured_trip(s_trip: ST.StructuredTrip) -> list[model.ExpandedTrip]:
     """Translate a pbs_2022_01 structured trip to Trip."""
     return _translate_trips(s_trip=s_trip)
 
@@ -29,24 +29,15 @@ def _translate_flight(
     departure_station = model.get_airport_code_from_iata(
         iata=s_flight.departure_station
     )
-    depart = build_datetime_triple(
-        utc_date=departure_utc, base=base, local=departure_station
-    )
+
     arrival_station = model.get_airport_code_from_iata(iata=s_flight.arrival_station)
-    # try:
     operating_time = ST.parse_duration(s_flight.block)
-    # except ValueError as e:
-    #     logger.info(
-    #         f"Error parsing block duration {s_flight.block}. Is this a deadhead? {e}"
-    #     )
-    #     operating_time = timedelta(hours=0)
-    arrive = calculate_arrival(
-        base=base,
+    arrival_utc = calculate_arrival(
         arrival_station=arrival_station,
-        departure=depart,
+        departure_utc=departure_utc,
         arrival_time_str=s_flight.arrival_time.lcl,
     )
-    flight_time = arrive.utc - depart.utc
+    flight_time = arrival_utc - departure_utc
     soft_time = ST.parse_duration(s_flight.synth)
     try:
         ground_time = ST.parse_duration(s_flight.ground)
@@ -57,9 +48,9 @@ def _translate_flight(
         eq_code=s_flight.equipment_code,
         number=s_flight.flight_number,
         departure_station=departure_station,
-        depart=depart,
+        departure_utc=departure_utc,
         arrival_station=arrival_station,
-        arrive=arrive,
+        arrival_utc=arrival_utc,
         deadhead=bool(s_flight.deadhead),
         deadhead_code=s_flight.deadhead_code,
         crewmeal=s_flight.crew_meal,
@@ -87,7 +78,7 @@ def _translate_flights(
         flight = _translate_flight(
             departure_utc=departure_utc, base=base, s_flight=s_flight
         )
-        departure_utc = flight.arrive.utc + flight.ground_time
+        departure_utc = flight.arrival_utc + flight.ground_time
         flights.append(flight)
     return flights
 
@@ -101,25 +92,25 @@ def _translate_dutyperiod(
     end_station = model.get_airport_code_from_iata(
         s_dutyperiod.flights[-1].arrival_station
     )
-    report = build_datetime_triple(utc_date=report_utc, base=base, local=start_station)
+    # report = build_datetime_triple(utc_date=report_utc, base=base, local=start_station)
     duty = ST.parse_duration(s_dutyperiod.duty)
-    release_utc = report.utc + duty
-    release = build_datetime_triple(utc_date=release_utc, base=base, local=end_station)
+    release_utc = report_utc + duty
+    # release = build_datetime_triple(utc_date=release_utc, base=base, local=end_station)
     flight_duty = ST.parse_duration(s_dutyperiod.flight_duty)
     operating_time = ST.parse_duration(s_dutyperiod.block)
     soft_time = ST.parse_duration(s_dutyperiod.synth)
     flights = _translate_flights(
-        dutyperiod_report_utc=report.utc, base=base, s_flights=s_dutyperiod.flights
+        dutyperiod_report_utc=report_utc, base=base, s_flights=s_dutyperiod.flights
     )
     layover = _translate_layover(
-        dutyperiod_release=release.utc, base=base, s_layover=s_dutyperiod.layover
+        dutyperiod_release=release_utc, base=base, s_layover=s_dutyperiod.layover
     )
     flight_time = timedelta(seconds=sum([x.flight_time.seconds for x in flights]))
     return model.DutyPeriod(
-        start_station=start_station,
-        report=report,
-        end_station=end_station,
-        release=release,
+        report_station=start_station,
+        report_utc=report_utc,
+        release_station=end_station,
+        release_utc=release_utc,
         flights=flights,
         duty=duty,
         flight_duty=flight_duty,
@@ -143,7 +134,7 @@ def _translate_dutyperiods(
         )
         dutyperiods.append(dutyperiod)
         if dutyperiod.layover is not None:
-            report_utc = dutyperiod.release.utc + dutyperiod.layover.rest
+            report_utc = dutyperiod.release_utc + dutyperiod.layover.rest
     return dutyperiods
 
 
@@ -154,14 +145,18 @@ def _translate_layover(
         return None
     hotels = _translate_hotels(s_hotels=s_layover.hotels)
     layover_station = model.get_airport_code_from_iata(iata=s_layover.city)
-    start = build_datetime_triple(
-        utc_date=dutyperiod_release, base=base, local=layover_station
-    )
+    # start = build_datetime_triple(
+    #     utc_date=dutyperiod_release, base=base, local=layover_station
+    # )
     rest = ST.parse_duration(s_layover.rest)
     end_utc = dutyperiod_release + rest
-    end = build_datetime_triple(utc_date=end_utc, base=base, local=layover_station)
+    # end = build_datetime_triple(utc_date=end_utc, base=base, local=layover_station)
     return model.Layover(
-        layover_station=layover_station, start=start, end=end, rest=rest, hotels=hotels
+        layover_station=layover_station,
+        start_utc=dutyperiod_release,
+        end_utc=end_utc,
+        rest=rest,
+        hotels=hotels,
     )
 
 
@@ -181,7 +176,7 @@ def _translate_hotels(s_hotels: Sequence[ST.Hotel]) -> list[model.Hotel]:
     return hotels
 
 
-def _transate_trip(s_trip: ST.StructuredTrip, start_date: date) -> model.Trip:
+def _transate_trip(s_trip: ST.StructuredTrip, start_date: date) -> model.ExpandedTrip:
     """Translate a StructuredTrip that starts on a particular date."""
     base_airport = model.get_airport_code_from_iata(s_trip.page_footer.base)
 
@@ -201,6 +196,7 @@ def _transate_trip(s_trip: ST.StructuredTrip, start_date: date) -> model.Trip:
     flight_time = timedelta(seconds=sum([x.flight_time.seconds for x in dutyperiods]))
     operating_time = ST.parse_duration(s_trip.block)
     soft_time = ST.parse_duration(s_trip.synth)
+    tafb = ST.parse_duration(s_trip.tafb)
     try:
         satellite_base = model.get_airport_code_from_iata(
             iata=s_trip.page_footer.satellite_base
@@ -212,31 +208,32 @@ def _transate_trip(s_trip: ST.StructuredTrip, start_date: date) -> model.Trip:
         satellite_base=satellite_base,
         equipment=s_trip.page_footer.equipment,
     )
-    return model.Trip(
+    return model.ExpandedTrip(
         source=s_trip.uuid,
         trip_number=s_trip.number,
         base_equipment=base_equipment,
         positions=positions,
         operations=operations,
         special_qual=s_trip.special_qual,
-        start_station=dutyperiods[0].start_station,
-        start=dutyperiods[0].report,
-        end_station=dutyperiods[-1].end_station,
-        end=dutyperiods[-1].release,
+        start_station=dutyperiods[0].report_station,
+        start_utc=dutyperiods[0].report_utc,
+        end_station=dutyperiods[-1].release_station,
+        end_utc=dutyperiods[-1].release_utc,
         flight_time=flight_time,
         operating_time=operating_time,
         soft_time=soft_time,
+        tafb=tafb,
         dutyperiods=dutyperiods,
     )
 
 
-def _translate_trips(s_trip: ST.StructuredTrip) -> list[model.Trip]:
+def _translate_trips(s_trip: ST.StructuredTrip) -> list[model.ExpandedTrip]:
     start_dates = ST.build_start_dates(
         effective_from=date.fromisoformat(s_trip.external.effective_from),
         effective_to=date.fromisoformat(s_trip.external.effective_to),
         calendar=s_trip.calendar,
     )
-    trips: list[model.Trip] = []
+    trips: list[model.ExpandedTrip] = []
     for start_date in start_dates:
         trip = _transate_trip(s_trip=s_trip, start_date=start_date)
         trips.append(trip)
@@ -263,30 +260,29 @@ def trip_start_utc(start_date: date, first_report: str, tz_name: str) -> datetim
     return datetime_utc
 
 
-def build_datetime_triple(
-    utc_date: datetime, base: model.AirportCode, local: model.AirportCode
-) -> model.DatetimeTriple:
-    """Build a DatetimeTriple."""
-    return model.DatetimeTriple(
-        utc=utc_date,
-        lcl=utc_date.astimezone(ZoneInfo(local.tz_name)),
-        hbt=utc_date.astimezone(ZoneInfo(base.tz_name)),
-    )
+# def build_datetime_triple(
+#     utc_date: datetime, base: model.AirportCode, local: model.AirportCode
+# ) -> model.DatetimeTriple:
+#     """Build a DatetimeTriple."""
+#     return model.DatetimeTriple(
+#         utc=utc_date,
+#         lcl=utc_date.astimezone(ZoneInfo(local.tz_name)),
+#         hbt=utc_date.astimezone(ZoneInfo(base.tz_name)),
+#     )
 
 
 def calculate_arrival(
-    base: model.AirportCode,
-    departure: model.DatetimeTriple,
+    departure_utc: datetime,
     arrival_station: model.AirportCode,
     arrival_time_str: str,
-) -> model.DatetimeTriple:
+) -> datetime:
     """Derive the utc arrival time, and use to build DatetimeTriple."""
     arrival_utc = next_local_time_in_utc(
-        utc_start=departure.utc,
+        utc_start=departure_utc,
         next_nieve=time.fromisoformat(arrival_time_str),
         next_tz_name=arrival_station.tz_name,
     )
-    return build_datetime_triple(utc_date=arrival_utc, base=base, local=arrival_station)
+    return arrival_utc
 
 
 def next_local_time_in_utc(
