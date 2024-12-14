@@ -1,7 +1,8 @@
 """Models used in validating trips."""
 
-from dataclasses import dataclass, field
+from dataclasses import asdict, dataclass, field
 from datetime import date
+from pprint import pformat
 
 from .expanded import ExpandedTrip
 from .parsed_trip import ParsedTrip
@@ -28,19 +29,20 @@ class StructuredValidation:
         )
 
 
-@dataclass(slots=True)
+@dataclass(slots=True, kw_only=True)
 class ExpandedValidation:
     """A container for all the information required to validate an expanded trip."""
 
+    errors: list[str] = field(default_factory=list)
     expanded_trip: ExpandedTrip
     structured_trip: StructuredTrip
     expanded_path: str
     structured_path: str
-    errors: list[str] = field(default_factory=list)
 
     def __str__(self) -> str:
         """Custom str output."""
         return (
-            f"expanded_path: {self.expanded_path}\nstructured path: {self.structured_path}\n"
-            f"{self.expanded_trip}\n\n{self.structured_trip}\n\n{"\n".join(self.errors)}"
+            f"Errors:/n{"\n".join(self.errors)}"
+            f"\nexpanded_path: {self.expanded_path}\nstructured path: {self.structured_path}\n"
+            f"{self.expanded_trip}\n\n{pformat(asdict(self.structured_trip),sort_dicts=False)}"
         )

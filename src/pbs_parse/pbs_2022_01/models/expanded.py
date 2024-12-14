@@ -1,7 +1,7 @@
 """Data model for a `Trip`."""
 
 from dataclasses import dataclass, field
-from datetime import UTC, datetime, timedelta
+from datetime import datetime, timedelta
 from uuid import NAMESPACE_DNS, UUID, uuid5
 from zoneinfo import ZoneInfo
 
@@ -14,17 +14,18 @@ from pbs_parse.snippets.datetime.iso8601_duration import (
     timedelta_to_isoformat,
 )
 
+UTC = ZoneInfo("UTC")
 TRIP_NS = uuid5(NAMESPACE_DNS, "pbs_parse.pbs_2022_01.trip")
 
 
-@dataclass(slots=True)
+@dataclass(slots=True, kw_only=True)
 class Position:
     """A position, eg. CA or FO."""
 
     name: str
 
 
-@dataclass(slots=True)
+@dataclass(slots=True, kw_only=True)
 class AirportCode:
     """Airport/city identifiers."""
 
@@ -38,7 +39,7 @@ class AirportCode:
         return result
 
 
-@dataclass(slots=True)
+@dataclass(slots=True, kw_only=True)
 class BaseEquipment:
     """Base and equipment in the bidding context."""
 
@@ -74,14 +75,14 @@ class BaseEquipment:
         return result
 
 
-@dataclass(slots=True)
+@dataclass(slots=True, kw_only=True)
 class Operation:
     """An area of operation."""
 
     name: str
 
 
-@dataclass(slots=True)
+@dataclass(slots=True, kw_only=True)
 class Flight:
     """A flight."""
 
@@ -89,8 +90,12 @@ class Flight:
     number: str
     departure_station: AirportCode
     departure_utc: datetime
+    departure_lcl: datetime
+    departure_hbt: datetime
     arrival_station: AirportCode
     arrival_utc: datetime
+    arrival_lcl: datetime
+    arrival_hbt: datetime
     deadhead: bool
     deadhead_code: str
     crewmeal: str
@@ -107,8 +112,12 @@ class Flight:
             number=self.number,
             departure_station=self.departure_station.to_simple(),
             departure_utc=self.departure_utc.isoformat(),
+            departure_lcl=self.departure_lcl.isoformat(),
+            departure_hbt=self.departure_hbt.isoformat(),
             arrival_station=self.arrival_station.to_simple(),
             arrival_utc=self.arrival_utc.isoformat(),
+            arrival_lcl=self.arrival_lcl.isoformat(),
+            arrival_hbt=self.arrival_hbt.isoformat(),
             deadhead=self.deadhead,
             deadhead_code=self.deadhead_code,
             crewmeal=self.crewmeal,
@@ -131,10 +140,14 @@ class Flight:
             departure_utc=datetime.fromisoformat(
                 simple_obj["departure_utc"]
             ).astimezone(UTC),
+            departure_lcl=datetime.fromisoformat(simple_obj["departure_lcl"]),
+            departure_hbt=datetime.fromisoformat(simple_obj["departure_hbt"]),
             arrival_station=AirportCode(**simple_obj["arrival_station"]),
-            arrival_utc=datetime.fromisoformat(simple_obj["arrival_utc"]).astimezone(
-                UTC
-            ),
+            arrival_utc=datetime.fromisoformat(simple_obj["arrival_utc"])
+            .astimezone(UTC)
+            .astimezone(UTC),
+            arrival_lcl=datetime.fromisoformat(simple_obj["arrival_lcl"]),
+            arrival_hbt=datetime.fromisoformat(simple_obj["arrival_hbt"]),
             deadhead=simple_obj["deadhead"],
             deadhead_code=simple_obj["deadhead_code"],
             crewmeal=simple_obj["crewmeal"],
@@ -146,24 +159,8 @@ class Flight:
         )
         return result
 
-    def depart_local(self) -> datetime:
-        """Depart in local timezone."""
-        return self.departure_utc.astimezone(ZoneInfo(self.departure_station.tz_name))
 
-    def arrive_local(self) -> datetime:
-        """Arrive in local timezone."""
-        return self.arrival_utc.astimezone(ZoneInfo(self.arrival_station.tz_name))
-
-    def depart(self, tz_name: str) -> datetime:
-        """Depart in timezone."""
-        return self.departure_utc.astimezone(ZoneInfo(tz_name))
-
-    def arrive(self, tz_name: str) -> datetime:
-        """Arrive in timezone."""
-        return self.arrival_utc.astimezone(ZoneInfo(tz_name))
-
-
-@dataclass(slots=True)
+@dataclass(slots=True, kw_only=True)
 class Transportation:
     """Transpo."""
 
@@ -171,20 +168,23 @@ class Transportation:
     phone: str
 
 
-@dataclass(slots=True)
+@dataclass(slots=True, kw_only=True)
 class Hotel:
     """A Hotel."""
 
     name: str
     phone: str
-    trans: list[Transportation]
+    transportation: list[Transportation]
 
     def to_simple(self) -> TD.Hotel:
         """Hotel to simple."""
         result = TD.Hotel(
             name=self.name,
             phone=self.phone,
-            trans=[TD.Transportation(name=x.name, phone=x.phone) for x in self.trans],
+            transportation=[
+                TD.Transportation(name=x.name, phone=x.phone)
+                for x in self.transportation
+            ],
         )
         return result
 
@@ -194,18 +194,22 @@ class Hotel:
         result = Hotel(
             name=simple_obj["name"],
             phone=simple_obj["phone"],
-            trans=[Transportation(**x) for x in simple_obj["trans"]],
+            transportation=[Transportation(**x) for x in simple_obj["transportation"]],
         )
         return result
 
 
-@dataclass(slots=True)
+@dataclass(slots=True, kw_only=True)
 class Layover:
     """A Layover."""
 
     layover_station: AirportCode
     start_utc: datetime
+    start_lcl: datetime
+    start_hbt: datetime
     end_utc: datetime
+    end_lcl: datetime
+    end_hbt: datetime
     rest: timedelta
     hotels: list[Hotel] = field(default_factory=list)
 
@@ -214,7 +218,11 @@ class Layover:
         result = TD.Layover(
             layover_station=self.layover_station.to_simple(),
             start_utc=self.start_utc.isoformat(),
+            start_lcl=self.start_lcl.isoformat(),
+            start_hbt=self.start_hbt.isoformat(),
             end_utc=self.end_utc.isoformat(),
+            end_lcl=self.end_lcl.isoformat(),
+            end_hbt=self.end_hbt.isoformat(),
             hotels=[x.to_simple() for x in self.hotels],
             rest=timedelta_to_isoformat(self.rest),
         )
@@ -226,37 +234,29 @@ class Layover:
         result = Layover(
             layover_station=AirportCode(**simple_obj["layover_station"]),
             start_utc=datetime.fromisoformat(simple_obj["start_utc"]).astimezone(UTC),
+            start_lcl=datetime.fromisoformat(simple_obj["start_lcl"]),
+            start_hbt=datetime.fromisoformat(simple_obj["start_hbt"]),
             end_utc=datetime.fromisoformat(simple_obj["end_utc"]).astimezone(UTC),
+            end_lcl=datetime.fromisoformat(simple_obj["end_lcl"]),
+            end_hbt=datetime.fromisoformat(simple_obj["end_hbt"]),
             hotels=[Hotel.from_simple(x) for x in simple_obj["hotels"]],
             rest=string_to_timedelta(simple_obj["rest"]),
         )
         return result
 
-    def start_local(self) -> datetime:
-        """Start in local timezone."""
-        return self.start_utc.astimezone(ZoneInfo(self.layover_station.tz_name))
 
-    def end_local(self) -> datetime:
-        """End in local timezone."""
-        return self.end_utc.astimezone(ZoneInfo(self.layover_station.tz_name))
-
-    def start(self, tz_name: str) -> datetime:
-        """Start in timezone."""
-        return self.start_utc.astimezone(ZoneInfo(tz_name))
-
-    def end(self, tz_name: str) -> datetime:
-        """End in timezone."""
-        return self.end_utc.astimezone(ZoneInfo(tz_name))
-
-
-@dataclass(slots=True)
+@dataclass(slots=True, kw_only=True)
 class DutyPeriod:
     """A dutyperiod."""
 
     report_station: AirportCode
     report_utc: datetime
+    report_lcl: datetime
+    report_hbt: datetime
     release_station: AirportCode
     release_utc: datetime
+    release_lcl: datetime
+    release_hbt: datetime
     duty: timedelta
     flight_duty: timedelta
     operating_time: timedelta
@@ -274,8 +274,12 @@ class DutyPeriod:
         result = TD.DutyPeriod(
             report_station=self.report_station.to_simple(),
             report_utc=self.report_utc.isoformat(),
+            report_lcl=self.report_lcl.isoformat(),
+            report_hbt=self.report_hbt.isoformat(),
             release_station=self.release_station.to_simple(),
             release_utc=self.release_utc.isoformat(),
+            release_lcl=self.release_lcl.isoformat(),
+            release_hbt=self.release_hbt.isoformat(),
             flights=[x.to_simple() for x in self.flights],
             duty=timedelta_to_isoformat(self.duty),
             flight_duty=timedelta_to_isoformat(self.flight_duty),
@@ -285,22 +289,6 @@ class DutyPeriod:
             layover=layover,
         )
         return result
-
-    def report_local(self) -> datetime:
-        """Report in local timezone."""
-        return self.report_utc.astimezone(ZoneInfo(self.report_station.tz_name))
-
-    def release_local(self) -> datetime:
-        """Release in local timezone."""
-        return self.release_utc.astimezone(ZoneInfo(self.release_station.tz_name))
-
-    def report(self, tz_name: str) -> datetime:
-        """Report in timezone."""
-        return self.report_utc.astimezone(ZoneInfo(tz_name))
-
-    def release(self, tz_name: str) -> datetime:
-        """Release in timezone."""
-        return self.release_utc.astimezone(ZoneInfo(tz_name))
 
     @staticmethod
     def from_simple(simple_obj: TD.DutyPeriod) -> "DutyPeriod":
@@ -312,10 +300,14 @@ class DutyPeriod:
         result = DutyPeriod(
             report_station=AirportCode(**simple_obj["report_station"]),
             report_utc=datetime.fromisoformat(simple_obj["report_utc"]).astimezone(UTC),
+            report_lcl=datetime.fromisoformat(simple_obj["report_lcl"]),
+            report_hbt=datetime.fromisoformat(simple_obj["report_hbt"]),
             release_station=AirportCode(**simple_obj["release_station"]),
             release_utc=datetime.fromisoformat(simple_obj["release_utc"]).astimezone(
                 UTC
             ),
+            release_lcl=datetime.fromisoformat(simple_obj["release_lcl"]),
+            release_hbt=datetime.fromisoformat(simple_obj["release_hbt"]),
             flights=[Flight.from_simple(x) for x in simple_obj["flights"]],
             duty=string_to_timedelta(simple_obj["duty"]),
             flight_duty=string_to_timedelta(simple_obj["flight_duty"]),
@@ -327,23 +319,27 @@ class DutyPeriod:
         return result
 
 
-@dataclass(slots=True)
+@dataclass(slots=True, kw_only=True)
 class ExpandedTrip:
     """A trip."""
 
     source: str
+    uuid: str = ""
     trip_number: str
     base_equipment: BaseEquipment
     special_qual: bool
     start_station: AirportCode
     start_utc: datetime
+    start_lcl: datetime
+    start_hbt: datetime
     end_station: AirportCode
     end_utc: datetime
+    end_lcl: datetime
+    end_hbt: datetime
     flight_time: timedelta
     operating_time: timedelta
     soft_time: timedelta
     tafb: timedelta
-    uuid: str = ""
     dutyperiods: list[DutyPeriod] = field(default_factory=list)
     positions: list[Position] = field(default_factory=list)
     operations: list[Operation] = field(default_factory=list)
@@ -378,8 +374,12 @@ class ExpandedTrip:
             special_qual=simple_obj["special_qual"],
             start_station=AirportCode(**simple_obj["start_station"]),
             start_utc=datetime.fromisoformat(simple_obj["start_utc"]).astimezone(UTC),
+            start_lcl=datetime.fromisoformat(simple_obj["start_lcl"]),
+            start_hbt=datetime.fromisoformat(simple_obj["start_hbt"]),
             end_station=AirportCode(**simple_obj["end_station"]),
             end_utc=datetime.fromisoformat(simple_obj["end_utc"]).astimezone(UTC),
+            end_lcl=datetime.fromisoformat(simple_obj["end_lcl"]),
+            end_hbt=datetime.fromisoformat(simple_obj["end_hbt"]),
             flight_time=string_to_timedelta(simple_obj["flight_time"]),
             operating_time=string_to_timedelta(simple_obj["operating_time"]),
             soft_time=string_to_timedelta(simple_obj["soft_time"]),
@@ -399,8 +399,12 @@ class ExpandedTrip:
             special_qual=self.special_qual,
             start_station=self.start_station.to_simple(),
             start_utc=self.start_utc.isoformat(),
+            start_lcl=self.start_lcl.isoformat(),
+            start_hbt=self.start_hbt.isoformat(),
             end_station=self.end_station.to_simple(),
             end_utc=self.end_utc.isoformat(),
+            end_lcl=self.end_lcl.isoformat(),
+            end_hbt=self.end_hbt.isoformat(),
             flight_time=timedelta_to_isoformat(self.flight_time),
             operating_time=timedelta_to_isoformat(self.operating_time),
             soft_time=timedelta_to_isoformat(self.soft_time),
@@ -408,22 +412,6 @@ class ExpandedTrip:
             dutyperiods=[x.to_simple() for x in self.dutyperiods],
         )
         return result
-
-    def start_local(self) -> datetime:
-        """Start in local timezone."""
-        return self.start_utc.astimezone(ZoneInfo(self.start_station.tz_name))
-
-    def end_local(self) -> datetime:
-        """End in local timezone."""
-        return self.end_utc.astimezone(ZoneInfo(self.end_station.tz_name))
-
-    def start(self, tz_name: str) -> datetime:
-        """Start in timezone."""
-        return self.start_utc.astimezone(ZoneInfo(tz_name))
-
-    def end(self, tz_name: str) -> datetime:
-        """End in timezone."""
-        return self.end_utc.astimezone(ZoneInfo(tz_name))
 
 
 def get_airport_code_from_iata(iata: str) -> AirportCode:
@@ -451,7 +439,7 @@ EXPANDED_TRIP_SERIALIZER = trip_serializer()
 def default_file_name(trip: ExpandedTrip) -> str:
     """Assemble a file name from trip data."""
     ret_value: list[str] = []
-    ret_value.append(trip.start_local().date().isoformat())
+    ret_value.append(trip.start_lcl.date().isoformat())
     ret_value.append(f"_{trip.base_equipment.base.iata}")
     if trip.base_equipment.satellite_base:
         ret_value.append(f"_{trip.base_equipment.satellite_base.iata}")

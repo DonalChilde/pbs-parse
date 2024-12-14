@@ -2,13 +2,13 @@
 
 import datetime
 import logging
-from pathlib import Path
 from time import perf_counter_ns
 from typing import Annotated
 
 import typer
 from pfmsoft.pdf2txt.cli import extract_txt_cli
 
+from pbs_parse import APP_DIR, APP_NAME, LOG_DIR
 from pbs_parse.cli import (
     expand_trips_cli,
     parse_trips_cli,
@@ -19,16 +19,16 @@ from pbs_parse.cli import (
 
 logger = logging.getLogger(__name__)
 
-APP_NAME = "pbs-parse"
+# APP_NAME = "pbs-parse"
 
 
-def app_dir() -> Path:
-    """Get the system approiate application directory.
+# def app_dir() -> Path:
+#     """Get the system approiate application directory.
 
-    Returns:
-        _type_: The app dir.
-    """
-    return Path(typer.get_app_dir(app_name=APP_NAME))
+#     Returns:
+#         _type_: The app dir.
+#     """
+#     return Path(typer.get_app_dir(app_name=APP_NAME))
 
 
 def default_options(
@@ -37,6 +37,9 @@ def default_options(
     verbosity: Annotated[int, typer.Option("-v", help="Verbosity.", count=True)] = 1,
 ):
     """Describe what your app does here."""
+    typer.echo(f"Welcome to {APP_NAME}!")
+    typer.echo(f"{APP_NAME}'s application directory is {APP_DIR}")
+    typer.echo(f"{APP_NAME}'s log directory is {LOG_DIR}")
     ctx.ensure_object(dict)
     ctx.obj["START_TIME"] = perf_counter_ns()
     ctx.obj["DEBUG"] = debug
