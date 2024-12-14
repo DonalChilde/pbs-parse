@@ -73,11 +73,21 @@ LOG_CONFIG: dict[str, Any] = {
             "class": "logging.StreamHandler",
             "formatter": "consoleFormatter",
         },
-        "rot_file": {
+        "rot_file_info": {
             "class": "logging.handlers.RotatingFileHandler",
             "formatter": "mine",
             "level": "INFO",
-            "filename": f"{LOG_DIR/'rot_debug.log'}",
+            "filename": f"{LOG_DIR/'rot_info.log'}",
+            "mode": "a",
+            "encoding": "utf-8",
+            "maxBytes": 10000000,
+            "backupCount": 10,
+        },
+        "rot_file_warn": {
+            "class": "logging.handlers.RotatingFileHandler",
+            "formatter": "mine",
+            "level": "WARNING",
+            "filename": f"{LOG_DIR/'rot_warn.log'}",
             "mode": "a",
             "encoding": "utf-8",
             "maxBytes": 500000,
@@ -86,7 +96,7 @@ LOG_CONFIG: dict[str, Any] = {
     },
     "loggers": {
         "": {
-            "handlers": ["rot_file", "console"],
+            "handlers": ["rot_file_info", "rot_file_warn", "console"],
             "level": "DEBUG",
         },
     },

@@ -20,6 +20,7 @@ def translate_structured_trip_from_file(path_in: Path) -> list[model.ExpandedTri
 
 def translate_structured_trip(s_trip: ST.StructuredTrip) -> list[model.ExpandedTrip]:
     """Translate a pbs_2022_01 structured trip to Trip."""
+    logger.info("Translating structured trip %s : uuid=%s", s_trip.number, s_trip.uuid)
     return _translate_trips(s_trip=s_trip)
 
 
@@ -87,7 +88,12 @@ def _translate_flights(
 ) -> list[model.Flight]:
     flights: list[model.Flight] = []
     departure_utc = first_departure_utc
-    for s_flight in s_flights:
+    for idx, s_flight in enumerate(s_flights):
+        logger.debug(
+            "Translating flight %d with departure_utc %s",
+            idx + 1,
+            departure_utc.isoformat(),
+        )
         departure_station = model.get_airport_code_from_iata(s_flight.departure_station)
         flight = _translate_flight(
             departure_utc=departure_utc,
@@ -170,6 +176,11 @@ def _translate_dutyperiods(
     dutyperiods: list[model.DutyPeriod] = []
     report_utc = first_report_utc
     for idx, s_dutyperiod in enumerate(s_dutyperiods):
+        logger.debug(
+            "Translating dutyperiod %d with report_utc %s",
+            idx + 1,
+            report_utc.isoformat(),
+        )
         try:
             next_report_lcl = s_dutyperiods[idx + 1].report_time.lcl
         except IndexError:
@@ -193,7 +204,11 @@ def _translate_layover(
     s_layover: ST.Layover | None,
 ) -> model.Layover | None:
     if s_layover is None:
+        logger.debug("No Layover.")
         return None
+    logger.debug(
+        "Translating layover with start %s", dutyperiod_release_utc.isoformat()
+    )
     hotels = _translate_hotels(s_hotels=s_layover.hotels)
     layover_station = model.get_airport_code_from_iata(iata=s_layover.city)
 
@@ -219,7 +234,8 @@ def _translate_layover(
 
 def _translate_hotel(s_hotel: ST.Hotel) -> model.Hotel:
     transportation: list[model.Transportation] = []
-    for s_trans in s_hotel.transportation:
+    for idx, s_trans in enumerate(s_hotel.transportation):
+        logger.debug("Translating transportation %d", idx + 1)
         trans = model.Transportation(name=s_trans.name, phone=s_trans.phone)
         transportation.append(trans)
     hotel = model.Hotel(
@@ -230,13 +246,17 @@ def _translate_hotel(s_hotel: ST.Hotel) -> model.Hotel:
 
 def _translate_hotels(s_hotels: Sequence[ST.Hotel]) -> list[model.Hotel]:
     hotels: list[model.Hotel] = []
-    for s_hotel in s_hotels:
+    for idx, s_hotel in enumerate(s_hotels):
+        logger.debug("Translating hotel %d", idx + 1)
         hotels.append(_translate_hotel(s_hotel=s_hotel))
     return hotels
 
 
-def _transate_trip(s_trip: ST.StructuredTrip, start_date: date) -> model.ExpandedTrip:
+def _translate_trip(s_trip: ST.StructuredTrip, start_date: date) -> model.ExpandedTrip:
     """Translate a StructuredTrip that starts on a particular date."""
+    logger.info(
+        "Translating trip %s with start date %s", s_trip.number, start_date.isoformat()
+    )
     base_airport = model.get_airport_code_from_iata(s_trip.page_footer.base)
     first_report = time.fromisoformat(s_trip.dutyperiods[0].report_time.lcl)
     # Should be unambiguous unless start time is in the fold, Nov. dst switch 2am sunday.
@@ -298,7 +318,7 @@ def _translate_trips(s_trip: ST.StructuredTrip) -> list[model.ExpandedTrip]:
     )
     trips: list[model.ExpandedTrip] = []
     for start_date in start_dates:
-        trip = _transate_trip(s_trip=s_trip, start_date=start_date)
+        trip = _translate_trip(s_trip=s_trip, start_date=start_date)
         trips.append(trip)
     return trips
 
@@ -402,11 +422,16 @@ def delta_dt(utc_ref: datetime, td: timedelta, lcl_ref: str, lcl_tz: str) -> dat
         datetime: _description_
     """
     dt_utc = utc_ref + td
-    dt_lcl = dt_utc.astimezone(ZoneInfo(lcl_tz))
-    if dt_lcl.strftime("%H%M") != lcl_ref:
-        logger.warning("%r time does not match %s. %r", dt_lcl, lcl_ref, locals())
-        dt_alt = next_local_time_in_utc(
+    dt_lcl_addition = dt_utc.astimezone(ZoneInfo(lcl_tz))
+    if dt_lcl_addition.strftime("%H%M") != lcl_ref:
+        dt_utc_alt = next_local_time_in_utc(
             utc_start=utc_ref, next_lcl=time.fromisoformat(lcl_ref), next_tz_name=lcl_tz
         )
-        return dt_alt
+        dt_alt_lcl = dt_utc_alt.astimezone(ZoneInfo(lcl_tz))
+        _ = dt_alt_lcl
+        logger.info(
+            "Delta addition did not match local time, falling back to `next_local`. %r",
+            locals(),
+        )
+        return dt_utc_alt
     return dt_utc
