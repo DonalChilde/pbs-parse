@@ -90,10 +90,15 @@ def expand_trips_rich(jobs: Sequence[ExpandTripJob]):
                     )
                     trips_with_errors += 1
                     total_errors += len(validation.errors)
-                    progress.console.print(
-                        f"Found {len(validation.errors)} errors in {job.path_out.name}"
+                    err_msg = (
+                        f"Found {len(validation.errors)} errors in {path_out.name!r}"
                     )
-            total_trips += 1
+                    progress.console.print(err_msg)
+                    for msg in validation.errors:
+                        progress.console.print(f"\t{msg!r}")
+                    logger.warning(err_msg)
+                    logger.warning("%r", validation.errors)
+            total_trips += len(expanded_trips)
             progress.update(
                 task,
                 advance=job.path_in.stat().st_size,
