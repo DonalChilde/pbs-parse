@@ -160,41 +160,34 @@ def timedelta_to_isoformat(td: timedelta) -> str:
     zero_dur = timedelta(0)
     if td == zero_dur:
         return "PT0S"
-    negative = td < zero_dur
+    is_negative = td < zero_dur
     abs_value = abs(td)
     days, rem = divmod(abs_value, timedelta(days=1))
     hours, rem = divmod(rem, timedelta(hours=1))
     minutes, rem = divmod(rem, timedelta(minutes=1))
     seconds = int(rem.total_seconds())
     microseconds = rem.microseconds
-    if negative:
+    if is_negative:
         sign = "-"
     else:
         sign = ""
     output = [sign, "P"]
-    has_HMS = False
+    if any([hours > 0, minutes > 0, seconds > 0, microseconds > 0]):
+        time_sep = "T"
+    else:
+        time_sep = ""
     if days > 0:
         output.append(f"{days}D")
+    output.append(time_sep)
     if hours > 0:
-        output.append("T")
         output.append(f"{hours}H")
-        has_HMS = True
     if minutes > 0:
-        if not has_HMS:
-            output.append("T")
-            has_HMS = True
         output.append(f"{minutes}M")
     if seconds > 0:
-        if not has_HMS:
-            output.append("T")
-            has_HMS = True
         output.append(f"{seconds}")
         if microseconds > 0:
             output.append(f".{str(microseconds).zfill(6)}")
         output.append("S")
     if seconds == 0 and microseconds > 0:
-        if not has_HMS:
-            output.append("T")
-            has_HMS = True
         output.append(f"0.{str(microseconds).zfill(6)}S")
     return "".join(output)
