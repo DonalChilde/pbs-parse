@@ -11,6 +11,8 @@ from pbs_parse.pbs_2022_01.models import expanded as model
 
 logger = logging.getLogger(__name__)
 
+# TODO make a class version, so that current state can be maintained easier -> better error logging.
+
 
 def translate_structured_trip_from_file(path_in: Path) -> list[model.ExpandedTrip]:
     """Load a pbs_2022_01 structured trip from file and translate it to Trip."""

@@ -20,6 +20,7 @@ from rich.progress import (
 from pbs_parse.pbs_2022_01.expand.structured_to_expanded import (
     translate_structured_trip_from_file,
 )
+from pbs_parse.pbs_2022_01.expand.structured_to_expanded_cls import StructuredToExpanded
 from pbs_parse.pbs_2022_01.models.expanded import (
     EXPANDED_TRIP_SERIALIZER,
     default_file_name,
@@ -71,7 +72,9 @@ def expand_trips_rich(jobs: Sequence[ExpandTripJob]):
         trips_with_errors = 0
 
         for idx, job in enumerate(jobs, start=1):
-            expanded_trips = translate_structured_trip_from_file(path_in=job.path_in)
+            translator = StructuredToExpanded.from_file(path_in=job.path_in)
+            # expanded_trips = translate_structured_trip_from_file(path_in=job.path_in)
+            expanded_trips = translator.translate()
             for trip in expanded_trips:
                 path_out = job.path_out / default_file_name(trip=trip)
                 EXPANDED_TRIP_SERIALIZER.save_as_json(
