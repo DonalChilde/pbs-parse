@@ -9,6 +9,7 @@ from zoneinfo import ZoneInfo
 
 import pbs_parse.pbs_2022_01.models.structured as ST
 from pbs_parse.pbs_2022_01.models import expanded as model
+from pbs_parse.snippets.datetime.next_local_time import next_local_time
 
 logger = logging.getLogger(__name__)
 UTC = ZoneInfo("UTC")
@@ -370,6 +371,19 @@ class StructuredToExpanded:
         else:
             td_delta = timedelta(hours=1)
         return td_delta
+
+    def _calculate_next_utc(
+        self,
+        utc_ref: datetime,
+        td: timedelta,
+        lcl_ref: str,
+        lcl_tz: str,
+        field_name: str,
+    ) -> datetime:
+        simple_addition = utc_ref + td
+        tzinfo = ZoneInfo(lcl_tz)
+        next_time = time.fromisoformat(lcl_ref).replace(tzinfo=tzinfo)
+        computed = next_local_time(dt_ref=utc_ref, next_time=next_time, delta=td)
 
     def _delta_dt(
         self,
