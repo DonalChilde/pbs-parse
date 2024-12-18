@@ -24,6 +24,7 @@ def test_structure_trips_file(runner: CliRunner, test_output_dir: Path):  # noqa
         result = runner.invoke(
             app,
             [
+                "debug",
                 "structure",
                 "trip",
                 str(input_path),
@@ -46,6 +47,7 @@ def test_structure_trips_dir(runner: CliRunner, test_output_dir: Path):  # noqa:
         result = runner.invoke(
             app,
             [
+                "debug",
                 "structure",
                 "all",
                 str(input_path),

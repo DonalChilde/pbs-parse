@@ -8,27 +8,17 @@ from typing import Annotated
 import typer
 from pfmsoft.pdf2txt.cli import extract_txt_cli
 
-from pbs_parse import APP_DIR, APP_NAME, LOG_DIR
+from pbs_parse import APP_NAME, LOG_DIR
 from pbs_parse.cli import (
-    expand_trips_cli,
-    parse_trips_cli,
-    split_pages_cli,
-    split_trips_cli,
+    expand_trips,
+    parse_trips,
+    split_to_pages,
+    split_to_trips,
+    store_cli,
     structure_trips_cli,
 )
 
 logger = logging.getLogger(__name__)
-
-# APP_NAME = "pbs-parse"
-
-
-# def app_dir() -> Path:
-#     """Get the system approiate application directory.
-
-#     Returns:
-#         _type_: The app dir.
-#     """
-#     return Path(typer.get_app_dir(app_name=APP_NAME))
 
 
 def default_options(
@@ -38,7 +28,7 @@ def default_options(
 ):
     """Describe what your app does here."""
     typer.echo(f"Welcome to {APP_NAME}!")
-    typer.echo(f"{APP_NAME}'s application directory is {APP_DIR}")
+    # typer.echo(f"{APP_NAME}'s application directory is {APP_DIR}")
     typer.echo(f"{APP_NAME}'s log directory is {LOG_DIR}")
     ctx.ensure_object(dict)
     ctx.obj["START_TIME"] = perf_counter_ns()
@@ -53,17 +43,27 @@ def default_options(
 
 
 app = typer.Typer(callback=default_options)
-app.add_typer(extract_txt_cli.app, name="extract", help="Extract text from pdf files.")
+app_debug = typer.Typer()
+app_debug.add_typer(
+    extract_txt_cli.app, name="extract", help="Extract text from pdf files."
+)
+app_debug.add_typer(
+    split_to_pages.app, name="split-pages", help="Split pages from a bid package."
+)
+app_debug.add_typer(
+    split_to_trips.app, name="split-trips", help="Split trips from split pages."
+)
+app_debug.add_typer(parse_trips.app, name="parse", help="Parse split trips.")
+app_debug.add_typer(
+    structure_trips_cli.app, name="structure", help="Structure parsed trips."
+)
+app_debug.add_typer(expand_trips.app, name="expand", help="Expand structured trips.")
 app.add_typer(
-    split_pages_cli.app, name="split-pages", help="Split pages from a bid package."
+    store_cli.app, name="data-store", help="Use a data store for the PBS data."
 )
 app.add_typer(
-    split_trips_cli.app, name="split-trips", help="Split trips from split pages."
+    app_debug, name="debug", help="Manual commands for manipulating bid packages."
 )
-app.add_typer(parse_trips_cli.app, name="parse", help="Parse split trips.")
-app.add_typer(structure_trips_cli.app, name="structure", help="Structure parsed trips.")
-app.add_typer(expand_trips_cli.app, name="expand", help="Expand structured trips.")
-
 
 if __name__ == "__main__":
     app()

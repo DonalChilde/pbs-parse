@@ -28,7 +28,7 @@ def test_split_package_to_pages_file(runner: CliRunner, test_output_dir: Path):
     path_out = test_output_dir / "cli" / "package_to_pages_file"
     with resources.as_file(SINGLE_FILE_TEST.traversable()) as input_path:
         result = runner.invoke(
-            app, ["split-pages", "page", str(input_path), str(path_out)]
+            app, ["debug", "split-pages", "page", str(input_path), str(path_out)]
         )
         if result.stderr_bytes is not None:
             print(result.stderr)
@@ -47,7 +47,7 @@ def test_split_package_to_pages_dir(runner: CliRunner, test_output_dir: Path):
     path_out = test_output_dir / "cli" / "package_to_pages_dir"
     with resources.as_file(DIRECTORY_TEST.traversable()) as input_path:
         result = runner.invoke(
-            app, ["split-pages", "all", str(input_path), str(path_out)]
+            app, ["debug", "split-pages", "all-pages", str(input_path), str(path_out)]
         )
         if result.stderr_bytes is not None:
             print(result.stderr)
