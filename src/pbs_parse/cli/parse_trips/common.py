@@ -89,7 +89,7 @@ def total_size_of_files(jobs: Sequence[ParseTripJob]) -> int:
     return total
 
 
-def rich_worker(jobs: Sequence[ParseTripJob]):
+def parse_worker(jobs: Sequence[ParseTripJob]):
     """Do the jobs, with rich output."""
     file_count = len(jobs)
     typer.echo("Parsing split trips.....")

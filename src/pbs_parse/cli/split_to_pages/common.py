@@ -76,7 +76,7 @@ def build_jobs_from_dir(
     return jobs
 
 
-def rich_worker(jobs: Sequence[SplitPageJob]):
+def split_to_pages_worker(jobs: Sequence[SplitPageJob]):
     """Process the jobs to split pages."""
     file_count = len(jobs)
     typer.echo("\nSplitting bid packages into pages.....")

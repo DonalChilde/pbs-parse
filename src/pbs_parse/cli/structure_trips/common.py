@@ -97,7 +97,7 @@ def total_size_of_files(jobs: Sequence[StructureTripJob]) -> int:
     return total
 
 
-def rich_worker(jobs: Sequence[StructureTripJob]):
+def structure_worker(jobs: Sequence[StructureTripJob]):
     """rich_worker.
 
     Args:

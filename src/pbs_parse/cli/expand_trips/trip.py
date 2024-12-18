@@ -5,7 +5,7 @@ from typing import Annotated
 
 import typer
 
-from .common import ExpandTripJob, rich_worker
+from .common import ExpandTripJob, expand_worker
 
 app = typer.Typer()
 
@@ -46,4 +46,4 @@ def trip(
             overwrite=overwrite,
         )
     )
-    rich_worker(jobs=jobs)
+    expand_worker(jobs=jobs)

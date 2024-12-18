@@ -6,7 +6,7 @@ from typing import Annotated
 
 import typer
 
-from .common import build_job_from_file, rich_worker
+from .common import build_job_from_file, split_to_trips_worker
 
 logger = logging.getLogger(__name__)
 app = typer.Typer()
@@ -37,4 +37,4 @@ def trip(
     _ = ctx
     job = build_job_from_file(path_in=path_in, path_out=path_out, overwrite=overwrite)
     jobs = [job]
-    rich_worker(jobs=jobs)
+    split_to_trips_worker(jobs=jobs)

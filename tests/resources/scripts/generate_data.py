@@ -6,13 +6,11 @@ from pathlib import Path
 
 import typer
 
-from pbs_parse.cli import (
-    expand_trips_cli,
-    parse_trips_cli,
-    split_pages_cli,
-    split_trips_cli,
-    structure_trips_cli,
-)
+from pbs_parse.cli.expand_trips import common as expand_trips
+from pbs_parse.cli.parse_trips import common as parse_trips
+from pbs_parse.cli.split_to_pages import common as split_pages
+from pbs_parse.cli.split_to_trips import common as split_trips
+from pbs_parse.cli.structure_trips import common as structure_trips
 
 app = typer.Typer()
 RESOURCES_PATH = Path(__file__).parent.parent
@@ -32,13 +30,13 @@ def split_bid_packages_to_pages():
         output_path = PAGELINES_PATH / eff_date
         input_path = BIDPACKAGE_PATH / eff_date
         files = input_path.glob("*.txt")
-        jobs: list[split_pages_cli.SplitPageJob] = []
+        jobs: list[split_pages.SplitPageJob] = []
         for file in files:
-            job = split_pages_cli.SplitPageJob(
+            job = split_pages.SplitPageJob(
                 source_txt_path=file, split_page_path=output_path, overwrite=True
             )
             jobs.append(job)
-        split_pages_cli.rich_worker(jobs=jobs)
+        split_pages.split_to_pages_worker(jobs=jobs)
 
 
 def split_pages_to_trips():
@@ -46,21 +44,21 @@ def split_pages_to_trips():
     eff_dates = ["2024-11-01_2024-12-01"]
     for eff_date in eff_dates:
         output_path = TRIPLINES_PATH / eff_date
-        jobs = split_trips_cli.build_jobs_from_dir(
+        jobs = split_trips.build_jobs_from_dir(
             path_in=PAGELINES_PATH / eff_date, path_out=output_path, overwrite=True
         )
-        split_trips_cli.rich_worker(jobs=jobs)
+        split_trips.split_to_trips_worker(jobs=jobs)
 
 
-def parse_trips():
+def parse_split_trips():
     """Parse the split trips."""
     eff_dates = ["2024-11-01_2024-12-01"]
     for eff_date in eff_dates:
         output_path = PARSEDTRIPS_PATH / eff_date
-        jobs = parse_trips_cli.build_jobs_from_directory(
+        jobs = parse_trips.build_jobs_from_directory(
             path_in=TRIPLINES_PATH / eff_date, path_out=output_path, overwrite=True
         )
-        parse_trips_cli.rich_worker(jobs=jobs)
+        parse_trips.parse_worker(jobs=jobs)
 
 
 def structure_parsed_trips():
@@ -68,26 +66,26 @@ def structure_parsed_trips():
     eff_dates = ["2024-11-01_2024-12-01"]
     for eff_date in eff_dates:
         split_dates = eff_date.split("_")
-        jobs = structure_trips_cli.build_jobs_from_directory(
+        jobs = structure_trips.build_jobs_from_directory(
             path_in=PARSEDTRIPS_PATH / eff_date,
             path_out=STRUCTUREDTRIPS_PATH / eff_date,
             effective_from=date.fromisoformat(split_dates[0]),
             effective_to=date.fromisoformat(split_dates[1]),
             overwrite=True,
         )
-        structure_trips_cli.rich_worker(jobs=jobs)
+        structure_trips.structure_worker(jobs=jobs)
 
 
 def expand_structured_trips():
     """expand_structured_trips ."""
     eff_dates = ["2024-11-01_2024-12-01"]
     for eff_date in eff_dates:
-        jobs = expand_trips_cli.build_jobs_from_directory(
+        jobs = expand_trips.build_jobs_from_directory(
             path_in=STRUCTUREDTRIPS_PATH / eff_date,
             path_out=EXPANDEDTRIPS_PATH / eff_date,
             overwrite=True,
         )
-        expand_trips_cli.rich_worker(jobs=jobs)
+        expand_trips.expand_worker(jobs=jobs)
 
 
 @app.command()
@@ -95,7 +93,7 @@ def reset_data():
     """Reset all test data."""
     split_bid_packages_to_pages()
     split_pages_to_trips()
-    parse_trips()
+    parse_split_trips()
     structure_parsed_trips()
     expand_structured_trips()
 

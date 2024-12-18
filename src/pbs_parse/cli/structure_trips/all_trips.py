@@ -6,7 +6,7 @@ from typing import Annotated
 
 import typer
 
-from .common import build_jobs_from_directory, rich_worker
+from .common import build_jobs_from_directory, structure_worker
 
 app = typer.Typer()
 
@@ -50,4 +50,4 @@ def all_trips(
         effective_to=effective_to.date(),
         overwrite=overwrite,
     )
-    rich_worker(jobs=jobs)
+    structure_worker(jobs=jobs)

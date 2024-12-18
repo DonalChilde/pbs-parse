@@ -7,7 +7,7 @@ from typing import Annotated
 
 import typer
 
-from .common import ParseTripJob, default_file_name, rich_worker
+from .common import ParseTripJob, default_file_name, parse_worker
 
 logger = logging.getLogger(__name__)
 app = typer.Typer()
@@ -52,4 +52,4 @@ def trip(
             split_trip_path=path_in, parsed_trip_path=dest_path, overwrite=overwrite
         )
     )
-    rich_worker(jobs=jobs)
+    parse_worker(jobs=jobs)

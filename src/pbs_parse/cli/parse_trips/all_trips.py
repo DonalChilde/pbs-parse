@@ -6,7 +6,7 @@ from typing import Annotated
 
 import typer
 
-from .common import build_jobs_from_directory, rich_worker
+from .common import build_jobs_from_directory, parse_worker
 
 logger = logging.getLogger(__name__)
 app = typer.Typer()
@@ -38,4 +38,4 @@ def all_trips(
     jobs = build_jobs_from_directory(
         path_in=path_in, path_out=path_out, overwrite=overwrite
     )
-    rich_worker(jobs=jobs)
+    parse_worker(jobs=jobs)

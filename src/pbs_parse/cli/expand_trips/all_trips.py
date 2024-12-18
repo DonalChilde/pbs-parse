@@ -5,7 +5,7 @@ from typing import Annotated
 
 import typer
 
-from .common import build_jobs_from_directory, rich_worker
+from .common import build_jobs_from_directory, expand_worker
 
 app = typer.Typer()
 
@@ -38,4 +38,4 @@ def all_trips(
         path_out=path_out,
         overwrite=overwrite,
     )
-    rich_worker(jobs=jobs)
+    expand_worker(jobs=jobs)

@@ -6,7 +6,7 @@ from typing import Annotated
 
 import typer
 
-from .common import build_jobs_from_dir, rich_worker
+from .common import build_jobs_from_dir, split_to_trips_worker
 
 logger = logging.getLogger(__name__)
 app = typer.Typer()
@@ -36,4 +36,4 @@ def all_trips(
     """Split all the pages found in a directory into trips."""
     _ = ctx
     jobs = build_jobs_from_dir(path_in=path_in, path_out=path_out, overwrite=overwrite)
-    rich_worker(jobs=jobs)
+    split_to_trips_worker(jobs=jobs)

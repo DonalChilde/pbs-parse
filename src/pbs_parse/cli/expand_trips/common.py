@@ -49,7 +49,7 @@ def total_size_of_files(jobs: Sequence[ExpandTripJob]) -> int:
     return total
 
 
-def rich_worker(jobs: Sequence[ExpandTripJob]):
+def expand_worker(jobs: Sequence[ExpandTripJob]):
     """Turn structured trips into expanded trips, and save them."""
     file_count = len(jobs)
     typer.echo("Expanding structured trips.....")

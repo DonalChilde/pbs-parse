@@ -6,7 +6,7 @@ from typing import Annotated
 
 import typer
 
-from .common import StructureTripJob, default_file_name, rich_worker
+from .common import StructureTripJob, default_file_name, structure_worker
 
 app = typer.Typer()
 
@@ -64,4 +64,4 @@ def trip(
             effective_to=effective_to.date(),
         )
     )
-    rich_worker(jobs=jobs)
+    structure_worker(jobs=jobs)

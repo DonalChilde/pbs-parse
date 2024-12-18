@@ -6,7 +6,7 @@ from typing import Annotated
 
 import typer
 
-from .common import build_jobs_from_dir, rich_worker
+from .common import build_jobs_from_dir, split_to_pages_worker
 
 logger = logging.getLogger(__name__)
 app = typer.Typer()
@@ -39,4 +39,4 @@ def all_pages(
     """
     _ = ctx
     jobs = build_jobs_from_dir(path_in=path_in, path_out=path_out, overwrite=overwrite)
-    rich_worker(jobs=jobs)
+    split_to_pages_worker(jobs=jobs)
