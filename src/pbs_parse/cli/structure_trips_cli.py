@@ -31,75 +31,11 @@ logger = logging.getLogger(__name__)
 
 @dataclass
 class StructureTripJob:
-    path_in: Path
-    path_out: Path
+    parsed_trip_path: Path
+    structured_trip_path: Path
     effective_from: date
     effective_to: date
     overwrite: bool = False
-
-
-def total_size_of_files(jobs: Sequence[StructureTripJob]) -> int:
-    """Get total file size of jobs."""
-    total = 0
-    for job in jobs:
-        total += job.path_in.stat().st_size
-    return total
-
-
-def structure_trips_rich(jobs: Sequence[StructureTripJob]):
-    file_count = len(jobs)
-    typer.echo("Structuring parsed trips.....")
-    with Progress(
-        TextColumn("[progress.description]{task.description}"),
-        BarColumn(),
-        TaskProgressColumn(),
-        FileSizeColumn(),
-        TotalFileSizeColumn(),
-        TimeElapsedColumn(),
-    ) as progress:
-        task = progress.add_task(
-            f"1 of {file_count}", total=total_size_of_files(jobs=jobs)
-        )
-        total_trips = 0
-        total_errors = 0
-        trips_with_errors = 0
-        serializer = structured_trip_serializer()
-
-        for idx, job in enumerate(jobs, start=1):
-            structured_trip = translate_file(
-                path_in=job.path_in,
-                effective_from=job.effective_from,
-                effective_to=job.effective_to,
-            )
-            serializer.save_as_json(
-                path_out=job.path_out,
-                complex_obj=structured_trip,
-                overwrite=job.overwrite,
-            )
-            validation = validate_files(
-                parsed_trip_path=job.path_in, structured_trip_path=job.path_out
-            )
-            if validation.errors:
-                error_out = job.path_out.parent / f"{job.path_out.stem}.errors.txt"
-                error_out.write_text(str(validation))
-                trips_with_errors += 1
-                total_errors += len(validation.errors)
-                progress.console.print(
-                    f"Found {len(validation.errors)} errors in {job.path_out.name}"
-                )
-            total_trips += 1
-            progress.update(
-                task,
-                advance=job.path_in.stat().st_size,
-                description=f"{idx} of {file_count}, {total_trips} trips found.",
-            )
-        if trips_with_errors > 0:
-            progress.console.print(f"Found errors in {trips_with_errors} trips.")
-    typer.echo("\n")
-
-
-def output_file_name(path_in: Path) -> str:
-    return f"{path_in.stem}.structured.json"
 
 
 @app.command()
@@ -143,14 +79,14 @@ def trip(
     jobs: list[StructureTripJob] = []
     jobs.append(
         StructureTripJob(
-            path_in=path_in,
-            path_out=dest_path,
+            parsed_trip_path=path_in,
+            structured_trip_path=dest_path,
             overwrite=overwrite,
             effective_from=effective_from.date(),
             effective_to=effective_to.date(),
         )
     )
-    structure_trips_rich(jobs=jobs)
+    rich_worker(jobs=jobs)
 
 
 @app.command()
@@ -187,7 +123,7 @@ def all(
         effective_to=effective_to.date(),
         overwrite=overwrite,
     )
-    structure_trips_rich(jobs=jobs)
+    rich_worker(jobs=jobs)
 
 
 def build_jobs_from_directory(
@@ -215,11 +151,79 @@ def build_jobs_from_directory(
         dest_path = path_out / f"{output_file_name(path_in=input_file)}"
         jobs.append(
             StructureTripJob(
-                path_in=input_file,
-                path_out=dest_path,
+                parsed_trip_path=input_file,
+                structured_trip_path=dest_path,
                 overwrite=overwrite,
                 effective_from=effective_from,
                 effective_to=effective_to,
             )
         )
     return jobs
+
+
+def total_size_of_files(jobs: Sequence[StructureTripJob]) -> int:
+    """Get total file size of jobs."""
+    total = 0
+    for job in jobs:
+        total += job.parsed_trip_path.stat().st_size
+    return total
+
+
+def rich_worker(jobs: Sequence[StructureTripJob]):
+    file_count = len(jobs)
+    typer.echo("Structuring parsed trips.....")
+    with Progress(
+        TextColumn("[progress.description]{task.description}"),
+        BarColumn(),
+        TaskProgressColumn(),
+        FileSizeColumn(),
+        TotalFileSizeColumn(),
+        TimeElapsedColumn(),
+    ) as progress:
+        task = progress.add_task(
+            f"1 of {file_count}", total=total_size_of_files(jobs=jobs)
+        )
+        total_trips = 0
+        total_errors = 0
+        trips_with_errors = 0
+        serializer = structured_trip_serializer()
+
+        for idx, job in enumerate(jobs, start=1):
+            structured_trip = translate_file(
+                path_in=job.parsed_trip_path,
+                effective_from=job.effective_from,
+                effective_to=job.effective_to,
+            )
+            serializer.save_as_json(
+                path_out=job.structured_trip_path,
+                complex_obj=structured_trip,
+                overwrite=job.overwrite,
+            )
+            validation = validate_files(
+                parsed_trip_path=job.parsed_trip_path,
+                structured_trip_path=job.structured_trip_path,
+            )
+            if validation.errors:
+                error_out = (
+                    job.structured_trip_path.parent
+                    / f"{job.structured_trip_path.stem}.errors.txt"
+                )
+                error_out.write_text(str(validation))
+                trips_with_errors += 1
+                total_errors += len(validation.errors)
+                progress.console.print(
+                    f"Found {len(validation.errors)} errors in {job.structured_trip_path.name}"
+                )
+            total_trips += 1
+            progress.update(
+                task,
+                advance=job.parsed_trip_path.stat().st_size,
+                description=f"{idx} of {file_count}, {total_trips} trips found.",
+            )
+        if trips_with_errors > 0:
+            progress.console.print(f"Found errors in {trips_with_errors} trips.")
+    typer.echo("\n")
+
+
+def output_file_name(path_in: Path) -> str:
+    return f"{path_in.stem}.structured.json"

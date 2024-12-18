@@ -8,7 +8,7 @@ import typer
 
 from pbs_parse.cli.structure_trips_cli import (
     build_jobs_from_directory,
-    structure_trips_rich,
+    rich_worker,
 )
 
 app = typer.Typer()
@@ -68,7 +68,7 @@ def structure_trips_from_files(
             effective_to=effective_to,
             overwrite=False,
         )
-        structure_trips_rich(jobs=jobs)
+        rich_worker(jobs=jobs)
 
     # for source_file in source_paths:
     #     path_in = parsed_trip_dir_from_source_file(source_file)

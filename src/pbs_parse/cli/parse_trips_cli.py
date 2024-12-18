@@ -24,8 +24,6 @@ from pbs_parse.pbs_2022_01.models.parsed_trip import (
     ParsedTrip,
     default_file_name,
 )
-
-# from pbs_parse.pbs_2022_01.parse.trip_lines_parser import TripLinesParser
 from pbs_parse.pbs_2022_01.parse.trip_lines_parser import TripLinesParser
 
 logger = logging.getLogger(__name__)
@@ -34,64 +32,9 @@ app = typer.Typer()
 
 @dataclass
 class ParseTripJob:
-    path_in: Path
-    path_out: Path
+    split_trip_path: Path
+    parsed_trip_path: Path
     overwrite: bool = False
-
-
-def total_size_of_files(jobs: Sequence[ParseTripJob]) -> int:
-    """Get total file size of jobs."""
-    total = 0
-    for job in jobs:
-        total += job.path_in.stat().st_size
-    return total
-
-
-def parse_trips_rich(jobs: Sequence[ParseTripJob]):
-    file_count = len(jobs)
-    typer.echo("Parsing split trips.....")
-    with Progress(
-        TextColumn("[progress.description]{task.description}"),
-        BarColumn(),
-        TaskProgressColumn(),
-        FileSizeColumn(),
-        TotalFileSizeColumn(),
-        TimeElapsedColumn(),
-    ) as progress:
-        task = progress.add_task(
-            f"1 of {file_count}", total=total_size_of_files(jobs=jobs)
-        )
-        total_trips = 0
-        prior_trips = 0
-        parser = TripLinesParser()
-
-        for idx, job in enumerate(jobs, start=1):
-            ctx = ParseContext()
-            parsed_trip = parser.parse_file(ctx=ctx, path_in=job.path_in)
-            if check_for_prior_month(parsed_trip=parsed_trip):
-                output_path = (
-                    job.path_out.parent / job.path_out.stem / ".prior_month.json"
-                )
-                prior_trips += 1
-            else:
-                output_path = job.path_out
-            PARSED_TRIP_SERIALIZER.save_as_json(
-                path_out=output_path, complex_obj=parsed_trip, overwrite=job.overwrite
-            )
-            total_trips += 1
-            progress.update(
-                task,
-                advance=job.path_in.stat().st_size,
-                description=f"{idx} of {file_count}, {total_trips} trips found, with {prior_trips} prior month trips.",
-            )
-
-
-def check_for_prior_month(parsed_trip: ParsedTrip) -> bool:
-    for line in parsed_trip.parsed_lines:
-        if "trip_header" == line.id:
-            if "prior" in line.indexed_string.txt:
-                return True
-    return False
 
 
 @app.command()
@@ -127,8 +70,12 @@ def trip(
         dest_path = path_out / default_file_name(path_name=path_in.name)
 
     jobs: Sequence[ParseTripJob] = []
-    jobs.append(ParseTripJob(path_in=path_in, path_out=dest_path, overwrite=overwrite))
-    parse_trips_rich(jobs=jobs)
+    jobs.append(
+        ParseTripJob(
+            split_trip_path=path_in, parsed_trip_path=dest_path, overwrite=overwrite
+        )
+    )
+    rich_worker(jobs=jobs)
 
 
 @app.command()
@@ -156,7 +103,7 @@ def all(
     jobs = build_jobs_from_directory(
         path_in=path_in, path_out=path_out, overwrite=overwrite
     )
-    parse_trips_rich(jobs=jobs)
+    rich_worker(jobs=jobs)
 
 
 def build_jobs_from_directory(
@@ -181,6 +128,67 @@ def build_jobs_from_directory(
     for input_file in files:
         dest_path = path_out / default_file_name(path_name=input_file.name)
         jobs.append(
-            ParseTripJob(path_in=input_file, path_out=dest_path, overwrite=overwrite)
+            ParseTripJob(
+                split_trip_path=input_file,
+                parsed_trip_path=dest_path,
+                overwrite=overwrite,
+            )
         )
     return jobs
+
+
+def total_size_of_files(jobs: Sequence[ParseTripJob]) -> int:
+    """Get total file size of jobs."""
+    total = 0
+    for job in jobs:
+        total += job.split_trip_path.stat().st_size
+    return total
+
+
+def rich_worker(jobs: Sequence[ParseTripJob]):
+    file_count = len(jobs)
+    typer.echo("Parsing split trips.....")
+    with Progress(
+        TextColumn("[progress.description]{task.description}"),
+        BarColumn(),
+        TaskProgressColumn(),
+        FileSizeColumn(),
+        TotalFileSizeColumn(),
+        TimeElapsedColumn(),
+    ) as progress:
+        task = progress.add_task(
+            f"1 of {file_count}", total=total_size_of_files(jobs=jobs)
+        )
+        total_trips = 0
+        prior_trips = 0
+        parser = TripLinesParser()
+
+        for idx, job in enumerate(jobs, start=1):
+            ctx = ParseContext()
+            parsed_trip = parser.parse_file(ctx=ctx, path_in=job.split_trip_path)
+            if check_for_prior_month(parsed_trip=parsed_trip):
+                output_path = (
+                    job.parsed_trip_path.parent
+                    / job.parsed_trip_path.stem
+                    / ".prior_month.json"
+                )
+                prior_trips += 1
+            else:
+                output_path = job.parsed_trip_path
+            PARSED_TRIP_SERIALIZER.save_as_json(
+                path_out=output_path, complex_obj=parsed_trip, overwrite=job.overwrite
+            )
+            total_trips += 1
+            progress.update(
+                task,
+                advance=job.split_trip_path.stat().st_size,
+                description=f"{idx} of {file_count}, {total_trips} trips found, with {prior_trips} prior month trips.",
+            )
+
+
+def check_for_prior_month(parsed_trip: ParsedTrip) -> bool:
+    for line in parsed_trip.parsed_lines:
+        if "trip_header" == line.id:
+            if "prior" in line.indexed_string.txt:
+                return True
+    return False

@@ -30,17 +30,9 @@ app = typer.Typer()
 class SplitTripJob:
     """Job container."""
 
-    path_in: Path
-    path_out: Path
+    split_page_path: Path
+    split_trip_path: Path
     overwrite: bool = False
-
-
-def total_size_of_files(jobs: Sequence[SplitTripJob]) -> int:
-    """Get total file size of jobs."""
-    total = 0
-    for job in jobs:
-        total += job.path_in.stat().st_size
-    return total
 
 
 @app.command()
@@ -68,7 +60,7 @@ def trip(
     _ = ctx
     job = build_job_from_file(path_in=path_in, path_out=path_out, overwrite=overwrite)
     jobs = [job]
-    extract_trips_rich(jobs=jobs)
+    rich_worker(jobs=jobs)
 
 
 @app.command()
@@ -95,7 +87,7 @@ def all(
     """Split all the pages found in a directory into trips."""
     _ = ctx
     jobs = build_jobs_from_dir(path_in=path_in, path_out=path_out, overwrite=overwrite)
-    extract_trips_rich(jobs=jobs)
+    rich_worker(jobs=jobs)
 
 
 def build_job_from_file(path_in: Path, path_out: Path, overwrite: bool) -> SplitTripJob:
@@ -111,7 +103,9 @@ def build_job_from_file(path_in: Path, path_out: Path, overwrite: bool) -> Split
         raise typer.BadParameter(
             f"Output path is a file, it should be a directory. {path_out}"
         )
-    job = SplitTripJob(path_in=path_in, path_out=path_out, overwrite=overwrite)
+    job = SplitTripJob(
+        split_page_path=path_in, split_trip_path=path_out, overwrite=overwrite
+    )
     return job
 
 
@@ -138,30 +132,7 @@ def build_jobs_from_dir(
     return jobs
 
 
-# def collect_jobs(
-#     path_in: Path, path_out: Path, overwrite: bool
-# ) -> Sequence[SplitTripJob]:
-#     """Build a collections of jobs to do."""
-#     if path_in.is_dir():
-#         typer.echo(f"Looking for files in {path_in}")
-#         files = [f for f in path_in.glob("*.page_*") if f.is_file()]
-#         typer.echo(f"Found {len(files)} files")
-#         # input_paths.extend(files)
-#     elif path_in.is_file():
-#         files = [path_in]
-#     else:
-#         raise typer.BadParameter(
-#             "Input path is not a valid file, or directory containing valid files.\n"
-#             "Files are expected to match *.page_*"
-#         )
-#     typer.echo(f"Searching {len(files)} files for trips.")
-#     jobs: list[SplitTripJob] = []
-#     for file in files:
-#         jobs.append(SplitTripJob(path_in=file, path_out=path_out, overwrite=overwrite))
-#     return jobs
-
-
-def extract_trips_rich(jobs: Sequence[SplitTripJob]):
+def rich_worker(jobs: Sequence[SplitTripJob]):
     """Process the jobs to split trips."""
     file_count = len(jobs)
     typer.echo("Splitting pages into trips.....")
@@ -178,16 +149,24 @@ def extract_trips_rich(jobs: Sequence[SplitTripJob]):
         )
         total_trips = 0
         for idx, job in enumerate(jobs, start=1):
-            trips = parse_trip_lines_from_file(path_in=job.path_in)
+            trips = parse_trip_lines_from_file(path_in=job.split_page_path)
             trip_count = write_trip_lines(
-                file_stem=job.path_in.stem,
+                file_stem=job.split_page_path.stem,
                 trips=trips,
-                path_out=job.path_out,
+                path_out=job.split_trip_path,
                 overwrite=job.overwrite,
             )
             total_trips += trip_count
             progress.update(
                 task,
-                advance=job.path_in.stat().st_size,
+                advance=job.split_page_path.stat().st_size,
                 description=f"{idx} of {file_count}, {total_trips} trips found.",
             )
+
+
+def total_size_of_files(jobs: Sequence[SplitTripJob]) -> int:
+    """Get total file size of jobs."""
+    total = 0
+    for job in jobs:
+        total += job.split_page_path.stat().st_size
+    return total

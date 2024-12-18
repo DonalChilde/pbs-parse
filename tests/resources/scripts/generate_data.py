@@ -35,10 +35,10 @@ def split_bid_packages_to_pages():
         jobs: list[split_pages_cli.SplitPageJob] = []
         for file in files:
             job = split_pages_cli.SplitPageJob(
-                path_in=file, path_out=output_path, overwrite=True
+                source_txt_path=file, split_page_path=output_path, overwrite=True
             )
             jobs.append(job)
-        split_pages_cli.extract_pages_rich(jobs=jobs)
+        split_pages_cli.rich_worker(jobs=jobs)
 
 
 def split_pages_to_trips():
@@ -49,7 +49,7 @@ def split_pages_to_trips():
         jobs = split_trips_cli.build_jobs_from_dir(
             path_in=PAGELINES_PATH / eff_date, path_out=output_path, overwrite=True
         )
-        split_trips_cli.extract_trips_rich(jobs=jobs)
+        split_trips_cli.rich_worker(jobs=jobs)
 
 
 def parse_trips():
@@ -60,7 +60,7 @@ def parse_trips():
         jobs = parse_trips_cli.build_jobs_from_directory(
             path_in=TRIPLINES_PATH / eff_date, path_out=output_path, overwrite=True
         )
-        parse_trips_cli.parse_trips_rich(jobs=jobs)
+        parse_trips_cli.rich_worker(jobs=jobs)
 
 
 def structure_parsed_trips():
@@ -75,7 +75,7 @@ def structure_parsed_trips():
             effective_to=date.fromisoformat(split_dates[1]),
             overwrite=True,
         )
-        structure_trips_cli.structure_trips_rich(jobs=jobs)
+        structure_trips_cli.rich_worker(jobs=jobs)
 
 
 def expand_structured_trips():
@@ -87,7 +87,7 @@ def expand_structured_trips():
             path_out=EXPANDEDTRIPS_PATH / eff_date,
             overwrite=True,
         )
-        expand_trips_cli.expand_trips_rich(jobs=jobs)
+        expand_trips_cli.rich_worker(jobs=jobs)
 
 
 @app.command()

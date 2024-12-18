@@ -129,7 +129,7 @@ def expand_trips(source_path: Path, overwrite: bool):
         path_out=expanded_trip_dir_from_source_file(source_path),
         overwrite=overwrite,
     )
-    expand_trips_cli.expand_trips_rich(jobs=jobs)
+    expand_trips_cli.rich_worker(jobs=jobs)
 
 
 def structure_trips(
@@ -143,7 +143,7 @@ def structure_trips(
         effective_to=effective_to,
         overwrite=overwrite,
     )
-    structure_trips_cli.structure_trips_rich(jobs=jobs)
+    structure_trips_cli.rich_worker(jobs=jobs)
 
 
 def parse_trips(source_path: Path, overwrite: bool):
@@ -153,7 +153,7 @@ def parse_trips(source_path: Path, overwrite: bool):
         path_out=parsed_trip_dir_from_source_file(source_path),
         overwrite=overwrite,
     )
-    parse_trips_cli.parse_trips_rich(jobs=jobs)
+    parse_trips_cli.rich_worker(jobs=jobs)
 
 
 def split_pages(source_path: Path, overwrite: bool):
@@ -164,7 +164,7 @@ def split_pages(source_path: Path, overwrite: bool):
         overwrite=overwrite,
     )
     jobs = [job]
-    split_pages_cli.extract_pages_rich(jobs=jobs)
+    split_pages_cli.rich_worker(jobs=jobs)
 
 
 def split_trips(source_path: Path, overwrite: bool):
@@ -174,7 +174,7 @@ def split_trips(source_path: Path, overwrite: bool):
         path_out=split_trip_dir_from_source_path(source_file=source_path),
         overwrite=overwrite,
     )
-    split_trips_cli.extract_trips_rich(jobs=jobs)
+    split_trips_cli.rich_worker(jobs=jobs)
 
 
 # TODO get dates from parent dir name

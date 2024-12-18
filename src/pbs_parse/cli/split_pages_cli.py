@@ -30,17 +30,9 @@ app = typer.Typer()
 class SplitPageJob:
     """Job container."""
 
-    path_in: Path
-    path_out: Path
+    source_txt_path: Path
+    split_page_path: Path
     overwrite: bool = False
-
-
-def total_size_of_files(jobs: Sequence[SplitPageJob]) -> int:
-    """Get total file size of jobs."""
-    total = 0
-    for job in jobs:
-        total += job.path_in.stat().st_size
-    return total
 
 
 @app.command()
@@ -68,7 +60,7 @@ def page(
     _ = ctx
     job = build_job_from_file(path_in=path_in, path_out=path_out, overwrite=overwrite)
     jobs = [job]
-    extract_pages_rich(jobs=jobs)
+    rich_worker(jobs=jobs)
 
 
 @app.command()
@@ -98,7 +90,7 @@ def all(
     """
     _ = ctx
     jobs = build_jobs_from_dir(path_in=path_in, path_out=path_out, overwrite=overwrite)
-    extract_pages_rich(jobs=jobs)
+    rich_worker(jobs=jobs)
 
 
 def build_job_from_file(path_in: Path, path_out: Path, overwrite: bool) -> SplitPageJob:
@@ -114,7 +106,9 @@ def build_job_from_file(path_in: Path, path_out: Path, overwrite: bool) -> Split
         raise typer.BadParameter(
             f"Output path is a file, it should be a directory. {path_out}"
         )
-    job = SplitPageJob(path_in=path_in, path_out=path_out, overwrite=overwrite)
+    job = SplitPageJob(
+        source_txt_path=path_in, split_page_path=path_out, overwrite=overwrite
+    )
     return job
 
 
@@ -142,29 +136,7 @@ def build_jobs_from_dir(
     return jobs
 
 
-# def collect_jobs(
-#     path_in: Path, path_out: Path, overwrite: bool
-# ) -> Sequence[SplitPageJob]:
-#     """Build a collections of jobs to do."""
-#     if path_in.is_dir():
-#         files = [f for f in path_in.glob(".txt", case_sensitive=False) if f.is_file()]
-#     elif path_in.is_file():
-#         files = [path_in]
-#     else:
-#         raise typer.BadParameter(
-#             "Input path is not a valid file, or directory containing valid files."
-#         )
-#     jobs: list[SplitPageJob] = []
-#     for file in files:
-#         if len(files) > 1:
-#             dest_dir = path_out / Path(file.stem) / Path("pages")
-#         else:
-#             dest_dir = path_out
-#         jobs.append(SplitPageJob(path_in=file, path_out=dest_dir, overwrite=overwrite))
-#     return jobs
-
-
-def extract_pages_rich(jobs: Sequence[SplitPageJob]):
+def rich_worker(jobs: Sequence[SplitPageJob]):
     """Process the jobs to split pages."""
     file_count = len(jobs)
     typer.echo("\nSplitting bid packages into pages.....")
@@ -181,16 +153,24 @@ def extract_pages_rich(jobs: Sequence[SplitPageJob]):
         )
         total_pages = 0
         for idx, job in enumerate(jobs, start=1):
-            pages = parse_page_lines_from_file(path_in=job.path_in)
+            pages = parse_page_lines_from_file(path_in=job.source_txt_path)
             page_count = write_page_lines(
-                file_stem=job.path_in.stem,
+                file_stem=job.source_txt_path.stem,
                 pages=pages,
-                path_out=job.path_out,
+                path_out=job.split_page_path,
                 overwrite=job.overwrite,
             )
             total_pages += page_count
             progress.update(
                 task,
-                advance=job.path_in.stat().st_size,
+                advance=job.source_txt_path.stat().st_size,
                 description=f"{idx} of {file_count}, {total_pages} pages found.",
             )
+
+
+def total_size_of_files(jobs: Sequence[SplitPageJob]) -> int:
+    """Get total file size of jobs."""
+    total = 0
+    for job in jobs:
+        total += job.source_txt_path.stat().st_size
+    return total
