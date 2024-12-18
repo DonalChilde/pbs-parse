@@ -49,7 +49,7 @@ def test_structure_trips_dir(runner: CliRunner, test_output_dir: Path):  # noqa:
             [
                 "debug",
                 "structure",
-                "all",
+                "all-trips",
                 str(input_path),
                 str(path_out),
                 "2024-11-01",

@@ -15,7 +15,7 @@ from pbs_parse.cli import (
     split_to_pages,
     split_to_trips,
     store_cli,
-    structure_trips_cli,
+    structure_trips,
 )
 
 logger = logging.getLogger(__name__)
@@ -48,14 +48,14 @@ app_debug.add_typer(
     extract_txt_cli.app, name="extract", help="Extract text from pdf files."
 )
 app_debug.add_typer(
-    split_to_pages.app, name="split-pages", help="Split pages from a bid package."
+    split_to_pages.app, name="split-to-pages", help="Split pages from a bid package."
 )
 app_debug.add_typer(
-    split_to_trips.app, name="split-trips", help="Split trips from split pages."
+    split_to_trips.app, name="split-to-trips", help="Split trips from split pages."
 )
 app_debug.add_typer(parse_trips.app, name="parse", help="Parse split trips.")
 app_debug.add_typer(
-    structure_trips_cli.app, name="structure", help="Structure parsed trips."
+    structure_trips.app, name="structure", help="Structure parsed trips."
 )
 app_debug.add_typer(expand_trips.app, name="expand", help="Expand structured trips.")
 app.add_typer(
