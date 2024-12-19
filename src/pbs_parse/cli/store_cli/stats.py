@@ -13,9 +13,11 @@ app = typer.Typer()
 @app.command()
 def stats(
     ctx: typer.Context,
-    store_path: Annotated[
+    store_directory: Annotated[
         Path,
-        typer.Argument(help="Path to the data store.", exists=True, dir_okay=False),
+        typer.Argument(
+            help="Directory of the data store.", exists=True, file_okay=False
+        ),
     ],
 ):
     """Get stats from the store."""

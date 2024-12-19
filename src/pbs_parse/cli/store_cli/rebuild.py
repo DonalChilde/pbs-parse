@@ -13,9 +13,11 @@ app = typer.Typer()
 @app.command()
 def rebuild(
     ctx: typer.Context,
-    store_path: Annotated[
+    store_directory: Annotated[
         Path,
-        typer.Argument(help="Path to the data store.", exists=True, dir_okay=False),
+        typer.Argument(
+            help="Directory of the data store.", exists=True, file_okay=False
+        ),
     ],
     force_clean: Annotated[
         bool, typer.Option(help="Remove exisiting before performing action.")

@@ -15,28 +15,22 @@ class FileTypes(StrEnum):
     PDF_PACKAGE = "pdf_package"
     TXT_PACKAGE = "txt_package"
     BID_MANIFEST = "bid_manifest"
+    ALL = "all"
 
 
 class FileInfo(TypedDict):
     """Info for an item in the store."""
 
-    uuid: str
+    key: str
     type: str
-    file_name: str
+    file_path: str
 
 
 class Base(TypedDict):
     """Base info."""
 
     base_name: str
-    source_file: str
-    source_dir: str
-    split_page_dir: str
-    split_trip_dir: str
-    parsed_trip_dir: str
-    structured_trip_dir: str
-    expanded_trip_dir: str
-    files: list[FileInfo]
+    files: dict[str, FileInfo]
 
 
 class BidPeriodManifest(TypedDict):
@@ -45,4 +39,4 @@ class BidPeriodManifest(TypedDict):
     name: str
     effective_from: str
     effective_to: str
-    bases: list[Base]
+    bases: dict[str, Base]

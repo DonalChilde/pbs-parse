@@ -1,10 +1,13 @@
 """FILE: create.py."""
 
 import logging
+from datetime import datetime
 from pathlib import Path
 from typing import Annotated
 
 import typer
+
+from pbs_parse.pbs_2022_01.pbs_manifest.store_manager import StoreManager
 
 logger = logging.getLogger(__name__)
 app = typer.Typer()
@@ -13,15 +16,26 @@ app = typer.Typer()
 @app.command()
 def create(
     ctx: typer.Context,
-    store_path: Annotated[
+    store_directory: Annotated[
         Path,
-        typer.Argument(help="Path to the data store.", exists=True, dir_okay=False),
+        typer.Argument(
+            help="Directory of the data store.", exists=True, file_okay=False
+        ),
     ],
-    overwrite: Annotated[
-        bool, typer.Option(help="Overwrite existing output file.")
-    ] = False,
-    force_clean: Annotated[
-        bool, typer.Option(help="Remove exisiting before performing action.")
-    ] = False,
+    name: Annotated[
+        str, typer.Argument(help="The name for the bid period, eg Nov2024.")
+    ],
+    effective_from: Annotated[
+        datetime, typer.Argument(help="Effective From date for bid package.")
+    ],
+    effective_to: Annotated[
+        datetime, typer.Argument(help="Effective To date for bid package")
+    ],
 ):
     """Create a PBS data store in the STORE_PATH directory."""
+    StoreManager.init_manifest(
+        manifest_directory=store_directory,
+        name=name,
+        effective_from=effective_from.date(),
+        effective_to=effective_to.date(),
+    )
