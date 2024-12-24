@@ -16,13 +16,8 @@ from rich.progress import (
 )
 
 from pbs_parse.pbs_2022_01.expand.structured_to_expanded_cls import StructuredToExpanded
-from pbs_parse.pbs_2022_01.models.expanded import (
-    EXPANDED_TRIP_SERIALIZER,
-    default_file_name,
-)
-from pbs_parse.pbs_2022_01.models.structured import (
-    STRUCTURED_TRIP_SERIALIZER,
-)
+from pbs_parse.pbs_2022_01.models.expanded import EXPANDED_TRIP_SERIALIZER
+from pbs_parse.pbs_2022_01.models.structured import STRUCTURED_TRIP_SERIALIZER
 from pbs_parse.pbs_2022_01.validate.expanded.validator import ExpandedValidator
 
 app = typer.Typer()
@@ -73,9 +68,9 @@ def expand_worker(jobs: Sequence[ExpandTripJob]):
             translator = StructuredToExpanded(structured_trip=s_trip)
             expanded_trips = translator.translate()
             for trip in expanded_trips:
-                path_out = job.dir_path_out / default_file_name(trip=trip)
+                path_out = job.dir_path_out / trip.default_file_name()
                 EXPANDED_TRIP_SERIALIZER.save_as_json(
-                    path_out=path_out, complex_obj=trip
+                    path_out=path_out, complex_obj=trip, overwrite=job.overwrite
                 )
                 validator = ExpandedValidator(
                     expanded_trip=trip,
@@ -131,7 +126,7 @@ def build_jobs_from_directory(
     Returns:
         Sequence[ExpandTripJob]: _description_
     """
-    glob = "*.structured.json*"
+    glob = "structured-trip_*.json*"
     files = []
     if path_in.is_file():
         raise typer.BadParameter("PATH_IN is a file and should be a directory.")

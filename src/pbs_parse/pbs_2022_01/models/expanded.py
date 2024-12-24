@@ -362,6 +362,17 @@ class ExpandedTrip:
             name=f"{self.source}{self.start_utc.isoformat()}{self.trip_number}",
         )
 
+    def default_file_name(self) -> str:
+        """Assemble a file name from trip data."""
+        ret_value: list[str] = []
+        ret_value.append(self.start_lcl.date().isoformat())
+        ret_value.append(f"_{self.base_equipment.base.iata}")
+        if self.base_equipment.satellite_base:
+            ret_value.append(f"_{self.base_equipment.satellite_base.iata}")
+        ret_value.append(f"_{self.base_equipment.equipment}")
+        ret_value.append(f"_{self.trip_number}.json")
+        return "".join(ret_value)
+
     @staticmethod
     def from_simple(simple_obj: TD.ExpandedTrip) -> "ExpandedTrip":
         """Turn simple object into Trip."""

@@ -167,28 +167,31 @@ def split_to_trips(base: str, store: StoreManager, task_id: TaskID):
     page_infos = store.get_files(base=base, file_type=manifest.FileTypes.SPLIT_PAGE)
 
 
-def parse_trips(base: str, store: StoreManager):
+def parse_trips(base: str, store: StoreManager, task_id: TaskID):
     """parse_trips.
 
     Args:
         base (str): _description_
         store (StoreManager): _description_
+        task_id (TaskID): _description_
     """
 
 
-def structure_trips(base: str, store: StoreManager):
+def structure_trips(base: str, store: StoreManager, task_id: TaskID):
     """structure_trips.
 
     Args:
         base (str): _description_
         store (StoreManager): _description_
+        task_id (TaskID): _description_
     """
 
 
-def expand_trips(base: str, store: StoreManager):
+def expand_trips(base: str, store: StoreManager, task_id: TaskID):
     """expand_trips.
 
     Args:
         base (str): _description_
         store (StoreManager): _description_
+        task_id (TaskID): _description_
     """

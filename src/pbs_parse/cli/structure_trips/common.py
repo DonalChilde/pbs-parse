@@ -16,9 +16,10 @@ from rich.progress import (
     TotalFileSizeColumn,
 )
 
-from pbs_parse.pbs_2022_01.models.structured import structured_trip_serializer
+from pbs_parse.pbs_2022_01.models.structured import STRUCTURED_TRIP_SERIALIZER
 from pbs_parse.pbs_2022_01.structure.parsed_to_structured import translate_file
 from pbs_parse.pbs_2022_01.validate.validate_structured import validate_files
+from pbs_parse.snippets.file.check_file import check_file
 
 app = typer.Typer()
 
@@ -61,7 +62,7 @@ def build_jobs_from_directory(
     Returns:
         Sequence[StructureTripJob]: _description_
     """
-    glob = "*.parsed.json*"
+    glob = "parsed-trip_*.json*"
     files = []
     if path_in.is_file():
         raise typer.BadParameter("PATH_IN is a file and should be a directory.")
@@ -76,11 +77,10 @@ def build_jobs_from_directory(
             )
     jobs: list[StructureTripJob] = []
     for input_file in files:
-        dest_path = path_out / f"{default_file_name(path_in=input_file)}"
         jobs.append(
             StructureTripJob(
                 parsed_trip_path=input_file,
-                structured_trip_path=dest_path,
+                structured_trip_path=path_out,
                 overwrite=overwrite,
                 effective_from=effective_from,
                 effective_to=effective_to,
@@ -119,7 +119,6 @@ def structure_worker(jobs: Sequence[StructureTripJob]):
         total_trips = 0
         total_errors = 0
         trips_with_errors = 0
-        serializer = structured_trip_serializer()
 
         for idx, job in enumerate(jobs, start=1):
             structured_trip = translate_file(
@@ -127,20 +126,20 @@ def structure_worker(jobs: Sequence[StructureTripJob]):
                 effective_from=job.effective_from,
                 effective_to=job.effective_to,
             )
-            serializer.save_as_json(
-                path_out=job.structured_trip_path,
-                complex_obj=structured_trip,
-                overwrite=job.overwrite,
+            path_out = job.structured_trip_path / structured_trip.default_file_name()
+            STRUCTURED_TRIP_SERIALIZER.save_as_json(
+                path_out=path_out, complex_obj=structured_trip, overwrite=job.overwrite
             )
             validation = validate_files(
-                parsed_trip_path=job.parsed_trip_path,
-                structured_trip_path=job.structured_trip_path,
+                parsed_trip_path=job.parsed_trip_path, structured_trip_path=path_out
             )
             if validation.errors:
                 error_out = (
                     job.structured_trip_path.parent
+                    / "errors"
                     / f"{job.structured_trip_path.stem}.errors.txt"
                 )
+                check_file(error_out)
                 error_out.write_text(str(validation))
                 trips_with_errors += 1
                 total_errors += len(validation.errors)

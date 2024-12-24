@@ -127,11 +127,10 @@ class StoreManager:
         """Save a PageLines in the store."""
         idx = 0
         for idx, page in enumerate(pages, start=1):
-            file_name = f"page_{idx}_{page.uuid}.json"
             page_info = M.FileInfo(
                 key=page.uuid,
                 type=M.FileTypes.SPLIT_PAGE,
-                file_path=f"{base}/pages/{file_name}",
+                file_path=f"{base}/pages/{page.default_file_name(idx=idx)}",
             )
             path_out = self.manifest_directory / page_info["file_path"]
             PAGE_LINES_SERIALIZER.save_as_json(
@@ -144,17 +143,16 @@ class StoreManager:
         self,
         base: str,
         trips: Iterable[TripLines],
-        page: int = 0,
+        page_idx: int = 0,
         overwrite: bool = False,
     ):
         """Save TripLines in the store."""
         idx = 0
         for idx, trip in enumerate(trips, start=1):
-            file_name = f"page_{page}_trip_{idx}_{trip.uuid}.json"
             trip_info = M.FileInfo(
                 key=trip.uuid,
                 type=M.FileTypes.SPLIT_TRIP,
-                file_path=f"{base}/trips/{file_name}",
+                file_path=f"{base}/trips/{trip.default_file_name(page_idx,idx)}",
             )
             path_out = self.manifest_directory / trip_info["file_path"]
             TRIP_LINES_SERIALIZER.save_as_json(

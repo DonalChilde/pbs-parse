@@ -1,6 +1,5 @@
 """pages lines."""
 
-# ruff: noqa: D101 D102 D103
 from dataclasses import dataclass, field
 from typing import TypedDict
 from uuid import NAMESPACE_DNS, UUID, uuid5
@@ -13,6 +12,8 @@ PAGE_LINES_NS = uuid5(NAMESPACE_DNS, "pbs_split.pbs_2022_01.page_lines")
 
 
 class PageLinesTD(TypedDict):
+    """PageLinesTD."""
+
     uuid: str
     idx: int
     lines: list[IndexedStringTD]
@@ -20,6 +21,8 @@ class PageLinesTD(TypedDict):
 
 @dataclass(slots=True)
 class PageLines:
+    """PageLines."""
+
     idx: int
     uuid: str = ""
     lines: list[IndexedString] = field(default_factory=list)
@@ -41,6 +44,14 @@ class PageLines:
 
     @staticmethod
     def from_simple(simple_obj: PageLinesTD) -> "PageLines":
+        """from_simple.
+
+        Args:
+            simple_obj (PageLinesTD): _description_
+
+        Returns:
+            PageLines: _description_
+        """
         result = PageLines(
             uuid=simple_obj["uuid"],
             idx=simple_obj["idx"],
@@ -48,8 +59,21 @@ class PageLines:
         )
         return result
 
+    def default_file_name(self) -> str:
+        """default_file_name.
+
+        Returns:
+            str: _description_
+        """
+        return f"page-lines_{self.idx}_{self.uuid}.json"
+
 
 def page_lines_serializer() -> DataclassSerializer[PageLines, PageLinesTD]:
+    """page_lines_serializer.
+
+    Returns:
+        DataclassSerializer[PageLines, PageLinesTD]: _description_
+    """
     return DataclassSerializer[PageLines, PageLinesTD](
         complex_factory=PageLines.from_simple
     )

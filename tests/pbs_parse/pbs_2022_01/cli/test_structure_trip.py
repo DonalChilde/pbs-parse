@@ -11,7 +11,7 @@ from tests.resources.parsed_trips import PARSED_TRIPS_ANCHOR
 
 SINGLE_FILE_TEST = FileResource(
     anchor=PARSED_TRIPS_ANCHOR,
-    pathname=f"2024-11-01_2024-12-01/PBS_LAX_November_2024_20241010125833_partial.page_1_of_4.trip_1_of_4.parsed.json",
+    pathname=f"2024-11-01_2024-12-01/parsed-trip_page_1_trip_1_dc7bc881-4c37-537b-a7bf-fe7ee7971ad4.json",
 )
 DIRECTORY_TEST = FileResource(
     anchor=PARSED_TRIPS_ANCHOR, pathname=f"2024-11-01_2024-12-01"

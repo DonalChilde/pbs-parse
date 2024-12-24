@@ -85,9 +85,7 @@ def write_page_lines(
     count = 0
     serializer = page_lines_serializer()
     for idx, page in enumerate(pages_list, start=1):
-        result_path = path_out / Path(
-            f"{file_stem}.page_{idx}_of_{len(pages_list)}.json"
-        )
+        result_path = path_out / page.default_file_name()
         serializer.save_as_json(
             path_out=result_path, complex_obj=page, overwrite=overwrite
         )

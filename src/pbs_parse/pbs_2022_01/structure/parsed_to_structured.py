@@ -61,11 +61,8 @@ def translate(
     parsed_trip: ParsedTrip, effective_from: date, effective_to: date
 ) -> structured.StructuredTrip:
     """Translate a ParsedTrip."""
-    trip_lines = _organize_lines(parsed_trip=parsed_trip)
-    calendar = _collect_calendar(parsed_trip=parsed_trip)
     trip = _translate_trip(
-        trip_lines=trip_lines,
-        calendar=calendar,
+        parsed_trip=parsed_trip,
         effective_from=effective_from,
         effective_to=effective_to,
         source_uuid=parsed_trip.uuid,
@@ -162,17 +159,17 @@ def _translate_hotels(
 
 
 def _translate_trip(
-    trip_lines: TripLines,
-    calendar: list[str],
+    parsed_trip: ParsedTrip,
     effective_from: date,
     effective_to: date,
     source_uuid: str,
 ) -> structured.StructuredTrip:
+    trip_lines = _organize_lines(parsed_trip=parsed_trip)
+    calendar = _collect_calendar(parsed_trip=parsed_trip)
     dutyperiods: list[structured.DutyPeriod] = [
         _translate_dutyperiod(x, idx)
         for idx, x in enumerate(trip_lines.duty_periods, start=1)
     ]
-    assert isinstance(effective_from, date)
     external = structured.ExternalData(
         effective_from=effective_from.isoformat(),
         effective_to=effective_to.isoformat(),
@@ -192,6 +189,8 @@ def _translate_trip(
     )
     trip = structured.StructuredTrip(
         source=source_uuid,
+        page_idx=parsed_trip.page_idx,
+        trip_idx=parsed_trip.trip_idx,
         number=trip_lines.trip_header.data["trip_number"],
         ops_count=trip_lines.trip_header.data["ops_count"],
         positions=trip_lines.trip_header.data["positions"],

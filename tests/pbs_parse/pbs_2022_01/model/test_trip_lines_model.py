@@ -10,7 +10,7 @@ from tests.resources.trip_lines import TRIP_LINES_ANCHOR
 
 SINGLE_FILE_TEST = FileResource(
     anchor=TRIP_LINES_ANCHOR,
-    pathname=f"2024-11-01_2024-12-01/PBS_LAX_November_2024_20241010125833_partial.page_1_of_4.trip_1_of_4.json",
+    pathname=f"2024-11-01_2024-12-01/trip-lines_page_1_trip_4_7846702d-1b0f-5d67-a2bf-725c7f4a93fa.json",
 )
 
 

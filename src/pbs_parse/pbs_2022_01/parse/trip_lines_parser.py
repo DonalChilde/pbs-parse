@@ -36,6 +36,8 @@ class TripLinesParser:
 
         trip = ParsedTrip(
             source=trip_lines.uuid,
+            page_idx=trip_lines.page_idx,
+            trip_idx=trip_lines.idx,
             parsed_lines=[x.parsed_indexed_string for x in handler.results],
         )
         return trip

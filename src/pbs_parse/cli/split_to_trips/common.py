@@ -57,7 +57,7 @@ def build_jobs_from_dir(
     path_in: Path, path_out: Path, overwrite: bool
 ) -> Sequence[SplitTripJob]:
     """Collect text files, and use to build `SplitTripJob`s."""
-    glob = "*.page_*.json"
+    glob = "page-lines_*.json"
     if not path_in.is_dir():
         raise typer.BadParameter("PATH_IN should be a directory.")
     typer.echo("\nCollecting split pages.......")

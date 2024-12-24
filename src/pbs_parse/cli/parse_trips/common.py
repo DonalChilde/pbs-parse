@@ -20,7 +20,6 @@ from rich.progress import (
 from pbs_parse.pbs_2022_01.models.parsed_trip import (
     PARSED_TRIP_SERIALIZER,
     ParsedTrip,
-    default_file_name,
 )
 from pbs_parse.pbs_2022_01.parse.trip_lines_parser import TripLinesParser
 
@@ -55,7 +54,7 @@ def build_jobs_from_directory(
     Returns:
         Sequence[ParseTripJob]: _description_
     """
-    glob = "*.trip_*"
+    glob = "trip-lines_*.json"
     files = []
     if path_in.is_file():
         raise typer.BadParameter("PATH_IN is a file and should be a directory.")
@@ -70,11 +69,10 @@ def build_jobs_from_directory(
             )
     jobs: Sequence[ParseTripJob] = []
     for input_file in files:
-        dest_path = path_out / default_file_name(path_name=input_file.name)
         jobs.append(
             ParseTripJob(
                 split_trip_path=input_file,
-                parsed_trip_path=dest_path,
+                parsed_trip_path=path_out,
                 overwrite=overwrite,
             )
         )
@@ -111,15 +109,12 @@ def parse_worker(jobs: Sequence[ParseTripJob]):
         for idx, job in enumerate(jobs, start=1):
             ctx = ParseContext()
             parsed_trip = parser.parse_file(ctx=ctx, path_in=job.split_trip_path)
+            output_path = job.parsed_trip_path / parsed_trip.default_file_name()
             if check_for_prior_month(parsed_trip=parsed_trip):
                 output_path = (
-                    job.parsed_trip_path.parent
-                    / job.parsed_trip_path.stem
-                    / ".prior_month.json"
+                    output_path.parent / output_path.stem / ".prior_month.json"
                 )
                 prior_trips += 1
-            else:
-                output_path = job.parsed_trip_path
             PARSED_TRIP_SERIALIZER.save_as_json(
                 path_out=output_path, complex_obj=parsed_trip, overwrite=job.overwrite
             )

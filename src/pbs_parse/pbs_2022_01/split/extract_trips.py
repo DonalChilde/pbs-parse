@@ -64,6 +64,7 @@ def parse_trip_lines(page: PageLines) -> Iterator[TripLines]:
         trip = TripLines(
             source=page.uuid,
             idx=idx,
+            page_idx=page.idx,
             lines=[page.lines[0], page.lines[1], *trip_lines, page.lines[-1]],
         )
         yield trip
@@ -87,9 +88,7 @@ def write_trip_lines(
     trips_list = list(trips)
     count = 0
     for idx, trip in enumerate(trips_list, start=1):
-        result_path = path_out / Path(
-            f"{file_stem}.trip_{idx}_of_{len(trips_list)}.json"
-        )
+        result_path = path_out / trip.default_file_name()
         TRIP_LINES_SERIALIZER.save_as_json(
             path_out=result_path, complex_obj=trip, overwrite=overwrite
         )

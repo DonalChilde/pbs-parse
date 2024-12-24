@@ -1,0 +1,131 @@
+{
+ "source": "00a53621-a6d3-5a72-8e73-5d90e995ea89",
+ "trip_number": "8034",
+ "base_equipment": {
+  "base": {
+   "iata": "LAX",
+   "icao": "KLAX",
+   "tz_name": "America/Los_Angeles"
+  },
+  "satellite_base": {
+   "iata": "ONT",
+   "icao": "KONT",
+   "tz_name": "America/Los_Angeles"
+  },
+  "equipment": "320"
+ },
+ "positions": [
+  {
+   "name": "CA"
+  },
+  {
+   "name": "FO"
+  }
+ ],
+ "operations": [],
+ "special_qual": false,
+ "start_station": {
+  "iata": "ONT",
+  "icao": "KONT",
+  "tz_name": "America/Los_Angeles"
+ },
+ "start_utc": "2024-11-22T13:05:00+00:00",
+ "start_lcl": "2024-11-22T05:05:00-08:00",
+ "start_hbt": "2024-11-22T05:05:00-08:00",
+ "end_station": {
+  "iata": "ONT",
+  "icao": "KONT",
+  "tz_name": "America/Los_Angeles"
+ },
+ "end_utc": "2024-11-22T22:29:00+00:00",
+ "end_lcl": "2024-11-22T14:29:00-08:00",
+ "end_hbt": "2024-11-22T14:29:00-08:00",
+ "flight_time": "PT6H24M",
+ "operating_time": "PT6H24M",
+ "soft_time": "PT0S",
+ "tafb": "PT9H24M",
+ "dutyperiods": [
+  {
+   "report_station": {
+    "iata": "ONT",
+    "icao": "KONT",
+    "tz_name": "America/Los_Angeles"
+   },
+   "report_utc": "2024-11-22T13:05:00+00:00",
+   "report_lcl": "2024-11-22T05:05:00-08:00",
+   "report_hbt": "2024-11-22T05:05:00-08:00",
+   "release_station": {
+    "iata": "ONT",
+    "icao": "KONT",
+    "tz_name": "America/Los_Angeles"
+   },
+   "release_utc": "2024-11-22T22:29:00+00:00",
+   "release_lcl": "2024-11-22T14:29:00-08:00",
+   "release_hbt": "2024-11-22T14:29:00-08:00",
+   "flights": [
+    {
+     "eq_code": "64",
+     "number": "1412",
+     "departure_station": {
+      "iata": "ONT",
+      "icao": "KONT",
+      "tz_name": "America/Los_Angeles"
+     },
+     "departure_utc": "2024-11-22T14:05:00+00:00",
+     "departure_lcl": "2024-11-22T06:05:00-08:00",
+     "departure_hbt": "2024-11-22T06:05:00-08:00",
+     "arrival_station": {
+      "iata": "DFW",
+      "icao": "KDFW",
+      "tz_name": "America/Chicago"
+     },
+     "arrival_utc": "2024-11-22T17:06:00+00:00",
+     "arrival_lcl": "2024-11-22T11:06:00-06:00",
+     "arrival_hbt": "2024-11-22T09:06:00-08:00",
+     "deadhead": false,
+     "deadhead_code": "",
+     "crewmeal": "",
+     "eq_change": true,
+     "flight_time": "PT3H1M",
+     "operating_time": "PT3H1M",
+     "soft_time": "PT0S",
+     "ground_time": "PT1H30M"
+    },
+    {
+     "eq_code": "64",
+     "number": "2635",
+     "departure_station": {
+      "iata": "DFW",
+      "icao": "KDFW",
+      "tz_name": "America/Chicago"
+     },
+     "departure_utc": "2024-11-22T18:36:00+00:00",
+     "departure_lcl": "2024-11-22T12:36:00-06:00",
+     "departure_hbt": "2024-11-22T10:36:00-08:00",
+     "arrival_station": {
+      "iata": "ONT",
+      "icao": "KONT",
+      "tz_name": "America/Los_Angeles"
+     },
+     "arrival_utc": "2024-11-22T21:59:00+00:00",
+     "arrival_lcl": "2024-11-22T13:59:00-08:00",
+     "arrival_hbt": "2024-11-22T13:59:00-08:00",
+     "deadhead": false,
+     "deadhead_code": "",
+     "crewmeal": "",
+     "eq_change": false,
+     "flight_time": "PT3H23M",
+     "operating_time": "PT3H23M",
+     "soft_time": "PT0S",
+     "ground_time": "PT0S"
+    }
+   ],
+   "duty": "PT9H24M",
+   "flight_duty": "PT8H54M",
+   "operating_time": "PT6H24M",
+   "flight_time": "PT6H24M",
+   "soft_time": "PT0S",
+   "layover": null
+  }
+ ]
+}

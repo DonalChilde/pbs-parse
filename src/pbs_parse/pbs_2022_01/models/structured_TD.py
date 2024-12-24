@@ -90,6 +90,8 @@ class ExternalData(TypedDict):
 class StructuredTripTD(TypedDict):
     uuid: str
     source: str
+    page_idx: int
+    trip_idx: int
     number: str
     ops_count: str
     block: str

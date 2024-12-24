@@ -1,6 +1,5 @@
 """Structured model of a parsed trip, no translations from strings to more complex data."""
 
-# ruff: noqa: D101 D102 D103
 from dataclasses import dataclass, field
 from datetime import date, timedelta
 from typing import Optional
@@ -18,24 +17,38 @@ DURATION_REGEX = pattern_HHHMM(".")
 
 @dataclass(slots=True)
 class DualTime:
+    """DualTime."""
+
     lcl: str
     hbt: str
 
 
 @dataclass(slots=True)
 class Transportation:
+    """Transportatin."""
+
     name: str
     phone: str
 
 
 @dataclass(slots=True)
 class Hotel:
+    """Hotel."""
+
     name: str
     phone: str
     transportation: list[Transportation] = field(default_factory=list)
 
     @staticmethod
     def from_simple(simple_obj: TD.Hotel) -> "Hotel":
+        """from_simple.
+
+        Args:
+            simple_obj (TD.Hotel): _description_
+
+        Returns:
+            Hotel: _description_
+        """
         result = Hotel(
             name=simple_obj["name"],
             phone=simple_obj["phone"],
@@ -47,12 +60,19 @@ class Hotel:
 
 @dataclass(slots=True)
 class Layover:
+    """Layover."""
+
     rest: str
     city: str
     hotels: list[Hotel] = field(default_factory=list)
 
     @staticmethod
     def from_simple(simple_obj: TD.Layover | None) -> Optional["Layover"]:
+        """from_simple.
+
+        Returns:
+            TD.Layover | None: _description_
+        """
         if simple_obj is None:
             return None
         result = Layover(
@@ -65,6 +85,8 @@ class Layover:
 
 @dataclass(slots=True)
 class Flight:
+    """Flight."""
+
     dutyperiod_idx: str
     idx: str
     depart_day: str
@@ -85,6 +107,14 @@ class Flight:
 
     @staticmethod
     def from_simple(simple_obj: TD.Flight) -> "Flight":
+        """from_simple.
+
+        Args:
+            simple_obj (TD.Flight): _description_
+
+        Returns:
+            Flight: _description_
+        """
         result = Flight(
             dutyperiod_idx=simple_obj["dutyperiod_idx"],
             idx=simple_obj["idx"],
@@ -110,6 +140,8 @@ class Flight:
 
 @dataclass(slots=True)
 class DutyPeriod:
+    """DutyPeriod."""
+
     idx: str
     report_time: DualTime
     release_time: DualTime
@@ -123,6 +155,14 @@ class DutyPeriod:
 
     @staticmethod
     def from_simple(simple_obj: TD.DutyPeriod) -> "DutyPeriod":
+        """from_simple.
+
+        Args:
+            simple_obj (TD.DutyPeriod): _description_
+
+        Returns:
+            DutyPeriod: _description_
+        """
         result = DutyPeriod(
             idx=simple_obj["idx"],
             report_time=DualTime(**simple_obj["report_time"]),
@@ -140,17 +180,29 @@ class DutyPeriod:
 
 @dataclass(slots=True)
 class MonthDay:
+    """MonthDay."""
+
     month: str
     day: str
 
 
 @dataclass(slots=True)
 class PageHeader:
+    """PageHeader."""
+
     from_date: MonthDay
     to_date: MonthDay
 
     @staticmethod
     def from_simple(simple_obj: TD.PageHeader) -> "PageHeader":
+        """from_simple.
+
+        Args:
+            simple_obj (TD.PageHeader): _description_
+
+        Returns:
+            PageHeader: _description_
+        """
         result = PageHeader(
             from_date=MonthDay(**simple_obj["from_date"]),
             to_date=MonthDay(**simple_obj["to_date"]),
@@ -160,6 +212,8 @@ class PageHeader:
 
 @dataclass(slots=True)
 class PageFooter:
+    """PageFooter."""
+
     issued: str
     effective: str
     base: str
@@ -171,13 +225,19 @@ class PageFooter:
 
 @dataclass(slots=True)
 class ExternalData:
+    """ExternalData."""
+
     effective_from: str
     effective_to: str
 
 
 @dataclass(slots=True)
 class StructuredTrip:
+    """StructuredTrip."""
+
     source: str
+    page_idx: int
+    trip_idx: int
     number: str
     ops_count: str
     special_qual: bool
@@ -209,11 +269,29 @@ class StructuredTrip:
         """Make a uuid from a namespace and the source uuid string."""
         return uuid5(namespace=STRUCTURED_TRIP_NS, name=self.source)
 
+    def default_file_name(self) -> str:
+        """default_file_name.
+
+        Returns:
+            str: _description_
+        """
+        return f"structured-trip_page_{self.page_idx}_trip_{self.trip_idx}_{self.uuid}.json"
+
     @staticmethod
     def from_simple(simple_obj: TD.StructuredTripTD) -> "StructuredTrip":
+        """from_simple.
+
+        Args:
+            simple_obj (TD.StructuredTripTD): _description_
+
+        Returns:
+            StructuredTrip: _description_
+        """
         result = StructuredTrip(
             uuid=simple_obj["uuid"],
             source=simple_obj["source"],
+            page_idx=simple_obj["page_idx"],
+            trip_idx=simple_obj["trip_idx"],
             number=simple_obj["number"],
             ops_count=simple_obj["ops_count"],
             block=simple_obj["block"],
@@ -235,17 +313,17 @@ class StructuredTrip:
 def structured_trip_serializer() -> (
     DataclassSerializer[StructuredTrip, TD.StructuredTripTD]
 ):
+    """structured_trip_serializer.
+
+    Returns:
+        _type_: _description_
+    """
     return DataclassSerializer[StructuredTrip, TD.StructuredTripTD](
         complex_factory=StructuredTrip.from_simple
     )
 
 
 STRUCTURED_TRIP_SERIALIZER = structured_trip_serializer()
-
-
-def default_file_name(path_name: str) -> str:
-    new_name = path_name.removesuffix(".parsed.json")
-    return f"{new_name}.structured.json"
 
 
 def build_start_dates(
@@ -273,6 +351,17 @@ def build_start_dates(
 
 
 def parse_duration(duration_string: str) -> timedelta:
+    """parse_duration.
+
+    Args:
+        duration_string (str): _description_
+
+    Raises:
+        ValueError: _description_
+
+    Returns:
+        timedelta: _description_
+    """
     match = DURATION_REGEX.fullmatch(duration_string)
     if match is None:
         raise ValueError(

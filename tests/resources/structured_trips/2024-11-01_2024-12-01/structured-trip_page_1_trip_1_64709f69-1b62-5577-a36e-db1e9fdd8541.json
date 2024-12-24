@@ -1,0 +1,229 @@
+{
+ "source": "dc7bc881-4c37-537b-a7bf-fe7ee7971ad4",
+ "page_idx": 1,
+ "trip_idx": 1,
+ "number": "26475",
+ "ops_count": "1",
+ "special_qual": false,
+ "block": "13.09",
+ "synth": "0.00",
+ "total_pay": "13.09",
+ "tafb": "36.00",
+ "external": {
+  "effective_from": "2024-11-01",
+  "effective_to": "2024-12-01"
+ },
+ "page_header": {
+  "from_date": {
+   "month": "11",
+   "day": "01"
+  },
+  "to_date": {
+   "month": "12",
+   "day": "01"
+  }
+ },
+ "page_footer": {
+  "issued": "09OCT2024",
+  "effective": "01NOV2024",
+  "base": "LAX",
+  "satellite_base": "",
+  "equipment": "737",
+  "division": "DOM",
+  "page": "210"
+ },
+ "uuid": "64709f69-1b62-5577-a36e-db1e9fdd8541",
+ "positions": [
+  "CA",
+  "FO"
+ ],
+ "operations": [],
+ "dutyperiods": [
+  {
+   "idx": "1",
+   "report_time": {
+    "lcl": "0640",
+    "hbt": "0640"
+   },
+   "release_time": {
+    "lcl": "2015",
+    "hbt": "1715"
+   },
+   "block": "6.15",
+   "synth": "0.00",
+   "total_pay": "6.15",
+   "duty": "10.35",
+   "flight_duty": "10.20",
+   "layover": {
+    "rest": "15.53",
+    "city": "PHL",
+    "hotels": [
+     {
+      "name": "MARRIOTT OLD CITY",
+      "phone": "12152386000",
+      "transportation": [
+       {
+        "name": "SKYHOP GLOBAL",
+        "phone": "9544000412"
+       }
+      ]
+     }
+    ]
+   },
+   "flights": [
+    {
+     "dutyperiod_idx": "1",
+     "idx": "1",
+     "depart_day": "1",
+     "arrive_day": "1",
+     "equipment_code": "65",
+     "flight_number": "475",
+     "deadhead": false,
+     "deadhead_code": "",
+     "departure_station": "LAX",
+     "departure_time": {
+      "lcl": "0740",
+      "hbt": "0740"
+     },
+     "crew_meal": "",
+     "arrival_station": "ORD",
+     "arrival_time": {
+      "lcl": "1354",
+      "hbt": "1154"
+     },
+     "block": "4.14",
+     "synth": "0.00",
+     "ground": "3.05",
+     "equipment_change": true
+    },
+    {
+     "dutyperiod_idx": "1",
+     "idx": "2",
+     "depart_day": "1",
+     "arrive_day": "1",
+     "equipment_code": "45",
+     "flight_number": "588",
+     "deadhead": false,
+     "deadhead_code": "",
+     "departure_station": "ORD",
+     "departure_time": {
+      "lcl": "1659",
+      "hbt": "1459"
+     },
+     "crew_meal": "",
+     "arrival_station": "PHL",
+     "arrival_time": {
+      "lcl": "2000",
+      "hbt": "1700"
+     },
+     "block": "2.01",
+     "synth": "0.00",
+     "ground": "0.00",
+     "equipment_change": false
+    }
+   ]
+  },
+  {
+   "idx": "2",
+   "report_time": {
+    "lcl": "1108",
+    "hbt": "0808"
+   },
+   "release_time": {
+    "lcl": "1740",
+    "hbt": "1740"
+   },
+   "block": "6.54",
+   "synth": "0.00",
+   "total_pay": "6.54",
+   "duty": "9.32",
+   "flight_duty": "9.17",
+   "layover": null,
+   "flights": [
+    {
+     "dutyperiod_idx": "2",
+     "idx": "1",
+     "depart_day": "2",
+     "arrive_day": "2",
+     "equipment_code": "45",
+     "flight_number": "629",
+     "deadhead": false,
+     "deadhead_code": "",
+     "departure_station": "PHL",
+     "departure_time": {
+      "lcl": "1208",
+      "hbt": "0908"
+     },
+     "crew_meal": "",
+     "arrival_station": "ORD",
+     "arrival_time": {
+      "lcl": "1332",
+      "hbt": "1132"
+     },
+     "block": "2.24",
+     "synth": "0.00",
+     "ground": "1.23",
+     "equipment_change": true
+    },
+    {
+     "dutyperiod_idx": "2",
+     "idx": "2",
+     "depart_day": "2",
+     "arrive_day": "2",
+     "equipment_code": "65",
+     "flight_number": "1551",
+     "deadhead": false,
+     "deadhead_code": "",
+     "departure_station": "ORD",
+     "departure_time": {
+      "lcl": "1455",
+      "hbt": "1255"
+     },
+     "crew_meal": "",
+     "arrival_station": "LAX",
+     "arrival_time": {
+      "lcl": "1725",
+      "hbt": "1725"
+     },
+     "block": "4.30",
+     "synth": "0.00",
+     "ground": "0.00",
+     "equipment_change": false
+    }
+   ]
+  }
+ ],
+ "calendar": [
+  "\u2212\u2212",
+  "2",
+  "\u2212\u2212",
+  "\u2212\u2212",
+  "\u2212\u2212",
+  "\u2212\u2212",
+  "\u2212\u2212",
+  "\u2212\u2212",
+  "\u2212\u2212",
+  "\u2212\u2212",
+  "\u2212\u2212",
+  "\u2212\u2212",
+  "\u2212\u2212",
+  "\u2212\u2212",
+  "\u2212\u2212",
+  "\u2212\u2212",
+  "\u2212\u2212",
+  "\u2212\u2212",
+  "\u2212\u2212",
+  "\u2212\u2212",
+  "\u2212\u2212",
+  "\u2212\u2212",
+  "\u2212\u2212",
+  "\u2212\u2212",
+  "\u2212\u2212",
+  "\u2212\u2212",
+  "\u2212\u2212",
+  "\u2212\u2212",
+  "\u2212\u2212",
+  "\u2212\u2212",
+  "\u2212\u2212"
+ ]
+}

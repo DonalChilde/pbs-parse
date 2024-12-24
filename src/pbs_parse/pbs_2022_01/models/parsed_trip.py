@@ -1,7 +1,6 @@
 """Models for Parsed trips."""
 
 from dataclasses import dataclass, field
-from pathlib import Path
 from typing import TypedDict
 from uuid import NAMESPACE_DNS, UUID, uuid5
 
@@ -16,6 +15,8 @@ class ParsedTripTD(TypedDict):
 
     uuid: str
     source: str
+    page_idx: int
+    trip_idx: int
     parsed_lines: list[model.ParsedIndexedStringTD]
 
 
@@ -24,6 +25,8 @@ class ParsedTrip:
     """ParsedTrip contains the parsed lines of a pbs trip."""
 
     source: str
+    page_idx: int
+    trip_idx: int
     uuid: str = ""
     parsed_lines: list[model.ParsedIndexedString] = field(default_factory=list)
 
@@ -48,12 +51,26 @@ class ParsedTrip:
         result = ParsedTrip(
             uuid=simple_obj["uuid"],
             source=simple_obj["source"],
+            page_idx=simple_obj["page_idx"],
+            trip_idx=simple_obj["trip_idx"],
             parsed_lines=[
                 model.ParsedIndexedString.from_simple(x)
                 for x in simple_obj["parsed_lines"]
             ],
         )
         return result
+
+    def default_file_name(self) -> str:
+        """default_file_name.
+
+        Args:
+            page_idx (int): _description_
+            trip_idx (int): _description_
+
+        Returns:
+            str: _description_
+        """
+        return f"parsed-trip_page_{self.page_idx}_trip_{self.trip_idx}_{self.uuid}.json"
 
     def __str__(self) -> str:
         """Make a str rep of ParsedTrip."""
@@ -77,8 +94,3 @@ def parsed_trip_serializer() -> DataclassSerializer[ParsedTrip, ParsedTripTD]:
 
 
 PARSED_TRIP_SERIALIZER = parsed_trip_serializer()
-
-
-def default_file_name(path_name: str) -> str:
-    """Make the default file name for ParsedTrip."""
-    return f"{Path(path_name).stem}.parsed.json"

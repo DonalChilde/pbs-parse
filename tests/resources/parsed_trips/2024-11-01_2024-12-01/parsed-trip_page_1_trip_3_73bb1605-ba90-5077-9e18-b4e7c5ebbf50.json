@@ -1,0 +1,305 @@
+{
+ "source": "22bf2478-b861-5811-a8fc-dbaa3499e89d",
+ "page_idx": 1,
+ "trip_idx": 3,
+ "uuid": "73bb1605-ba90-5077-9e18-b4e7c5ebbf50",
+ "parsed_lines": [
+  {
+   "id": "page_header_1",
+   "indexed_string": {
+    "idx": 1,
+    "txt": "\f   DAY          \u2212\u2212DEPARTURE\u2212\u2212    \u2212\u2212\u2212ARRIVAL\u2212\u2212\u2212                GRND/        REST/\n"
+   },
+   "data": {}
+  },
+  {
+   "id": "page_header_2",
+   "indexed_string": {
+    "idx": 2,
+    "txt": "DP D/A EQ FLT#  STA DLCL/DHBT ML STA ALCL/AHBT  BLOCK  SYNTH   TPAY   DUTY  TAFB   FDP CALENDAR 11/01\u221212/01\n"
+   },
+   "data": {
+    "from_date": {
+     "month": "11",
+     "day": "01"
+    },
+    "to_date": {
+     "month": "12",
+     "day": "01"
+    }
+   }
+  },
+  {
+   "id": "trip_header",
+   "indexed_string": {
+    "idx": 36,
+    "txt": "SEQ 26480   1 OPS   POSN CA FO                                                         MO TU WE TH FR SA SU\n"
+   },
+   "data": {
+    "trip_number": "26480",
+    "ops_count": "1",
+    "positions": [
+     "CA",
+     "FO"
+    ],
+    "operations": [],
+    "special_qual": false,
+    "prior_month_trip": false
+   }
+  },
+  {
+   "id": "duty_period_report",
+   "indexed_string": {
+    "idx": 37,
+    "txt": "                RPT 1035/1035                                                                      \u2212\u2212  2 \u2212\u2212\n"
+   },
+   "data": {
+    "report": {
+     "lcl": "1035",
+     "hbt": "1035"
+    },
+    "calendar_entries": [
+     "\u2212\u2212",
+     "2",
+     "\u2212\u2212"
+    ]
+   }
+  },
+  {
+   "id": "flight",
+   "indexed_string": {
+    "idx": 38,
+    "txt": "1  1/1 65 1594  LAX 1135/1135  L ORD 1749/1549   4.14          1.40X                   \u2212\u2212 \u2212\u2212 \u2212\u2212 \u2212\u2212 \u2212\u2212 \u2212\u2212 \u2212\u2212\n"
+   },
+   "data": {
+    "dutyperiod_idx": "1",
+    "depart_day": "1",
+    "arrive_day": "1",
+    "equipment_code": "65",
+    "flight_number": "1594",
+    "deadhead": false,
+    "deadhead_code": "",
+    "departure_station": "LAX",
+    "departure_time": {
+     "lcl": "1135",
+     "hbt": "1135"
+    },
+    "crew_meal": "",
+    "arrival_station": "ORD",
+    "arrival_time": {
+     "lcl": "1749",
+     "hbt": "1549"
+    },
+    "block": "4.14",
+    "synth": "0.00",
+    "ground": "1.40",
+    "equipment_change": true,
+    "calendar_entries": [
+     "\u2212\u2212",
+     "\u2212\u2212",
+     "\u2212\u2212",
+     "\u2212\u2212",
+     "\u2212\u2212",
+     "\u2212\u2212",
+     "\u2212\u2212"
+    ]
+   }
+  },
+  {
+   "id": "flight",
+   "indexed_string": {
+    "idx": 39,
+    "txt": "1  1/1 65 1715  ORD 1929/1729  D AUS 2222/2022   2.53                                  \u2212\u2212 \u2212\u2212 \u2212\u2212 \u2212\u2212 \u2212\u2212 \u2212\u2212 \u2212\u2212\n"
+   },
+   "data": {
+    "dutyperiod_idx": "1",
+    "depart_day": "1",
+    "arrive_day": "1",
+    "equipment_code": "65",
+    "flight_number": "1715",
+    "deadhead": false,
+    "deadhead_code": "",
+    "departure_station": "ORD",
+    "departure_time": {
+     "lcl": "1929",
+     "hbt": "1729"
+    },
+    "crew_meal": "",
+    "arrival_station": "AUS",
+    "arrival_time": {
+     "lcl": "2222",
+     "hbt": "2022"
+    },
+    "block": "2.53",
+    "synth": "0.00",
+    "ground": "0.00",
+    "equipment_change": false,
+    "calendar_entries": [
+     "\u2212\u2212",
+     "\u2212\u2212",
+     "\u2212\u2212",
+     "\u2212\u2212",
+     "\u2212\u2212",
+     "\u2212\u2212",
+     "\u2212\u2212"
+    ]
+   }
+  },
+  {
+   "id": "duty_period_release",
+   "indexed_string": {
+    "idx": 40,
+    "txt": "                                 RLS 2237/2037   7.07   0.00   7.07  10.02        9.47 \u2212\u2212 \u2212\u2212 \u2212\u2212 \u2212\u2212 \u2212\u2212 \u2212\u2212 \u2212\u2212\n"
+   },
+   "data": {
+    "release": {
+     "lcl": "2237",
+     "hbt": "2037"
+    },
+    "block": "7.07",
+    "synth": "0.00",
+    "total_pay": "7.07",
+    "duty": "10.02",
+    "flight_duty": "9.47",
+    "calendar_entries": [
+     "\u2212\u2212",
+     "\u2212\u2212",
+     "\u2212\u2212",
+     "\u2212\u2212",
+     "\u2212\u2212",
+     "\u2212\u2212",
+     "\u2212\u2212"
+    ]
+   }
+  },
+  {
+   "id": "layover",
+   "indexed_string": {
+    "idx": 41,
+    "txt": "                AUS AUSTIN MARRIOTT DOWNTOWN                5124571111     21.09       \u2212\u2212 \u2212\u2212 \u2212\u2212 \u2212\u2212 \u2212\u2212 \u2212\u2212 \u2212\u2212\n"
+   },
+   "data": {
+    "layover_city": "AUS",
+    "hotel_name": "AUSTIN MARRIOTT DOWNTOWN",
+    "hotel_phone": "5124571111",
+    "rest": "21.09",
+    "calendar_entries": [
+     "\u2212\u2212",
+     "\u2212\u2212",
+     "\u2212\u2212",
+     "\u2212\u2212",
+     "\u2212\u2212",
+     "\u2212\u2212",
+     "\u2212\u2212"
+    ]
+   }
+  },
+  {
+   "id": "transportation",
+   "indexed_string": {
+    "idx": 42,
+    "txt": "                    J & G\u2019S CITYWIDE EXPRESS                5127868131\n"
+   },
+   "data": {
+    "name": "J & G\u2019S CITYWIDE EXPRESS",
+    "phone": "5127868131",
+    "calendar_entries": []
+   }
+  },
+  {
+   "id": "duty_period_report",
+   "indexed_string": {
+    "idx": 43,
+    "txt": "                RPT 1846/1646\n"
+   },
+   "data": {
+    "report": {
+     "lcl": "1846",
+     "hbt": "1646"
+    },
+    "calendar_entries": []
+   }
+  },
+  {
+   "id": "flight",
+   "indexed_string": {
+    "idx": 44,
+    "txt": "2  2/2 65  799  AUS 1946/1746    LAX 2107/2107   3.21\n"
+   },
+   "data": {
+    "dutyperiod_idx": "2",
+    "depart_day": "2",
+    "arrive_day": "2",
+    "equipment_code": "65",
+    "flight_number": "799",
+    "deadhead": false,
+    "deadhead_code": "",
+    "departure_station": "AUS",
+    "departure_time": {
+     "lcl": "1946",
+     "hbt": "1746"
+    },
+    "crew_meal": "",
+    "arrival_station": "LAX",
+    "arrival_time": {
+     "lcl": "2107",
+     "hbt": "2107"
+    },
+    "block": "3.21",
+    "synth": "0.00",
+    "ground": "0.00",
+    "equipment_change": false,
+    "calendar_entries": []
+   }
+  },
+  {
+   "id": "duty_period_release",
+   "indexed_string": {
+    "idx": 45,
+    "txt": "                                 RLS 2122/2122   3.21   0.00   3.21   4.36        4.21\n"
+   },
+   "data": {
+    "release": {
+     "lcl": "2122",
+     "hbt": "2122"
+    },
+    "block": "3.21",
+    "synth": "0.00",
+    "total_pay": "3.21",
+    "duty": "4.36",
+    "flight_duty": "4.21",
+    "calendar_entries": []
+   }
+  },
+  {
+   "id": "trip_footer",
+   "indexed_string": {
+    "idx": 46,
+    "txt": "TTL                                             10.28   0.02  10.30        35.47\n"
+   },
+   "data": {
+    "block": "10.28",
+    "synth": "0.02",
+    "total_pay": "10.30",
+    "tafb": "35.47",
+    "calendar_entries": []
+   }
+  },
+  {
+   "id": "page_footer",
+   "indexed_string": {
+    "idx": 72,
+    "txt": "COCKPIT  ISSUED 09OCT2024  EFF 01NOV2024               LAX 737  DOM                              PAGE   210\n"
+   },
+   "data": {
+    "issued": "09OCT2024",
+    "effective": "01NOV2024",
+    "base": "LAX",
+    "satellite_base": "",
+    "equipment": "737",
+    "division": "DOM",
+    "page": "210"
+   }
+  }
+ ]
+}
