@@ -2,17 +2,17 @@
 
 import json
 import shutil
-from collections.abc import Sequence
+from collections.abc import Iterable, Sequence
 from datetime import date
 from pathlib import Path
 from types import TracebackType
 
 from pbs_parse.pbs_2022_01.models import manifest as M
 from pbs_parse.pbs_2022_01.models.expanded import ExpandedTrip
-from pbs_parse.pbs_2022_01.models.page_lines import PageLines
+from pbs_parse.pbs_2022_01.models.page_lines import PAGE_LINES_SERIALIZER, PageLines
 from pbs_parse.pbs_2022_01.models.parsed_trip import ParsedTrip
 from pbs_parse.pbs_2022_01.models.structured import StructuredTrip
-from pbs_parse.pbs_2022_01.models.trip_lines import TripLines
+from pbs_parse.pbs_2022_01.models.trip_lines import TRIP_LINES_SERIALIZER, TripLines
 from pbs_parse.snippets.file.check_file import check_file
 
 
@@ -93,12 +93,12 @@ class StoreManager:
         pdf_info = M.FileInfo(
             key=M.FileTypes.PDF_PACKAGE,
             type=M.FileTypes.PDF_PACKAGE,
-            file_path=f"source/{source_pdf.name}",
+            file_path=f"{name}/source/{source_pdf.name}",
         )
         txt_info = M.FileInfo(
             key=M.FileTypes.TXT_PACKAGE,
             type=M.FileTypes.TXT_PACKAGE,
-            file_path=f"source/{source_txt.name}",
+            file_path=f"{name}/source/{source_txt.name}",
         )
         if not source_pdf.is_file():
             raise ValueError(f"Path to pdf file is not valid. {source_pdf=}")
@@ -117,27 +117,63 @@ class StoreManager:
         base["files"][txt_info["key"]] = txt_info
         self.manifest["bases"][base["base_name"]] = base
 
+    def record_file(self, base: str, info: M.FileInfo):
+        """Record file info in manifest."""
+        self.manifest["bases"][base]["files"][info["key"]] = info
+
     def save_page_lines(
-        self, base: str, page: Sequence[PageLines], overwrite: bool = False
-    ):
+        self, base: str, pages: Iterable[PageLines], overwrite: bool = False
+    ) -> int:
         """Save a PageLines in the store."""
+        idx = 0
+        for idx, page in enumerate(pages, start=1):
+            file_name = f"page_{idx}_{page.uuid}.json"
+            page_info = M.FileInfo(
+                key=page.uuid,
+                type=M.FileTypes.SPLIT_PAGE,
+                file_path=f"{base}/pages/{file_name}",
+            )
+            path_out = self.manifest_directory / page_info["file_path"]
+            PAGE_LINES_SERIALIZER.save_as_json(
+                path_out=path_out, complex_obj=page, overwrite=overwrite
+            )
+            self.record_file(base=base, info=page_info)
+        return idx
 
     def save_trip_lines(
-        self, base: str, trip: Sequence[TripLines], overwrite: bool = False
+        self,
+        base: str,
+        trips: Iterable[TripLines],
+        page: int = 0,
+        overwrite: bool = False,
     ):
-        """Save a TripLines in the store."""
+        """Save TripLines in the store."""
+        idx = 0
+        for idx, trip in enumerate(trips, start=1):
+            file_name = f"page_{page}_trip_{idx}_{trip.uuid}.json"
+            trip_info = M.FileInfo(
+                key=trip.uuid,
+                type=M.FileTypes.SPLIT_TRIP,
+                file_path=f"{base}/trips/{file_name}",
+            )
+            path_out = self.manifest_directory / trip_info["file_path"]
+            TRIP_LINES_SERIALIZER.save_as_json(
+                path_out=path_out, complex_obj=trip, overwrite=overwrite
+            )
+            self.record_file(base=base, info=trip_info)
+        return idx
 
     def save_parsed_trip(
-        self, base: str, parsed: Sequence[ParsedTrip], overwrite: bool = False
+        self, base: str, parsed: Iterable[ParsedTrip], overwrite: bool = False
     ):
         """Save a ParsedTrip in the store."""
 
     def save_structured_trip(
-        self, base: str, structured: Sequence[StructuredTrip], overwrite: bool = False
+        self, base: str, structured: Iterable[StructuredTrip], overwrite: bool = False
     ):
         """Save a StructuredTrip in the store."""
 
     def save_expanded_trip(
-        self, base: str, expanded: Sequence[ExpandedTrip], overwrite: bool = False
+        self, base: str, expanded: Iterable[ExpandedTrip], overwrite: bool = False
     ):
         """Save an ExpandedTrip in the store."""
