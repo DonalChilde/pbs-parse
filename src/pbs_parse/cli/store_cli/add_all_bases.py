@@ -44,17 +44,18 @@ def add_all_bases(
 ):
     """Add all the PDF and TXT files in a directory to the store.
 
-    Collects all the pdf files in a directory, then collects all the TXT files with
-    matching stem names. Eg. the name is the same but for the .pdf or .txt ending.
+    Collects all the pdf files in a directory, parses out the base name, then collects
+    all the TXT files with matching stem names, ie. where the name is the same but for
+    the .pdf or .txt ending.
 
-    Base name is parsed from the pdf file name. Will raise an error if the name cannot
-    be determined. Parser looks for a name in the format `PBS_PHX_....`.
+    Base name is parsed from the pdf file name in the format `PBS_PHX_*`. Files without
+    a base name will be skipped.
     """
     typer.echo("Searching for pdf files...")
     glob = "*.pdf"
     file_pairs: list[FilePair] = []
     pdf_files = list(path_in.glob(glob, case_sensitive=False))
-    typer.echo(f"Found {len(pdf_files)} in directory.")
+    typer.echo(f"Found {len(pdf_files)} pdf files in directory.")
     for pdf_file in pdf_files:
         base = ""
         match = BASE_PATTERN.match(pdf_file.name)
@@ -71,8 +72,8 @@ def add_all_bases(
             typer.echo(
                 f"Did not find a matching .txt file for {pdf_file.name}. Skipping."
             )
+    typer.echo(f"Found {len(file_pairs)} bases with matching text files.")
     for pair in file_pairs:
-        typer.echo(f"Found {len(file_pairs)} bases.")
         with StoreManager(manifest_directory=store_directory) as store:
             typer.echo(f"Adding {pair['name']} to store.")
             store.create_base_bid(**pair)

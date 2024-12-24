@@ -37,5 +37,5 @@ def add_base(
 ):
     """Add a pairing package PDF file to the store."""
     with StoreManager(manifest_directory=store_directory) as store:
-        typer.echo(f"Adding {base} to store.")
         store.create_base_bid(source_pdf=pdf_path, source_txt=txt_path, name=base)
+        typer.echo(f"Added {base} to store.")

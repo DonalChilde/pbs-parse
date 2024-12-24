@@ -18,24 +18,31 @@ def create(
     ctx: typer.Context,
     store_directory: Annotated[
         Path,
-        typer.Argument(
-            help="Directory of the data store.", exists=True, file_okay=False
-        ),
+        typer.Argument(help="Directory of the data store."),
     ],
     name: Annotated[
         str, typer.Argument(help="The name for the bid period, eg Nov2024.")
     ],
     effective_from: Annotated[
-        datetime, typer.Argument(help="Effective From date for bid package.")
+        datetime,
+        typer.Argument(
+            help="Effective From date for bid package.", formats=["%Y-%m-%d"]
+        ),
     ],
     effective_to: Annotated[
-        datetime, typer.Argument(help="Effective To date for bid package")
+        datetime,
+        typer.Argument(help="Effective To date for bid package", formats=["%Y-%m-%d"]),
     ],
 ):
     """Create a PBS data store in the STORE_PATH directory."""
+    if store_directory.is_file():
+        raise typer.BadParameter(
+            f"Store directory is an existing file. {store_directory=}"
+        )
     StoreManager.init_manifest(
         manifest_directory=store_directory,
         name=name,
         effective_from=effective_from.date(),
         effective_to=effective_to.date(),
     )
+    typer.echo(f"Created a new pbs data store at {store_directory}")
