@@ -45,19 +45,19 @@ class TripLines:
     duty_periods: list[DutyPeriodLines] = field(default_factory=list)
 
 
-def translate_file(
+def structure_trip_from_file(
     path_in: Path, effective_from: date, effective_to: date
 ) -> structured.StructuredTrip:
     """Load a ParsedTrip from file and translate it."""
     parsed_trip = PARSED_TRIP_SERIALIZER.load_from_json(path_in=path_in)
-    return translate(
+    return structure_trip(
         parsed_trip=parsed_trip,
         effective_from=effective_from,
         effective_to=effective_to,
     )
 
 
-def translate(
+def structure_trip(
     parsed_trip: ParsedTrip, effective_from: date, effective_to: date
 ) -> structured.StructuredTrip:
     """Translate a ParsedTrip."""

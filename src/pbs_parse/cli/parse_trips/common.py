@@ -122,7 +122,7 @@ def parse_worker(jobs: Sequence[ParseTripJob]):
             progress.update(
                 task,
                 advance=job.split_trip_path.stat().st_size,
-                description=f"{idx} of {file_count}, {total_trips} trips found, with {prior_trips} prior month trips.",
+                description=f"{idx} of {file_count}, {total_trips} trips parsed, with {prior_trips} prior month trips.",
             )
 
 

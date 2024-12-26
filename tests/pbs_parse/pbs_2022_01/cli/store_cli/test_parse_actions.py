@@ -2,7 +2,7 @@
 
 import pytest
 
-from pbs_parse.cli.store_cli.common import ParseActions
+from pbs_parse.cli.store_cli.parse.common import ParseActions
 
 
 def test_action_list():

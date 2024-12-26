@@ -6,6 +6,7 @@ from collections.abc import Iterable, Sequence
 from datetime import date
 from pathlib import Path
 from types import TracebackType
+from typing import Any
 
 from pbs_parse.pbs_2022_01.models import manifest as M
 from pbs_parse.pbs_2022_01.models.expanded import ExpandedTrip
@@ -71,10 +72,12 @@ class StoreManager:
         self.manifest_path.unlink()
         self.manifest_path.write_text(json.dumps(self.manifest, indent=1))
 
-    def clean(self, file_type: Sequence[M.FileTypes]):
+    def clean(self, base: str, file_types: Sequence[M.FileTypes]):
         """Remove files of these types from store."""
 
-    def get_files(self, base: str, file_type: M.FileTypes) -> Sequence[M.FileInfo]:
+    def get_files_by_type(
+        self, base: str, file_type: M.FileTypes
+    ) -> Sequence[M.FileInfo]:
         """Get all the files of a certain type."""
         files: list[M.FileInfo] = []
         base_data = self.manifest["bases"].get(base, None)
@@ -84,6 +87,21 @@ class StoreManager:
             if file["type"] == file_type:
                 files.append(file)
         return files
+
+    def get_file_by_id(self, base: str, file_id: str) -> M.FileInfo | None:
+        """get_file_by_id.
+
+        Args:
+            base (str): _description_
+            file_id (str): _description_
+
+        Returns:
+            M.FileInfo|None: _description_
+        """
+        # check for base
+        # check for file
+        # return file or None
+        return None
 
     def create_base_bid(self, source_pdf: Path, source_txt: Path, name: str):
         """Create a base bid, and copy the pdf and txt files into store."""
@@ -127,10 +145,11 @@ class StoreManager:
         """Save a PageLines in the store."""
         idx = 0
         for idx, page in enumerate(pages, start=1):
+            _ = idx
             page_info = M.FileInfo(
                 key=page.uuid,
                 type=M.FileTypes.SPLIT_PAGE,
-                file_path=f"{base}/pages/{page.default_file_name(idx=idx)}",
+                file_path=f"{base}/pages/{page.default_file_name()}",
             )
             path_out = self.manifest_directory / page_info["file_path"]
             PAGE_LINES_SERIALIZER.save_as_json(
@@ -143,16 +162,16 @@ class StoreManager:
         self,
         base: str,
         trips: Iterable[TripLines],
-        page_idx: int = 0,
         overwrite: bool = False,
     ):
         """Save TripLines in the store."""
         idx = 0
         for idx, trip in enumerate(trips, start=1):
+            _ = idx
             trip_info = M.FileInfo(
                 key=trip.uuid,
                 type=M.FileTypes.SPLIT_TRIP,
-                file_path=f"{base}/trips/{trip.default_file_name(page_idx,idx)}",
+                file_path=f"{base}/trips/{trip.default_file_name()}",
             )
             path_out = self.manifest_directory / trip_info["file_path"]
             TRIP_LINES_SERIALIZER.save_as_json(
@@ -162,16 +181,31 @@ class StoreManager:
         return idx
 
     def save_parsed_trip(
-        self, base: str, parsed: Iterable[ParsedTrip], overwrite: bool = False
-    ):
+        self, base: str, parsed: ParsedTrip, overwrite: bool = False
+    ) -> int:
+        """Save a ParsedTrip in the store."""
+
+    def save_parsed_prior_month_trip(
+        self, base: str, parsed: ParsedTrip, overwrite: bool = False
+    ) -> int:
         """Save a ParsedTrip in the store."""
 
     def save_structured_trip(
-        self, base: str, structured: Iterable[StructuredTrip], overwrite: bool = False
-    ):
+        self, base: str, structured: StructuredTrip, overwrite: bool = False
+    ) -> int:
         """Save a StructuredTrip in the store."""
 
-    def save_expanded_trip(
+    def save_structured_trip_validation_error(
+        self, base: str, structured_error: Iterable[Any], overwrite: bool = False
+    ) -> int:
+        """Fix type of error."""
+
+    def save_expanded_trips(
         self, base: str, expanded: Iterable[ExpandedTrip], overwrite: bool = False
-    ):
+    ) -> int:
         """Save an ExpandedTrip in the store."""
+
+    def save_expanded_trip_validation_error(
+        self, base: str, expanded_error: Iterable[Any], overwrite: bool = False
+    ) -> int:
+        """Fix type of error."""

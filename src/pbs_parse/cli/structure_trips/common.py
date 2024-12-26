@@ -17,8 +17,12 @@ from rich.progress import (
 )
 
 from pbs_parse.pbs_2022_01.models.structured import STRUCTURED_TRIP_SERIALIZER
-from pbs_parse.pbs_2022_01.structure.parsed_to_structured import translate_file
-from pbs_parse.pbs_2022_01.validate.validate_structured import validate_files
+from pbs_parse.pbs_2022_01.structure.parsed_to_structured import (
+    structure_trip_from_file,
+)
+from pbs_parse.pbs_2022_01.validate.validate_structured import (
+    validate_structured_trip_from_file,
+)
 from pbs_parse.snippets.file.check_file import check_file
 
 app = typer.Typer()
@@ -121,7 +125,7 @@ def structure_worker(jobs: Sequence[StructureTripJob]):
         trips_with_errors = 0
 
         for idx, job in enumerate(jobs, start=1):
-            structured_trip = translate_file(
+            structured_trip = structure_trip_from_file(
                 path_in=job.parsed_trip_path,
                 effective_from=job.effective_from,
                 effective_to=job.effective_to,
@@ -130,7 +134,7 @@ def structure_worker(jobs: Sequence[StructureTripJob]):
             STRUCTURED_TRIP_SERIALIZER.save_as_json(
                 path_out=path_out, complex_obj=structured_trip, overwrite=job.overwrite
             )
-            validation = validate_files(
+            validation = validate_structured_trip_from_file(
                 parsed_trip_path=job.parsed_trip_path, structured_trip_path=path_out
             )
             if validation.errors:

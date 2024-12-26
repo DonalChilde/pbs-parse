@@ -10,11 +10,13 @@ class FileTypes(StrEnum):
     SPLIT_PAGE = "split_page"
     SPLIT_TRIP = "split_trip"
     PARSED_TRIP = "parsed_trip"
+    PARSED_PRIOR_MONTH_TRIP = "parsed_prior_month_trip"
     STRUCTURED_TRIP = "structured_trip"
     EXPANDED_TRIP = "expanded_trip"
     PDF_PACKAGE = "pdf_package"
     TXT_PACKAGE = "txt_package"
     BID_MANIFEST = "bid_manifest"
+    ERROR_MSG = "error_msg"
     ALL = "all"
 
 

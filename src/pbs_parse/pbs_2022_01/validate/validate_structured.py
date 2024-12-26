@@ -12,7 +12,7 @@ from pbs_parse.snippets.datetime.date_range import date_range
 logger = logging.getLogger(__name__)
 
 
-def validate(ctx: StructuredValidation) -> StructuredValidation:
+def validate_structured_trip(ctx: StructuredValidation) -> StructuredValidation:
     """validate.
 
     Args:
@@ -28,7 +28,7 @@ def validate(ctx: StructuredValidation) -> StructuredValidation:
     return ctx
 
 
-def validate_files(
+def validate_structured_trip_from_file(
     parsed_trip_path: Path, structured_trip_path: Path
 ) -> StructuredValidation:
     """Validate_files _summary_.
