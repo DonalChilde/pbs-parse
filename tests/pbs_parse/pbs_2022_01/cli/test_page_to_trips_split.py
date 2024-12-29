@@ -11,7 +11,7 @@ from tests.resources.page_lines import PAGE_LINES_ANCHOR
 
 SINGLE_FILE_TEST = FileResource(
     anchor=PAGE_LINES_ANCHOR,
-    pathname=f"2024-11-01_2024-12-01/page-lines_1_15d7d139-d7bc-5253-b541-529a3a4bce4c.json",
+    pathname=f"2024-11-01_2024-12-01/page-lines_00001-00_15d7d139-d7bc-5253-b541-529a3a4bce4c.json",
 )
 DIRECTORY_TEST = FileResource(
     anchor=PAGE_LINES_ANCHOR, pathname=f"2024-11-01_2024-12-01"

@@ -10,7 +10,7 @@ from tests.resources.structured_trips import STRUCTURED_TRIPS_ANCHOR
 
 SINGLE_FILE_TEST = FileResource(
     anchor=STRUCTURED_TRIPS_ANCHOR,
-    pathname=f"2024-11-01_2024-12-01/structured-trip_page_2_trip_1_b04de4a0-8a13-5e08-9764-6488fd7c158f.json",
+    pathname=f"2024-11-01_2024-12-01/structured-trip_00002-01__b04de4a0-8a13-5e08-9764-6488fd7c158f.json",
 )
 
 

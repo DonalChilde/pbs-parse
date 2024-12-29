@@ -11,7 +11,7 @@ from tests.resources.trip_lines import TRIP_LINES_ANCHOR
 
 SINGLE_FILE_TEST = FileResource(
     anchor=TRIP_LINES_ANCHOR,
-    pathname=f"2024-11-01_2024-12-01/trip-lines_page_1_trip_1_2565ba54-18cd-53d1-a4d1-6155478cb42e.json",
+    pathname=f"2024-11-01_2024-12-01/trip-lines_00001-01_2565ba54-18cd-53d1-a4d1-6155478cb42e.json",
 )
 DIRECTORY_TEST = FileResource(
     anchor=TRIP_LINES_ANCHOR, pathname=f"2024-11-01_2024-12-01"

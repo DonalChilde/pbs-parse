@@ -10,7 +10,7 @@ from tests.resources.parsed_trips import PARSED_TRIPS_ANCHOR
 
 SINGLE_FILE_TEST = FileResource(
     anchor=PARSED_TRIPS_ANCHOR,
-    pathname=f"2024-11-01_2024-12-01/parsed-trip_page_1_trip_4_9726d2fb-4892-5e06-b43b-360c3f347874.json",
+    pathname=f"2024-11-01_2024-12-01/parsed-trip_00001-04_9726d2fb-4892-5e06-b43b-360c3f347874.json",
 )
 
 

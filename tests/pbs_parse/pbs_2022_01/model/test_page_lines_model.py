@@ -10,7 +10,7 @@ from tests.resources.page_lines import PAGE_LINES_ANCHOR
 
 SINGLE_FILE_TEST = FileResource(
     anchor=PAGE_LINES_ANCHOR,
-    pathname=f"2024-11-01_2024-12-01/page-lines_4_a9e3382a-1205-50a5-bfe2-da849fe82e61.json",
+    pathname=f"2024-11-01_2024-12-01/page-lines_00004-00_a9e3382a-1205-50a5-bfe2-da849fe82e61.json",
 )
 
 

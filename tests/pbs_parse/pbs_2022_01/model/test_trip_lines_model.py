@@ -10,11 +10,11 @@ from tests.resources.trip_lines import TRIP_LINES_ANCHOR
 
 SINGLE_FILE_TEST = FileResource(
     anchor=TRIP_LINES_ANCHOR,
-    pathname=f"2024-11-01_2024-12-01/trip-lines_page_1_trip_4_7846702d-1b0f-5d67-a2bf-725c7f4a93fa.json",
+    pathname=f"2024-11-01_2024-12-01/trip-lines_00001-04_7846702d-1b0f-5d67-a2bf-725c7f4a93fa.json",
 )
 
 
-def test_page_lines_roundtrip(test_output_dir: Path):
+def test_trip_lines_roundtrip(test_output_dir: Path):
     """Test TripLines model will roundtrip to json.
 
     Args:
