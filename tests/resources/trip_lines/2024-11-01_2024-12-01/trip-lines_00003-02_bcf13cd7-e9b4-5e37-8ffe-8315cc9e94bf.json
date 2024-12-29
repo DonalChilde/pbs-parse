@@ -1,0 +1,87 @@
+{
+ "source_uuid": "6b5e7086-b5e7-5c2b-aa41-cf0e3540f976",
+ "idx": "00003-02",
+ "uuid": "bcf13cd7-e9b4-5e37-8ffe-8315cc9e94bf",
+ "lines": [
+  {
+   "idx": 149,
+   "txt": "\f   DAY          \u2212\u2212DEPARTURE\u2212\u2212    \u2212\u2212\u2212ARRIVAL\u2212\u2212\u2212                GRND/        REST/\n"
+  },
+  {
+   "idx": 150,
+   "txt": "DP D/A EQ FLT#  STA DLCL/DHBT ML STA ALCL/AHBT  BLOCK  SYNTH   TPAY   DUTY  TAFB   FDP CALENDAR 11/01\u221212/01\n"
+  },
+  {
+   "idx": 163,
+   "txt": "SEQ 8587    1 OPS   POSN CA FO                                                         MO TU WE TH FR SA SU\n"
+  },
+  {
+   "idx": 164,
+   "txt": "                RPT 2055/2055                                                                      \u2212\u2212 \u2212\u2212 \u2212\u2212\n"
+  },
+  {
+   "idx": 165,
+   "txt": "1  1/2 63 2511  LAX 2155/2155  M CLT 0532/0232   4.37                                  \u2212\u2212 \u2212\u2212 \u2212\u2212 \u2212\u2212 \u2212\u2212 \u2212\u2212 \u2212\u2212\n"
+  },
+  {
+   "idx": 166,
+   "txt": "                                 RLS 0602/0302   4.37   0.00   4.37   6.07        5.37 \u2212\u2212 \u2212\u2212 \u2212\u2212 \u2212\u2212 \u2212\u2212 \u2212\u2212 \u2212\u2212\n"
+  },
+  {
+   "idx": 167,
+   "txt": "                CLT HYATT PLACE CLT LAKE POINTE             17043578555    11.13       \u2212\u2212 \u2212\u2212 \u2212\u2212 \u2212\u2212 \u2212\u2212 \u2212\u2212 \u2212\u2212\n"
+  },
+  {
+   "idx": 168,
+   "txt": "                    SHUTTLE                                                            \u2212\u2212 26 \u2212\u2212 \u2212\u2212 \u2212\u2212 \u2212\u2212 \u2212\u2212\n"
+  },
+  {
+   "idx": 169,
+   "txt": "                RPT 1715/1415\n"
+  },
+  {
+   "idx": 170,
+   "txt": "2  2/2 73  423  CLT 1815/1515  D PHL 1951/1651   1.36          1.39X\n"
+  },
+  {
+   "idx": 171,
+   "txt": "2  2/2 92 3129  PHL 2130/1830    PVD 2243/1943   1.13\n"
+  },
+  {
+   "idx": 172,
+   "txt": "                                 RLS 2313/2013   2.49   0.10   2.59   5.58        5.28\n"
+  },
+  {
+   "idx": 173,
+   "txt": "                PVD FAIRFIELD INN AND SUITES PVD            4017320900     12.36\n"
+  },
+  {
+   "idx": 174,
+   "txt": "                    SHUTTLE\n"
+  },
+  {
+   "idx": 175,
+   "txt": "                RPT 1149/0849\n"
+  },
+  {
+   "idx": 176,
+   "txt": "3  3/3 00 5363D PVD 1219/0919    DCA 1401/1101    TE    1.42   2.59X\n"
+  },
+  {
+   "idx": 177,
+   "txt": "3  3/3 26 1162  DCA 1700/1400  D LAX 2003/2003   6.03\n"
+  },
+  {
+   "idx": 178,
+   "txt": "                                 RLS 2033/2033   6.03   1.42   7.45  11.44       11.14\n"
+  },
+  {
+   "idx": 179,
+   "txt": "TTL                                             13.29   2.16  15.45        47.38\n"
+  },
+  {
+   "idx": 217,
+   "txt": "COCKPIT  ISSUED 09OCT2024  EFF 01NOV2024               LAX 320  INTL                             PAGE  2035\n"
+  }
+ ]
+}

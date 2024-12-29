@@ -1,0 +1,43 @@
+{
+ "source_uuid": "a9e3382a-1205-50a5-bfe2-da849fe82e61",
+ "idx": "00004-01",
+ "uuid": "30bace28-f7f4-53fc-bfce-5113f636a580",
+ "lines": [
+  {
+   "idx": 218,
+   "txt": "\f   DAY          \u2212\u2212DEPARTURE\u2212\u2212    \u2212\u2212\u2212ARRIVAL\u2212\u2212\u2212                GRND/        REST/\n"
+  },
+  {
+   "idx": 219,
+   "txt": "DP D/A EQ FLT#  STA DLCL/DHBT ML STA ALCL/AHBT  BLOCK  SYNTH   TPAY   DUTY  TAFB   FDP CALENDAR 11/01\u221212/01\n"
+  },
+  {
+   "idx": 223,
+   "txt": "SEQ 8034    6 OPS   POSN CA FO                                                         MO TU WE TH FR SA SU\n"
+  },
+  {
+   "idx": 224,
+   "txt": "                RPT 0505/0505                                                                      \u2212\u2212 \u2212\u2212 \u2212\u2212\n"
+  },
+  {
+   "idx": 225,
+   "txt": "1  1/1 64 1412  ONT 0605/0605  B DFW 1106/0906   3.01          1.30X                   \u2212\u2212 \u2212\u2212 \u2212\u2212 \u2212\u2212 \u2212\u2212 \u2212\u2212 \u2212\u2212\n"
+  },
+  {
+   "idx": 226,
+   "txt": "1  1/1 64 2635  DFW 1236/1036  L ONT 1359/1359   3.23                                  \u2212\u2212 \u2212\u2212 \u2212\u2212 \u2212\u2212 \u2212\u2212 16 17\n"
+  },
+  {
+   "idx": 227,
+   "txt": "                                 RLS 1429/1429   6.24   0.00   6.24   9.24        8.54 18 \u2212\u2212 \u2212\u2212 21 22 23 \u2212\u2212\n"
+  },
+  {
+   "idx": 228,
+   "txt": "TTL                                              6.24   0.00   6.24         9.24       \u2212\u2212 \u2212\u2212 \u2212\u2212 \u2212\u2212 \u2212\u2212 \u2212\u2212 \u2212\u2212\n"
+  },
+  {
+   "idx": 285,
+   "txt": "COCKPIT  ISSUED 09OCT2024  EFF 01NOV2024           LAX ONT 320  INTL                             PAGE  2062\n"
+  }
+ ]
+}

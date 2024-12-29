@@ -1,0 +1,356 @@
+{
+ "source_uuid": "341aae92-9df9-5efb-85bd-0dcd0b724a4e",
+ "source_idx": "00004-03",
+ "trip_number": "8063",
+ "base_equipment": {
+  "base": {
+   "iata": "LAX",
+   "icao": "KLAX",
+   "tz_name": "America/Los_Angeles"
+  },
+  "satellite_base": {
+   "iata": "ONT",
+   "icao": "KONT",
+   "tz_name": "America/Los_Angeles"
+  },
+  "equipment": "320"
+ },
+ "positions": [
+  {
+   "name": "CA"
+  },
+  {
+   "name": "FO"
+  }
+ ],
+ "operations": [],
+ "special_qual": false,
+ "start_station": {
+  "iata": "ONT",
+  "icao": "KONT",
+  "tz_name": "America/Los_Angeles"
+ },
+ "start_utc": "2024-11-09T19:53:00+00:00",
+ "start_lcl": "2024-11-09T11:53:00-08:00",
+ "start_hbt": "2024-11-09T11:53:00-08:00",
+ "end_station": {
+  "iata": "ONT",
+  "icao": "KONT",
+  "tz_name": "America/Los_Angeles"
+ },
+ "end_utc": "2024-11-12T05:06:00+00:00",
+ "end_lcl": "2024-11-11T21:06:00-08:00",
+ "end_hbt": "2024-11-11T21:06:00-08:00",
+ "flight_time": "PT16H12M",
+ "operating_time": "PT16H12M",
+ "soft_time": "PT8M",
+ "tafb": "P2DT9H13M",
+ "dutyperiods": [
+  {
+   "report_station": {
+    "iata": "ONT",
+    "icao": "KONT",
+    "tz_name": "America/Los_Angeles"
+   },
+   "report_utc": "2024-11-09T19:53:00+00:00",
+   "report_lcl": "2024-11-09T11:53:00-08:00",
+   "report_hbt": "2024-11-09T11:53:00-08:00",
+   "release_station": {
+    "iata": "JAX",
+    "icao": "KJAX",
+    "tz_name": "America/New_York"
+   },
+   "release_utc": "2024-11-10T04:08:00+00:00",
+   "release_lcl": "2024-11-09T23:08:00-05:00",
+   "release_hbt": "2024-11-09T20:08:00-08:00",
+   "flights": [
+    {
+     "eq_code": "29",
+     "number": "1792",
+     "departure_station": {
+      "iata": "ONT",
+      "icao": "KONT",
+      "tz_name": "America/Los_Angeles"
+     },
+     "departure_utc": "2024-11-09T20:53:00+00:00",
+     "departure_lcl": "2024-11-09T12:53:00-08:00",
+     "departure_hbt": "2024-11-09T12:53:00-08:00",
+     "arrival_station": {
+      "iata": "PHX",
+      "icao": "KPHX",
+      "tz_name": "America/Phoenix"
+     },
+     "arrival_utc": "2024-11-09T22:12:00+00:00",
+     "arrival_lcl": "2024-11-09T15:12:00-07:00",
+     "arrival_hbt": "2024-11-09T14:12:00-08:00",
+     "deadhead": false,
+     "deadhead_code": "",
+     "crewmeal": "",
+     "eq_change": true,
+     "flight_time": "PT1H19M",
+     "operating_time": "PT1H19M",
+     "soft_time": "PT0S",
+     "ground_time": "PT1H33M"
+    },
+    {
+     "eq_code": "29",
+     "number": "1479",
+     "departure_station": {
+      "iata": "PHX",
+      "icao": "KPHX",
+      "tz_name": "America/Phoenix"
+     },
+     "departure_utc": "2024-11-09T23:45:00+00:00",
+     "departure_lcl": "2024-11-09T16:45:00-07:00",
+     "departure_hbt": "2024-11-09T15:45:00-08:00",
+     "arrival_station": {
+      "iata": "JAX",
+      "icao": "KJAX",
+      "tz_name": "America/New_York"
+     },
+     "arrival_utc": "2024-11-10T03:38:00+00:00",
+     "arrival_lcl": "2024-11-09T22:38:00-05:00",
+     "arrival_hbt": "2024-11-09T19:38:00-08:00",
+     "deadhead": false,
+     "deadhead_code": "",
+     "crewmeal": "",
+     "eq_change": false,
+     "flight_time": "PT3H53M",
+     "operating_time": "PT3H53M",
+     "soft_time": "PT0S",
+     "ground_time": "PT0S"
+    }
+   ],
+   "duty": "PT8H15M",
+   "flight_duty": "PT7H45M",
+   "operating_time": "PT5H12M",
+   "flight_time": "PT5H12M",
+   "soft_time": "PT0S",
+   "layover": {
+    "layover_station": {
+     "iata": "JAX",
+     "icao": "KJAX",
+     "tz_name": "America/New_York"
+    },
+    "start_utc": "2024-11-10T04:08:00+00:00",
+    "start_lcl": "2024-11-09T23:08:00-05:00",
+    "start_hbt": "2024-11-09T20:08:00-08:00",
+    "end_utc": "2024-11-10T21:54:00+00:00",
+    "end_lcl": "2024-11-10T16:54:00-05:00",
+    "end_hbt": "2024-11-10T13:54:00-08:00",
+    "hotels": [
+     {
+      "name": "HYATT REGENCY RIVERFRONT",
+      "phone": "19045881234",
+      "transportation": [
+       {
+        "name": "654LIMO",
+        "phone": "8505742312"
+       }
+      ]
+     }
+    ],
+    "rest": "PT17H46M"
+   }
+  },
+  {
+   "report_station": {
+    "iata": "JAX",
+    "icao": "KJAX",
+    "tz_name": "America/New_York"
+   },
+   "report_utc": "2024-11-10T21:54:00+00:00",
+   "report_lcl": "2024-11-10T16:54:00-05:00",
+   "report_hbt": "2024-11-10T13:54:00-08:00",
+   "release_station": {
+    "iata": "IND",
+    "icao": "KIND",
+    "tz_name": "America/New_York"
+   },
+   "release_utc": "2024-11-11T04:56:00+00:00",
+   "release_lcl": "2024-11-10T23:56:00-05:00",
+   "release_hbt": "2024-11-10T20:56:00-08:00",
+   "flights": [
+    {
+     "eq_code": "67",
+     "number": "1918",
+     "departure_station": {
+      "iata": "JAX",
+      "icao": "KJAX",
+      "tz_name": "America/New_York"
+     },
+     "departure_utc": "2024-11-10T22:54:00+00:00",
+     "departure_lcl": "2024-11-10T17:54:00-05:00",
+     "departure_hbt": "2024-11-10T14:54:00-08:00",
+     "arrival_station": {
+      "iata": "PHL",
+      "icao": "KPHL",
+      "tz_name": "America/New_York"
+     },
+     "arrival_utc": "2024-11-11T00:58:00+00:00",
+     "arrival_lcl": "2024-11-10T19:58:00-05:00",
+     "arrival_hbt": "2024-11-10T16:58:00-08:00",
+     "deadhead": false,
+     "deadhead_code": "",
+     "crewmeal": "",
+     "eq_change": true,
+     "flight_time": "PT2H4M",
+     "operating_time": "PT2H4M",
+     "soft_time": "PT0S",
+     "ground_time": "PT1H22M"
+    },
+    {
+     "eq_code": "92",
+     "number": "2979",
+     "departure_station": {
+      "iata": "PHL",
+      "icao": "KPHL",
+      "tz_name": "America/New_York"
+     },
+     "departure_utc": "2024-11-11T02:20:00+00:00",
+     "departure_lcl": "2024-11-10T21:20:00-05:00",
+     "departure_hbt": "2024-11-10T18:20:00-08:00",
+     "arrival_station": {
+      "iata": "IND",
+      "icao": "KIND",
+      "tz_name": "America/New_York"
+     },
+     "arrival_utc": "2024-11-11T04:26:00+00:00",
+     "arrival_lcl": "2024-11-10T23:26:00-05:00",
+     "arrival_hbt": "2024-11-10T20:26:00-08:00",
+     "deadhead": false,
+     "deadhead_code": "",
+     "crewmeal": "",
+     "eq_change": false,
+     "flight_time": "PT2H6M",
+     "operating_time": "PT2H6M",
+     "soft_time": "PT0S",
+     "ground_time": "PT0S"
+    }
+   ],
+   "duty": "PT7H2M",
+   "flight_duty": "PT6H32M",
+   "operating_time": "PT4H10M",
+   "flight_time": "PT4H10M",
+   "soft_time": "PT0S",
+   "layover": {
+    "layover_station": {
+     "iata": "IND",
+     "icao": "KIND",
+     "tz_name": "America/New_York"
+    },
+    "start_utc": "2024-11-11T04:56:00+00:00",
+    "start_lcl": "2024-11-10T23:56:00-05:00",
+    "start_hbt": "2024-11-10T20:56:00-08:00",
+    "end_utc": "2024-11-11T18:06:00+00:00",
+    "end_lcl": "2024-11-11T13:06:00-05:00",
+    "end_hbt": "2024-11-11T10:06:00-08:00",
+    "hotels": [
+     {
+      "name": "HYATT REGENCY INDIANAPOLIS",
+      "phone": "3176321234",
+      "transportation": [
+       {
+        "name": "CAPITOL CITY COACH",
+        "phone": "3174848484"
+       }
+      ]
+     },
+     {
+      "name": "DELTA HOTELS BY MARRIOTT                3172479700",
+      "phone": "",
+      "transportation": [
+       {
+        "name": "SHUTTLE",
+        "phone": ""
+       }
+      ]
+     }
+    ],
+    "rest": "PT13H10M"
+   }
+  },
+  {
+   "report_station": {
+    "iata": "IND",
+    "icao": "KIND",
+    "tz_name": "America/New_York"
+   },
+   "report_utc": "2024-11-11T18:06:00+00:00",
+   "report_lcl": "2024-11-11T13:06:00-05:00",
+   "report_hbt": "2024-11-11T10:06:00-08:00",
+   "release_station": {
+    "iata": "ONT",
+    "icao": "KONT",
+    "tz_name": "America/Los_Angeles"
+   },
+   "release_utc": "2024-11-12T05:06:00+00:00",
+   "release_lcl": "2024-11-11T21:06:00-08:00",
+   "release_hbt": "2024-11-11T21:06:00-08:00",
+   "flights": [
+    {
+     "eq_code": "63",
+     "number": "2085",
+     "departure_station": {
+      "iata": "IND",
+      "icao": "KIND",
+      "tz_name": "America/New_York"
+     },
+     "departure_utc": "2024-11-11T19:06:00+00:00",
+     "departure_lcl": "2024-11-11T14:06:00-05:00",
+     "departure_hbt": "2024-11-11T11:06:00-08:00",
+     "arrival_station": {
+      "iata": "CLT",
+      "icao": "KCLT",
+      "tz_name": "America/New_York"
+     },
+     "arrival_utc": "2024-11-11T20:45:00+00:00",
+     "arrival_lcl": "2024-11-11T15:45:00-05:00",
+     "arrival_hbt": "2024-11-11T12:45:00-08:00",
+     "deadhead": false,
+     "deadhead_code": "",
+     "crewmeal": "",
+     "eq_change": true,
+     "flight_time": "PT1H39M",
+     "operating_time": "PT1H39M",
+     "soft_time": "PT0S",
+     "ground_time": "PT2H40M"
+    },
+    {
+     "eq_code": "63",
+     "number": "2276",
+     "departure_station": {
+      "iata": "CLT",
+      "icao": "KCLT",
+      "tz_name": "America/New_York"
+     },
+     "departure_utc": "2024-11-11T23:25:00+00:00",
+     "departure_lcl": "2024-11-11T18:25:00-05:00",
+     "departure_hbt": "2024-11-11T15:25:00-08:00",
+     "arrival_station": {
+      "iata": "ONT",
+      "icao": "KONT",
+      "tz_name": "America/Los_Angeles"
+     },
+     "arrival_utc": "2024-11-12T04:36:00+00:00",
+     "arrival_lcl": "2024-11-11T20:36:00-08:00",
+     "arrival_hbt": "2024-11-11T20:36:00-08:00",
+     "deadhead": false,
+     "deadhead_code": "",
+     "crewmeal": "",
+     "eq_change": false,
+     "flight_time": "PT5H11M",
+     "operating_time": "PT5H11M",
+     "soft_time": "PT0S",
+     "ground_time": "PT0S"
+    }
+   ],
+   "duty": "PT11H",
+   "flight_duty": "PT10H30M",
+   "operating_time": "PT6H50M",
+   "flight_time": "PT6H50M",
+   "soft_time": "PT0S",
+   "layover": null
+  }
+ ]
+}

@@ -1,0 +1,203 @@
+{
+ "source_uuid": "73bb1605-ba90-5077-9e18-b4e7c5ebbf50",
+ "idx": "00001-03",
+ "number": "26480",
+ "ops_count": "1",
+ "special_qual": false,
+ "block": "10.28",
+ "synth": "0.02",
+ "total_pay": "10.30",
+ "tafb": "35.47",
+ "external": {
+  "effective_from": "2024-11-01",
+  "effective_to": "2024-12-01"
+ },
+ "page_header": {
+  "from_date": {
+   "month": "11",
+   "day": "01"
+  },
+  "to_date": {
+   "month": "12",
+   "day": "01"
+  }
+ },
+ "page_footer": {
+  "issued": "09OCT2024",
+  "effective": "01NOV2024",
+  "base": "LAX",
+  "satellite_base": "",
+  "equipment": "737",
+  "division": "DOM",
+  "page": "210"
+ },
+ "uuid": "34e66a90-9f21-5e0f-a8a9-058d950036ad",
+ "positions": [
+  "CA",
+  "FO"
+ ],
+ "operations": [],
+ "dutyperiods": [
+  {
+   "idx": "1",
+   "report_time": {
+    "lcl": "1035",
+    "hbt": "1035"
+   },
+   "release_time": {
+    "lcl": "2237",
+    "hbt": "2037"
+   },
+   "block": "7.07",
+   "synth": "0.00",
+   "total_pay": "7.07",
+   "duty": "10.02",
+   "flight_duty": "9.47",
+   "layover": {
+    "rest": "21.09",
+    "city": "AUS",
+    "hotels": [
+     {
+      "name": "AUSTIN MARRIOTT DOWNTOWN",
+      "phone": "5124571111",
+      "transportation": [
+       {
+        "name": "J & G\u2019S CITYWIDE EXPRESS",
+        "phone": "5127868131"
+       }
+      ]
+     }
+    ]
+   },
+   "flights": [
+    {
+     "dutyperiod_idx": "1",
+     "idx": "1",
+     "depart_day": "1",
+     "arrive_day": "1",
+     "equipment_code": "65",
+     "flight_number": "1594",
+     "deadhead": false,
+     "deadhead_code": "",
+     "departure_station": "LAX",
+     "departure_time": {
+      "lcl": "1135",
+      "hbt": "1135"
+     },
+     "crew_meal": "",
+     "arrival_station": "ORD",
+     "arrival_time": {
+      "lcl": "1749",
+      "hbt": "1549"
+     },
+     "block": "4.14",
+     "synth": "0.00",
+     "ground": "1.40",
+     "equipment_change": true
+    },
+    {
+     "dutyperiod_idx": "1",
+     "idx": "2",
+     "depart_day": "1",
+     "arrive_day": "1",
+     "equipment_code": "65",
+     "flight_number": "1715",
+     "deadhead": false,
+     "deadhead_code": "",
+     "departure_station": "ORD",
+     "departure_time": {
+      "lcl": "1929",
+      "hbt": "1729"
+     },
+     "crew_meal": "",
+     "arrival_station": "AUS",
+     "arrival_time": {
+      "lcl": "2222",
+      "hbt": "2022"
+     },
+     "block": "2.53",
+     "synth": "0.00",
+     "ground": "0.00",
+     "equipment_change": false
+    }
+   ]
+  },
+  {
+   "idx": "2",
+   "report_time": {
+    "lcl": "1846",
+    "hbt": "1646"
+   },
+   "release_time": {
+    "lcl": "2122",
+    "hbt": "2122"
+   },
+   "block": "3.21",
+   "synth": "0.00",
+   "total_pay": "3.21",
+   "duty": "4.36",
+   "flight_duty": "4.21",
+   "layover": null,
+   "flights": [
+    {
+     "dutyperiod_idx": "2",
+     "idx": "1",
+     "depart_day": "2",
+     "arrive_day": "2",
+     "equipment_code": "65",
+     "flight_number": "799",
+     "deadhead": false,
+     "deadhead_code": "",
+     "departure_station": "AUS",
+     "departure_time": {
+      "lcl": "1946",
+      "hbt": "1746"
+     },
+     "crew_meal": "",
+     "arrival_station": "LAX",
+     "arrival_time": {
+      "lcl": "2107",
+      "hbt": "2107"
+     },
+     "block": "3.21",
+     "synth": "0.00",
+     "ground": "0.00",
+     "equipment_change": false
+    }
+   ]
+  }
+ ],
+ "calendar": [
+  "\u2212\u2212",
+  "2",
+  "\u2212\u2212",
+  "\u2212\u2212",
+  "\u2212\u2212",
+  "\u2212\u2212",
+  "\u2212\u2212",
+  "\u2212\u2212",
+  "\u2212\u2212",
+  "\u2212\u2212",
+  "\u2212\u2212",
+  "\u2212\u2212",
+  "\u2212\u2212",
+  "\u2212\u2212",
+  "\u2212\u2212",
+  "\u2212\u2212",
+  "\u2212\u2212",
+  "\u2212\u2212",
+  "\u2212\u2212",
+  "\u2212\u2212",
+  "\u2212\u2212",
+  "\u2212\u2212",
+  "\u2212\u2212",
+  "\u2212\u2212",
+  "\u2212\u2212",
+  "\u2212\u2212",
+  "\u2212\u2212",
+  "\u2212\u2212",
+  "\u2212\u2212",
+  "\u2212\u2212",
+  "\u2212\u2212"
+ ]
+}
