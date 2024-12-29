@@ -95,7 +95,6 @@ def split_to_trips_worker(jobs: Sequence[SplitTripJob]):
         for idx, job in enumerate(jobs, start=1):
             trips = parse_trip_lines_from_file(path_in=job.split_page_path)
             trip_count = write_trip_lines(
-                file_stem=job.split_page_path.stem,
                 trips=trips,
                 path_out=job.split_trip_path,
                 overwrite=job.overwrite,
