@@ -1,4 +1,4 @@
-"""FILE: all_pages.py."""
+"""FILE: all_packages.py."""
 
 import logging
 from pathlib import Path
@@ -13,7 +13,7 @@ app = typer.Typer()
 
 
 @app.command()
-def all_pages(
+def all_packages(
     ctx: typer.Context,
     path_in: Annotated[
         Path,
