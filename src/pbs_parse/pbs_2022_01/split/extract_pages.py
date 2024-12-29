@@ -1,12 +1,32 @@
 """This module handles splitting a bid package text file into `PageLines`."""
 
-from collections.abc import Iterable, Iterator
+from collections.abc import Callable, Iterable, Iterator
 from pathlib import Path
 
 from pfmsoft.indexed_string.index_strings import index_lines_in_file
 from pfmsoft.indexed_string.model import IndexedString
 
 from pbs_parse.pbs_2022_01.models.page_lines import PageLines, page_lines_serializer
+
+
+def split_to_pages(
+    path_in: Path, observer: Callable[[PageLines], None] | None = None
+) -> Iterator[PageLines]:
+    """Split a text file to PageLines, with an optional observer.
+
+    Args:
+        path_in (Path): The path to the input text file.
+        observer (Callable[[PageLines], None] | None, optional): The optional observer.
+            Defaults to None.
+
+    Yields:
+        Iterator[PageLines]: _description_
+    """
+    reader = index_lines_in_file(file_path=path_in, index_start=1)
+    for page in parse_page_lines(lines=reader):
+        if observer:
+            observer(page)
+        yield page
 
 
 def lines_of_package_to_lines_of_pages(
@@ -67,13 +87,11 @@ def parse_page_lines(lines: Iterator[IndexedString]) -> Iterator[PageLines]:
 
 
 def write_page_lines(
-    file_stem: str, pages: Iterator[PageLines], path_out: Path, overwrite: bool
+    pages: Iterator[PageLines], path_out: Path, overwrite: bool
 ) -> int:
     """Write the `PageLines` to file with a default file name.
 
     Args:
-        file_stem (str): The first part of the output file name, usually the stem of
-            the bid package input file.
         pages (Iterator[PageLines]): The PageLines to write to disk.
         path_out (Path): The directory to write the PageLines to.
         overwrite (bool): Overwrite existing files if found.

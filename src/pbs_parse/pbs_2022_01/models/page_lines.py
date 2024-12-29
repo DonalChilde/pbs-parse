@@ -1,12 +1,17 @@
 """pages lines."""
 
+from abc import ABC, abstractmethod
+from collections.abc import Iterable
 from dataclasses import dataclass, field
+from pathlib import Path
 from typing import TypedDict
 from uuid import NAMESPACE_DNS, UUID, uuid5
 
 from pfmsoft.indexed_string.index_strings import make_uuid_iter
 from pfmsoft.indexed_string.model import IndexedString, IndexedStringTD
 from pfmsoft.simple_serializer import DataclassSerializer
+
+from pbs_parse.snippets.file.data_file_loader import DataFileLoader
 
 PAGE_LINES_NS = uuid5(NAMESPACE_DNS, "pbs_split.pbs_2022_01.page_lines")
 
@@ -80,3 +85,51 @@ def page_lines_serializer() -> DataclassSerializer[PageLines, PageLinesTD]:
 
 
 PAGE_LINES_SERIALIZER = page_lines_serializer()
+
+
+class PageLinesSaver:
+    """PageLinesSaver."""
+
+    def __init__(self, path_out: Path) -> None:
+        """Save PageLines to a directory using the default file name.
+
+        Args:
+            path_out (Path): The directory to save the PageLines to.
+        """
+        if path_out.is_file():
+            raise ValueError(
+                f"Path out is an existing file, should be a directory. {path_out=}"
+            )
+        self.path_out = path_out
+
+    def __call__(self, page_lines: PageLines, overwrite: bool = False) -> Path:
+        """Save PageLines to a directory using the default file name.
+
+        Args:
+            page_lines (PageLines): The PageLines to save.
+            overwrite (bool): Overwrite existing files.
+
+        Returns:
+            Path: The path to the saved file.
+        """
+        path_out = self.path_out / page_lines.default_file_name()
+        PAGE_LINES_SERIALIZER.save_as_json(
+            path_out=path_out, complex_obj=page_lines, overwrite=overwrite
+        )
+        return path_out
+
+
+class PageLinesLoader(DataFileLoader[PageLines]):
+    """PageLinesLoader."""
+
+    def __init__(self, path_in: Path, glob: str = "page-lines_*.json") -> None:
+        """Load PageLines from directory.
+
+        Args:
+            path_in (Path): The directory to load files from.
+            glob (str, optional): The glob to match files. Defaults to "page-lines_*.json".
+        """
+        super().__init__(path_in, glob)
+
+    def _translate(self, obj_path: Path) -> PageLines:
+        return PAGE_LINES_SERIALIZER.load_from_json(path_in=obj_path)

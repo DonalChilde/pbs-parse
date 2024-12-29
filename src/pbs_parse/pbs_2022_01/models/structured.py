@@ -2,6 +2,7 @@
 
 from dataclasses import dataclass, field
 from datetime import date, timedelta
+from pathlib import Path
 from typing import Optional
 from uuid import NAMESPACE_DNS, UUID, uuid5
 
@@ -10,6 +11,7 @@ from pfmsoft.simple_serializer import DataclassSerializer
 from pbs_parse.pbs_2022_01.models import structured_TD as TD
 from pbs_parse.snippets.datetime.date_range import date_range
 from pbs_parse.snippets.datetime.duration_regex import pattern_HHHMM
+from pbs_parse.snippets.file.data_file_loader import DataFileLoader
 
 STRUCTURED_TRIP_NS = uuid5(NAMESPACE_DNS, "pbs_parse.pbs_2022_01.structured_trip")
 DURATION_REGEX = pattern_HHHMM(".")
@@ -310,22 +312,6 @@ class StructuredTrip:
         return result
 
 
-def structured_trip_serializer() -> (
-    DataclassSerializer[StructuredTrip, TD.StructuredTripTD]
-):
-    """structured_trip_serializer.
-
-    Returns:
-        _type_: _description_
-    """
-    return DataclassSerializer[StructuredTrip, TD.StructuredTripTD](
-        complex_factory=StructuredTrip.from_simple
-    )
-
-
-STRUCTURED_TRIP_SERIALIZER = structured_trip_serializer()
-
-
 def build_start_dates(
     effective_from: date, effective_to: date, calendar: list[str]
 ) -> list[date]:
@@ -371,3 +357,69 @@ def parse_duration(duration_string: str) -> timedelta:
     hours = int(data["hours"])
     minutes = int(data["minutes"])
     return timedelta(hours=hours, minutes=minutes)
+
+
+def structured_trip_serializer() -> (
+    DataclassSerializer[StructuredTrip, TD.StructuredTripTD]
+):
+    """structured_trip_serializer.
+
+    Returns:
+        _type_: _description_
+    """
+    return DataclassSerializer[StructuredTrip, TD.StructuredTripTD](
+        complex_factory=StructuredTrip.from_simple
+    )
+
+
+STRUCTURED_TRIP_SERIALIZER = structured_trip_serializer()
+
+
+class StructuredTripSaver:
+    """StructuredTripSaver."""
+
+    def __init__(self, path_out: Path) -> None:
+        """Save StructuredTrip to a directory using the default file name.
+
+        Args:
+            path_out (Path): The directory to save the StructuredTrip to.
+        """
+        if path_out.is_file():
+            raise ValueError(
+                f"Path out is an existing file, should be a directory. {path_out=}"
+            )
+        self.path_out = path_out
+
+    def __call__(
+        self, structured_trip: StructuredTrip, overwrite: bool = False
+    ) -> Path:
+        """Save StructuredTrip to a directory using the default file name.
+
+        Args:
+            structured_trip (StructuredTrip): The StructuredTrip to save.
+            overwrite (bool): Overwrite existing files.
+
+        Returns:
+            Path: The path to the saved file.
+        """
+        path_out = self.path_out / structured_trip.default_file_name()
+        STRUCTURED_TRIP_SERIALIZER.save_as_json(
+            path_out=path_out, complex_obj=structured_trip, overwrite=overwrite
+        )
+        return path_out
+
+
+class StructuredTripLoader(DataFileLoader[StructuredTrip]):
+    """StructuredTripLoader."""
+
+    def __init__(self, path_in: Path, glob: str = "structured-trip_*.json") -> None:
+        """Load StructuredTrip from directory.
+
+        Args:
+            path_in (Path): The directory to load files from.
+            glob (str, optional): The glob to match files. Defaults to "parsed_trip_*.json".
+        """
+        super().__init__(path_in, glob)
+
+    def _translate(self, obj_path: Path) -> StructuredTrip:
+        return STRUCTURED_TRIP_SERIALIZER.load_from_json(path_in=obj_path)

@@ -1,12 +1,31 @@
 """Extract trip lines from page lines."""
 
-from collections.abc import Iterable, Iterator
+from collections.abc import Callable, Iterable, Iterator
 from pathlib import Path
 
 from pfmsoft.indexed_string.model import IndexedString
 
 from pbs_parse.pbs_2022_01.models.page_lines import PAGE_LINES_SERIALIZER, PageLines
 from pbs_parse.pbs_2022_01.models.trip_lines import TRIP_LINES_SERIALIZER, TripLines
+
+
+def split_to_trips(
+    pages: Iterable[PageLines], observer: Callable[[TripLines], None] | None = None
+) -> Iterator[TripLines]:
+    """Split an iterable of PageLines to TripLines, with an optional observer.
+
+    Args:
+        pages (Iterable[PageLines]): The PageLines.
+        observer (Callable[[TripLines], None] | None, optional): The optional observer. Defaults to None.
+
+    Yields:
+        Iterator[TripLines]: _description_
+    """
+    for page in pages:
+        for trip_lines in parse_trip_lines(page):
+            if observer:
+                observer(trip_lines)
+            yield trip_lines
 
 
 def lines_of_page_to_lines_of_trips(
@@ -70,14 +89,10 @@ def parse_trip_lines(page: PageLines) -> Iterator[TripLines]:
         yield trip
 
 
-def write_trip_lines(
-    file_stem: str, trips: Iterator[TripLines], path_out: Path, overwrite: bool
-):
+def write_trip_lines(trips: Iterator[TripLines], path_out: Path, overwrite: bool):
     """Write TripLines to a file.
 
     Args:
-        file_stem (str): The first part of the output file name, usually the stem of
-            the PageLines input file.
         trips (Iterator[TripLines]): The TripLines to write to disk.
         path_out (Path): The directory to write the TripLines to.
         overwrite (bool): Overwrite existing files if found.

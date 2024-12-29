@@ -95,7 +95,6 @@ def split_to_pages_worker(jobs: Sequence[SplitPageJob]):
         for idx, job in enumerate(jobs, start=1):
             pages = parse_page_lines_from_file(path_in=job.source_txt_path)
             page_count = write_page_lines(
-                file_stem=job.source_txt_path.stem,
                 pages=pages,
                 path_out=job.split_page_path,
                 overwrite=job.overwrite,

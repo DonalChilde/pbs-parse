@@ -1,7 +1,7 @@
 """Translate structured to expanded."""
 
 import logging
-from collections.abc import Sequence
+from collections.abc import Callable, Iterable, Iterator, Sequence
 from datetime import date, datetime, time, timedelta
 from pathlib import Path
 from typing import Self
@@ -499,3 +499,25 @@ def next_local_time_in_utc(
             tzinfo=local_tz,
         )
     return next_datetime.astimezone(UTC)
+
+
+def expand_trips(
+    structured_trips: Iterable[ST.StructuredTrip],
+    observer: Callable[[model.ExpandedTrip], None] | None = None,
+) -> Iterator[model.ExpandedTrip]:
+    """Expand structured trips, with an optional observer.
+
+    Args:
+        structured_trips (Iterable[ST.StructuredTrip]): _description_
+        observer (Callable[[model.ExpandedTrip], None] | None, optional): _description_. Defaults to None.
+
+    Yields:
+        Iterator[model.ExpandedTrip]: _description_
+    """
+    for trip in structured_trips:
+        expander = StructuredToExpanded(structured_trip=trip)
+        expanded_trips = expander.translate()
+        for expanded in expanded_trips:
+            if observer:
+                observer(expanded)
+            yield expanded

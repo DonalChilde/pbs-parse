@@ -1,12 +1,15 @@
 """trip lines.."""
 
 from dataclasses import dataclass, field
+from pathlib import Path
 from typing import TypedDict
 from uuid import NAMESPACE_DNS, UUID, uuid5
 
 from pfmsoft.indexed_string.index_strings import make_uuid_iter
 from pfmsoft.indexed_string.model import IndexedString, IndexedStringTD
 from pfmsoft.simple_serializer import DataclassSerializer
+
+from pbs_parse.snippets.file.data_file_loader import DataFileLoader
 
 TRIP_LINES_NS = uuid5(NAMESPACE_DNS, "pbs_split.pbs_2022_01.trip_lines")
 
@@ -86,3 +89,51 @@ def trip_lines_serializer() -> DataclassSerializer[TripLines, TripLinesTD]:
 
 
 TRIP_LINES_SERIALIZER = trip_lines_serializer()
+
+
+class TripLinesSaver:
+    """TripLinesSaver."""
+
+    def __init__(self, path_out: Path) -> None:
+        """Save TripLines to a directory using the default file name.
+
+        Args:
+            path_out (Path): The directory to save the TripLines to.
+        """
+        if path_out.is_file():
+            raise ValueError(
+                f"Path out is an existing file, should be a directory. {path_out=}"
+            )
+        self.path_out = path_out
+
+    def __call__(self, trip_lines: TripLines, overwrite: bool = False) -> Path:
+        """Save TripLines to a directory using the default file name.
+
+        Args:
+            trip_lines (TripLines): The TripLines to save.
+            overwrite (bool): Overwrite existing files.
+
+        Returns:
+            Path: The path to the saved file.
+        """
+        path_out = self.path_out / trip_lines.default_file_name()
+        TRIP_LINES_SERIALIZER.save_as_json(
+            path_out=path_out, complex_obj=trip_lines, overwrite=overwrite
+        )
+        return path_out
+
+
+class TripLinesLoader(DataFileLoader[TripLines]):
+    """TripLinesLoader."""
+
+    def __init__(self, path_in: Path, glob: str = "trip-lines_*.json") -> None:
+        """Load TripLines from directory.
+
+        Args:
+            path_in (Path): _description_
+            glob (str, optional): _description_. Defaults to "trip-lines_*.json".
+        """
+        super().__init__(path_in, glob)
+
+    def _translate(self, obj_path: Path) -> TripLines:
+        return TRIP_LINES_SERIALIZER.load_from_json(path_in=obj_path)

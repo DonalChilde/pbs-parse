@@ -1,11 +1,14 @@
 """Models for Parsed trips."""
 
 from dataclasses import dataclass, field
+from pathlib import Path
 from typing import TypedDict
 from uuid import NAMESPACE_DNS, UUID, uuid5
 
 from pfmsoft.simple_serializer import DataclassSerializer
 from pfmsoft.state_parser import model
+
+from pbs_parse.snippets.file.data_file_loader import DataFileLoader
 
 PARSED_TRIP_NS = uuid5(NAMESPACE_DNS, "pbs_parse.pbs_2022_01.parsed_trip")
 
@@ -94,3 +97,51 @@ def parsed_trip_serializer() -> DataclassSerializer[ParsedTrip, ParsedTripTD]:
 
 
 PARSED_TRIP_SERIALIZER = parsed_trip_serializer()
+
+
+class ParsedTripSaver:
+    """ParsedTripSaver."""
+
+    def __init__(self, path_out: Path) -> None:
+        """Save ParsedTrip to a directory using the default file name.
+
+        Args:
+            path_out (Path): The directory to save the ParsedTrip to.
+        """
+        if path_out.is_file():
+            raise ValueError(
+                f"Path out is an existing file, should be a directory. {path_out=}"
+            )
+        self.path_out = path_out
+
+    def __call__(self, parsed_trip: ParsedTrip, overwrite: bool = False) -> Path:
+        """Save ParsedTrip to a directory using the default file name.
+
+        Args:
+            parsed_trip (ParsedTrip): The ParsedTrip to save.
+            overwrite (bool): Overwrite existing files.
+
+        Returns:
+            Path: The path to the saved file.
+        """
+        path_out = self.path_out / parsed_trip.default_file_name()
+        PARSED_TRIP_SERIALIZER.save_as_json(
+            path_out=path_out, complex_obj=parsed_trip, overwrite=overwrite
+        )
+        return path_out
+
+
+class ParsedTripLoader(DataFileLoader[ParsedTrip]):
+    """ParsedTripLoader."""
+
+    def __init__(self, path_in: Path, glob: str = "parsed-trip_*.json") -> None:
+        """Load ParsedTrip from directory.
+
+        Args:
+            path_in (Path): The directory to load files from.
+            glob (str, optional): The glob to match files. Defaults to "parsed-trip_*.json".
+        """
+        super().__init__(path_in, glob)
+
+    def _translate(self, obj_path: Path) -> ParsedTrip:
+        return PARSED_TRIP_SERIALIZER.load_from_json(path_in=obj_path)

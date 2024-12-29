@@ -1,5 +1,6 @@
 """Parser for TripLines."""
 
+from collections.abc import Callable, Iterable
 from pathlib import Path
 
 from pfmsoft.state_parser import ParseContext, ParseScheme, StateParser
@@ -41,3 +42,30 @@ class TripLinesParser:
             parsed_lines=[x.parsed_indexed_string for x in handler.results],
         )
         return trip
+
+
+def parse_trips(
+    trip_lines: Iterable[TripLines],
+    parser: TripLinesParser,
+    ctx: ParseContext,
+    observer: Callable[[ParsedTrip], None] | None = None,
+) -> Iterable[ParsedTrip]:
+    """Parse an iterable of trip_lines, with an optional observer.
+
+    Args:
+        trip_lines (Iterable[TripLines]): _description_
+        parser (TripLinesParser): _description_
+        ctx (ParseContext): _description_
+        observer (Callable[[ParsedTrip], None] | None, optional): _description_. Defaults to None.
+
+    Returns:
+        Iterable[ParsedTrip]: _description_
+
+    Yields:
+        Iterator[Iterable[ParsedTrip]]: _description_
+    """
+    for trip in trip_lines:
+        parsed_trip = parser.parse(ctx=ctx, trip_lines=trip)
+        if observer:
+            observer(parsed_trip)
+        yield parsed_trip

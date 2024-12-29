@@ -1,6 +1,7 @@
 """Translate a parsed to structured trip."""
 
 import logging
+from collections.abc import Callable, Iterable, Iterator
 from dataclasses import dataclass, field
 from datetime import date
 from pathlib import Path
@@ -55,6 +56,34 @@ def structure_trip_from_file(
         effective_from=effective_from,
         effective_to=effective_to,
     )
+
+
+def structure_trips(
+    parsed_trips: Iterable[ParsedTrip],
+    effective_from: date,
+    effective_to: date,
+    observer: Callable[[structured.StructuredTrip], None] | None = None,
+) -> Iterator[structured.StructuredTrip]:
+    """Structure parsed trips, with optional observer.
+
+    All trips are expected to have the same effective from-to dates.
+
+    Args:
+        parsed_trips (Iterable[ParsedTrip]): _description_
+        effective_from (date): _description_
+        effective_to (date): _description_
+        observer (Callable[[structured.StructuredTrip], None] | None, optional): _description_. Defaults to None.
+
+    Yields:
+        Iterator[structured.StructuredTrip]: _description_
+    """
+    for parsed in parsed_trips:
+        structured = structure_trip(
+            parsed_trip=parsed, effective_from=effective_from, effective_to=effective_to
+        )
+        if observer:
+            observer(structured)
+        yield structured
 
 
 def structure_trip(

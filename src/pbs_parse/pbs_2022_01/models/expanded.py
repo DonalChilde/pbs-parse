@@ -2,6 +2,7 @@
 
 from dataclasses import dataclass, field
 from datetime import datetime, timedelta
+from pathlib import Path
 from uuid import NAMESPACE_DNS, UUID, uuid5
 from zoneinfo import ZoneInfo
 
@@ -13,6 +14,7 @@ from pbs_parse.snippets.datetime.iso8601_duration import (
     string_to_timedelta,
     timedelta_to_isoformat,
 )
+from pbs_parse.snippets.file.data_file_loader import DataFileLoader
 
 UTC = ZoneInfo("UTC")
 TRIP_NS = uuid5(NAMESPACE_DNS, "pbs_parse.pbs_2022_01.trip")
@@ -433,6 +435,18 @@ def get_airport_code_from_iata(iata: str) -> AirportCode:
     )
 
 
+def default_file_name(trip: ExpandedTrip) -> str:
+    """Assemble a file name from trip data."""
+    ret_value: list[str] = []
+    ret_value.append(trip.start_lcl.date().isoformat())
+    ret_value.append(f"_{trip.base_equipment.base.iata}")
+    if trip.base_equipment.satellite_base:
+        ret_value.append(f"_{trip.base_equipment.satellite_base.iata}")
+    ret_value.append(f"_{trip.base_equipment.equipment}")
+    ret_value.append(f"_{trip.trip_number}.json")
+    return "".join(ret_value)
+
+
 def trip_serializer() -> DataclassSerializer[ExpandedTrip, TD.ExpandedTrip]:
     """Init a Trip serializer.
 
@@ -447,13 +461,49 @@ def trip_serializer() -> DataclassSerializer[ExpandedTrip, TD.ExpandedTrip]:
 EXPANDED_TRIP_SERIALIZER = trip_serializer()
 
 
-def default_file_name(trip: ExpandedTrip) -> str:
-    """Assemble a file name from trip data."""
-    ret_value: list[str] = []
-    ret_value.append(trip.start_lcl.date().isoformat())
-    ret_value.append(f"_{trip.base_equipment.base.iata}")
-    if trip.base_equipment.satellite_base:
-        ret_value.append(f"_{trip.base_equipment.satellite_base.iata}")
-    ret_value.append(f"_{trip.base_equipment.equipment}")
-    ret_value.append(f"_{trip.trip_number}.json")
-    return "".join(ret_value)
+class ExpandedTripSaver:
+    """ExpandedTripSaver."""
+
+    def __init__(self, path_out: Path) -> None:
+        """Save ExpandedTrip to a directory using the default file name.
+
+        Args:
+            path_out (Path): The directory to save the ExpandedTrip to.
+        """
+        if path_out.is_file():
+            raise ValueError(
+                f"Path out is an existing file, should be a directory. {path_out=}"
+            )
+        self.path_out = path_out
+
+    def __call__(self, expanded_trip: ExpandedTrip, overwrite: bool = False) -> Path:
+        """Save ExpandedTrip to a directory using the default file name.
+
+        Args:
+            expanded_trip (ExpandedTrip): The ExpandedTrip to save.
+            overwrite (bool): Overwrite existing files.
+
+        Returns:
+            Path: The path to the saved file.
+        """
+        path_out = self.path_out / expanded_trip.default_file_name()
+        EXPANDED_TRIP_SERIALIZER.save_as_json(
+            path_out=path_out, complex_obj=expanded_trip, overwrite=overwrite
+        )
+        return path_out
+
+
+class ExpandedTripLoader(DataFileLoader[ExpandedTrip]):
+    """ExpandedTripLoader."""
+
+    def __init__(self, path_in: Path, glob: str = "expanded-trip_*.json") -> None:
+        """Load ExpandedTrip from directory.
+
+        Args:
+            path_in (Path): The directory to load files from.
+            glob (str, optional): The glob to match files. Defaults to "expanded-trip_*.json".
+        """
+        super().__init__(path_in, glob)
+
+    def _translate(self, obj_path: Path) -> ExpandedTrip:
+        return EXPANDED_TRIP_SERIALIZER.load_from_json(path_in=obj_path)
