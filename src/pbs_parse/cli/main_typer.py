@@ -47,11 +47,11 @@ app_debug = typer.Typer()
 
 app_debug.add_typer(
     split_to_pages.app,
-    name="split-to-pages",
+    name="packages",
     short_help="Split pages from a bid package.",
 )
 app_debug.add_typer(
-    split_to_trips.app, name="split-to-trips", help="Split trips from split pages."
+    split_to_trips.app, name="pages", help="Split trips from split pages."
 )
 app_debug.add_typer(parse_trips.app, name="parse", help="Parse split trips.")
 app_debug.add_typer(
