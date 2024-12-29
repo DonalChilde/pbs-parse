@@ -80,10 +80,10 @@ def parse_trip_lines(page: PageLines) -> Iterator[TripLines]:
     for idx, trip_lines in enumerate(
         lines_of_page_to_lines_of_trips(page.lines), start=1
     ):
-        page_number = page.idx.split("_")[0]
+        page_number = page.idx.split("-")[0]
         trip = TripLines(
             source_uuid=page.uuid,
-            idx=f"{page_number}_{idx:02}",
+            idx=f"{page_number}-{idx:02}",
             lines=[page.lines[0], page.lines[1], *trip_lines, page.lines[-1]],
         )
         yield trip

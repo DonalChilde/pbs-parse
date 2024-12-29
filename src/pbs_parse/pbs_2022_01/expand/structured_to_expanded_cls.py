@@ -328,7 +328,8 @@ class StructuredToExpanded:
             equipment=s_trip.page_footer.equipment,
         )
         return model.ExpandedTrip(
-            source=s_trip.uuid,
+            source_uuid=s_trip.uuid,
+            source_idx=s_trip.idx,
             trip_number=s_trip.number,
             base_equipment=base_equipment,
             positions=positions,
