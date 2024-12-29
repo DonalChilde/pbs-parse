@@ -325,7 +325,8 @@ class DutyPeriod:
 class ExpandedTrip:
     """A trip."""
 
-    source: str
+    source_uuid: str
+    source_idx: str
     uuid: str = ""
     trip_number: str
     base_equipment: BaseEquipment
@@ -361,13 +362,15 @@ class ExpandedTrip:
         """Make a uuid from a namespace and the source uuid string, start date, and trip number."""
         return uuid5(
             namespace=TRIP_NS,
-            name=f"{self.source}{self.start_utc.isoformat()}{self.trip_number}",
+            name=f"{self.source_uuid}{self.start_utc.isoformat()}{self.trip_number}",
         )
 
     def default_file_name(self) -> str:
         """Assemble a file name from trip data."""
         ret_value: list[str] = []
-        ret_value.append(self.start_lcl.date().isoformat())
+        ret_value.append("expanded-trip")
+        ret_value.append(f"_{self.source_idx}")
+        ret_value.append(f"_{self.start_lcl.date().isoformat()}")
         ret_value.append(f"_{self.base_equipment.base.iata}")
         if self.base_equipment.satellite_base:
             ret_value.append(f"_{self.base_equipment.satellite_base.iata}")
@@ -379,7 +382,8 @@ class ExpandedTrip:
     def from_simple(simple_obj: TD.ExpandedTrip) -> "ExpandedTrip":
         """Turn simple object into Trip."""
         result = ExpandedTrip(
-            source=simple_obj["source"],
+            source_uuid=simple_obj["source_uuid"],
+            source_idx=simple_obj["source_idx"],
             trip_number=simple_obj["trip_number"],
             base_equipment=BaseEquipment.from_simple(simple_obj["base_equipment"]),
             positions=[Position(name=x["name"]) for x in simple_obj["positions"]],
@@ -404,7 +408,8 @@ class ExpandedTrip:
     def to_simple(self) -> TD.ExpandedTrip:
         """Trip to simple object."""
         result = TD.ExpandedTrip(
-            source=self.source,
+            source_uuid=self.source_uuid,
+            source_idx=self.source_idx,
             trip_number=self.trip_number,
             base_equipment=self.base_equipment.to_simple(),
             positions=[TD.Position(name=x.name) for x in self.positions],
@@ -435,16 +440,16 @@ def get_airport_code_from_iata(iata: str) -> AirportCode:
     )
 
 
-def default_file_name(trip: ExpandedTrip) -> str:
-    """Assemble a file name from trip data."""
-    ret_value: list[str] = []
-    ret_value.append(trip.start_lcl.date().isoformat())
-    ret_value.append(f"_{trip.base_equipment.base.iata}")
-    if trip.base_equipment.satellite_base:
-        ret_value.append(f"_{trip.base_equipment.satellite_base.iata}")
-    ret_value.append(f"_{trip.base_equipment.equipment}")
-    ret_value.append(f"_{trip.trip_number}.json")
-    return "".join(ret_value)
+# def default_file_name(trip: ExpandedTrip) -> str:
+#     """Assemble a file name from trip data."""
+#     ret_value: list[str] = []
+#     ret_value.append(trip.start_lcl.date().isoformat())
+#     ret_value.append(f"_{trip.base_equipment.base.iata}")
+#     if trip.base_equipment.satellite_base:
+#         ret_value.append(f"_{trip.base_equipment.satellite_base.iata}")
+#     ret_value.append(f"_{trip.base_equipment.equipment}")
+#     ret_value.append(f"_{trip.trip_number}.json")
+#     return "".join(ret_value)
 
 
 def trip_serializer() -> DataclassSerializer[ExpandedTrip, TD.ExpandedTrip]:

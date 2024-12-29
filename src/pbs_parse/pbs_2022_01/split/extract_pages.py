@@ -82,7 +82,7 @@ def parse_page_lines(lines: Iterator[IndexedString]) -> Iterator[PageLines]:
     for idx, lines_of_page in enumerate(
         lines_of_package_to_lines_of_pages(lines), start=1
     ):
-        page = PageLines(idx=idx, lines=lines_of_page)
+        page = PageLines(idx=f"{idx:05}-00", lines=lines_of_page)
         yield page
 
 

@@ -1,7 +1,5 @@
 """pages lines."""
 
-from abc import ABC, abstractmethod
-from collections.abc import Iterable
 from dataclasses import dataclass, field
 from pathlib import Path
 from typing import TypedDict
@@ -20,7 +18,7 @@ class PageLinesTD(TypedDict):
     """PageLinesTD."""
 
     uuid: str
-    idx: int
+    idx: str
     lines: list[IndexedStringTD]
 
 
@@ -28,7 +26,7 @@ class PageLinesTD(TypedDict):
 class PageLines:
     """PageLines."""
 
-    idx: int
+    idx: str
     uuid: str = ""
     lines: list[IndexedString] = field(default_factory=list)
 

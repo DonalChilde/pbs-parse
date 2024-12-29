@@ -106,7 +106,8 @@ class DutyPeriod(TypedDict):
 class ExpandedTrip(TypedDict):
     """A trip."""
 
-    source: str
+    source_uuid: str
+    source_idx: str
     trip_number: str
     base_equipment: BaseEquipment
     positions: list[Position]

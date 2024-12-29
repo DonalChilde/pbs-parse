@@ -217,9 +217,8 @@ def _translate_trip(
         page=trip_lines.page_footer.data["page"],
     )
     trip = structured.StructuredTrip(
-        source=source_uuid,
-        page_idx=parsed_trip.page_idx,
-        trip_idx=parsed_trip.trip_idx,
+        source_uuid=parsed_trip.uuid,
+        idx=parsed_trip.idx,
         number=trip_lines.trip_header.data["trip_number"],
         ops_count=trip_lines.trip_header.data["ops_count"],
         positions=trip_lines.trip_header.data["positions"],

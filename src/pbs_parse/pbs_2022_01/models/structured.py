@@ -237,9 +237,8 @@ class ExternalData:
 class StructuredTrip:
     """StructuredTrip."""
 
-    source: str
-    page_idx: int
-    trip_idx: int
+    source_uuid: str
+    idx: str
     number: str
     ops_count: str
     special_qual: bool
@@ -269,7 +268,7 @@ class StructuredTrip:
 
     def make_uuid(self) -> UUID:
         """Make a uuid from a namespace and the source uuid string."""
-        return uuid5(namespace=STRUCTURED_TRIP_NS, name=self.source)
+        return uuid5(namespace=STRUCTURED_TRIP_NS, name=self.source_uuid)
 
     def default_file_name(self) -> str:
         """default_file_name.
@@ -277,7 +276,7 @@ class StructuredTrip:
         Returns:
             str: _description_
         """
-        return f"structured-trip_page_{self.page_idx}_trip_{self.trip_idx}_{self.uuid}.json"
+        return f"structured-trip_{self.idx}__{self.uuid}.json"
 
     @staticmethod
     def from_simple(simple_obj: TD.StructuredTripTD) -> "StructuredTrip":
@@ -291,9 +290,8 @@ class StructuredTrip:
         """
         result = StructuredTrip(
             uuid=simple_obj["uuid"],
-            source=simple_obj["source"],
-            page_idx=simple_obj["page_idx"],
-            trip_idx=simple_obj["trip_idx"],
+            source_uuid=simple_obj["source_uuid"],
+            idx=simple_obj["idx"],
             number=simple_obj["number"],
             ops_count=simple_obj["ops_count"],
             block=simple_obj["block"],
@@ -417,7 +415,7 @@ class StructuredTripLoader(DataFileLoader[StructuredTrip]):
 
         Args:
             path_in (Path): The directory to load files from.
-            glob (str, optional): The glob to match files. Defaults to "parsed_trip_*.json".
+            glob (str, optional): The glob to match files. Defaults to "structured-trip_*.json".
         """
         super().__init__(path_in, glob)
 

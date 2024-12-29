@@ -17,9 +17,8 @@ class ParsedTripTD(TypedDict):
     """A simple object version of ParsedTrip."""
 
     uuid: str
-    source: str
-    page_idx: int
-    trip_idx: int
+    source_uuid: str
+    idx: str
     parsed_lines: list[model.ParsedIndexedStringTD]
 
 
@@ -27,9 +26,8 @@ class ParsedTripTD(TypedDict):
 class ParsedTrip:
     """ParsedTrip contains the parsed lines of a pbs trip."""
 
-    source: str
-    page_idx: int
-    trip_idx: int
+    source_uuid: str
+    idx: str
     uuid: str = ""
     parsed_lines: list[model.ParsedIndexedString] = field(default_factory=list)
 
@@ -45,17 +43,16 @@ class ParsedTrip:
             )
 
     def make_uuid(self) -> UUID:
-        """Make a uuid from a namespace and the repr of asdict(self), minus the uuid field."""
-        return uuid5(namespace=PARSED_TRIP_NS, name=self.source)
+        """Make a uuid from a namespace and the source uuid as a string."""
+        return uuid5(namespace=PARSED_TRIP_NS, name=self.source_uuid)
 
     @staticmethod
     def from_simple(simple_obj: ParsedTripTD) -> "ParsedTrip":
         """Reconstitute a ParsedTrip from a simple object."""
         result = ParsedTrip(
             uuid=simple_obj["uuid"],
-            source=simple_obj["source"],
-            page_idx=simple_obj["page_idx"],
-            trip_idx=simple_obj["trip_idx"],
+            source_uuid=simple_obj["source_uuid"],
+            idx=simple_obj["idx"],
             parsed_lines=[
                 model.ParsedIndexedString.from_simple(x)
                 for x in simple_obj["parsed_lines"]
@@ -73,13 +70,14 @@ class ParsedTrip:
         Returns:
             str: _description_
         """
-        return f"parsed-trip_page_{self.page_idx}_trip_{self.trip_idx}_{self.uuid}.json"
+        return f"parsed-trip_{self.idx}_{self.uuid}.json"
 
     def __str__(self) -> str:
         """Make a str rep of ParsedTrip."""
         lines: list[str] = []
         lines.append(f"uuid: {self.uuid}")
-        lines.append(f"source: {self.source}")
+        lines.append(f"{self.idx=}")
+        lines.append(f"source_uuid: {self.source_uuid}")
         lines.append("Text Input:")
         lines.extend(f"{x.indexed_string}" for x in self.parsed_lines)
         lines.append("Parsed Data:")

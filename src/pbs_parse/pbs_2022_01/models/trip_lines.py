@@ -18,9 +18,8 @@ class TripLinesTD(TypedDict):
     """TripLinesTD."""
 
     uuid: str
-    source: str
-    page_idx: int
-    idx: int
+    source_uuid: str
+    idx: str
     lines: list[IndexedStringTD]
 
 
@@ -28,9 +27,8 @@ class TripLinesTD(TypedDict):
 class TripLines:
     """TripLines."""
 
-    source: str
-    page_idx: int
-    idx: int
+    source_uuid: str
+    idx: str
     uuid: str = ""
     lines: list[IndexedString] = field(default_factory=list)
 
@@ -61,8 +59,7 @@ class TripLines:
         """
         result = TripLines(
             uuid=simple_obj["uuid"],
-            page_idx=simple_obj["page_idx"],
-            source=simple_obj["source"],
+            source_uuid=simple_obj["source_uuid"],
             idx=simple_obj["idx"],
             lines=[IndexedString(**x) for x in simple_obj["lines"]],
         )
@@ -74,7 +71,7 @@ class TripLines:
         Returns:
             str: _description_
         """
-        return f"trip-lines_page_{self.page_idx}_trip_{self.idx}_{self.uuid}.json"
+        return f"trip-lines_{self.idx}_{self.uuid}.json"
 
 
 def trip_lines_serializer() -> DataclassSerializer[TripLines, TripLinesTD]:
