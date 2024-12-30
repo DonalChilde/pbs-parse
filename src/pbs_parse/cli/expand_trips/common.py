@@ -17,8 +17,12 @@ from rich.progress import (
 
 from pbs_parse.pbs_2022_01.expand.structured_to_expanded_cls import StructuredToExpanded
 from pbs_parse.pbs_2022_01.models.expanded import EXPANDED_TRIP_SERIALIZER
+from pbs_parse.pbs_2022_01.models.expanded_validation import (
+    EXPANDED_VALIDATION_SERIALIZER,
+    ExpandedValidation,
+)
 from pbs_parse.pbs_2022_01.models.structured import STRUCTURED_TRIP_SERIALIZER
-from pbs_parse.pbs_2022_01.validate.expanded.validator import ExpandedValidator
+from pbs_parse.pbs_2022_01.validate.validate_expanded import validate_expanded
 
 app = typer.Typer()
 
@@ -72,29 +76,31 @@ def expand_worker(jobs: Sequence[ExpandTripJob]):
                 EXPANDED_TRIP_SERIALIZER.save_as_json(
                     path_out=path_out, complex_obj=trip, overwrite=job.overwrite
                 )
-                validator = ExpandedValidator(
-                    expanded_trip=trip,
-                    structured_trip=s_trip,
-                    expanded_trip_path=path_out,
-                    structured_trip_path=job.s_trip_path,
-                    parsed_trip_path=None,
+                validation_model = ExpandedValidation(
+                    expanded=trip,
+                    structured=s_trip,
+                    expanded_path=str(path_out),
+                    structured_path=str(job.s_trip_path),
                 )
-                validator.validate()
-                if validator.errors:
+                validate_expanded(validation_model=validation_model)
+
+                if validation_model.errors:
                     error_out = (
-                        path_out.parent / "errors" / f"{path_out.stem}.errors.txt"
+                        path_out.parent
+                        / "errors"
+                        / validation_model.default_file_name()
                     )
-                    error_out.write_text(str(validator))
+                    EXPANDED_VALIDATION_SERIALIZER.save_as_json(
+                        path_out=error_out, complex_obj=validation_model
+                    )
                     trips_with_errors += 1
-                    total_errors += len(validator.errors)
-                    err_msg = (
-                        f"Found {len(validator.errors)} errors in {path_out.name!r}"
-                    )
+                    total_errors += len(validation_model.errors)
+                    err_msg = f"Found {len(validation_model.errors)} errors in {path_out.name!r}"
                     progress.console.print(err_msg)
-                    for msg in validator.errors:
+                    for msg in validation_model.errors:
                         progress.console.print(f"\t{msg!r}")
                     logger.warning(err_msg)
-                    logger.warning("%r", validator.errors)
+                    logger.warning("%r", validation_model.errors)
             total_trips += len(expanded_trips)
             progress.update(
                 task,

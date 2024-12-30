@@ -30,7 +30,7 @@ def parse_all(
     end: Annotated[
         ParseActions,
         typer.Option(help="The action to end at. defaults to `expand_trip`"),
-    ] = ParseActions.EXPAND_TRIPS,
+    ] = ParseActions.VALIDATE_EXPANDED_TRIPS,
     overwrite: Annotated[
         bool, typer.Option(help="Overwrite existing output file.")
     ] = False,

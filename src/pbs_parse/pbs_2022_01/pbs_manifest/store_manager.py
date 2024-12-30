@@ -369,7 +369,7 @@ class StoreManager:
         """Save an ExpandedTrip in the store."""
         trip_info = M.FileInfo(
             key=expanded.uuid,
-            type=M.FileTypes.STRUCTURED_TRIP,
+            type=M.FileTypes.EXPANDED_TRIP,
             file_path=f"{base}/expanded/{expanded.default_file_name()}",
         )
         path_out = self.manifest_directory / trip_info["file_path"]
@@ -413,3 +413,7 @@ class StoreManager:
         )
         self.record_file(base=base, info=trip_info)
         return path_out
+
+    def report_errors(self):
+        """Report errors."""
+        pass

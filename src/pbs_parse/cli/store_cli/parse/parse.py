@@ -31,7 +31,7 @@ def parse(
     end: Annotated[
         ParseActions,
         typer.Option(help="The action to end at."),
-    ] = ParseActions.EXPAND_TRIPS,
+    ] = ParseActions.VALIDATE_EXPANDED_TRIPS,
 ):
     """Parse the data from the text extracted from a PDF file."""
     _ = ctx

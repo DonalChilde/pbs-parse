@@ -64,7 +64,7 @@ class ParseJob:
 
     base: str
     start: ParseActions = ParseActions.SPLIT_TO_PAGES
-    end: ParseActions = ParseActions.EXPAND_TRIPS
+    end: ParseActions = ParseActions.VALIDATE_EXPANDED_TRIPS
     action_items: list[ActionItem] = field(default_factory=list)
 
 
