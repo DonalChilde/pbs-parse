@@ -2,19 +2,19 @@
 
 from rich.progress import (
     BarColumn,
-    FileSizeColumn,
+    MofNCompleteColumn,
     Progress,
+    SpinnerColumn,
     TaskProgressColumn,
     TextColumn,
     TimeElapsedColumn,
-    TotalFileSizeColumn,
 )
 
 progress = Progress(
+    SpinnerColumn(),
     TextColumn("[progress.description]{task.description}"),
+    MofNCompleteColumn(),
     BarColumn(),
     TaskProgressColumn(),
-    FileSizeColumn(),
-    TotalFileSizeColumn(),
     TimeElapsedColumn(),
 )

@@ -9,8 +9,10 @@ from pbs_parse.pbs_2022_01.split.extract_pages import parse_page_lines_from_file
 from .progress import progress
 
 
-def split_to_pages(base: str, store: StoreManager, task_id: TaskID):
-    """split_to_pages _summary_.
+def split_to_pages(
+    base: str, store: StoreManager, task_id: TaskID, overwrite: bool = False
+):
+    """Split a text bid package to pages.
 
     Code to split pages, with rich progress.
 
@@ -18,19 +20,22 @@ def split_to_pages(base: str, store: StoreManager, task_id: TaskID):
         base (str): _description_
         store (StoreManager): _description_
         task_id (TaskID): _description_
+        overwrite (bool, optional): _description_. Defaults to False.
     """
     source_info = store.get_files_by_type(
         base=base, file_type=manifest.FileTypes.TXT_PACKAGE
     )
     source_path = source_info[0]["file_path"]
-    progress.update(task_id=task_id, total=1, description="Splitting pages....")
-    msg = f"Splitting pages from {source_path}"
-    progress.console.print(msg)
-    path_in = store.manifest_path / source_info[0]["file_path"]
+    progress.update(task_id=task_id, total=0, description="Splitting package....")
+    path_in = store.manifest_directory / source_path
     pages = parse_page_lines_from_file(path_in=path_in)
-    count = store.save_page_lines(base=base, pages=pages)
-    progress.update(
-        task_id=task_id, completed=True, description=f"Found {count} pages."
-    )
-    msg = f"Found {count} pages in {source_path}"
-    progress.console.print(msg)
+    count = 0
+    for page in pages:
+        store.save_page_lines(base=base, page=page, overwrite=overwrite)
+        count += 1
+        progress.update(
+            task_id=task_id,
+            advance=1,
+            completed=True,
+            description=f"Splitting package to {count} pages.",
+        )

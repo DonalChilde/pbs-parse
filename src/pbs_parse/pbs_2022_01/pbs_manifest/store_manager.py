@@ -9,10 +9,13 @@ from types import TracebackType
 from typing import Any
 
 from pbs_parse.pbs_2022_01.models import manifest as M
-from pbs_parse.pbs_2022_01.models.expanded import ExpandedTrip
+from pbs_parse.pbs_2022_01.models.expanded import EXPANDED_TRIP_SERIALIZER, ExpandedTrip
 from pbs_parse.pbs_2022_01.models.page_lines import PAGE_LINES_SERIALIZER, PageLines
-from pbs_parse.pbs_2022_01.models.parsed_trip import ParsedTrip
-from pbs_parse.pbs_2022_01.models.structured import StructuredTrip
+from pbs_parse.pbs_2022_01.models.parsed_trip import PARSED_TRIP_SERIALIZER, ParsedTrip
+from pbs_parse.pbs_2022_01.models.structured import (
+    STRUCTURED_TRIP_SERIALIZER,
+    StructuredTrip,
+)
 from pbs_parse.pbs_2022_01.models.trip_lines import TRIP_LINES_SERIALIZER, TripLines
 from pbs_parse.snippets.file.check_file import check_file
 
@@ -103,6 +106,21 @@ class StoreManager:
         # return file or None
         return None
 
+    def get_effective_dates(self) -> tuple[date, date]:
+        """get_effective_dates _summary_.
+
+        Returns:
+            tuple[date, date]: (from,to)
+        """
+        return (
+            date.fromisoformat(self.manifest["effective_from"]),
+            date.fromisoformat(self.manifest["effective_to"]),
+        )
+
+    def get_bases(self) -> Sequence[str]:
+        """Get a list of base keys."""
+        return list(self.manifest["bases"].keys())
+
     def create_base_bid(self, source_pdf: Path, source_txt: Path, name: str):
         """Create a base bid, and copy the pdf and txt files into store."""
         if self.manifest["bases"].get(name, None) is not None:
@@ -140,70 +158,108 @@ class StoreManager:
         self.manifest["bases"][base]["files"][info["key"]] = info
 
     def save_page_lines(
-        self, base: str, pages: Iterable[PageLines], overwrite: bool = False
-    ) -> int:
+        self, base: str, page: PageLines, overwrite: bool = False
+    ) -> Path:
         """Save a PageLines in the store."""
-        idx = 0
-        for idx, page in enumerate(pages, start=1):
-            _ = idx
-            page_info = M.FileInfo(
-                key=page.uuid,
-                type=M.FileTypes.SPLIT_PAGE,
-                file_path=f"{base}/pages/{page.default_file_name()}",
-            )
-            path_out = self.manifest_directory / page_info["file_path"]
-            PAGE_LINES_SERIALIZER.save_as_json(
-                path_out=path_out, complex_obj=page, overwrite=overwrite
-            )
-            self.record_file(base=base, info=page_info)
-        return idx
+        page_info = M.FileInfo(
+            key=page.uuid,
+            type=M.FileTypes.SPLIT_PAGE,
+            file_path=f"{base}/pages/{page.default_file_name()}",
+        )
+        path_out = self.manifest_directory / page_info["file_path"]
+        PAGE_LINES_SERIALIZER.save_as_json(
+            path_out=path_out, complex_obj=page, overwrite=overwrite
+        )
+        self.record_file(base=base, info=page_info)
+        return path_out
 
     def save_trip_lines(
         self,
         base: str,
-        trips: Iterable[TripLines],
+        trip: TripLines,
         overwrite: bool = False,
     ):
         """Save TripLines in the store."""
-        idx = 0
-        for idx, trip in enumerate(trips, start=1):
-            _ = idx
-            trip_info = M.FileInfo(
-                key=trip.uuid,
-                type=M.FileTypes.SPLIT_TRIP,
-                file_path=f"{base}/trips/{trip.default_file_name()}",
-            )
-            path_out = self.manifest_directory / trip_info["file_path"]
-            TRIP_LINES_SERIALIZER.save_as_json(
-                path_out=path_out, complex_obj=trip, overwrite=overwrite
-            )
-            self.record_file(base=base, info=trip_info)
-        return idx
+        trip_info = M.FileInfo(
+            key=trip.uuid,
+            type=M.FileTypes.SPLIT_TRIP,
+            file_path=f"{base}/trip_lines/{trip.default_file_name()}",
+        )
+        path_out = self.manifest_directory / trip_info["file_path"]
+        TRIP_LINES_SERIALIZER.save_as_json(
+            path_out=path_out, complex_obj=trip, overwrite=overwrite
+        )
+        self.record_file(base=base, info=trip_info)
+        return path_out
 
     def save_parsed_trip(
         self, base: str, parsed: ParsedTrip, overwrite: bool = False
-    ) -> int:
+    ) -> Path:
         """Save a ParsedTrip in the store."""
+        trip_info = M.FileInfo(
+            key=parsed.uuid,
+            type=M.FileTypes.PARSED_TRIP,
+            file_path=f"{base}/parsed/{parsed.default_file_name()}",
+        )
+        path_out = self.manifest_directory / trip_info["file_path"]
+        PARSED_TRIP_SERIALIZER.save_as_json(
+            path_out=path_out, complex_obj=parsed, overwrite=overwrite
+        )
+        self.record_file(base=base, info=trip_info)
+        return path_out
 
     def save_parsed_prior_month_trip(
         self, base: str, parsed: ParsedTrip, overwrite: bool = False
-    ) -> int:
+    ) -> Path:
         """Save a ParsedTrip in the store."""
+        trip_info = M.FileInfo(
+            key=parsed.uuid,
+            type=M.FileTypes.PARSED_PRIOR_MONTH_TRIP,
+            file_path=f"{base}/parsed_prior/{parsed.default_file_name()}",
+        )
+        path_out = self.manifest_directory / trip_info["file_path"]
+        PARSED_TRIP_SERIALIZER.save_as_json(
+            path_out=path_out, complex_obj=parsed, overwrite=overwrite
+        )
+        self.record_file(base=base, info=trip_info)
+        return path_out
 
     def save_structured_trip(
         self, base: str, structured: StructuredTrip, overwrite: bool = False
-    ) -> int:
+    ) -> Path:
         """Save a StructuredTrip in the store."""
+        trip_info = M.FileInfo(
+            key=structured.uuid,
+            type=M.FileTypes.STRUCTURED_TRIP,
+            file_path=f"{base}/structured/{structured.default_file_name()}",
+        )
+        path_out = self.manifest_directory / trip_info["file_path"]
+        STRUCTURED_TRIP_SERIALIZER.save_as_json(
+            path_out=path_out, complex_obj=structured, overwrite=overwrite
+        )
+        self.record_file(base=base, info=trip_info)
+        return path_out
 
     def save_structured_trip_validation_error(
         self, base: str, structured_error: Iterable[Any], overwrite: bool = False
-    ) -> int:
+    ) -> Path:
         """Fix type of error."""
 
-    def save_expanded_trips(
-        self, base: str, expanded: Iterable[ExpandedTrip], overwrite: bool = False
-    ) -> int:
+    def save_expanded_trip(
+        self, base: str, expanded: ExpandedTrip, overwrite: bool = False
+    ) -> Path:
         """Save an ExpandedTrip in the store."""
+        trip_info = M.FileInfo(
+            key=expanded.uuid,
+            type=M.FileTypes.STRUCTURED_TRIP,
+            file_path=f"{base}/expanded/{expanded.default_file_name()}",
+        )
+        path_out = self.manifest_directory / trip_info["file_path"]
+        EXPANDED_TRIP_SERIALIZER.save_as_json(
+            path_out=path_out, complex_obj=expanded, overwrite=overwrite
+        )
+        self.record_file(base=base, info=trip_info)
+        return path_out
 
     def save_expanded_trip_validation_error(
         self, base: str, expanded_error: Iterable[Any], overwrite: bool = False
