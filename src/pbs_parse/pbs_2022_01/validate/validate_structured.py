@@ -6,26 +6,28 @@ from pathlib import Path
 
 from pbs_parse.pbs_2022_01.models import parsed_trip as PT
 from pbs_parse.pbs_2022_01.models import structured as ST
-from pbs_parse.pbs_2022_01.models.validation import StructuredValidation
+from pbs_parse.pbs_2022_01.models.structured_validation import StructuredValidation
 from pbs_parse.snippets.datetime.date_range import date_range
 
 logger = logging.getLogger(__name__)
 
 
-def validate_structured_trip(ctx: StructuredValidation) -> StructuredValidation:
+def validate_structured_trip(
+    validation_model: StructuredValidation,
+) -> StructuredValidation:
     """validate.
 
     Args:
-        ctx (StructuredValidation): _description_
+        validation_model (StructuredValidation): _description_
 
     Returns:
         StructuredValidation: Will contain any error messages generated.
     """
-    ctx.external_start_dates = _possible_start_dates(
-        structured_trip=ctx.structured_trip
+    validation_model.valid_start_dates = _possible_start_dates(
+        structured_trip=validation_model.structured_trip
     )
-    _validate(ctx=ctx)
-    return ctx
+    _validate(ctx=validation_model)
+    return validation_model
 
 
 def validate_structured_trip_from_file(
@@ -47,7 +49,7 @@ def validate_structured_trip_from_file(
         parsed_path=str(parsed_trip_path),
         structured_path=str(structured_trip_path),
     )
-    ctx.external_start_dates = _possible_start_dates(structured_trip=structured_trip)
+    ctx.valid_start_dates = _possible_start_dates(structured_trip=structured_trip)
     _validate(ctx=ctx)
     return ctx
 
@@ -72,11 +74,11 @@ def _validate(ctx: StructuredValidation) -> None:
 
 def _calendar_starts_count(ctx: StructuredValidation) -> None:
     """Check if whole calendar was captured."""
-    if len(ctx.structured_trip.calendar) != len(ctx.external_start_dates):
+    if len(ctx.structured_trip.calendar) != len(ctx.valid_start_dates):
         msg = (
             f"len(ctx.structured_trip.calendar) != len(ctx.external_start_dates)\n"
-            f"\t{len(ctx.structured_trip.calendar)} != {len(ctx.external_start_dates)}\n"
+            f"\t{len(ctx.structured_trip.calendar)} != {len(ctx.valid_start_dates)}\n"
             f"\tctx.structured_trip.calendar -> {ctx.structured_trip.calendar!r}\n"
-            f"\tctx.external_start_dates -> {ctx.external_start_dates}\n"
+            f"\tctx.external_start_dates -> {ctx.valid_start_dates}\n"
         )
         ctx.errors.append(msg)

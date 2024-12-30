@@ -13,6 +13,8 @@ from .progress import progress
 from .split_to_pages import split_to_pages
 from .split_to_trips import split_to_trips
 from .structure_trips import structure_trips
+from .validate_expanded_trips import validate_expanded_trips
+from .validate_structured_trips import validate_structured_trips
 
 # pbs-parse data-store create ~/projects/tmp/store November 2024-11-01 2024-12-01
 # pbs-parse data-store add-all-bases ~/projects/tmp/store ~/projects/tmp/pbs-data/2024.11.01-2024.12.01/
@@ -26,7 +28,9 @@ class ParseActions(StrEnum):
     SPLIT_TO_TRIPS = "split_to_trips"
     PARSE_TRIPS = "parse_trips"
     STRUCTURE_TRIPS = "structure_trips"
+    VALIDATE_STRUCTURED_TRIPS = "validate_structured_trips"
     EXPAND_TRIPS = "expand_trips"
+    VALIDATE_EXPANDED_TRIPS = "validate_expanded_trips"
 
     @staticmethod
     def action_list(
@@ -123,5 +127,13 @@ def action_dispatch(action: ActionItem, store: StoreManager):
             parse_trips(base=action.base, store=store, task_id=action.task_id)
         case ParseActions.STRUCTURE_TRIPS:
             structure_trips(base=action.base, store=store, task_id=action.task_id)
+        case ParseActions.VALIDATE_STRUCTURED_TRIPS:
+            validate_structured_trips(
+                base=action.base, store=store, task_id=action.task_id
+            )
         case ParseActions.EXPAND_TRIPS:
             expand_trips(base=action.base, store=store, task_id=action.task_id)
+        case ParseActions.VALIDATE_EXPANDED_TRIPS:
+            validate_expanded_trips(
+                base=action.base, store=store, task_id=action.task_id
+            )

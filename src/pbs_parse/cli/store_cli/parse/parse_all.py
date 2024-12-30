@@ -8,7 +8,7 @@ import typer
 
 from pbs_parse.pbs_2022_01.pbs_manifest.store_manager import StoreManager
 
-from .common import ParseActions, ParseJob, do_jobs, expand_actions
+from .common import ParseActions, ParseJob, do_jobs
 
 logger = logging.getLogger(__name__)
 app = typer.Typer()
@@ -39,11 +39,11 @@ def parse_all(
     ] = False,
 ):
     """Parse the data from the text extracted from all the PDF files."""
-    store = StoreManager(manifest_directory=store_directory)
-    bases = store.get_bases()
-    jobs: list[ParseJob] = []
-    for base in bases:
-        job = ParseJob(base=base, start=start, end=end)
-        # expand_actions(job=job)
-        jobs.append(job)
-    do_jobs(jobs=jobs, store=store)
+    with StoreManager(manifest_directory=store_directory) as store:
+        bases = store.get_bases()
+        jobs: list[ParseJob] = []
+        for base in bases:
+            job = ParseJob(base=base, start=start, end=end)
+            # expand_actions(job=job)
+            jobs.append(job)
+        do_jobs(jobs=jobs, store=store)

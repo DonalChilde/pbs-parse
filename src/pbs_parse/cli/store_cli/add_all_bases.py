@@ -73,7 +73,7 @@ def add_all_bases(
                 f"Did not find a matching .txt file for {pdf_file.name}. Skipping."
             )
     typer.echo(f"Found {len(file_pairs)} bases with matching text files.")
-    for pair in file_pairs:
-        with StoreManager(manifest_directory=store_directory) as store:
+    with StoreManager(manifest_directory=store_directory) as store:
+        for pair in file_pairs:
             typer.echo(f"Adding {pair['name']} to store.")
             store.create_base_bid(**pair)

@@ -22,7 +22,7 @@ def split_to_pages(
         task_id (TaskID): _description_
         overwrite (bool, optional): _description_. Defaults to False.
     """
-    source_info = store.get_files_by_type(
+    source_info = store.get_file_info_by_type(
         base=base, file_type=manifest.FileTypes.TXT_PACKAGE
     )
     source_path = source_info[0]["file_path"]

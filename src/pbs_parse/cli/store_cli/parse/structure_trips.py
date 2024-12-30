@@ -22,7 +22,7 @@ def structure_trips(
         task_id (TaskID): _description_
         overwrite (bool, optional): _description_. Defaults to False.
     """
-    trip_infos = store.get_files_by_type(
+    trip_infos = store.get_file_info_by_type(
         base=base, file_type=manifest.FileTypes.PARSED_TRIP
     )
     total_trips = len(trip_infos)

@@ -12,11 +12,12 @@ class FileTypes(StrEnum):
     PARSED_TRIP = "parsed_trip"
     PARSED_PRIOR_MONTH_TRIP = "parsed_prior_month_trip"
     STRUCTURED_TRIP = "structured_trip"
+    STRUCTURED_TRIP_VALIDATION = "structured_trip_validation"
     EXPANDED_TRIP = "expanded_trip"
+    EXPANDED_TRIP_VALIDATION = "expanded_trip_validation"
     PDF_PACKAGE = "pdf_package"
     TXT_PACKAGE = "txt_package"
     BID_MANIFEST = "bid_manifest"
-    ERROR_MSG = "error_msg"
     ALL = "all"
 
 

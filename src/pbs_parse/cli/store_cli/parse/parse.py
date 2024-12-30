@@ -6,7 +6,9 @@ from typing import Annotated
 
 import typer
 
-from .common import ParseActions
+from pbs_parse.pbs_2022_01.pbs_manifest.store_manager import StoreManager
+
+from .common import ParseActions, ParseJob, do_jobs
 
 logger = logging.getLogger(__name__)
 app = typer.Typer()
@@ -32,3 +34,9 @@ def parse(
     ] = ParseActions.EXPAND_TRIPS,
 ):
     """Parse the data from the text extracted from a PDF file."""
+    _ = ctx
+    with StoreManager(manifest_directory=store_directory) as store:
+        jobs: list[ParseJob] = []
+        job = ParseJob(base=base, start=start, end=end)
+        jobs.append(job)
+        do_jobs(jobs=jobs, store=store)

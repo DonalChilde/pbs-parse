@@ -5,7 +5,7 @@ from pathlib import Path
 
 from pbs_parse.pbs_2022_01.models import expanded as ET
 from pbs_parse.pbs_2022_01.models import structured as ST
-from pbs_parse.pbs_2022_01.models.validation import ExpandedValidation
+from pbs_parse.pbs_2022_01.models.structured_validation import ExpandedValidation
 
 logger = logging.getLogger(__name__)
 

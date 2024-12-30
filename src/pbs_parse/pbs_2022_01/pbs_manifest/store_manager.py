@@ -1,6 +1,7 @@
 """Class to interact with pbs manifest."""
 
 import json
+import logging
 import shutil
 from collections.abc import Iterable, Sequence
 from datetime import date
@@ -16,8 +17,16 @@ from pbs_parse.pbs_2022_01.models.structured import (
     STRUCTURED_TRIP_SERIALIZER,
     StructuredTrip,
 )
+from pbs_parse.pbs_2022_01.models.structured_validation import (
+    STRUCTURED_VALIDATION_SERIALIZER,
+    StructuredValidation,
+)
 from pbs_parse.pbs_2022_01.models.trip_lines import TRIP_LINES_SERIALIZER, TripLines
 from pbs_parse.snippets.file.check_file import check_file
+
+from .exceptions import NotInManifestError, StoreOperationError, UnableToLoadError
+
+logger = logging.getLogger(__name__)
 
 
 class StoreManager:
@@ -78,20 +87,20 @@ class StoreManager:
     def clean(self, base: str, file_types: Sequence[M.FileTypes]):
         """Remove files of these types from store."""
 
-    def get_files_by_type(
+    def get_file_info_by_type(
         self, base: str, file_type: M.FileTypes
     ) -> Sequence[M.FileInfo]:
         """Get all the files of a certain type."""
         files: list[M.FileInfo] = []
         base_data = self.manifest["bases"].get(base, None)
         if base_data is None:
-            raise ValueError(f"Base not in store. {base=}")
+            raise NotInManifestError(f"Base not in manifest. {base=}")
         for file in base_data["files"].values():
             if file["type"] == file_type:
                 files.append(file)
         return files
 
-    def get_file_by_id(self, base: str, file_id: str) -> M.FileInfo | None:
+    def get_file_info_by_id(self, base: str, file_id: str) -> M.FileInfo:
         """get_file_by_id.
 
         Args:
@@ -101,10 +110,13 @@ class StoreManager:
         Returns:
             M.FileInfo|None: _description_
         """
-        # check for base
-        # check for file
-        # return file or None
-        return None
+        base_data = self.manifest["bases"].get(base, None)
+        if base_data is None:
+            raise NotInManifestError(f"Base not in manifest. {base=}")
+        info = base_data["files"].get(file_id, None)
+        if info is None:
+            raise NotInManifestError(f"Resource not in manifest. {base=}, {file_id=}")
+        return info
 
     def get_effective_dates(self) -> tuple[date, date]:
         """get_effective_dates _summary_.
@@ -124,7 +136,9 @@ class StoreManager:
     def create_base_bid(self, source_pdf: Path, source_txt: Path, name: str):
         """Create a base bid, and copy the pdf and txt files into store."""
         if self.manifest["bases"].get(name, None) is not None:
-            raise ValueError(f"Cannot create new base, it already exists. {name=}")
+            raise StoreOperationError(
+                f"Cannot create new base, it already exists. {name=}"
+            )
         base = M.Base(base_name=name, files={})
         pdf_info = M.FileInfo(
             key=M.FileTypes.PDF_PACKAGE,
@@ -137,9 +151,9 @@ class StoreManager:
             file_path=f"{name}/source/{source_txt.name}",
         )
         if not source_pdf.is_file():
-            raise ValueError(f"Path to pdf file is not valid. {source_pdf=}")
+            raise UnableToLoadError(f"Path to pdf file is not valid. {source_pdf=}")
         if not source_txt.is_file():
-            raise ValueError(f"Path to txt file is not valid. {source_txt=}")
+            raise UnableToLoadError(f"Path to txt file is not valid. {source_txt=}")
 
         pdf_dest_path = self.manifest_directory / pdf_info["file_path"]
         check_file(path_out=pdf_dest_path)
@@ -173,6 +187,25 @@ class StoreManager:
         self.record_file(base=base, info=page_info)
         return path_out
 
+    def load_page_lines(self, base: str, uuid: str) -> PageLines:
+        """Load a PageLines from the store.
+
+        Args:
+            base (str): _description_
+            uuid (str): _description_
+
+        Returns:
+            PageLines: _description_
+        """
+        data = self.load_resource(base=base, uuid=uuid)
+        try:
+            value = PAGE_LINES_SERIALIZER.from_simple(data)  # type: ignore
+            return value
+        except Exception as e:
+            msg = f"Tried to make PageLines from json, but there was an error. {base=}, {uuid=}"
+            logger.exception(msg)
+            raise UnableToLoadError(msg) from e
+
     def save_trip_lines(
         self,
         base: str,
@@ -192,6 +225,25 @@ class StoreManager:
         self.record_file(base=base, info=trip_info)
         return path_out
 
+    def load_trip_lines(self, base: str, uuid: str) -> TripLines:
+        """Load a TripLines from the store.
+
+        Args:
+            base (str): _description_
+            uuid (str): _description_
+
+        Returns:
+            TripLines: _description_
+        """
+        data = self.load_resource(base=base, uuid=uuid)
+        try:
+            value = TRIP_LINES_SERIALIZER.from_simple(data)  # type: ignore
+            return value
+        except Exception as e:
+            msg = f"Tried to make TripLines from json, but there was an error. {base=}, {uuid=}"
+            logger.exception(msg)
+            raise UnableToLoadError(msg) from e
+
     def save_parsed_trip(
         self, base: str, parsed: ParsedTrip, overwrite: bool = False
     ) -> Path:
@@ -207,6 +259,38 @@ class StoreManager:
         )
         self.record_file(base=base, info=trip_info)
         return path_out
+
+    def load_parsed_trip(self, base: str, uuid: str) -> ParsedTrip:
+        """Load a ParsedTrip from the store.
+
+        Args:
+            base (str): _description_
+            uuid (str): _description_
+
+        Returns:
+            ParsedTrip: _description_
+        """
+        data = self.load_resource(base=base, uuid=uuid)
+        try:
+            value = PARSED_TRIP_SERIALIZER.from_simple(data)  # type: ignore
+            return value
+        except Exception as e:
+            msg = f"Tried to make ParsedTrip from json, but there was an error. {base=}, {uuid=}"
+            logger.exception(msg)
+            raise UnableToLoadError(msg) from e
+
+    def load_resource(self, base: str, uuid: str) -> dict[str, Any]:
+        """Load a json object from the store."""
+        file_info = self.get_file_info_by_id(base=base, file_id=uuid)
+        path_in = self.manifest_directory / file_info["file_path"]
+        try:
+            with open(path_in) as file_in:
+                value = json.load(file_in)
+            return value
+        except Exception as e:
+            msg = f"Unable to load json resource. {base=}, {uuid=}, {file_info=!r}, {path_in=!r}"
+            logger.exception(msg)
+            raise UnableToLoadError(msg) from e
 
     def save_parsed_prior_month_trip(
         self, base: str, parsed: ParsedTrip, overwrite: bool = False
@@ -240,10 +324,40 @@ class StoreManager:
         self.record_file(base=base, info=trip_info)
         return path_out
 
+    def load_structured_trip(self, base: str, uuid: str) -> StructuredTrip:
+        """Load a StructuredTrip from the store.
+
+        Args:
+            base (str): _description_
+            uuid (str): _description_
+
+        Returns:
+            StructuredTrip: _description_
+        """
+        data = self.load_resource(base=base, uuid=uuid)
+        try:
+            value = STRUCTURED_TRIP_SERIALIZER.from_simple(data)  # type: ignore
+            return value
+        except Exception as e:
+            msg = f"Tried to make StructuredTrip from json, but there was an error. {base=}, {uuid=}"
+            logger.exception(msg)
+            raise UnableToLoadError(msg) from e
+
     def save_structured_trip_validation_error(
-        self, base: str, structured_error: Iterable[Any], overwrite: bool = False
+        self, base: str, validation_model: StructuredValidation, overwrite: bool = False
     ) -> Path:
         """Fix type of error."""
+        trip_info = M.FileInfo(
+            key=validation_model.uuid,
+            type=M.FileTypes.STRUCTURED_TRIP_VALIDATION,
+            file_path=f"{base}/structured/errors/{validation_model.default_file_name()}",
+        )
+        path_out = self.manifest_directory / trip_info["file_path"]
+        STRUCTURED_VALIDATION_SERIALIZER.save_as_json(
+            path_out=path_out, complex_obj=validation_model, overwrite=overwrite
+        )
+        self.record_file(base=base, info=trip_info)
+        return path_out
 
     def save_expanded_trip(
         self, base: str, expanded: ExpandedTrip, overwrite: bool = False
@@ -260,6 +374,25 @@ class StoreManager:
         )
         self.record_file(base=base, info=trip_info)
         return path_out
+
+    def load_expanded_trip(self, base: str, uuid: str) -> ExpandedTrip:
+        """Load a ExpandedTrip from the store.
+
+        Args:
+            base (str): _description_
+            uuid (str): _description_
+
+        Returns:
+            ExpandedTrip: _description_
+        """
+        data = self.load_resource(base=base, uuid=uuid)
+        try:
+            value = EXPANDED_TRIP_SERIALIZER.from_simple(data)  # type: ignore
+            return value
+        except Exception as e:
+            msg = f"Tried to make ExpandedTrip from json, but there was an error. {base=}, {uuid=}"
+            logger.exception(msg)
+            raise UnableToLoadError(msg) from e
 
     def save_expanded_trip_validation_error(
         self, base: str, expanded_error: Iterable[Any], overwrite: bool = False

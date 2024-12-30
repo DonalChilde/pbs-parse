@@ -20,7 +20,7 @@ def split_to_trips(
         task_id (TaskID): _description_
         overwrite (bool, optional): _description_. Defaults to False.
     """
-    page_infos = store.get_files_by_type(
+    page_infos = store.get_file_info_by_type(
         base=base, file_type=manifest.FileTypes.SPLIT_PAGE
     )
     progress.update(
