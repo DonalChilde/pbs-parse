@@ -24,7 +24,7 @@ def validate_structured_trip(
         StructuredValidation: Will contain any error messages generated.
     """
     validation_model.valid_start_dates = _possible_start_dates(
-        structured_trip=validation_model.structured_trip
+        structured_trip=validation_model.structured
     )
     _validate(ctx=validation_model)
     return validation_model
@@ -44,8 +44,8 @@ def validate_structured_trip_from_file(
     )
 
     ctx = StructuredValidation(
-        parsed_trip=parsed_trip,
-        structured_trip=structured_trip,
+        parsed=parsed_trip,
+        structured=structured_trip,
         parsed_path=str(parsed_trip_path),
         structured_path=str(structured_trip_path),
     )
@@ -74,11 +74,11 @@ def _validate(ctx: StructuredValidation) -> None:
 
 def _calendar_starts_count(ctx: StructuredValidation) -> None:
     """Check if whole calendar was captured."""
-    if len(ctx.structured_trip.calendar) != len(ctx.valid_start_dates):
+    if len(ctx.structured.calendar) != len(ctx.valid_start_dates):
         msg = (
             f"len(ctx.structured_trip.calendar) != len(ctx.external_start_dates)\n"
-            f"\t{len(ctx.structured_trip.calendar)} != {len(ctx.valid_start_dates)}\n"
-            f"\tctx.structured_trip.calendar -> {ctx.structured_trip.calendar!r}\n"
+            f"\t{len(ctx.structured.calendar)} != {len(ctx.valid_start_dates)}\n"
+            f"\tctx.structured_trip.calendar -> {ctx.structured.calendar!r}\n"
             f"\tctx.external_start_dates -> {ctx.valid_start_dates}\n"
         )
         ctx.errors.append(msg)

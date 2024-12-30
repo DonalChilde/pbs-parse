@@ -11,6 +11,10 @@ from typing import Any
 
 from pbs_parse.pbs_2022_01.models import manifest as M
 from pbs_parse.pbs_2022_01.models.expanded import EXPANDED_TRIP_SERIALIZER, ExpandedTrip
+from pbs_parse.pbs_2022_01.models.expanded_validation import (
+    EXPANDED_VALIDATION_SERIALIZER,
+    ExpandedValidation,
+)
 from pbs_parse.pbs_2022_01.models.page_lines import PAGE_LINES_SERIALIZER, PageLines
 from pbs_parse.pbs_2022_01.models.parsed_trip import PARSED_TRIP_SERIALIZER, ParsedTrip
 from pbs_parse.pbs_2022_01.models.structured import (
@@ -395,6 +399,17 @@ class StoreManager:
             raise UnableToLoadError(msg) from e
 
     def save_expanded_trip_validation_error(
-        self, base: str, expanded_error: Iterable[Any], overwrite: bool = False
-    ) -> int:
+        self, base: str, validation_model: ExpandedValidation, overwrite: bool = False
+    ) -> Path:
         """Fix type of error."""
+        trip_info = M.FileInfo(
+            key=validation_model.uuid,
+            type=M.FileTypes.EXPANDED_TRIP_VALIDATION,
+            file_path=f"{base}/expanded/errors/{validation_model.default_file_name()}",
+        )
+        path_out = self.manifest_directory / trip_info["file_path"]
+        EXPANDED_VALIDATION_SERIALIZER.save_as_json(
+            path_out=path_out, complex_obj=validation_model, overwrite=overwrite
+        )
+        self.record_file(base=base, info=trip_info)
+        return path_out

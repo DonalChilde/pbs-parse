@@ -379,11 +379,12 @@ class ExpandedTrip:
         return "".join(ret_value)
 
     @staticmethod
-    def from_simple(simple_obj: TD.ExpandedTrip) -> "ExpandedTrip":
+    def from_simple(simple_obj: TD.ExpandedTripTD) -> "ExpandedTrip":
         """Turn simple object into Trip."""
         result = ExpandedTrip(
             source_uuid=simple_obj["source_uuid"],
             source_idx=simple_obj["source_idx"],
+            uuid=simple_obj["uuid"],
             trip_number=simple_obj["trip_number"],
             base_equipment=BaseEquipment.from_simple(simple_obj["base_equipment"]),
             positions=[Position(name=x["name"]) for x in simple_obj["positions"]],
@@ -405,11 +406,12 @@ class ExpandedTrip:
         )
         return result
 
-    def to_simple(self) -> TD.ExpandedTrip:
+    def to_simple(self) -> TD.ExpandedTripTD:
         """Trip to simple object."""
-        result = TD.ExpandedTrip(
+        result = TD.ExpandedTripTD(
             source_uuid=self.source_uuid,
             source_idx=self.source_idx,
+            uuid=self.uuid,
             trip_number=self.trip_number,
             base_equipment=self.base_equipment.to_simple(),
             positions=[TD.Position(name=x.name) for x in self.positions],
@@ -452,13 +454,13 @@ def get_airport_code_from_iata(iata: str) -> AirportCode:
 #     return "".join(ret_value)
 
 
-def trip_serializer() -> DataclassSerializer[ExpandedTrip, TD.ExpandedTrip]:
+def trip_serializer() -> DataclassSerializer[ExpandedTrip, TD.ExpandedTripTD]:
     """Init a Trip serializer.
 
     Returns:
         DataclassSerializer[Trip, TD.Trip]: _description_
     """
-    return DataclassSerializer[ExpandedTrip, TD.ExpandedTrip](
+    return DataclassSerializer[ExpandedTrip, TD.ExpandedTripTD](
         complex_factory=ExpandedTrip.from_simple, simple_factory=ExpandedTrip.to_simple
     )
 

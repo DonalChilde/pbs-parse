@@ -32,8 +32,8 @@ def validate_structured_trips(base: str, store: StoreManager, task_id: TaskID):
         structured = store.load_structured_trip(base=base, uuid=trip_info["key"])
         parsed = store.load_parsed_trip(base=base, uuid=structured.source_uuid)
         validation_model = StructuredValidation(
-            parsed_trip=parsed,
-            structured_trip=structured,
+            parsed=parsed,
+            structured=structured,
             parsed_path="",
             structured_path="",
         )

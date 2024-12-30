@@ -103,11 +103,12 @@ class DutyPeriod(TypedDict):
     layover: Layover | None
 
 
-class ExpandedTrip(TypedDict):
+class ExpandedTripTD(TypedDict):
     """A trip."""
 
     source_uuid: str
     source_idx: str
+    uuid: str
     trip_number: str
     base_equipment: BaseEquipment
     positions: list[Position]
