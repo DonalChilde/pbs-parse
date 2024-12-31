@@ -44,9 +44,15 @@ class StructuredValidation:
     def __str__(self) -> str:
         """Custom str output."""
         return (
-            f"parsed_path: {self.parsed_path}\nstructured path: {self.structured_path}\n"
-            f"external_start_dates: {self.valid_start_dates!r}\n"
-            f"{self.parsed}\n\n{self.structured}\n\n{"\n".join(self.errors)}"
+            "StructuredValidation:\n"
+            f"{self.parsed_path=}\n"
+            f"{self.structured_path=}\n"
+            f"{self.uuid=}\n"
+            f"{self.valid_start_dates=!r}\n"
+            f"\nErrors:\n{"\n".join(self.errors)}"
+            f"\nParsed:\n{self.parsed}\n"
+            f"\nStructured:\n{self.structured}\n"
+            "\n"
         )
 
     def __post_init__(self):

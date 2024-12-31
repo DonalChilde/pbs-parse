@@ -55,6 +55,21 @@ class ExpandedValidation:
                 f"Supplied uuid: {self.uuid} does not match calculated uuid: {current_uuid_str}"
             )
 
+    def __str__(self) -> str:
+        """Custom str output."""
+        return (
+            "ExpandedValidation:\n"
+            f"{self.parsed_path=}\n"
+            f"{self.structured_path=}\n"
+            f"{self.expanded_path=}\n"
+            f"{self.uuid=}\n"
+            f"\nErrors:\n{"\n".join(self.errors)}\n"
+            f"\n{self.parsed}\n"
+            f"\nStructured:\n{self.structured}\n"
+            f"\nExpanded:\n{self.expanded}\n"
+            "\n"
+        )
+
     def make_uuid(self) -> UUID:
         """Make a uuid from a namespace and the expanded uuid."""
         return uuid5(namespace=EXPANDED_VALIDATION_NS, name=self.expanded.uuid)
