@@ -2,7 +2,7 @@
 
 from rich.progress import TaskID
 
-from pbs_parse.pbs_2022_01.expand.structured_to_expanded_cls import StructuredToExpanded
+from pbs_parse.pbs_2022_01.expand.structured_to_expanded import StructuredToExpanded
 from pbs_parse.pbs_2022_01.models import manifest
 from pbs_parse.pbs_2022_01.pbs_manifest.store_manager import StoreManager
 
