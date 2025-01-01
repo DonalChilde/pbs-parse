@@ -40,9 +40,19 @@ class StoreManager:
         """Init manager and open data store."""
         self.manifest_directory = manifest_directory
         self.manifest_path = self.manifest_directory / self.manifest_file_name()
-        with open(self.manifest_path) as file_in:
-            manifest = json.load(file_in)
+        try:
+            with open(self.manifest_path) as file_in:
+                manifest = json.load(file_in)
+        except Exception as e:
+            raise UnableToLoadError(
+                f"Unable to find Pbs Store `{self.manifest_file_name()}` at `{manifest_directory}`"
+            ) from e
         self.manifest: M.BidPeriodManifest = manifest
+        for key in ("name", "effective_from", "effective_to", "bases"):
+            if not key in self.manifest.keys():
+                raise NotInManifestError(
+                    "Loaded manifest does not have basic keys. Is the the right location?"
+                )
         self.read_only = True
 
     def __enter__(self):
