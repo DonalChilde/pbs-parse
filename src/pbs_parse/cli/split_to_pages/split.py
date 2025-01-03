@@ -33,7 +33,7 @@ def split(
     """Split the text version of a PBS pairing package into pages.
 
     The output file name will be in the form of `page-lines_00001-00_<uuid>.json
-    If splitting multiple files, files will be output to PATH_OUT/PATH_IN/file.stem/pages/
+    If splitting multiple files, files will be output to PATH_OUT/<PATH_IN/file.stem>/pages/
     """
     _ = ctx
     if path_in.is_file():
