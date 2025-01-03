@@ -27,5 +27,6 @@ def test_parsed_trip_roundtrip(test_output_dir: Path):
     parsed_trip_simple = PARSED_TRIP_SERIALIZER.to_simple(parsed_trip)
     assert parsed_trip_json == parsed_trip_simple
     PARSED_TRIP_SERIALIZER.save_as_json(path_out=path_out, complex_obj=parsed_trip)
+    path_out.with_suffix(".txt").write_text(str(parsed_trip))
     parsed_trip_saved = PARSED_TRIP_SERIALIZER.load_from_json(path_in=path_out)
     assert parsed_trip == parsed_trip_saved

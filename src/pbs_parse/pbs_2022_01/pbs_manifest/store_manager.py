@@ -3,7 +3,7 @@
 import json
 import logging
 import shutil
-from collections.abc import Iterable, Sequence
+from collections.abc import Sequence
 from datetime import date
 from pathlib import Path
 from types import TracebackType
@@ -40,12 +40,24 @@ class StoreManager:
         """Init manager and open data store."""
         self.manifest_directory = manifest_directory
         self.manifest_path = self.manifest_directory / self.manifest_file_name()
-        with open(self.manifest_path) as file_in:
-            manifest = json.load(file_in)
+        try:
+            with open(self.manifest_path) as file_in:
+                manifest = json.load(file_in)
+        except Exception as e:
+            raise UnableToLoadError(
+                f"Unable to find Pbs Store `{self.manifest_file_name()}` at `{manifest_directory}`"
+            ) from e
         self.manifest: M.BidPeriodManifest = manifest
+        for key in ("name", "effective_from", "effective_to", "bases"):
+            if not key in self.manifest.keys():
+                raise NotInManifestError(
+                    "Loaded manifest does not have basic keys. Is the the right location?"
+                )
+        self.read_only = True
 
     def __enter__(self):
         """Context manager."""
+        self.read_only = False
         return self
 
     def __exit__(
@@ -57,6 +69,7 @@ class StoreManager:
         """Context manager exit."""
         if exc_val is None:
             self.save_manifest()
+        self.read_only = True
         return False
 
     @classmethod
@@ -173,12 +186,20 @@ class StoreManager:
 
     def record_file(self, base: str, info: M.FileInfo):
         """Record file info in manifest."""
+        if self.read_only:
+            raise StoreOperationError(
+                "Store is opened in read-only mode. No changes allowed."
+            )
         self.manifest["bases"][base]["files"][info["key"]] = info
 
     def save_page_lines(
         self, base: str, page: PageLines, overwrite: bool = False
     ) -> Path:
         """Save a PageLines in the store."""
+        if self.read_only:
+            raise StoreOperationError(
+                "Store is opened in read-only mode. No changes allowed."
+            )
         page_info = M.FileInfo(
             key=page.uuid,
             type=M.FileTypes.SPLIT_PAGE,
@@ -217,6 +238,10 @@ class StoreManager:
         overwrite: bool = False,
     ):
         """Save TripLines in the store."""
+        if self.read_only:
+            raise StoreOperationError(
+                "Store is opened in read-only mode. No changes allowed."
+            )
         trip_info = M.FileInfo(
             key=trip.uuid,
             type=M.FileTypes.SPLIT_TRIP,
@@ -252,6 +277,10 @@ class StoreManager:
         self, base: str, parsed: ParsedTrip, overwrite: bool = False
     ) -> Path:
         """Save a ParsedTrip in the store."""
+        if self.read_only:
+            raise StoreOperationError(
+                "Store is opened in read-only mode. No changes allowed."
+            )
         trip_info = M.FileInfo(
             key=parsed.uuid,
             type=M.FileTypes.PARSED_TRIP,
@@ -300,6 +329,10 @@ class StoreManager:
         self, base: str, parsed: ParsedTrip, overwrite: bool = False
     ) -> Path:
         """Save a ParsedTrip in the store."""
+        if self.read_only:
+            raise StoreOperationError(
+                "Store is opened in read-only mode. No changes allowed."
+            )
         trip_info = M.FileInfo(
             key=parsed.uuid,
             type=M.FileTypes.PARSED_PRIOR_MONTH_TRIP,
@@ -316,6 +349,10 @@ class StoreManager:
         self, base: str, structured: StructuredTrip, overwrite: bool = False
     ) -> Path:
         """Save a StructuredTrip in the store."""
+        if self.read_only:
+            raise StoreOperationError(
+                "Store is opened in read-only mode. No changes allowed."
+            )
         trip_info = M.FileInfo(
             key=structured.uuid,
             type=M.FileTypes.STRUCTURED_TRIP,
@@ -351,6 +388,10 @@ class StoreManager:
         self, base: str, validation_model: StructuredValidation, overwrite: bool = False
     ) -> Path:
         """Fix type of error."""
+        if self.read_only:
+            raise StoreOperationError(
+                "Store is opened in read-only mode. No changes allowed."
+            )
         trip_info = M.FileInfo(
             key=validation_model.uuid,
             type=M.FileTypes.STRUCTURED_TRIP_VALIDATION,
@@ -367,6 +408,10 @@ class StoreManager:
         self, base: str, expanded: ExpandedTrip, overwrite: bool = False
     ) -> Path:
         """Save an ExpandedTrip in the store."""
+        if self.read_only:
+            raise StoreOperationError(
+                "Store is opened in read-only mode. No changes allowed."
+            )
         trip_info = M.FileInfo(
             key=expanded.uuid,
             type=M.FileTypes.EXPANDED_TRIP,
@@ -402,6 +447,10 @@ class StoreManager:
         self, base: str, validation_model: ExpandedValidation, overwrite: bool = False
     ) -> Path:
         """Fix type of error."""
+        if self.read_only:
+            raise StoreOperationError(
+                "Store is opened in read-only mode. No changes allowed."
+            )
         trip_info = M.FileInfo(
             key=validation_model.uuid,
             type=M.FileTypes.EXPANDED_TRIP_VALIDATION,

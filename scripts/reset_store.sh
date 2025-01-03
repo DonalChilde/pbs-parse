@@ -8,7 +8,7 @@ pbs-parse data-store create ~/projects/tmp/store November 2024-11-01 2024-12-01
 echo
 echo "***** Add the bid packages *****"
 echo
-pbs-parse data-store add-all-bases ~/projects/tmp/store ~/projects/tmp/pbs-data/2024.11.01-2024.12.01/
+pbs-parse data-store add-all-bases ~/projects/tmp/store ~/projects/tmp/pbs-data/2024-11-01_2024-12-01/
 echo
 echo "***** Parse the data *****"
 echo

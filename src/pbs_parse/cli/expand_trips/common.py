@@ -15,7 +15,7 @@ from rich.progress import (
     TotalFileSizeColumn,
 )
 
-from pbs_parse.pbs_2022_01.expand.structured_to_expanded_cls import StructuredToExpanded
+from pbs_parse.pbs_2022_01.expand.structured_to_expanded import StructuredToExpanded
 from pbs_parse.pbs_2022_01.models.expanded import EXPANDED_TRIP_SERIALIZER
 from pbs_parse.pbs_2022_01.models.expanded_validation import (
     EXPANDED_VALIDATION_SERIALIZER,

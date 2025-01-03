@@ -74,17 +74,31 @@ class ParsedTrip:
 
     def __str__(self) -> str:
         """Make a str rep of ParsedTrip."""
-        lines: list[str] = []
-        lines.append(f"uuid: {self.uuid}")
-        lines.append(f"{self.idx=}")
-        lines.append(f"source_uuid: {self.source_uuid}")
-        lines.append("Text Input:")
-        lines.extend(f"{x.indexed_string}" for x in self.parsed_lines)
-        lines.append("Parsed Data:")
-        lines.extend(
-            f"ID: {x.id} {x.indexed_string.idx}: {x.data!r}" for x in self.parsed_lines
+        return (
+            "ParsedTrip:\n"
+            f"{self.uuid=}\n"
+            f"{self.idx=}\n"
+            f"{self.source_uuid=}\n"
+            "\nText Input:\n"
+            f"{"".join([f"{x.indexed_string.idx:06}: {x.indexed_string.txt}" for x in self.parsed_lines])}\n"
+            "Parsed Data:\n"
+            f"{"\n".join([f"{x.id:20} {x.indexed_string.idx:06}: {x.data!r}" for x in self.parsed_lines])}\n"
         )
-        return "\n".join(lines)
+        # lines: list[str] = []
+        # lines.append(f"{self.uuid=}")
+        # lines.append(f"{self.idx=}")
+        # lines.append(f"{self.source_uuid=}")
+        # lines.append("Text Input:")
+        # lines.extend(
+        #     f"{x.indexed_string.idx:06}: {x.indexed_string.txt}"
+        #     for x in self.parsed_lines
+        # )
+        # lines.append("Parsed Data:")
+        # lines.extend(
+        #     f"{x.id:20} {x.indexed_string.idx:06}: {x.data!r}"
+        #     for x in self.parsed_lines
+        # )
+        # return "\n".join(lines)
 
 
 def parsed_trip_serializer() -> DataclassSerializer[ParsedTrip, ParsedTripTD]:
