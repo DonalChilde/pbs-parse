@@ -1,14 +1,10 @@
 """Command-line interface."""
 
-import datetime
 import logging
-from time import perf_counter_ns
-from typing import Annotated
 
 import typer
 from pfmsoft.pdf2txt.cli import extract_txt_cli
 
-from pbs_parse import APP_NAME, LOG_DIR
 from pbs_parse.cli import (
     expand_trips,
     parse_trips,
@@ -18,31 +14,12 @@ from pbs_parse.cli import (
     structure_trips,
 )
 
+from .default_callback import base_options
+
 logger = logging.getLogger(__name__)
 
 
-def default_options(
-    ctx: typer.Context,
-    debug: Annotated[bool, typer.Option(help="Enable debug output.")] = False,
-    verbosity: Annotated[int, typer.Option("-v", help="Verbosity.", count=True)] = 1,
-):
-    """Describe what your app does here."""
-    typer.echo(f"Welcome to {APP_NAME}!")
-    # typer.echo(f"{APP_NAME}'s application directory is {APP_DIR}")
-    typer.echo(f"{APP_NAME}'s log directory is {LOG_DIR}")
-    ctx.ensure_object(dict)
-    ctx.obj["START_TIME"] = perf_counter_ns()
-    ctx.obj["DEBUG"] = debug
-    ctx.obj["VERBOSITY"] = verbosity
-    if ctx.obj["VERBOSITY"] >= 3:
-        typer.echo(f"Verbosity: {ctx.obj["VERBOSITY"]}")
-        typer.echo(f"Debug: {ctx.obj["DEBUG"]}")
-        dt = datetime.datetime.now(datetime.UTC)
-        formatted_time = dt.strftime("%Y-%m-%d %H:%M:%S.%fZ")
-        typer.echo(f"Started at: {formatted_time}")
-
-
-app = typer.Typer(callback=default_options)
+app = typer.Typer(callback=base_options)
 app_debug = typer.Typer()
 
 app_debug.add_typer(
