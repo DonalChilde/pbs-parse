@@ -12,6 +12,18 @@ from pbs_parse.snippets.datetime.date_range import date_range
 logger = logging.getLogger(__name__)
 
 
+class StructuredValidator:
+    """_summary_."""
+
+    def validate(self, validation_model: StructuredValidation):
+        """validate.
+
+        Args:
+            validation_model (StructuredValidation): _description_
+        """
+        validate_structured_trip(validation_model=validation_model)
+
+
 def validate_structured_trip(
     validation_model: StructuredValidation,
 ) -> StructuredValidation:

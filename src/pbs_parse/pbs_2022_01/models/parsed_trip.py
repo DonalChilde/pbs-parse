@@ -70,7 +70,20 @@ class ParsedTrip:
         Returns:
             str: _description_
         """
-        return f"parsed-trip_{self.idx}_{self.uuid}.json"
+        return self.assemble_file_name(idx=self.idx, uuid=self.uuid)
+
+    @staticmethod
+    def assemble_file_name(idx: str, uuid: str) -> str:
+        """assemble_file_name.
+
+        Args:
+            idx (str): _description_
+            uuid (str): _description_
+
+        Returns:
+            str: _description_
+        """
+        return f"parsed-trip_{idx}_{uuid}.json"
 
     def __str__(self) -> str:
         """Make a str rep of ParsedTrip."""

@@ -2,7 +2,16 @@
 
 from abc import ABC, abstractmethod
 from collections.abc import Iterable
+from dataclasses import dataclass
 from pathlib import Path
+
+
+@dataclass(slots=True)
+class FileResource[T]:
+    """FileResource."""
+
+    resource: T
+    file_path: Path
 
 
 class DataFileLoader[T](ABC):
@@ -34,7 +43,7 @@ class DataFileLoader[T](ABC):
         self.glob = glob
         self.files: list[Path] = []
 
-    def __call__(self) -> Iterable[T]:
+    def __call__(self) -> Iterable[FileResource[T]]:
         """Get an iterable of the loaded data files.
 
         Returns:
@@ -45,7 +54,7 @@ class DataFileLoader[T](ABC):
         """
         self._build_file_list()
         for path in self.files:
-            yield self._translate(obj_path=path)
+            yield FileResource(resource=self._translate(obj_path=path), file_path=path)
 
     def _build_file_list(self):
         files = list(self.path_in.glob(self.glob))

@@ -3,7 +3,7 @@
 import json
 import logging
 import shutil
-from collections.abc import Sequence
+from collections.abc import Iterator, Sequence
 from datetime import date
 from pathlib import Path
 from types import TracebackType
@@ -231,6 +231,21 @@ class StoreManager:
             logger.exception(msg)
             raise UnableToLoadError(msg) from e
 
+    def load_all_page_lines(self, base: str) -> Iterator[PageLines]:
+        """load_all_page_lines.
+
+        Args:
+            base (str): _description_
+
+        Yields:
+            Iterator[PageLines]: _description_
+        """
+        page_infos = self.get_file_info_by_type(
+            base=base, file_type=M.FileTypes.SPLIT_PAGE
+        )
+        for page_info in page_infos:
+            yield self.load_page_lines(base=base, uuid=page_info["key"])
+
     def save_trip_lines(
         self,
         base: str,
@@ -273,6 +288,21 @@ class StoreManager:
             logger.exception(msg)
             raise UnableToLoadError(msg) from e
 
+    def load_all_trip_lines(self, base: str) -> Iterator[TripLines]:
+        """load_all_trip_lines.
+
+        Args:
+            base (str): _description_
+
+        Yields:
+            Iterator[TripLines]: _description_
+        """
+        trip_infos = self.get_file_info_by_type(
+            base=base, file_type=M.FileTypes.SPLIT_TRIP
+        )
+        for page_info in trip_infos:
+            yield self.load_trip_lines(base=base, uuid=page_info["key"])
+
     def save_parsed_trip(
         self, base: str, parsed: ParsedTrip, overwrite: bool = False
     ) -> Path:
@@ -311,6 +341,21 @@ class StoreManager:
             msg = f"Tried to make ParsedTrip from json, but there was an error. {base=}, {uuid=}"
             logger.exception(msg)
             raise UnableToLoadError(msg) from e
+
+    def load_all_parsed_trips(self, base: str) -> Iterator[ParsedTrip]:
+        """load_all_parsed_trips.
+
+        Args:
+            base (str): _description_
+
+        Yields:
+            Iterator[ParsedTrip]: _description_
+        """
+        trip_infos = self.get_file_info_by_type(
+            base=base, file_type=M.FileTypes.PARSED_TRIP
+        )
+        for page_info in trip_infos:
+            yield self.load_parsed_trip(base=base, uuid=page_info["key"])
 
     def load_resource(self, base: str, uuid: str) -> dict[str, Any]:
         """Load a json object from the store."""
@@ -384,6 +429,21 @@ class StoreManager:
             logger.exception(msg)
             raise UnableToLoadError(msg) from e
 
+    def load_all_structured_trips(self, base: str) -> Iterator[StructuredTrip]:
+        """load_all_structured_trips.
+
+        Args:
+            base (str): _description_
+
+        Yields:
+            Iterator[StructuredTrip]: _description_
+        """
+        trip_infos = self.get_file_info_by_type(
+            base=base, file_type=M.FileTypes.STRUCTURED_TRIP
+        )
+        for page_info in trip_infos:
+            yield self.load_structured_trip(base=base, uuid=page_info["key"])
+
     def save_structured_trip_validation_error(
         self, base: str, validation_model: StructuredValidation, overwrite: bool = False
     ) -> Path:
@@ -442,6 +502,21 @@ class StoreManager:
             msg = f"Tried to make ExpandedTrip from json, but there was an error. {base=}, {uuid=}"
             logger.exception(msg)
             raise UnableToLoadError(msg) from e
+
+    def load_all_expanded_trips(self, base: str) -> Iterator[ExpandedTrip]:
+        """load_all_expanded_trips.
+
+        Args:
+            base (str): _description_
+
+        Yields:
+            Iterator[ExpandedTrip]: _description_
+        """
+        trip_infos = self.get_file_info_by_type(
+            base=base, file_type=M.FileTypes.EXPANDED_TRIP
+        )
+        for page_info in trip_infos:
+            yield self.load_expanded_trip(base=base, uuid=page_info["key"])
 
     def save_expanded_trip_validation_error(
         self, base: str, validation_model: ExpandedValidation, overwrite: bool = False

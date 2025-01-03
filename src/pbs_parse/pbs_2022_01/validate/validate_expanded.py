@@ -9,6 +9,18 @@ from pbs_parse.pbs_2022_01.models.expanded_validation import ExpandedValidation
 logger = logging.getLogger(__name__)
 
 
+class ExpandedValidator:
+    """_summary_."""
+
+    def validate(self, validation_model: ExpandedValidation):
+        """validate.
+
+        Args:
+            validation_model (ExpandedValidation): _description_
+        """
+        validate_expanded(validation_model=validation_model)
+
+
 def validate_expanded(validation_model: ExpandedValidation):
     """validate.
 

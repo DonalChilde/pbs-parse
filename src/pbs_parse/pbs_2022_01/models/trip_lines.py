@@ -71,7 +71,20 @@ class TripLines:
         Returns:
             str: _description_
         """
-        return f"trip-lines_{self.idx}_{self.uuid}.json"
+        return self.assemble_file_name(idx=self.idx, uuid=self.uuid)
+
+    @staticmethod
+    def assemble_file_name(idx: str, uuid: str) -> str:
+        """assemble_file_name.
+
+        Args:
+            idx (str): _description_
+            uuid (str): _description_
+
+        Returns:
+            str: _description_
+        """
+        return f"trip-lines_{idx}_{uuid}.json"
 
 
 def trip_lines_serializer() -> DataclassSerializer[TripLines, TripLinesTD]:
