@@ -8,9 +8,10 @@ from rich.progress import Progress, TaskID
 
 from pbs_parse.pbs_2022_01.models import manifest
 from pbs_parse.pbs_2022_01.models.parsed_trip import ParsedTrip, ParsedTripSaver
-from pbs_parse.pbs_2022_01.models.trip_lines import TripLines, TripLinesLoader
+from pbs_parse.pbs_2022_01.models.trip_lines import TripLines
 from pbs_parse.pbs_2022_01.parse.trip_lines_parser import TripLinesParser
 from pbs_parse.pbs_2022_01.pbs_manifest.store_manager import StoreManager
+from pbs_parse.snippets.file.data_file_loader import FileResource
 
 
 def parse_trips(
@@ -81,31 +82,35 @@ def parse_trips_store(
 
 
 def parse_trips_disk(
-    path_in: Path, path_out: Path, overwrite: bool, task_id: TaskID, progress: Progress
+    trip_resources: Iterable[FileResource[TripLines]],
+    trip_count: int,
+    path_out: Path,
+    overwrite: bool,
+    task_id: TaskID,
+    progress: Progress,
 ):
     """parse_trips_disk.
 
     Args:
-        path_in (Path): _description_
+        trip_resources (Iterable[FileResource[TripLines]]): _description_
+        trip_count (int): _description_
         path_out (Path): _description_
         overwrite (bool): _description_
         task_id (TaskID): _description_
         progress (Progress): _description_
     """
-    loader = TripLinesLoader(path_in=path_in)
-    trip_lines = (x.resource for x in loader())
-    progress.update(
-        task_id=task_id, total=loader.file_count, description="Parsing trips...."
-    )
+    # loader = TripLinesLoader(path_in=path_in)
+    trip_lines = (x.resource for x in trip_resources)
+    progress.update(task_id=task_id, total=trip_count, description="Parsing trips....")
     saver = ParsedTripSaver(path_out=path_out)
     prior_saver = ParsedTripSaver(path_out=path_out / "prior")
     for parsed_trip in parse_trips(
         trip_lines=trip_lines, task_id=task_id, progress=progress
     ):
         if is_prior_month(parsed_trip=parsed_trip):
-            prior_saver(parsed_trip=parsed_trip)
+            prior_saver(parsed_trip=parsed_trip, overwrite=overwrite)
         else:
-            saver(parsed_trip=parsed_trip)
+            saver(parsed_trip=parsed_trip, overwrite=overwrite)
 
 
 def is_prior_month(parsed_trip: ParsedTrip) -> bool:

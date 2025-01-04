@@ -21,26 +21,22 @@ DIRECTORY_TEST = FileResource(
 def test_parse_trips_file(runner: CliRunner, test_output_dir: Path):  # noqa: D103
     path_out = test_output_dir / "cli" / "parse_trips_file"
     with resources.as_file(SINGLE_FILE_TEST.traversable()) as input_path:
-        result = runner.invoke(
-            app, ["debug", "parse", "trip", str(input_path), str(path_out)]
-        )
+        result = runner.invoke(app, ["manual", "parse", str(input_path), str(path_out)])
         if result.stderr_bytes is not None:
             print(result.stderr)
         print(result.stdout)
         assert result.exit_code == 0
-        assert "1 of 1, 1 trips parsed" in result.stdout
+        assert "found. 1/1" in result.stdout
         assert "error" not in result.stdout
 
 
 def test_parse_trips_dir(runner: CliRunner, test_output_dir: Path):  # noqa: D103
     path_out = test_output_dir / "cli" / "parse_trips_dir"
     with resources.as_file(DIRECTORY_TEST.traversable()) as input_path:
-        result = runner.invoke(
-            app, ["debug", "parse", "all-trips", str(input_path), str(path_out)]
-        )
+        result = runner.invoke(app, ["manual", "parse", str(input_path), str(path_out)])
         if result.stderr_bytes is not None:
             print(result.stderr)
         print(result.stdout)
         assert result.exit_code == 0
-        assert "18 of 18, 18 trips parsed" in result.stdout
+        assert "18/18" in result.stdout
         assert "error" not in result.stdout

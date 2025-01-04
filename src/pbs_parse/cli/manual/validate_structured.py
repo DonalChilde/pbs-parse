@@ -7,12 +7,16 @@ from typing import Annotated
 import typer
 
 from pbs_parse.cli.work.common import load_parsed
-from pbs_parse.pbs_2022_01.models.structured import STRUCTURED_TRIP_SERIALIZER
+from pbs_parse.pbs_2022_01.models.structured import (
+    STRUCTURED_TRIP_SERIALIZER,
+    StructuredTripLoader,
+)
 from pbs_parse.pbs_2022_01.models.structured_validation import (
     STRUCTURED_VALIDATION_SERIALIZER,
     StructuredValidation,
 )
 from pbs_parse.pbs_2022_01.validate.validate_structured import StructuredValidator
+from pbs_parse.snippets.file.data_file_loader import FileResource
 
 from ..work.progress import progress
 from ..work.validate_structured import validate_structured_disk
@@ -59,27 +63,32 @@ def validate_structured(
     if path_in.is_file():
         if parsed_dir is None:
             parsed_dir = path_in.parent
-        do_one(
-            path_in=path_in,
-            path_out=path_out,
-            parsed_dir=parsed_dir,
-            overwrite=overwrite,
+        structured_resource = FileResource(
+            resource=STRUCTURED_TRIP_SERIALIZER.load_from_json(path_in=path_in),
+            file_path=path_in,
         )
+        structured_resources = [structured_resource]
+        structured_count = 1
     else:
         if parsed_dir is None:
             parsed_dir = path_in
-        with progress:
-            task = progress.add_task(
-                description="Validating structured trips.....", total=0
-            )
-            validate_structured_disk(
-                path_in=path_in,
-                path_out=path_out,
-                parsed_dir=parsed_dir,
-                overwrite=overwrite,
-                task_id=task,
-                progress=progress,
-            )
+        loader = StructuredTripLoader(path_in=path_in)
+        structured_resources = iter(loader)
+        structured_count = len(loader)
+
+    with progress:
+        task = progress.add_task(
+            description="Validating structured trips.....", total=0
+        )
+        validate_structured_disk(
+            structured_resources=structured_resources,
+            structured_count=structured_count,
+            path_out=path_out,
+            parsed_dir=parsed_dir,
+            overwrite=overwrite,
+            task_id=task,
+            progress=progress,
+        )
 
 
 def do_one(path_in: Path, path_out: Path, parsed_dir: Path, overwrite: bool):

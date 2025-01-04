@@ -7,12 +7,13 @@ from pathlib import Path
 from rich.progress import Progress, TaskID
 
 from pbs_parse.pbs_2022_01.models import manifest
-from pbs_parse.pbs_2022_01.models.parsed_trip import ParsedTrip, ParsedTripLoader
+from pbs_parse.pbs_2022_01.models.parsed_trip import ParsedTrip
 from pbs_parse.pbs_2022_01.models.structured import StructuredTrip, StructuredTripSaver
 from pbs_parse.pbs_2022_01.pbs_manifest.store_manager import StoreManager
 from pbs_parse.pbs_2022_01.structure.parsed_to_structured import (
     structure_trip,
 )
+from pbs_parse.snippets.file.data_file_loader import FileResource
 
 
 def structure_trips(
@@ -85,7 +86,8 @@ def structure_trips_store(
 
 
 def structure_trips_disk(
-    path_in: Path,
+    parsed_resources: Iterable[FileResource[ParsedTrip]],
+    parsed_count: int,
     path_out: Path,
     overwrite: bool,
     effective_from: date,
@@ -96,7 +98,8 @@ def structure_trips_disk(
     """structure_trips_disk.
 
     Args:
-        path_in (Path): _description_
+        parsed_resources (Iterable[FileResource[ParsedTrip]]): _description_
+        parsed_count (int): _description_
         path_out (Path): _description_
         overwrite (bool): _description_
         effective_from (date): _description_
@@ -104,11 +107,10 @@ def structure_trips_disk(
         task_id (TaskID): _description_
         progress (Progress): _description_
     """
-    loader = ParsedTripLoader(path_in=path_in)
-    parsed_trips = (x.resource for x in loader())
+    parsed_trips = (x.resource for x in parsed_resources)
     progress.update(
         task_id=task_id,
-        total=loader.file_count,
+        total=parsed_count,
         description="Structuring trips....",
     )
     saver = StructuredTripSaver(path_out=path_out)

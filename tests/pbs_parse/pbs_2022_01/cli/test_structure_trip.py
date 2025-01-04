@@ -24,9 +24,8 @@ def test_structure_trips_file(runner: CliRunner, test_output_dir: Path):  # noqa
         result = runner.invoke(
             app,
             [
-                "debug",
+                "manual",
                 "structure",
-                "trip",
                 str(input_path),
                 str(path_out),
                 "2024-11-01",
@@ -37,7 +36,7 @@ def test_structure_trips_file(runner: CliRunner, test_output_dir: Path):  # noqa
             print(result.stderr)
         print(result.stdout)
         assert result.exit_code == 0
-        assert "1 of 1, 1 trips found" in result.stdout
+        assert "Structuring trips" in result.stdout
         assert "error" not in result.stdout
 
 
@@ -47,9 +46,8 @@ def test_structure_trips_dir(runner: CliRunner, test_output_dir: Path):  # noqa:
         result = runner.invoke(
             app,
             [
-                "debug",
+                "manual",
                 "structure",
-                "all-trips",
                 str(input_path),
                 str(path_out),
                 "2024-11-01",
@@ -60,5 +58,5 @@ def test_structure_trips_dir(runner: CliRunner, test_output_dir: Path):  # noqa:
             print(result.stderr)
         print(result.stdout)
         assert result.exit_code == 0
-        assert "18 of 18, 18 trips found" in result.stdout
+        assert "18/18" in result.stdout
         assert "error" not in result.stdout

@@ -7,7 +7,7 @@ from rich.progress import Progress, TaskID
 
 from pbs_parse.cli.work.common import load_parsed, load_structured
 from pbs_parse.pbs_2022_01.models import manifest
-from pbs_parse.pbs_2022_01.models.expanded import ExpandedTrip, ExpandedTripLoader
+from pbs_parse.pbs_2022_01.models.expanded import ExpandedTrip
 from pbs_parse.pbs_2022_01.models.expanded_validation import (
     EXPANDED_VALIDATION_SERIALIZER,
     ExpandedValidation,
@@ -97,7 +97,8 @@ def validate_expanded_store(
 
 
 def validate_expanded_disk(
-    path_in: Path,
+    expanded_resources: Iterable[FileResource[ExpandedTrip]],
+    expanded_count: int,
     structured_dir: Path,
     parsed_dir: Path,
     path_out: Path,
@@ -108,7 +109,8 @@ def validate_expanded_disk(
     """validate_expanded_disk.
 
     Args:
-        path_in (Path): _description_
+        expanded_resources (Iterable[FileResource[ExpandedTrip]]): _description_
+        expanded_count (int): _description_
         structured_dir (Path): _description_
         parsed_dir (Path): _description_
         path_out (Path): _description_
@@ -116,15 +118,13 @@ def validate_expanded_disk(
         task_id (TaskID): _description_
         progress (Progress): _description_
     """
-    loader = ExpandedTripLoader(path_in=path_in)
-    resources = loader()
     progress.update(
         task_id=task_id,
-        total=loader.file_count,
+        total=expanded_count,
         description="Validating expanded trips....",
     )
     validation_models = generate_validation_models(
-        resources=resources, structured_dir=structured_dir
+        resources=expanded_resources, structured_dir=structured_dir
     )
     for ev in validate_expanded(
         validation_models=validation_models, task_id=task_id, progress=progress

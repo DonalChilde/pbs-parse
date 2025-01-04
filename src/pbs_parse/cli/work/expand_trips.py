@@ -10,6 +10,7 @@ from pbs_parse.pbs_2022_01.models import manifest
 from pbs_parse.pbs_2022_01.models.expanded import ExpandedTrip, ExpandedTripSaver
 from pbs_parse.pbs_2022_01.models.structured import StructuredTrip, StructuredTripLoader
 from pbs_parse.pbs_2022_01.pbs_manifest.store_manager import StoreManager
+from pbs_parse.snippets.file.data_file_loader import FileResource
 
 
 def expand_trips(
@@ -71,22 +72,27 @@ def expand_trips_store(
 
 
 def expand_trips_disk(
-    path_in: Path, path_out: Path, overwrite: bool, task_id: TaskID, progress: Progress
+    structured_resources: Iterable[FileResource[StructuredTrip]],
+    structured_count: int,
+    path_out: Path,
+    overwrite: bool,
+    task_id: TaskID,
+    progress: Progress,
 ):
     """expand_trips_disk.
 
     Args:
-        path_in (Path): _description_
+        structured_resources (Iterable[FileResource[StructuredTrip]]): _description_
+        structured_count (int): _description_
         path_out (Path): _description_
         overwrite (bool): _description_
         task_id (TaskID): _description_
         progress (Progress): _description_
     """
-    loader = StructuredTripLoader(path_in=path_in)
-    s_trips = (x.resource for x in loader())
+    s_trips = (x.resource for x in structured_resources)
     progress.update(
         task_id=task_id,
-        total=loader.file_count,
+        total=structured_count,
         description="Expanding trips....",
     )
     saver = ExpandedTripSaver(path_out=path_out)

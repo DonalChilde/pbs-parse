@@ -7,12 +7,16 @@ from typing import Annotated
 import typer
 
 from pbs_parse.cli.work.common import load_parsed, load_structured
-from pbs_parse.pbs_2022_01.models.expanded import EXPANDED_TRIP_SERIALIZER
+from pbs_parse.pbs_2022_01.models.expanded import (
+    EXPANDED_TRIP_SERIALIZER,
+    ExpandedTripLoader,
+)
 from pbs_parse.pbs_2022_01.models.expanded_validation import (
     EXPANDED_VALIDATION_SERIALIZER,
     ExpandedValidation,
 )
 from pbs_parse.pbs_2022_01.validate.validate_expanded import ExpandedValidator
+from pbs_parse.snippets.file.data_file_loader import FileResource
 
 from ..work.progress import progress
 from ..work.validate_expanded import validate_expanded_disk
@@ -68,31 +72,32 @@ def validate_expanded(
             parsed_dir = path_in.parent
         if structured_dir is None:
             structured_dir = path_in.parent
-        do_one(
-            path_in=path_in,
-            path_out=path_out,
-            parsed_dir=parsed_dir,
-            structured_dir=structured_dir,
-            overwrite=overwrite,
+        expanded_resource = FileResource(
+            resource=EXPANDED_TRIP_SERIALIZER.load_from_json(path_in=path_in),
+            file_path=path_in,
         )
+        expanded_resources = [expanded_resource]
+        expanded_count = 1
     else:
         if parsed_dir is None:
             parsed_dir = path_in
         if structured_dir is None:
             structured_dir = path_in
-        with progress:
-            task = progress.add_task(
-                description="Validating expanded trips.....", total=0
-            )
-            validate_expanded_disk(
-                path_in=path_in,
-                path_out=path_out,
-                parsed_dir=parsed_dir,
-                structured_dir=structured_dir,
-                overwrite=overwrite,
-                task_id=task,
-                progress=progress,
-            )
+        loader = ExpandedTripLoader(path_in=path_in)
+        expanded_resources = iter(loader)
+        expanded_count = len(loader)
+    with progress:
+        task = progress.add_task(description="Validating expanded trips.....", total=0)
+        validate_expanded_disk(
+            expanded_resources=expanded_resources,
+            expanded_count=expanded_count,
+            path_out=path_out,
+            parsed_dir=parsed_dir,
+            structured_dir=structured_dir,
+            overwrite=overwrite,
+            task_id=task,
+            progress=progress,
+        )
 
 
 def do_one(

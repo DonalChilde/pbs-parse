@@ -6,10 +6,11 @@ from pathlib import Path
 from rich.progress import Progress, TaskID
 
 from pbs_parse.pbs_2022_01.models import manifest
-from pbs_parse.pbs_2022_01.models.page_lines import PageLines, PageLinesLoader
+from pbs_parse.pbs_2022_01.models.page_lines import PageLines
 from pbs_parse.pbs_2022_01.models.trip_lines import TripLines, TripLinesSaver
 from pbs_parse.pbs_2022_01.pbs_manifest.store_manager import StoreManager
 from pbs_parse.pbs_2022_01.split.extract_trips import parse_trip_lines
+from pbs_parse.snippets.file.data_file_loader import FileResource
 
 
 def split_to_trips(
@@ -68,21 +69,27 @@ def split_to_trips_store(
 
 
 def split_to_trips_disk(
-    path_in: Path, path_out: Path, overwrite: bool, task_id: TaskID, progress: Progress
+    page_resources: Iterable[FileResource[PageLines]],
+    page_count: int,
+    path_out: Path,
+    overwrite: bool,
+    task_id: TaskID,
+    progress: Progress,
 ):
     """split_to_trips_disk.
 
     Args:
-        path_in (Path): _description_
+        page_resources (Iterable[FileResource[PageLines]]): _description_
+        page_count (int): _description_
         path_out (Path): _description_
         overwrite (bool): _description_
         task_id (TaskID): _description_
         progress (Progress): _description_
     """
-    page_loader = PageLinesLoader(path_in=path_in)
-    pages = (x.resource for x in page_loader())
+    # page_loader = PageLinesLoader(path_in=path_in)
+    pages = (x.resource for x in page_resources)
     progress.update(
-        task_id=task_id, total=page_loader.file_count, description="Splitting pages...."
+        task_id=task_id, total=page_count, description="Splitting pages...."
     )
     trip_saver = TripLinesSaver(path_out=path_out)
     for trip in split_to_trips(pages=pages, task_id=task_id, progress=progress):

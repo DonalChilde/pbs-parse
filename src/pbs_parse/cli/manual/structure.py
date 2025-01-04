@@ -7,11 +7,11 @@ from typing import Annotated
 
 import typer
 
-from pbs_parse.pbs_2022_01.models.parsed_trip import PARSED_TRIP_SERIALIZER
-from pbs_parse.pbs_2022_01.models.structured import StructuredTripSaver
-from pbs_parse.pbs_2022_01.structure.parsed_to_structured import (
-    structure_trip,
+from pbs_parse.pbs_2022_01.models.parsed_trip import (
+    PARSED_TRIP_SERIALIZER,
+    ParsedTripLoader,
 )
+from pbs_parse.snippets.file.data_file_loader import FileResource
 
 from ..work.progress import progress
 from ..work.structure_trips import structure_trips_disk
@@ -58,24 +58,25 @@ def structure(
     if not path_in.exists():
         typer.BadParameter(f"Path in must be an existing file or directory. {path_in=}")
     if path_in.is_file():
-        parsed = PARSED_TRIP_SERIALIZER.load_from_json(path_in=path_in)
-        saver = StructuredTripSaver(path_out=path_out)
-        structured = structure_trip(
-            parsed_trip=parsed,
+        parsed_resource = FileResource(
+            resource=PARSED_TRIP_SERIALIZER.load_from_json(path_in=path_in),
+            file_path=path_in,
+        )
+        parsed_resources = [parsed_resource]
+        parsed_count = 1
+    else:
+        loader = ParsedTripLoader(path_in=path_in)
+        parsed_resources = iter(loader)
+        parsed_count = len(loader)
+    with progress:
+        task = progress.add_task(description="Structure trips.....")
+        structure_trips_disk(
+            parsed_resources=parsed_resources,
+            parsed_count=parsed_count,
+            path_out=path_out,
+            overwrite=overwrite,
             effective_from=effective_from.date(),
             effective_to=effective_to.date(),
+            task_id=task,
+            progress=progress,
         )
-        out = saver(structured_trip=structured, overwrite=overwrite)
-        typer.echo(f"Saved structured trip to {out}")
-    else:
-        with progress:
-            task = progress.add_task(description="Structure trips.....")
-            structure_trips_disk(
-                path_in=path_in,
-                path_out=path_out,
-                overwrite=overwrite,
-                effective_from=effective_from.date(),
-                effective_to=effective_to.date(),
-                task_id=task,
-                progress=progress,
-            )

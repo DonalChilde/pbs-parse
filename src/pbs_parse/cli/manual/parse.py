@@ -5,11 +5,12 @@ from pathlib import Path
 from typing import Annotated
 
 import typer
-from pfmsoft.state_parser import ParseContext
 
-from pbs_parse.pbs_2022_01.models.parsed_trip import ParsedTripSaver
-from pbs_parse.pbs_2022_01.models.trip_lines import TRIP_LINES_SERIALIZER
-from pbs_parse.pbs_2022_01.parse.trip_lines_parser import TripLinesParser
+from pbs_parse.pbs_2022_01.models.trip_lines import (
+    TRIP_LINES_SERIALIZER,
+    TripLinesLoader,
+)
+from pbs_parse.snippets.file.data_file_loader import FileResource
 
 from ..work.parse_trips import parse_trips_disk
 from ..work.progress import progress
@@ -46,19 +47,23 @@ def parse(
     if not path_in.exists():
         typer.BadParameter(f"Path in must be an existing file or directory. {path_in=}")
     if path_in.is_file():
-        trip_lines = TRIP_LINES_SERIALIZER.load_from_json(path_in=path_in)
-        parse_ctx = ParseContext()
-        parser = TripLinesParser()
-        parsed = parser.parse(ctx=parse_ctx, trip_lines=trip_lines)
-        out = ParsedTripSaver(path_out=path_out)(parsed_trip=parsed)
-        typer.echo(f"Saved parsed trip to {out}")
+        trip_resource = FileResource(
+            resource=TRIP_LINES_SERIALIZER.load_from_json(path_in=path_in),
+            file_path=path_in,
+        )
+        trip_resources = [trip_resource]
+        trip_count = 1
     else:
-        with progress:
-            task = progress.add_task(description="Parsing trips.....", total=0)
-            parse_trips_disk(
-                path_in=path_in,
-                path_out=path_out,
-                overwrite=overwrite,
-                task_id=task,
-                progress=progress,
-            )
+        loader = TripLinesLoader(path_in=path_in)
+        trip_resources = iter(loader)
+        trip_count = len(loader)
+    with progress:
+        task = progress.add_task(description="Parsing trips.....", total=0)
+        parse_trips_disk(
+            trip_resources=trip_resources,
+            trip_count=trip_count,
+            path_out=path_out,
+            overwrite=overwrite,
+            task_id=task,
+            progress=progress,
+        )

@@ -20,9 +20,6 @@ class DataFileLoader[T](ABC):
     def __init__(self, path_in: Path, glob: str) -> None:
         """Load data files from a directory. Files match the glob.
 
-        File paths are discovered after calling __call_, and refreshed after
-        further calls to __call__.
-
         Args:
             path_in (Path): Directory to load files from.
             glob (str): The glob to match.
@@ -42,32 +39,63 @@ class DataFileLoader[T](ABC):
         self.path_in = path_in
         self.glob = glob
         self.files: list[Path] = []
+        self._build_file_list()
 
-    def __call__(self) -> Iterable[FileResource[T]]:
-        """Get an iterable of the loaded data files.
+    def __iter__(self) -> Iterable[FileResource[T]]:
+        """__iter__.
 
         Returns:
-            Iterable[T]: _description_
-
-        Yields:
-            Iterator[Iterable[T]]: _description_
+            Iterable[FileResource[T]]: _description_
         """
-        self._build_file_list()
-        for path in self.files:
-            yield FileResource(resource=self._translate(obj_path=path), file_path=path)
+        return (
+            FileResource(resource=self._translate(obj_path=x), file_path=x)
+            for x in self.files
+        )
+
+    def __len__(self) -> int:
+        """__len__.
+
+        Returns:
+            int: _description_
+        """
+        return len(self.files)
+
+    def __getitem__(self, position: int) -> FileResource[T]:
+        """__getitem__.
+
+        Args:
+            position (int): _description_
+
+        Returns:
+            FileResource[T]: _description_
+        """
+        file_path = self.files[position]
+        return FileResource[T](resource=self._translate(file_path), file_path=file_path)
+
+    # def __call__(self) -> Iterable[FileResource[T]]:
+    #     """Get an iterable of the loaded data files.
+
+    #     Returns:
+    #         Iterable[T]: _description_
+
+    #     Yields:
+    #         Iterator[Iterable[T]]: _description_
+    #     """
+    #     for path in self.files:
+    #         yield FileResource(resource=self._translate(obj_path=path), file_path=path)
 
     def _build_file_list(self):
         files = list(self.path_in.glob(self.glob))
         files.sort()
         self.files = files
 
-    @property
-    def file_count(self) -> int:
-        """The total number of discovered files matching the glob.
+    # @property
+    # def file_count(self) -> int:
+    #     """The total number of discovered files matching the glob.
 
-        This is only populated after the __call__ function is called.
-        """
-        return len(self.files)
+    #     This is only populated after the __call__ function is called.
+    #     """
+    #     return len(self.files)
 
     @abstractmethod
     def _translate(self, obj_path: Path) -> T: ...

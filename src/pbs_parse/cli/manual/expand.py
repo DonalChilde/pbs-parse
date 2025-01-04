@@ -6,9 +6,11 @@ from typing import Annotated
 
 import typer
 
-from pbs_parse.pbs_2022_01.expand.structured_to_expanded import StructuredToExpanded
-from pbs_parse.pbs_2022_01.models.expanded import ExpandedTripSaver
-from pbs_parse.pbs_2022_01.models.structured import STRUCTURED_TRIP_SERIALIZER
+from pbs_parse.pbs_2022_01.models.structured import (
+    STRUCTURED_TRIP_SERIALIZER,
+    StructuredTripLoader,
+)
+from pbs_parse.snippets.file.data_file_loader import FileResource
 
 from ..work.expand_trips import expand_trips_disk
 from ..work.progress import progress
@@ -45,22 +47,23 @@ def expand(
     if not path_in.exists():
         typer.BadParameter(f"Path in must be an existing file or directory. {path_in=}")
     if path_in.is_file():
-        structured = STRUCTURED_TRIP_SERIALIZER.load_from_json(path_in=path_in)
-        saver = ExpandedTripSaver(path_out=path_out)
-        expander = StructuredToExpanded(structured_trip=structured)
-        idx = 0
-        out = Path("")
-        for idx, trip in enumerate(expander.translate(), start=1):
-            _ = idx
-            out = saver(expanded_trip=trip, overwrite=overwrite)
-        typer.echo(f"Saved {idx} expanded trips to {out.parent}")
+        structured_resource = FileResource(
+            resource=STRUCTURED_TRIP_SERIALIZER.load_from_json(path_in=path_in),
+            file_path=path_in,
+        )
+        structured_resources = [structured_resource]
+        structured_count = 1
     else:
-        with progress:
-            task = progress.add_task(description="Expand trips.....")
-            expand_trips_disk(
-                path_in=path_in,
-                path_out=path_out,
-                overwrite=overwrite,
-                task_id=task,
-                progress=progress,
-            )
+        loader = StructuredTripLoader(path_in=path_in)
+        structured_resources = iter(loader)
+        structured_count = len(loader)
+    with progress:
+        task = progress.add_task(description="Expand trips.....")
+        expand_trips_disk(
+            structured_resources=structured_resources,
+            structured_count=structured_count,
+            path_out=path_out,
+            overwrite=overwrite,
+            task_id=task,
+            progress=progress,
+        )

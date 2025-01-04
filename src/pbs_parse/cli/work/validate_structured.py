@@ -6,7 +6,7 @@ from pathlib import Path
 from rich.progress import Progress, TaskID
 
 from pbs_parse.pbs_2022_01.models import manifest
-from pbs_parse.pbs_2022_01.models.structured import StructuredTrip, StructuredTripLoader
+from pbs_parse.pbs_2022_01.models.structured import StructuredTrip
 from pbs_parse.pbs_2022_01.models.structured_validation import (
     STRUCTURED_VALIDATION_SERIALIZER,
     StructuredValidation,
@@ -97,7 +97,8 @@ def validate_structured_store(
 
 
 def validate_structured_disk(
-    path_in: Path,
+    structured_resources: Iterable[FileResource[StructuredTrip]],
+    structured_count: int,
     parsed_dir: Path,
     path_out: Path,
     overwrite: bool,
@@ -107,22 +108,21 @@ def validate_structured_disk(
     """validate_structured_disk.
 
     Args:
-        path_in (Path): _description_
+        structured_resources (Iterable[FileResource[StructuredTrip]]): _description_
+        structured_count (int): _description_
         parsed_dir (Path): _description_
         path_out (Path): _description_
         overwrite (bool): _description_
         task_id (TaskID): _description_
         progress (Progress): _description_
     """
-    loader = StructuredTripLoader(path_in=path_in)
-    resources = loader()
     progress.update(
         task_id=task_id,
-        total=loader.file_count,
+        total=structured_count,
         description="Validating structured trips....",
     )
     validation_models = generate_validation_models(
-        resources=resources, parsed_dir=parsed_dir
+        resources=structured_resources, parsed_dir=parsed_dir
     )
     for sv in validate_structured(
         validation_models=validation_models, task_id=task_id, progress=progress
