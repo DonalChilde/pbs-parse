@@ -54,7 +54,7 @@ def split_to_trips_store(
         overwrite (bool, optional): _description_. Defaults to False.
     """
     page_infos = store.get_file_info_by_type(
-        base=base, file_type=manifest.FileTypes.STRUCTURED_TRIP
+        base=base, file_type=manifest.FileTypes.SPLIT_PAGE
     )
     progress.update(
         task_id=task_id, total=len(page_infos), description="Splitting pages...."

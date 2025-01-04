@@ -1,4 +1,4 @@
-"""FILE: add_all.py."""
+"""FILE: add-all-bases.py."""
 
 import logging
 import re
@@ -27,6 +27,12 @@ class FilePair(TypedDict):
 @app.command()
 def add_all_bases(
     ctx: typer.Context,
+    store_directory: Annotated[
+        Path,
+        typer.Argument(
+            help="Directory of the data store.", exists=True, file_okay=False
+        ),
+    ],
     path_in: Annotated[
         Path,
         typer.Argument(
@@ -67,7 +73,7 @@ def add_all_bases(
                 f"Did not find a matching .txt file for {pdf_file.name}. Skipping."
             )
     typer.echo(f"Found {len(file_pairs)} bases with matching text files.")
-    store: StoreManager = ctx.obj["DISK_STORE"]
+    store = StoreManager(manifest_directory=store_directory)
     with store:
         for pair in file_pairs:
             typer.echo(f"Adding {pair['name']} to store.")

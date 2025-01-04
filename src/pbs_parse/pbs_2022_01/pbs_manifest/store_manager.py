@@ -146,7 +146,7 @@ class StoreManager:
             date.fromisoformat(self.manifest["effective_to"]),
         )
 
-    def get_bases(self) -> Sequence[str]:
+    def get_bases(self) -> list[str]:
         """Get a list of base keys."""
         return list(self.manifest["bases"].keys())
 
@@ -190,6 +190,12 @@ class StoreManager:
             raise StoreOperationError(
                 "Store is opened in read-only mode. No changes allowed."
             )
+        exists = self.manifest["bases"][base]["files"].get(info["key"], None)
+        if exists:
+            msg = f"Overwriting existing record for base {base} existing={exists!r} new={info!r}"
+            err = ValueError(msg)
+            logger.error(err)
+            raise err
         self.manifest["bases"][base]["files"][info["key"]] = info
 
     def save_page_lines(
@@ -335,10 +341,11 @@ class StoreManager:
         """
         data = self.load_resource(base=base, uuid=uuid)
         try:
+            logger.info(data)
             value = PARSED_TRIP_SERIALIZER.from_simple(data)  # type: ignore
             return value
         except Exception as e:
-            msg = f"Tried to make ParsedTrip from json, but there was an error. {base=}, {uuid=}"
+            msg = f"Tried to make ParsedTrip from json, but there was an error. {base=}, {uuid=} error={e}"
             logger.exception(msg)
             raise UnableToLoadError(msg) from e
 

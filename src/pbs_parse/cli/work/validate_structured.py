@@ -80,7 +80,7 @@ def validate_structured_store(
     structured_trips = store.load_all_structured_trips(base=base)
     validation_models = (
         StructuredValidation(
-            parsed=store.load_parsed_trip(base=base, uuid=x.uuid),
+            parsed=store.load_parsed_trip(base=base, uuid=x.source_uuid),
             structured=x,
             parsed_path="",
             structured_path="",
