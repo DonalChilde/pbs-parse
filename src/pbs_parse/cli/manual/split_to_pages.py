@@ -56,14 +56,15 @@ def do_one(path_in: Path, path_out: Path, overwrite: bool):
         path_out (Path): _description_
         overwrite (bool): _description_
     """
-    task_id = progress.add_task(description="Splitting package....", total=0)
-    split_to_pages_disk(
-        path_in=path_in,
-        path_out=path_out,
-        task_id=task_id,
-        progress=progress,
-        overwrite=overwrite,
-    )
+    with progress:
+        task_id = progress.add_task(description="Splitting package....", total=0)
+        split_to_pages_disk(
+            path_in=path_in,
+            path_out=path_out,
+            task_id=task_id,
+            progress=progress,
+            overwrite=overwrite,
+        )
 
 
 class Job(TypedDict):
@@ -97,6 +98,7 @@ def do_many(path_in: Path, path_out: Path, overwrite: bool):
                 ),
             )
         )
-    for job in jobs:
-        split_to_pages_disk(**job, overwrite=overwrite, progress=progress)
-        progress.advance(task_id=task_job, advance=1)
+    with progress:
+        for job in jobs:
+            split_to_pages_disk(**job, overwrite=overwrite, progress=progress)
+            progress.advance(task_id=task_job, advance=1)

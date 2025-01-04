@@ -53,11 +53,12 @@ def parse(
         out = ParsedTripSaver(path_out=path_out)(parsed_trip=parsed)
         typer.echo(f"Saved parsed trip to {out}")
     else:
-        task = progress.add_task(description="Parsing trips.....", total=0)
-        parse_trips_disk(
-            path_in=path_in,
-            path_out=path_out,
-            overwrite=overwrite,
-            task_id=task,
-            progress=progress,
-        )
+        with progress:
+            task = progress.add_task(description="Parsing trips.....", total=0)
+            parse_trips_disk(
+                path_in=path_in,
+                path_out=path_out,
+                overwrite=overwrite,
+                task_id=task,
+                progress=progress,
+            )

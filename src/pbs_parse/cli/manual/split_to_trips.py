@@ -53,11 +53,12 @@ def split_to_trips(
             saver(trip_lines=trip)
         typer.echo(f"Saved {count} trips to {path_out}")
     else:
-        task = progress.add_task(description="Splitting pages to trips....")
-        split_to_trips_disk(
-            path_in=path_in,
-            path_out=path_out,
-            task_id=task,
-            overwrite=overwrite,
-            progress=progress,
-        )
+        with progress:
+            task = progress.add_task(description="Splitting pages to trips....")
+            split_to_trips_disk(
+                path_in=path_in,
+                path_out=path_out,
+                task_id=task,
+                overwrite=overwrite,
+                progress=progress,
+            )

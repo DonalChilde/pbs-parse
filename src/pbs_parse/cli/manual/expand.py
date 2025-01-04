@@ -55,11 +55,12 @@ def expand(
             out = saver(expanded_trip=trip, overwrite=overwrite)
         typer.echo(f"Saved {idx} expanded trips to {out.parent}")
     else:
-        task = progress.add_task(description="Expand trips.....")
-        expand_trips_disk(
-            path_in=path_in,
-            path_out=path_out,
-            overwrite=overwrite,
-            task_id=task,
-            progress=progress,
-        )
+        with progress:
+            task = progress.add_task(description="Expand trips.....")
+            expand_trips_disk(
+                path_in=path_in,
+                path_out=path_out,
+                overwrite=overwrite,
+                task_id=task,
+                progress=progress,
+            )

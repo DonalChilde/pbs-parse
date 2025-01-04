@@ -80,16 +80,19 @@ def validate_expanded(
             parsed_dir = path_in
         if structured_dir is None:
             structured_dir = path_in
-        task = progress.add_task(description="Validating expanded trips.....", total=0)
-        validate_expanded_disk(
-            path_in=path_in,
-            path_out=path_out,
-            parsed_dir=parsed_dir,
-            structured_dir=structured_dir,
-            overwrite=overwrite,
-            task_id=task,
-            progress=progress,
-        )
+        with progress:
+            task = progress.add_task(
+                description="Validating expanded trips.....", total=0
+            )
+            validate_expanded_disk(
+                path_in=path_in,
+                path_out=path_out,
+                parsed_dir=parsed_dir,
+                structured_dir=structured_dir,
+                overwrite=overwrite,
+                task_id=task,
+                progress=progress,
+            )
 
 
 def do_one(

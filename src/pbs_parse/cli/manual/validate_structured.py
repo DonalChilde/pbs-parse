@@ -68,17 +68,18 @@ def validate_structured(
     else:
         if parsed_dir is None:
             parsed_dir = path_in
-        task = progress.add_task(
-            description="Validating structured trips.....", total=0
-        )
-        validate_structured_disk(
-            path_in=path_in,
-            path_out=path_out,
-            parsed_dir=parsed_dir,
-            overwrite=overwrite,
-            task_id=task,
-            progress=progress,
-        )
+        with progress:
+            task = progress.add_task(
+                description="Validating structured trips.....", total=0
+            )
+            validate_structured_disk(
+                path_in=path_in,
+                path_out=path_out,
+                parsed_dir=parsed_dir,
+                overwrite=overwrite,
+                task_id=task,
+                progress=progress,
+            )
 
 
 def do_one(path_in: Path, path_out: Path, parsed_dir: Path, overwrite: bool):

@@ -68,13 +68,14 @@ def structure(
         out = saver(structured_trip=structured, overwrite=overwrite)
         typer.echo(f"Saved structured trip to {out}")
     else:
-        task = progress.add_task(description="Structure trips.....")
-        structure_trips_disk(
-            path_in=path_in,
-            path_out=path_out,
-            overwrite=overwrite,
-            effective_from=effective_from.date(),
-            effective_to=effective_to.date(),
-            task_id=task,
-            progress=progress,
-        )
+        with progress:
+            task = progress.add_task(description="Structure trips.....")
+            structure_trips_disk(
+                path_in=path_in,
+                path_out=path_out,
+                overwrite=overwrite,
+                effective_from=effective_from.date(),
+                effective_to=effective_to.date(),
+                task_id=task,
+                progress=progress,
+            )

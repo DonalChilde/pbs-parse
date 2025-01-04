@@ -28,12 +28,13 @@ def test_split_package_to_pages_file(runner: CliRunner, test_output_dir: Path):
     path_out = test_output_dir / "cli" / "package_to_pages_file"
     with resources.as_file(SINGLE_FILE_TEST.traversable()) as input_path:
         result = runner.invoke(
-            app, ["debug", "packages", "split", str(input_path), str(path_out)]
+            app, ["manual", "split-to-pages", str(input_path), str(path_out)]
         )
         if result.stderr_bytes is not None:
             print(result.stderr)
+        print(result.stdout)
         assert result.exit_code == 0
-        assert "4 pages found" in result.stdout
+        assert "to 4 pages" in result.stdout
         assert "error" not in result.stdout
 
 
