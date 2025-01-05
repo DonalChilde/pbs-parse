@@ -1,3 +1,4 @@
+#!/usr/bin/env bash
 STORE="$HOME/projects/tmp/store"
 echo "***** Delete the old store. *****"
 rm -rf $STORE
