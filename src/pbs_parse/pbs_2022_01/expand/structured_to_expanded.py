@@ -11,6 +11,8 @@ import pbs_parse.pbs_2022_01.models.structured as ST
 from pbs_parse.pbs_2022_01.models import expanded as model
 from pbs_parse.snippets.datetime.next_local_time import next_local_time
 
+from .utc_to_local import utc_to_local
+
 logger = logging.getLogger(__name__)
 UTC = ZoneInfo("UTC")
 
@@ -186,10 +188,14 @@ class StructuredToExpanded:
         flight_time = timedelta(
             seconds=sum([x.flight_time.total_seconds() for x in flights])
         )
+        report_tzinfo = ZoneInfo(report_station.tz_name)
+        report_lcl = utc_to_local(
+            report_utc, report_tzinfo, s_dutyperiod.report_time.lcl
+        )
         return model.DutyPeriod(
             report_station=report_station,
             report_utc=report_utc,
-            report_lcl=report_utc.astimezone(ZoneInfo(report_station.tz_name)),
+            report_lcl=report_lcl,
             report_hbt=report_utc.astimezone(self.hbt_tzinfo),
             release_station=release_station,
             release_utc=release_utc,
@@ -211,15 +217,15 @@ class StructuredToExpanded:
     ) -> list[model.DutyPeriod]:
         dutyperiods: list[model.DutyPeriod] = []
         report_utc = first_report_utc
-        for idx, s_dutyperiod in enumerate(s_dutyperiods):
-            self.dp_idx = idx + 1
+        for idx, s_dutyperiod in enumerate(s_dutyperiods, start=1):
+            self.dp_idx = idx
             logger.debug(
                 "Translating dutyperiod %d with report_utc %s",
                 self.dp_idx,
                 report_utc.isoformat(),
             )
             try:
-                next_report_lcl = s_dutyperiods[idx + 1].report_time.lcl
+                next_report_lcl = s_dutyperiods[idx].report_time.lcl
             except IndexError:
                 next_report_lcl = ""
             dutyperiod = self._translate_dutyperiod(
