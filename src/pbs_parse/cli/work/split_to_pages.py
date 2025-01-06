@@ -30,7 +30,7 @@ def split_to_pages(
         pages_found += 1
         progress.update(
             task_id=task_id,
-            description=f"Splitting package to {pages_found} pages.",
+            description=f"\tSplitting package to {pages_found} pages.",
         )
         yield page
 

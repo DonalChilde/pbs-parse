@@ -150,6 +150,10 @@ class StoreManager:
         """Get a list of base keys."""
         return list(self.manifest["bases"].keys())
 
+    def get_name(self) -> str:
+        """Get store name."""
+        return self.manifest["name"]
+
     def create_base_bid(self, source_pdf: Path, source_txt: Path, name: str):
         """Create a base bid, and copy the pdf and txt files into store."""
         if self.manifest["bases"].get(name, None) is not None:

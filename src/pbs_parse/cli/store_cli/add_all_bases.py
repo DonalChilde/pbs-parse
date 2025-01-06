@@ -69,6 +69,7 @@ def add_all_bases(
     typer.echo(f"Found {len(file_pairs)} bases with matching text files.")
     store: StoreManager = ctx.obj["DISK_STORE"]
     with store:
+        store_name = store.get_name()
         for pair in file_pairs:
-            typer.echo(f"Adding {pair['name']} to store.")
+            typer.echo(f"Adding {pair['name']} to {store_name} store.")
             store.create_base_bid(**pair)

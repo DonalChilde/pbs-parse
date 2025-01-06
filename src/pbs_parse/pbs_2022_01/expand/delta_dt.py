@@ -39,37 +39,38 @@ def delta_dt(
     lcl_tzinfo = ZoneInfo(lcl_tz)
 
     dt_utc_addition = utc_ref + td
-    dt_lcl_addition = dt_utc_addition.astimezone(lcl_tzinfo)
-    if dt_lcl_addition.strftime("%H%M") == lcl_ref:
-        return (dt_utc_addition, state)
-    utc_ref_lcl = utc_ref.astimezone(lcl_tzinfo)
-    dt_utc_next = next_local_time_in_utc(
-        utc_start=utc_ref,
-        next_lcl=time.fromisoformat(lcl_ref),
-        next_tz_name=lcl_tz,
-    )
-    dt_lcl_next = dt_utc_next.astimezone(lcl_tzinfo)
+    # dt_lcl_addition = dt_utc_addition.astimezone(lcl_tzinfo)
+    return (dt_utc_addition, state)
+    # if dt_lcl_addition.strftime("%H%M") == lcl_ref:
+    #     return (dt_utc_addition, state)
+    # utc_ref_lcl = utc_ref.astimezone(lcl_tzinfo)
+    # dt_utc_next = next_local_time_in_utc(
+    #     utc_start=utc_ref,
+    #     next_lcl=time.fromisoformat(lcl_ref),
+    #     next_tz_name=lcl_tz,
+    # )
+    # dt_lcl_next = dt_utc_next.astimezone(lcl_tzinfo)
 
-    logger.info(
-        "for dp: %d flt %d field: %s Delta addition did not match lcl_ref. ",
-        state.dp_idx,
-        state.flight_idx,
-        field_name,
-    )
-    logger.info(
-        "Inputs: utc_ref: %s, td: %s, lcl_ref: %s, lcl_tz: %s, utc_ref_lcl: %s ",
-        utc_ref.isoformat(),
-        td,
-        lcl_ref,
-        lcl_tz,
-        utc_ref_lcl.isoformat(),
-    )
-    logger.info(
-        "Addition: %s %s ", dt_utc_addition.isoformat(), dt_lcl_addition.isoformat()
-    )
-    logger.info(
-        "Trying `next_local_time_in_utc`. %s %s",
-        dt_utc_next.isoformat(),
-        dt_lcl_next.isoformat(),
-    )
+    # logger.info(
+    #     "for dp: %d flt %d field: %s Delta addition did not match lcl_ref. ",
+    #     state.dp_idx,
+    #     state.flight_idx,
+    #     field_name,
+    # )
+    # logger.info(
+    #     "Inputs: utc_ref: %s, td: %s, lcl_ref: %s, lcl_tz: %s, utc_ref_lcl: %s ",
+    #     utc_ref.isoformat(),
+    #     td,
+    #     lcl_ref,
+    #     lcl_tz,
+    #     utc_ref_lcl.isoformat(),
+    # )
+    # logger.info(
+    #     "Addition: %s %s ", dt_utc_addition.isoformat(), dt_lcl_addition.isoformat()
+    # )
+    # logger.info(
+    #     "Trying `next_local_time_in_utc`. %s %s",
+    #     dt_utc_next.isoformat(),
+    #     dt_lcl_next.isoformat(),
+    # )
     return (dt_utc_next, state)

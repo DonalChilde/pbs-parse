@@ -91,9 +91,8 @@ def _check_dutyperiod_times(
     for test in tests:
         if test[0].strftime("%H%M") != test[1]:
             errors.append(
-                f"Expanded {test[0].isoformat()} time does not match Structured {test[1]}"
+                f"Expanded {test[0].isoformat()} time {test[0].time()} does not match Structured {test[1]}"
                 f" for dutyperiod idx {dp_idx}, field `{test[2]}` "
-                f"{test[0].time()!r}"
             )
 
     return errors
@@ -114,7 +113,7 @@ def _check_flight_times(
     for test in tests:
         if test[0].strftime("%H%M") != test[1]:
             errors.append(
-                f"Expanded {test[0].isoformat()} time does not match Structured "
+                f"Expanded {test[0].isoformat()} time {test[0].time()} does not match Structured "
                 f"{test[1]} for dutyperiod-{dp_idx} flight-{flt_idx} field `{test[2]}`"
             )
     return errors
@@ -133,7 +132,7 @@ def _check_trip_report_release(
     for test in tests:
         if test[0].strftime("%H%M") != test[1]:
             errors.append(
-                f"Expanded {test[0].isoformat()} time does not match Structured "
+                f"Expanded {test[0].isoformat()} time {test[0].time()} does not match Structured "
                 f"{test[1]} for trip {s_trip.number} field `{test[2]}`"
             )
     return errors
