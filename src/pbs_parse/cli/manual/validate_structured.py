@@ -6,6 +6,7 @@ from typing import Annotated
 
 import typer
 
+from pbs_parse import APP_NAME
 from pbs_parse.cli.work.common import load_parsed
 from pbs_parse.pbs_2022_01.models.structured import (
     STRUCTURED_TRIP_SERIALIZER,
@@ -17,6 +18,7 @@ from pbs_parse.pbs_2022_01.models.structured_validation import (
 )
 from pbs_parse.pbs_2022_01.validate.validate_structured import StructuredValidator
 from pbs_parse.snippets.file.data_file_loader import FileResource
+from pbs_parse.snippets.typer.task_complete import task_complete
 
 from ..work.progress import progress
 from ..work.validate_structured import validate_structured_disk
@@ -89,6 +91,8 @@ def validate_structured(
             task_id=task,
             progress=progress,
         )
+    start_perf = ctx.obj[APP_NAME]["start_perf"]
+    task_complete(start_perf=start_perf)
 
 
 def do_one(path_in: Path, path_out: Path, parsed_dir: Path, overwrite: bool):

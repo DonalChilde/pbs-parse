@@ -6,7 +6,9 @@ from typing import Annotated
 
 import typer
 
+from pbs_parse import APP_NAME
 from pbs_parse.pbs_2022_01.pbs_manifest.store_manager import StoreManager
+from pbs_parse.snippets.typer.task_complete import task_complete
 
 logger = logging.getLogger(__name__)
 app = typer.Typer()
@@ -41,3 +43,5 @@ def add_base(
         store_name = store.get_name()
         store.create_base_bid(source_pdf=pdf_path, source_txt=txt_path, name=base)
         typer.echo(f"Added {base} to {store_name} store.")
+    start_perf = ctx.obj[APP_NAME]["start_perf"]
+    task_complete(start_perf=start_perf)

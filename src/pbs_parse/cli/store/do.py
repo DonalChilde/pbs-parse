@@ -6,7 +6,9 @@ from typing import Annotated
 
 import typer
 
+from pbs_parse import APP_NAME
 from pbs_parse.pbs_2022_01.pbs_manifest.store_manager import StoreManager
+from pbs_parse.snippets.typer.task_complete import task_complete
 
 from .common import ParseActions, ParseJob, do_jobs
 
@@ -58,3 +60,5 @@ def do(
             job = ParseJob(base=base, start=start, end=end, overwrite=overwrite)
             jobs.append(job)
         do_jobs(jobs=jobs, store=store)
+    start_perf = ctx.obj[APP_NAME]["start_perf"]
+    task_complete(start_perf=start_perf)

@@ -6,12 +6,14 @@ from typing import Annotated
 
 import typer
 
+from pbs_parse import APP_NAME
 from pbs_parse.pbs_2022_01.models.page_lines import (
     PAGE_LINES_SERIALIZER,
     PageLines,
     PageLinesLoader,
 )
 from pbs_parse.snippets.file.data_file_loader import FileResource
+from pbs_parse.snippets.typer.task_complete import task_complete
 
 from ..work.progress import progress
 from ..work.split_to_trips import split_to_trips_disk
@@ -71,3 +73,5 @@ def split_to_trips(
             overwrite=overwrite,
             progress=progress,
         )
+    start_perf = ctx.obj[APP_NAME]["start_perf"]
+    task_complete(start_perf=start_perf)

@@ -7,11 +7,13 @@ from typing import Annotated
 
 import typer
 
+from pbs_parse import APP_NAME
 from pbs_parse.pbs_2022_01.models.parsed_trip import (
     PARSED_TRIP_SERIALIZER,
     ParsedTripLoader,
 )
 from pbs_parse.snippets.file.data_file_loader import FileResource
+from pbs_parse.snippets.typer.task_complete import task_complete
 
 from ..work.progress import progress
 from ..work.structure_trips import structure_trips_disk
@@ -80,3 +82,5 @@ def structure(
             task_id=task,
             progress=progress,
         )
+    start_perf = ctx.obj[APP_NAME]["start_perf"]
+    task_complete(start_perf=start_perf)

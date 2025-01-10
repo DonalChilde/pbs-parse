@@ -6,11 +6,13 @@ from typing import Annotated
 
 import typer
 
+from pbs_parse import APP_NAME
 from pbs_parse.pbs_2022_01.models.structured import (
     STRUCTURED_TRIP_SERIALIZER,
     StructuredTripLoader,
 )
 from pbs_parse.snippets.file.data_file_loader import FileResource
+from pbs_parse.snippets.typer.task_complete import task_complete
 
 from ..work.expand_trips import expand_trips_disk
 from ..work.progress import progress
@@ -67,3 +69,5 @@ def expand(
             task_id=task,
             progress=progress,
         )
+    start_perf = ctx.obj[APP_NAME]["start_perf"]
+    task_complete(start_perf=start_perf)

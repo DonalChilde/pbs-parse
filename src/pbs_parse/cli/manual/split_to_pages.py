@@ -7,6 +7,9 @@ from typing import Annotated, TypedDict
 import typer
 from rich.progress import TaskID
 
+from pbs_parse import APP_NAME
+from pbs_parse.snippets.typer.task_complete import task_complete
+
 from ..work.progress import progress
 from ..work.split_to_pages import split_to_pages_disk
 
@@ -46,6 +49,8 @@ def split_to_pages(
         do_one(path_in=path_in, path_out=path_out, overwrite=overwrite)
     else:
         do_many(path_in=path_in, path_out=path_out, overwrite=overwrite)
+    start_perf = ctx.obj[APP_NAME]["start_perf"]
+    task_complete(start_perf=start_perf)
 
 
 def do_one(path_in: Path, path_out: Path, overwrite: bool):
