@@ -5,9 +5,9 @@ from pathlib import Path
 
 from rich.progress import Progress, TaskID
 
+import pbs_parse.pbs_2022_01.pbs_manifest as STORE
 from pbs_parse.pbs_2022_01.models import manifest
 from pbs_parse.pbs_2022_01.models.page_lines import PageLines, PageLinesSaver
-from pbs_parse.pbs_2022_01.pbs_manifest.store_manager import StoreManager
 from pbs_parse.pbs_2022_01.split.extract_pages import parse_page_lines_from_file
 
 
@@ -37,7 +37,7 @@ def split_to_pages(
 
 def split_to_pages_store(
     base: str,
-    store: StoreManager,
+    store: STORE.StoreManager,
     task_id: TaskID,
     progress: Progress,
     overwrite: bool = False,
@@ -58,7 +58,7 @@ def split_to_pages_store(
     progress.update(task_id=task_id, total=1, description="Splitting package....")
     path_in = store.manifest_directory / source_path
     for page in split_to_pages(path_in=path_in, task_id=task_id, progress=progress):
-        store.save_page_lines(base=base, page=page, overwrite=overwrite)
+        STORE.save.page_lines(store=store, base=base, page=page, overwrite=overwrite)
     progress.update(task_id=task_id, advance=1)
 
 

@@ -5,6 +5,8 @@ from collections.abc import Iterable, Sequence
 from pbs_parse.pbs_2022_01.models.manifest import FileTypes
 from pbs_parse.pbs_2022_01.pbs_manifest.store_manager import StoreManager
 
+from . import load
+
 
 def make_stats(store: StoreManager, bases: Iterable[str], indent: str = "  ") -> str:
     """make_stats.
@@ -110,7 +112,9 @@ def make_structured_trip_errors(
         base=base, file_type=FileTypes.STRUCTURED_TRIP_VALIDATION
     )
     for info in structured_error_infos:
-        validation = store.load_structured_trip_validation(base=base, uuid=info["key"])
+        validation = load.structured_trip_validation(
+            store=store, base=base, uuid=info["key"]
+        )
         s_trip = validation.structured
         stats.append(f"{s_trip.number}_{s_trip.idx}")
         for error in validation.errors:
@@ -136,7 +140,9 @@ def make_expanded_trip_errors(
         base=base, file_type=FileTypes.EXPANDED_TRIP_VALIDATION
     )
     for info in expanded_error_infos:
-        validation = store.load_expanded_trip_validation(base=base, uuid=info["key"])
+        validation = load.expanded_trip_validation(
+            store=store, base=base, uuid=info["key"]
+        )
         e_trip = validation.expanded
         stats.append(
             f"{e_trip.trip_number}_{e_trip.start_lcl.date()}_{e_trip.source_idx}"

@@ -5,13 +5,13 @@ from pathlib import Path
 
 from rich.progress import Progress, TaskID
 
+import pbs_parse.pbs_2022_01.pbs_manifest as STORE
 from pbs_parse.pbs_2022_01.models import manifest
 from pbs_parse.pbs_2022_01.models.structured import StructuredTrip
 from pbs_parse.pbs_2022_01.models.structured_validation import (
     STRUCTURED_VALIDATION_SERIALIZER,
     StructuredValidation,
 )
-from pbs_parse.pbs_2022_01.pbs_manifest.store_manager import StoreManager
 from pbs_parse.pbs_2022_01.validate.validate_structured import StructuredValidator
 from pbs_parse.snippets.file.data_file_loader import FileResource
 
@@ -53,7 +53,7 @@ def validate_structured(
 
 def validate_structured_store(
     base: str,
-    store: StoreManager,
+    store: STORE.StoreManager,
     task_id: TaskID,
     progress: Progress,
     overwrite: bool = False,
@@ -67,20 +67,22 @@ def validate_structured_store(
         progress (Progress): _description_
         overwrite (bool, optional): _description_. Defaults to False.
     """
-    total_trips = len(
-        store.get_file_info_by_type(
-            base=base, file_type=manifest.FileTypes.STRUCTURED_TRIP
-        )
+    structured_infos = store.get_file_info_by_type(
+        base=base, file_type=manifest.FileTypes.STRUCTURED_TRIP
     )
+    total_trips = len(structured_infos)
     progress.update(
         task_id=task_id,
         total=total_trips,
         description="Validating structured trips....",
     )
-    structured_trips = store.load_all_structured_trips(base=base)
+    structured_trips = (
+        STORE.load.structured_trip(store=store, base=base, uuid=x["key"])
+        for x in structured_infos
+    )
     validation_models = (
         StructuredValidation(
-            parsed=store.load_parsed_trip(base=base, uuid=x.source_uuid),
+            parsed=STORE.load.parsed_trip(store=store, base=base, uuid=x.source_uuid),
             structured=x,
             parsed_path="",
             structured_path="",
@@ -91,8 +93,8 @@ def validate_structured_store(
         validation_models=validation_models, task_id=task_id, progress=progress
     ):
         if sv.errors:
-            store.save_structured_trip_validation_error(
-                base=base, validation_model=sv, overwrite=overwrite
+            STORE.save.structured_trip_validation_error(
+                store=store, base=base, validation_model=sv, overwrite=overwrite
             )
 
 

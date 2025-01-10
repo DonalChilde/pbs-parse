@@ -7,8 +7,8 @@ from typing import Annotated, TypedDict
 
 import typer
 
+import pbs_parse.pbs_2022_01.pbs_manifest as STORE
 from pbs_parse import APP_NAME
-from pbs_parse.pbs_2022_01.pbs_manifest.store_manager import StoreManager
 from pbs_parse.snippets.typer.task_complete import task_complete
 
 logger = logging.getLogger(__name__)
@@ -75,9 +75,9 @@ def add_all_bases(
                 f"Did not find a matching .txt file for {pdf_file.name}. Skipping."
             )
     typer.echo(f"Found {len(file_pairs)} bases with matching text files.")
-    store = StoreManager(manifest_directory=store_directory)
+    store = STORE.StoreManager(manifest_directory=store_directory)
     with store:
-        store_name = store.get_name()
+        store_name = STORE.get.name(store=store)
         for pair in file_pairs:
             typer.echo(f"Adding {pair['name']} to {store_name} store.")
             store.create_base_bid(**pair)

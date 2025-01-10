@@ -6,7 +6,7 @@ from pbs_parse.pbs_2022_01.pbs_manifest.stats import make_stats
 from pbs_parse.pbs_2022_01.pbs_manifest.store_manager import StoreManager
 
 
-def get_effective_dates(store: StoreManager) -> tuple[date, date]:
+def effective_dates(store: StoreManager) -> tuple[date, date]:
     """get_effective_dates _summary_.
 
     Returns:
@@ -18,17 +18,17 @@ def get_effective_dates(store: StoreManager) -> tuple[date, date]:
     )
 
 
-def get_bases(store: StoreManager) -> list[str]:
+def bases(store: StoreManager) -> list[str]:
     """Get a list of base keys."""
     return list(store.manifest["bases"].keys())
 
 
-def get_name(store: StoreManager) -> str:
+def name(store: StoreManager) -> str:
     """Get store name."""
     return store.manifest["name"]
 
 
-def get_stats(store: StoreManager) -> str:
+def stats(store: StoreManager) -> str:
     """get_stats.
 
     Args:
@@ -37,6 +37,6 @@ def get_stats(store: StoreManager) -> str:
     Returns:
         str: _description_
     """
-    bases = get_bases(store=store)
+    bases = bases(store=store)
     stats = make_stats(store=store, bases=bases, indent="  ")
     return stats

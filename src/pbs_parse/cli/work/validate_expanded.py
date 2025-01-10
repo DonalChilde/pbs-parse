@@ -5,6 +5,7 @@ from pathlib import Path
 
 from rich.progress import Progress, TaskID
 
+import pbs_parse.pbs_2022_01.pbs_manifest as STORE
 from pbs_parse.cli.work.common import load_parsed, load_structured
 from pbs_parse.pbs_2022_01.models import manifest
 from pbs_parse.pbs_2022_01.models.expanded import ExpandedTrip
@@ -12,7 +13,6 @@ from pbs_parse.pbs_2022_01.models.expanded_validation import (
     EXPANDED_VALIDATION_SERIALIZER,
     ExpandedValidation,
 )
-from pbs_parse.pbs_2022_01.pbs_manifest.store_manager import StoreManager
 from pbs_parse.pbs_2022_01.validate.validate_expanded import ExpandedValidator
 from pbs_parse.snippets.file.data_file_loader import FileResource
 
@@ -52,7 +52,7 @@ def validate_expanded(
 
 def validate_expanded_store(
     base: str,
-    store: StoreManager,
+    store: STORE.StoreManager,
     task_id: TaskID,
     progress: Progress,
     overwrite: bool = False,
@@ -66,21 +66,25 @@ def validate_expanded_store(
         progress (Progress): _description_
         overwrite (bool, optional): _description_. Defaults to False.
     """
-    total_trips = len(
-        store.get_file_info_by_type(
-            base=base, file_type=manifest.FileTypes.EXPANDED_TRIP
-        )
+    expanded_infos = store.get_file_info_by_type(
+        base=base, file_type=manifest.FileTypes.EXPANDED_TRIP
     )
+    total_trips = len(expanded_infos)
     progress.update(
         task_id=task_id,
         total=total_trips,
         description="Validating expanded trips....",
     )
-    expanded_trips = store.load_all_expanded_trips(base=base)
+    expanded_trips = (
+        STORE.load.expanded_trip(store=store, base=base, uuid=x["key"])
+        for x in expanded_infos
+    )
     validation_models = (
         ExpandedValidation(
             expanded=x,
-            structured=store.load_structured_trip(base=base, uuid=x.source_uuid),
+            structured=STORE.load.structured_trip(
+                store=store, base=base, uuid=x.source_uuid
+            ),
         )
         for x in expanded_trips
     )
@@ -88,11 +92,11 @@ def validate_expanded_store(
         validation_models=validation_models, task_id=task_id, progress=progress
     ):
         if ev.errors:
-            ev.parsed = store.load_parsed_trip(
-                base=base, uuid=ev.structured.source_uuid
+            ev.parsed = STORE.load.parsed_trip(
+                store=store, base=base, uuid=ev.structured.source_uuid
             )
-            store.save_expanded_trip_validation_error(
-                base=base, validation_model=ev, overwrite=overwrite
+            STORE.save.expanded_trip_validation_error(
+                store=store, base=base, validation_model=ev, overwrite=overwrite
             )
 
 

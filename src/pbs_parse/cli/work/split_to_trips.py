@@ -5,10 +5,10 @@ from pathlib import Path
 
 from rich.progress import Progress, TaskID
 
+import pbs_parse.pbs_2022_01.pbs_manifest as STORE
 from pbs_parse.pbs_2022_01.models import manifest
 from pbs_parse.pbs_2022_01.models.page_lines import PageLines
 from pbs_parse.pbs_2022_01.models.trip_lines import TripLines, TripLinesSaver
-from pbs_parse.pbs_2022_01.pbs_manifest.store_manager import StoreManager
 from pbs_parse.pbs_2022_01.split.extract_trips import parse_trip_lines
 from pbs_parse.snippets.file.data_file_loader import FileResource
 
@@ -40,7 +40,7 @@ def split_to_trips(
 
 def split_to_trips_store(
     base: str,
-    store: StoreManager,
+    store: STORE.StoreManager,
     task_id: TaskID,
     progress: Progress,
     overwrite: bool = False,
@@ -60,12 +60,15 @@ def split_to_trips_store(
     progress.update(
         task_id=task_id, total=len(page_infos), description="Splitting pages...."
     )
+    pages = (
+        STORE.load.page_lines(store=store, base=base, uuid=x["key"]) for x in page_infos
+    )
     for trip in split_to_trips(
-        pages=store.load_all_page_lines(base=base),
+        pages=pages,
         task_id=task_id,
         progress=progress,
     ):
-        store.save_trip_lines(base=base, trip=trip, overwrite=overwrite)
+        STORE.save.trip_lines(store=store, base=base, trip=trip, overwrite=overwrite)
 
 
 def split_to_trips_disk(

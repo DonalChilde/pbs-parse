@@ -6,11 +6,11 @@ from pathlib import Path
 from pfmsoft.state_parser import ParseContext
 from rich.progress import Progress, TaskID
 
+import pbs_parse.pbs_2022_01.pbs_manifest as STORE
 from pbs_parse.pbs_2022_01.models import manifest
 from pbs_parse.pbs_2022_01.models.parsed_trip import ParsedTrip, ParsedTripSaver
 from pbs_parse.pbs_2022_01.models.trip_lines import TripLines
 from pbs_parse.pbs_2022_01.parse.trip_lines_parser import TripLinesParser
-from pbs_parse.pbs_2022_01.pbs_manifest.store_manager import StoreManager
 from pbs_parse.snippets.file.data_file_loader import FileResource
 
 
@@ -48,7 +48,7 @@ def parse_trips(
 
 def parse_trips_store(
     base: str,
-    store: StoreManager,
+    store: STORE.StoreManager,
     task_id: TaskID,
     progress: Progress,
     overwrite: bool = False,
@@ -68,17 +68,22 @@ def parse_trips_store(
     progress.update(
         task_id=task_id, total=len(trip_infos), description="Parsing trips...."
     )
+    trip_lines = (
+        STORE.load.trip_lines(store=store, base=base, uuid=x["key"]) for x in trip_infos
+    )
     for parsed_trip in parse_trips(
-        trip_lines=store.load_all_trip_lines(base=base),
+        trip_lines=trip_lines,
         task_id=task_id,
         progress=progress,
     ):
         if is_prior_month(parsed_trip=parsed_trip):
-            store.save_parsed_prior_month_trip(
-                base=base, parsed=parsed_trip, overwrite=overwrite
+            STORE.save.parsed_prior_month_trip(
+                store=store, base=base, parsed=parsed_trip, overwrite=overwrite
             )
         else:
-            store.save_parsed_trip(base=base, parsed=parsed_trip, overwrite=overwrite)
+            STORE.save.parsed_trip(
+                store=store, base=base, parsed=parsed_trip, overwrite=overwrite
+            )
 
 
 def parse_trips_disk(

@@ -6,10 +6,10 @@ from pathlib import Path
 
 from rich.progress import Progress, TaskID
 
+import pbs_parse.pbs_2022_01.pbs_manifest as STORE
 from pbs_parse.pbs_2022_01.models import manifest
 from pbs_parse.pbs_2022_01.models.parsed_trip import ParsedTrip
 from pbs_parse.pbs_2022_01.models.structured import StructuredTrip, StructuredTripSaver
-from pbs_parse.pbs_2022_01.pbs_manifest.store_manager import StoreManager
 from pbs_parse.pbs_2022_01.structure.parsed_to_structured import (
     structure_trip,
 )
@@ -50,7 +50,7 @@ def structure_trips(
 
 def structure_trips_store(
     base: str,
-    store: StoreManager,
+    store: STORE.StoreManager,
     task_id: TaskID,
     progress: Progress,
     overwrite: bool = False,
@@ -71,17 +71,21 @@ def structure_trips_store(
     progress.update(
         task_id=task_id, total=total_trips, description="Structuring trips...."
     )
-    effective_from, effective_to = store.get_effective_dates()
+    effective_from, effective_to = STORE.get.effective_dates(store=store)
+    parsed_trips = (
+        STORE.load.parsed_trip(store=store, base=base, uuid=x["key"])
+        for x in trip_infos
+    )
     structured_trips = structure_trips(
-        parsed_trips=store.load_all_parsed_trips(base=base),
+        parsed_trips=parsed_trips,
         effective_from=effective_from,
         effective_to=effective_to,
         task_id=task_id,
         progress=progress,
     )
     for structured_trip in structured_trips:
-        store.save_structured_trip(
-            base=base, structured=structured_trip, overwrite=overwrite
+        STORE.save.structured_trip(
+            store=store, base=base, structured=structured_trip, overwrite=overwrite
         )
 
 

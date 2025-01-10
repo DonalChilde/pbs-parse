@@ -6,8 +6,8 @@ from typing import Annotated
 
 import typer
 
+import pbs_parse.pbs_2022_01.pbs_manifest as STORE
 from pbs_parse import APP_NAME
-from pbs_parse.pbs_2022_01.pbs_manifest.store_manager import StoreManager
 from pbs_parse.snippets.typer.task_complete import task_complete
 
 logger = logging.getLogger(__name__)
@@ -38,9 +38,9 @@ def add_base(
     ],
 ):
     """Add a pairing package PDF file to the store."""
-    store = StoreManager(manifest_directory=store_directory)
+    store = STORE.StoreManager(manifest_directory=store_directory)
     with store:
-        store_name = store.get_name()
+        store_name = STORE.get.name(store=store)
         store.create_base_bid(source_pdf=pdf_path, source_txt=txt_path, name=base)
         typer.echo(f"Added {base} to {store_name} store.")
     start_perf = ctx.obj[APP_NAME]["start_perf"]

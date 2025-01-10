@@ -5,7 +5,7 @@ from enum import StrEnum
 
 from rich.progress import TaskID
 
-from pbs_parse.pbs_2022_01.pbs_manifest.store_manager import StoreManager
+import pbs_parse.pbs_2022_01.pbs_manifest as STORE
 
 from ..work.expand_trips import expand_trips_store
 from ..work.parse_trips import parse_trips_store
@@ -94,14 +94,14 @@ def expand_actions(job: ParseJob) -> list[ActionItem]:
     return action_items
 
 
-def do_jobs(jobs: list[ParseJob], store: StoreManager) -> None:
+def do_jobs(jobs: list[ParseJob], store: STORE.StoreManager) -> None:
     """do_jobs.
 
     Args:
         jobs (list[ParseJob]): _description_
         store (StoreManager): _description_
     """
-    store_name = store.get_name()
+    store_name = STORE.get.name(store=store)
     for job in jobs:
         with progress:
             task_id = progress.add_task(
@@ -114,7 +114,7 @@ def do_jobs(jobs: list[ParseJob], store: StoreManager) -> None:
                 progress.update(task_id=task_id, advance=1)
 
 
-def action_dispatch(action: ActionItem, store: StoreManager):
+def action_dispatch(action: ActionItem, store: STORE.StoreManager):
     """action_dispatch.
 
     Args:

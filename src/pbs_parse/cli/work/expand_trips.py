@@ -5,11 +5,11 @@ from pathlib import Path
 
 from rich.progress import Progress, TaskID
 
+import pbs_parse.pbs_2022_01.pbs_manifest as STORE
 from pbs_parse.pbs_2022_01.expand.structured_to_expanded import StructuredToExpanded
 from pbs_parse.pbs_2022_01.models import manifest
 from pbs_parse.pbs_2022_01.models.expanded import ExpandedTrip, ExpandedTripSaver
 from pbs_parse.pbs_2022_01.models.structured import StructuredTrip, StructuredTripLoader
-from pbs_parse.pbs_2022_01.pbs_manifest.store_manager import StoreManager
 from pbs_parse.snippets.file.data_file_loader import FileResource
 
 
@@ -43,7 +43,7 @@ def expand_trips(
 
 def expand_trips_store(
     base: str,
-    store: StoreManager,
+    store: STORE.StoreManager,
     task_id: TaskID,
     progress: Progress,
     overwrite: bool = False,
@@ -64,11 +64,13 @@ def expand_trips_store(
         task_id=task_id, total=len(trip_infos), description="Expanding trips...."
     )
     for e_trip in expand_trips(
-        structured_trips=store.load_all_structured_trips(base=base),
+        structured_trips=STORE.load.all_structured_trips(store=store, base=base),
         task_id=task_id,
         progress=progress,
     ):
-        store.save_expanded_trip(base=base, expanded=e_trip, overwrite=overwrite)
+        STORE.save.expanded_trip(
+            store=store, base=base, expanded=e_trip, overwrite=overwrite
+        )
 
 
 def expand_trips_disk(

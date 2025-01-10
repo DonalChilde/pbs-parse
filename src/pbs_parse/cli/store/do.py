@@ -6,8 +6,8 @@ from typing import Annotated
 
 import typer
 
+import pbs_parse.pbs_2022_01.pbs_manifest as STORE
 from pbs_parse import APP_NAME
-from pbs_parse.pbs_2022_01.pbs_manifest.store_manager import StoreManager
 from pbs_parse.snippets.typer.task_complete import task_complete
 
 from .common import ParseActions, ParseJob, do_jobs
@@ -44,9 +44,9 @@ def do(
     ] = False,
 ):
     """Parse the data from the text extracted from all the PDF files."""
-    store = StoreManager(manifest_directory=store_directory)
+    store = STORE.StoreManager(manifest_directory=store_directory)
     with store:
-        bases_in_store = store.get_bases()
+        bases_in_store = STORE.get.bases(store=store)
         if "_all_" in bases:
             bases = bases_in_store
         else:
