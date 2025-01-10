@@ -39,14 +39,11 @@ def make_stats_base(
     Returns:
         Sequence[str]: _description_
     """
-    trip_error_count = 0
     stats: list[str] = []
     stats.append(f"{base}:")
-    stats.append(f"{indent}Errors:")
-    stats.append(f"{indent*2}Number of trips with errors: {trip_error_count}")
     stats.extend(
         [
-            f"{indent*2}{x}"
+            f"{indent}{x}"
             for x in make_base_errors(base=base, store=store, indent=indent)
         ]
     )
@@ -116,7 +113,7 @@ def make_structured_trip_errors(
             store=store, base=base, uuid=info["key"]
         )
         s_trip = validation.structured
-        stats.append(f"{s_trip.number}_{s_trip.idx}")
+        stats.append(f"{s_trip.number} {s_trip.idx}")
         for error in validation.errors:
             stats.append(f"{indent}{error}")
     return stats
@@ -145,7 +142,7 @@ def make_expanded_trip_errors(
         )
         e_trip = validation.expanded
         stats.append(
-            f"{e_trip.trip_number}_{e_trip.start_lcl.date()}_{e_trip.source_idx}"
+            f"{e_trip.trip_number} {e_trip.start_lcl.date()} {e_trip.source_idx}"
         )
         for error in validation.errors:
             stats.append(f"{indent}{error}")

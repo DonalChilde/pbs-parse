@@ -37,6 +37,6 @@ def stats(store: StoreManager) -> str:
     Returns:
         str: _description_
     """
-    bases = bases(store=store)
-    stats = make_stats(store=store, bases=bases, indent="  ")
+    _bases = bases(store=store)
+    stats = make_stats(store=store, bases=_bases, indent="  ")
     return stats
