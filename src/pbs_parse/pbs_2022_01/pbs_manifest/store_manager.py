@@ -135,24 +135,24 @@ class StoreManager:
             raise NotInManifestError(f"Resource not in manifest. {base=}, {file_id=}")
         return info
 
-    def get_effective_dates(self) -> tuple[date, date]:
-        """get_effective_dates _summary_.
+    # def get_effective_dates(self) -> tuple[date, date]:
+    #     """get_effective_dates _summary_.
 
-        Returns:
-            tuple[date, date]: (from,to)
-        """
-        return (
-            date.fromisoformat(self.manifest["effective_from"]),
-            date.fromisoformat(self.manifest["effective_to"]),
-        )
+    #     Returns:
+    #         tuple[date, date]: (from,to)
+    #     """
+    #     return (
+    #         date.fromisoformat(self.manifest["effective_from"]),
+    #         date.fromisoformat(self.manifest["effective_to"]),
+    #     )
 
-    def get_bases(self) -> list[str]:
-        """Get a list of base keys."""
-        return list(self.manifest["bases"].keys())
+    # def get_bases(self) -> list[str]:
+    #     """Get a list of base keys."""
+    #     return list(self.manifest["bases"].keys())
 
-    def get_name(self) -> str:
-        """Get store name."""
-        return self.manifest["name"]
+    # def get_name(self) -> str:
+    #     """Get store name."""
+    #     return self.manifest["name"]
 
     def create_base_bid(self, source_pdf: Path, source_txt: Path, name: str):
         """Create a base bid, and copy the pdf and txt files into store."""
@@ -455,6 +455,30 @@ class StoreManager:
         for page_info in trip_infos:
             yield self.load_structured_trip(base=base, uuid=page_info["key"])
 
+    def load_structured_trip_validation(
+        self, base: str, uuid: str
+    ) -> StructuredValidation:
+        """load_structured_trip_validation.
+
+        Args:
+            base (str): _description_
+            uuid (str): _description_
+
+        Raises:
+            UnableToLoadError: _description_
+
+        Returns:
+            StructuredValidation: _description_
+        """
+        data = self.load_resource(base=base, uuid=uuid)
+        try:
+            value = STRUCTURED_VALIDATION_SERIALIZER.from_simple(data)  # type: ignore
+            return value
+        except Exception as e:
+            msg = f"Tried to make StructuredValidation from json, but there was an error. {base=}, {uuid=}"
+            logger.exception(msg)
+            raise UnableToLoadError(msg) from e
+
     def save_structured_trip_validation_error(
         self, base: str, validation_model: StructuredValidation, overwrite: bool = False
     ) -> Path:
@@ -549,6 +573,28 @@ class StoreManager:
         self.record_file(base=base, info=trip_info)
         return path_out
 
-    def report_errors(self):
-        """Report errors."""
-        pass
+    def load_expanded_trip_validation(self, base: str, uuid: str) -> ExpandedValidation:
+        """load_expanded_trip_validation.
+
+        Args:
+            base (str): _description_
+            uuid (str): _description_
+
+        Raises:
+            UnableToLoadError: _description_
+
+        Returns:
+            ExpandedValidation: _description_
+        """
+        data = self.load_resource(base=base, uuid=uuid)
+        try:
+            value = EXPANDED_VALIDATION_SERIALIZER.from_simple(data)  # type: ignore
+            return value
+        except Exception as e:
+            msg = f"Tried to make ExpandedValidation from json, but there was an error. {base=}, {uuid=}"
+            logger.exception(msg)
+            raise UnableToLoadError(msg) from e
+
+    # def report_errors(self):
+    #     """Report errors."""
+    #     pass
