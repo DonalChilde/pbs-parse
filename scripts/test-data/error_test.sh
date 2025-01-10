@@ -1,6 +1,11 @@
 #!/usr/bin/env bash
 # https://stackoverflow.com/a/4494535
 # https://dateful.com/convert/utc
+
+# The location of the PageLines.json containing errors,
+# Assumes all are from the same bid period.
+# Does not specifically allow for different bases,
+# it might be more clear to have bases in separate dirs.
 ERROR_TRIPS="$HOME/projects/tmp/error-trips"
 BID_PERIOD="2024-11-01 2024-12-01"
 readarray -t dirs < <(find $ERROR_TRIPS -mindepth 1 -maxdepth 1 -type d -printf '%P\n')
