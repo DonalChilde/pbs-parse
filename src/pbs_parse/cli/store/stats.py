@@ -26,8 +26,7 @@ def stats(
 ):
     """Get stats from the store."""
     store = STORE.StoreManager(manifest_directory=store_directory)
-    typer.echo("Bases:")
-    for base in STORE.get.bases(store=store):
-        typer.echo(f"\t{base}")
+    typer.echo(STORE.get.stats(store=store))
+
     start_perf = ctx.obj[APP_NAME]["start_perf"]
     task_complete(start_perf=start_perf)
