@@ -5,7 +5,7 @@ from collections.abc import Iterable, Sequence
 from pbs_parse.pbs_2022_01.models.manifest import FileTypes
 from pbs_parse.pbs_2022_01.pbs_manifest.store_manager import StoreManager
 
-from . import load
+from . import get, load
 
 
 def make_stats(store: StoreManager, bases: Iterable[str], indent: str = "  ") -> str:
@@ -20,8 +20,12 @@ def make_stats(store: StoreManager, bases: Iterable[str], indent: str = "  ") ->
         str: _description_
     """
     stats: list[str] = []
+    stats.append(f"{get.name(store=store)}")
     for base in bases:
-        stats.extend(make_stats_base(store=store, base=base, indent=indent))
+        stats.extend(
+            f"{indent}{x}"
+            for x in make_stats_base(store=store, base=base, indent=indent)
+        )
 
     return "\n".join(stats)
 

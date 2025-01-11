@@ -105,7 +105,7 @@ def do_jobs(jobs: list[ParseJob], store: STORE.StoreManager) -> None:
     for job in jobs:
         with progress:
             task_id = progress.add_task(
-                description=f"[blue]..... {job.base} - {store_name} ....."
+                description=f"[blue]..... {store_name}-{job.base} ....."
             )
             expand_actions(job=job)
             progress.update(task_id=task_id, total=len(job.action_items))
