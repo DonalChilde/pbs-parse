@@ -7,16 +7,10 @@ from typing import Annotated
 import typer
 
 from pbs_parse import APP_NAME
-from pbs_parse.cli.work.common import load_parsed
 from pbs_parse.pbs_2022_01.models.structured import (
     STRUCTURED_TRIP_SERIALIZER,
     StructuredTripLoader,
 )
-from pbs_parse.pbs_2022_01.models.structured_validation import (
-    STRUCTURED_VALIDATION_SERIALIZER,
-    StructuredValidation,
-)
-from pbs_parse.pbs_2022_01.validate.validate_structured import StructuredValidator
 from pbs_parse.snippets.file.data_file_loader import FileResource
 from pbs_parse.snippets.typer.task_complete import task_complete
 
@@ -93,36 +87,3 @@ def validate_structured(
         )
     start_perf = ctx.obj[APP_NAME]["start_perf"]
     task_complete(start_perf=start_perf)
-
-
-def do_one(path_in: Path, path_out: Path, parsed_dir: Path, overwrite: bool):
-    """do_one.
-
-    Args:
-        path_in (Path): _description_
-        path_out (Path): _description_
-        parsed_dir (Path): _description_
-        overwrite (bool): _description_
-    """
-    structured = STRUCTURED_TRIP_SERIALIZER.load_from_json(path_in=path_in)
-    parsed = load_parsed(parsed_dir=parsed_dir, s_trip=structured)
-    validation_model = StructuredValidation(
-        parsed=parsed.resource,
-        parsed_path=str(parsed.file_path),
-        structured=structured,
-        structured_path=str(path_in),
-    )
-    validator = StructuredValidator()
-    validator.validate(validation_model=validation_model)
-    if validation_model.errors:
-        file_out = path_out / validation_model.default_file_name()
-        STRUCTURED_VALIDATION_SERIALIZER.save_as_json(
-            path_out=file_out, complex_obj=validation_model, overwrite=overwrite
-        )
-        txt_out = file_out.with_suffix(".txt")
-        txt_out.write_text(str(validation_model))
-        typer.echo(
-            f"Found {len(validation_model.errors)} errors, debug info at {file_out}"
-        )
-    else:
-        typer.echo(f"Found no errors")

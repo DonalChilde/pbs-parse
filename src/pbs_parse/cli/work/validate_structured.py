@@ -12,21 +12,26 @@ from pbs_parse.pbs_2022_01.models.structured_validation import (
     STRUCTURED_VALIDATION_SERIALIZER,
     StructuredValidation,
 )
-from pbs_parse.pbs_2022_01.validate.validate_structured import StructuredValidator
+from pbs_parse.pbs_2022_01.structure.validate.validate_structured_trip import (
+    validate_structured_trip,
+)
+from pbs_parse.pbs_2022_01.structure.validate.validation_model_factories import (
+    validation_model_from_objects,
+)
 from pbs_parse.snippets.file.data_file_loader import FileResource
 
 from .common import load_parsed
 
 
 def validate_structured(
-    validation_models: Iterable[StructuredValidation],
+    vms: Iterable[StructuredValidation],
     task_id: TaskID,
     progress: Progress,
 ) -> Iterator[StructuredValidation]:
     """validate_structured.
 
     Args:
-        validation_models (Iterable[StructuredValidation]): _description_
+        vms (Iterable[StructuredValidation]): Validation models.
         task_id (TaskID): _description_
         progress (Progress): _description_
 
@@ -35,12 +40,11 @@ def validate_structured(
     """
     errors_found = 0
     errors_found_detailed = 0
-    validator = StructuredValidator()
-    for sv in validation_models:
-        validator.validate(validation_model=sv)
-        if sv.errors:
+    for vm in vms:
+        validate_structured_trip(vm=vm)
+        if vm.errors:
             errors_found += 1
-            errors_found_detailed += len(sv.errors)
+            errors_found_detailed += len(vm.errors)
             progress.update(
                 task_id,
                 advance=1,
@@ -48,7 +52,7 @@ def validate_structured(
             )
         else:
             progress.update(task_id=task_id, advance=1)
-        yield sv
+        yield vm
 
 
 def validate_structured_store(
@@ -81,16 +85,18 @@ def validate_structured_store(
         for x in structured_infos
     )
     validation_models = (
-        StructuredValidation(
-            parsed=STORE.load.parsed_trip(store=store, base=base, uuid=x.source_uuid),
-            structured=x,
-            parsed_path="",
-            structured_path="",
+        validation_model_from_objects(
+            parsed_trip=STORE.load.parsed_trip(
+                store=store, base=base, uuid=x.source_uuid
+            ),
+            structured_trip=x,
+            parsed_trip_path="",
+            structured_trip_path="",
         )
         for x in structured_trips
     )
     for sv in validate_structured(
-        validation_models=validation_models, task_id=task_id, progress=progress
+        vms=validation_models, task_id=task_id, progress=progress
     ):
         if sv.errors:
             STORE.save.structured_trip_validation_error(
@@ -127,7 +133,7 @@ def validate_structured_disk(
         resources=structured_resources, parsed_dir=parsed_dir
     )
     for sv in validate_structured(
-        validation_models=validation_models, task_id=task_id, progress=progress
+        vms=validation_models, task_id=task_id, progress=progress
     ):
         if sv.errors:
             file_out = path_out / sv.default_file_name()
@@ -155,10 +161,10 @@ def generate_validation_models(
     """
     for s_trip_res in resources:
         parsed_resource = load_parsed(parsed_dir=parsed_dir, s_trip=s_trip_res.resource)
-        sv = StructuredValidation(
-            parsed=parsed_resource.resource,
-            parsed_path=str(parsed_resource.file_path),
-            structured=s_trip_res.resource,
-            structured_path=str(s_trip_res.file_path),
+        vm = validation_model_from_objects(
+            parsed_trip=parsed_resource.resource,
+            parsed_trip_path=str(parsed_resource.file_path),
+            structured_trip=s_trip_res.resource,
+            structured_trip_path=str(s_trip_res.file_path),
         )
-        yield sv
+        yield vm
