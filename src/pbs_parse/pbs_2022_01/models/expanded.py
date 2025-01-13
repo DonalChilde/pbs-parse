@@ -10,10 +10,8 @@ from pfmsoft.simple_serializer import DataclassSerializer
 
 import pbs_parse.pbs_2022_01.models.expanded_TD as TD
 from pbs_parse.airports import airport_from_iata
-from pbs_parse.snippets.datetime.iso8601_duration import (
-    string_to_timedelta,
-    timedelta_to_isoformat,
-)
+from pbs_parse.snippets.datetime.factored_timedelta import timedelta_to_isoformat
+from pbs_parse.snippets.datetime.iso8601_duration_2 import isoformat_to_timedelta
 from pbs_parse.snippets.file.data_file_loader import DataFileLoader
 
 UTC = ZoneInfo("UTC")
@@ -154,10 +152,10 @@ class Flight:
             deadhead_code=simple_obj["deadhead_code"],
             crewmeal=simple_obj["crewmeal"],
             eq_change=simple_obj["eq_change"],
-            flight_time=string_to_timedelta(simple_obj["flight_time"]),
-            operating_time=string_to_timedelta(simple_obj["operating_time"]),
-            soft_time=string_to_timedelta(simple_obj["soft_time"]),
-            ground_time=string_to_timedelta(simple_obj["ground_time"]),
+            flight_time=isoformat_to_timedelta(simple_obj["flight_time"]),
+            operating_time=isoformat_to_timedelta(simple_obj["operating_time"]),
+            soft_time=isoformat_to_timedelta(simple_obj["soft_time"]),
+            ground_time=isoformat_to_timedelta(simple_obj["ground_time"]),
         )
         return result
 
@@ -242,7 +240,7 @@ class Layover:
             end_lcl=datetime.fromisoformat(simple_obj["end_lcl"]),
             end_hbt=datetime.fromisoformat(simple_obj["end_hbt"]),
             hotels=[Hotel.from_simple(x) for x in simple_obj["hotels"]],
-            rest=string_to_timedelta(simple_obj["rest"]),
+            rest=isoformat_to_timedelta(simple_obj["rest"]),
         )
         return result
 
@@ -311,11 +309,11 @@ class DutyPeriod:
             release_lcl=datetime.fromisoformat(simple_obj["release_lcl"]),
             release_hbt=datetime.fromisoformat(simple_obj["release_hbt"]),
             flights=[Flight.from_simple(x) for x in simple_obj["flights"]],
-            duty=string_to_timedelta(simple_obj["duty"]),
-            flight_duty=string_to_timedelta(simple_obj["flight_duty"]),
-            operating_time=string_to_timedelta(simple_obj["operating_time"]),
-            flight_time=string_to_timedelta(simple_obj["flight_time"]),
-            soft_time=string_to_timedelta(simple_obj["soft_time"]),
+            duty=isoformat_to_timedelta(simple_obj["duty"]),
+            flight_duty=isoformat_to_timedelta(simple_obj["flight_duty"]),
+            operating_time=isoformat_to_timedelta(simple_obj["operating_time"]),
+            flight_time=isoformat_to_timedelta(simple_obj["flight_time"]),
+            soft_time=isoformat_to_timedelta(simple_obj["soft_time"]),
             layover=layover,
         )
         return result
@@ -398,10 +396,10 @@ class ExpandedTrip:
             end_utc=datetime.fromisoformat(simple_obj["end_utc"]).astimezone(UTC),
             end_lcl=datetime.fromisoformat(simple_obj["end_lcl"]),
             end_hbt=datetime.fromisoformat(simple_obj["end_hbt"]),
-            flight_time=string_to_timedelta(simple_obj["flight_time"]),
-            operating_time=string_to_timedelta(simple_obj["operating_time"]),
-            soft_time=string_to_timedelta(simple_obj["soft_time"]),
-            tafb=string_to_timedelta(simple_obj["tafb"]),
+            flight_time=isoformat_to_timedelta(simple_obj["flight_time"]),
+            operating_time=isoformat_to_timedelta(simple_obj["operating_time"]),
+            soft_time=isoformat_to_timedelta(simple_obj["soft_time"]),
+            tafb=isoformat_to_timedelta(simple_obj["tafb"]),
             dutyperiods=[DutyPeriod.from_simple(x) for x in simple_obj["dutyperiods"]],
         )
         return result
