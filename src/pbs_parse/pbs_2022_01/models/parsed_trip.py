@@ -85,6 +85,15 @@ class ParsedTrip:
         """
         return f"parsed-trip_{idx}_{uuid}.json"
 
+    def original_text(self, with_line_num: bool = True, sep: str = "") -> str:
+        """Get the original input text, with and without line numbers."""
+        if with_line_num:
+            return f"{sep.join([f'{x.indexed_string.idx:06}: {x.indexed_string.txt}' for x in self.parsed_lines])}\n"
+        else:
+            return (
+                f"{sep.join([f'{x.indexed_string.txt}' for x in self.parsed_lines])}\n"
+            )
+
     def __str__(self) -> str:
         """Make a str rep of ParsedTrip."""
         return (
@@ -93,25 +102,10 @@ class ParsedTrip:
             f"{self.idx=}\n"
             f"{self.source_uuid=}\n"
             "\nText Input:\n"
-            f"{"".join([f"{x.indexed_string.idx:06}: {x.indexed_string.txt}" for x in self.parsed_lines])}\n"
+            f"{self.original_text()}\n"
             "Parsed Data:\n"
-            f"{"\n".join([f"{x.id:20} {x.indexed_string.idx:06}: {x.data!r}" for x in self.parsed_lines])}\n"
+            f"{'\n'.join([f'{x.id:20} {x.indexed_string.idx:06}: {x.data!r}' for x in self.parsed_lines])}\n"
         )
-        # lines: list[str] = []
-        # lines.append(f"{self.uuid=}")
-        # lines.append(f"{self.idx=}")
-        # lines.append(f"{self.source_uuid=}")
-        # lines.append("Text Input:")
-        # lines.extend(
-        #     f"{x.indexed_string.idx:06}: {x.indexed_string.txt}"
-        #     for x in self.parsed_lines
-        # )
-        # lines.append("Parsed Data:")
-        # lines.extend(
-        #     f"{x.id:20} {x.indexed_string.idx:06}: {x.data!r}"
-        #     for x in self.parsed_lines
-        # )
-        # return "\n".join(lines)
 
 
 def parsed_trip_serializer() -> DataclassSerializer[ParsedTrip, ParsedTripTD]:
