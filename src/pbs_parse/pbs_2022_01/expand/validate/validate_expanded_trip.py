@@ -7,7 +7,7 @@ from pbs_parse.pbs_2022_01.models.expanded_validation import ExpandedValidation
 
 
 def validate_expanded_trip(vm: ExpandedValidation):
-    """validate.
+    """validate_expanded_trip.
 
     Args:
         vm (ExpandedValidation): _description_

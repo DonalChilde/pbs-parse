@@ -7,13 +7,15 @@ from rich.progress import Progress, TaskID
 
 import pbs_parse.pbs_2022_01.pbs_manifest as STORE
 from pbs_parse.cli.work.common import load_parsed, load_structured
+from pbs_parse.pbs_2022_01.expand.validate.validate_expanded_trip import (
+    validate_expanded_trip,
+)
 from pbs_parse.pbs_2022_01.models import manifest
 from pbs_parse.pbs_2022_01.models.expanded import ExpandedTrip
 from pbs_parse.pbs_2022_01.models.expanded_validation import (
     EXPANDED_VALIDATION_SERIALIZER,
     ExpandedValidation,
 )
-from pbs_parse.pbs_2022_01.validate.validate_expanded import ExpandedValidator
 from pbs_parse.snippets.file.data_file_loader import FileResource
 
 
@@ -34,20 +36,19 @@ def validate_expanded(
     """
     errors_found = 0
     errors_found_detailed = 0
-    validator = ExpandedValidator()
-    for sv in validation_models:
-        validator.validate(validation_model=sv)
-        if sv.errors:
+    for vm in validation_models:
+        validate_expanded_trip(vm=vm)
+        if vm.errors:
             errors_found += 1
-            errors_found_detailed += len(sv.errors)
+            errors_found_detailed += len(vm.errors)
             progress.update(
                 task_id,
                 advance=1,
-                description=f"{f"[red]{errors_found} expanded trips with errors, {errors_found_detailed} errors total." if errors_found else None}",
+                description=f"{f'[red]{errors_found} expanded trips with errors, {errors_found_detailed} errors total.' if errors_found else None}",
             )
         else:
             progress.update(task_id=task_id, advance=1)
-        yield sv
+        yield vm
 
 
 def validate_expanded_store(
@@ -88,15 +89,15 @@ def validate_expanded_store(
         )
         for x in expanded_trips
     )
-    for ev in validate_expanded(
+    for vm in validate_expanded(
         validation_models=validation_models, task_id=task_id, progress=progress
     ):
-        if ev.errors:
-            ev.parsed = STORE.load.parsed_trip(
-                store=store, base=base, uuid=ev.structured.source_uuid
+        if vm.errors:
+            vm.parsed = STORE.load.parsed_trip(
+                store=store, base=base, uuid=vm.structured.source_uuid
             )
             STORE.save.expanded_trip_validation_error(
-                store=store, base=base, validation_model=ev, overwrite=overwrite
+                store=store, base=base, validation_model=vm, overwrite=overwrite
             )
 
 
@@ -130,19 +131,19 @@ def validate_expanded_disk(
     validation_models = generate_validation_models(
         resources=expanded_resources, structured_dir=structured_dir
     )
-    for ev in validate_expanded(
+    for vm in validate_expanded(
         validation_models=validation_models, task_id=task_id, progress=progress
     ):
-        if ev.errors:
-            parsed = load_parsed(parsed_dir=parsed_dir, s_trip=ev.structured)
-            ev.parsed = parsed.resource
-            ev.parsed_path = str(parsed.file_path)
-            file_out = path_out / ev.default_file_name()
+        if vm.errors:
+            parsed = load_parsed(parsed_dir=parsed_dir, s_trip=vm.structured)
+            vm.parsed = parsed.resource
+            vm.parsed_path = str(parsed.file_path)
+            file_out = path_out / vm.default_file_name()
             EXPANDED_VALIDATION_SERIALIZER.save_as_json(
-                path_out=file_out, complex_obj=ev, overwrite=overwrite
+                path_out=file_out, complex_obj=vm, overwrite=overwrite
             )
             txt_out = file_out.with_suffix(".txt")
-            txt_out.write_text(str(ev))
+            txt_out.write_text(str(vm))
 
 
 def generate_validation_models(
@@ -164,10 +165,10 @@ def generate_validation_models(
         structured_resource = load_structured(
             structured_dir=structured_dir, e_trip=e_trip_res.resource
         )
-        sv = ExpandedValidation(
+        vm = ExpandedValidation(
             expanded=e_trip_res.resource,
             expanded_path=str(e_trip_res.file_path),
             structured=structured_resource.resource,
             structured_path=str(e_trip_res.file_path),
         )
-        yield sv
+        yield vm
