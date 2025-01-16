@@ -1,5 +1,7 @@
 """FILE: check_localized_times.py."""
 
+from datetime import datetime
+
 from pbs_parse.pbs_2022_01.models import expanded as ET
 from pbs_parse.pbs_2022_01.models import structured as ST
 from pbs_parse.pbs_2022_01.models.expanded_validation import ExpandedValidation
@@ -16,6 +18,7 @@ def check_localized_times(vm: ExpandedValidation) -> None:
             e_dutyperiod=e_dutyperiod,
             s_dutyperiod=s_dutyperiod,
             dp_idx=dp_idx,
+            hb_tz_name=vm.expanded.start_station.tz_name,
         )
         if dp_errors:
             vm.errors.extend(dp_errors)
@@ -38,20 +41,46 @@ def dutyperiod_times(
     e_dutyperiod: ET.DutyPeriod,
     s_dutyperiod: ST.DutyPeriod,
     dp_idx: int,
+    hb_tz_name: str,
 ) -> list[str]:
     """Check the dutyperiod report and release times."""
     errors: list[str] = []
+
     tests = [
-        (e_dutyperiod.report_lcl, s_dutyperiod.report_time.lcl, "local report"),
-        (e_dutyperiod.report_hbt, s_dutyperiod.report_time.hbt, "hbt report"),
-        (e_dutyperiod.release_lcl, s_dutyperiod.release_time.lcl, "local release"),
-        (e_dutyperiod.release_hbt, s_dutyperiod.release_time.hbt, "hbt release"),
+        (
+            e_dutyperiod.report_lcl,
+            s_dutyperiod.report_time.lcl,
+            "local report",
+            e_dutyperiod.report_station.tz_name,
+            e_dutyperiod.report_utc,
+        ),
+        (
+            e_dutyperiod.report_hbt,
+            s_dutyperiod.report_time.hbt,
+            "hbt report",
+            hb_tz_name,
+            e_dutyperiod.report_utc,
+        ),
+        (
+            e_dutyperiod.release_lcl,
+            s_dutyperiod.release_time.lcl,
+            "local release",
+            e_dutyperiod.release_station.tz_name,
+            e_dutyperiod.release_utc,
+        ),
+        (
+            e_dutyperiod.release_hbt,
+            s_dutyperiod.release_time.hbt,
+            "hbt release",
+            hb_tz_name,
+            e_dutyperiod.release_utc,
+        ),
     ]
     for test in tests:
         if test[0].strftime("%H%M") != test[1]:
             errors.append(
                 f"Expanded {test[0].isoformat()} time {test[0].time()} does not match Structured {test[1]}"
-                f" for dutyperiod idx {dp_idx}, field `{test[2]}` "
+                f" for dutyperiod-{dp_idx}, field `{test[2]}`, tz_name={test[3]}, utc={test[4]} "
             )
 
     return errors

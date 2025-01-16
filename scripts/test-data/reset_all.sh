@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 
 SCRIPT_DIR="$(dirname "$(readlink -f "$0")")"
+STATS_FILE="$HOME/projects/tmp/stats.txt"
 echo "**** Resetting all bids ****"
 
 $SCRIPT_DIR/reset_jan2024.sh
@@ -15,3 +16,5 @@ $SCRIPT_DIR/reset_sep2024.sh
 $SCRIPT_DIR/reset_oct2024.sh
 $SCRIPT_DIR/reset_nov2024.sh
 $SCRIPT_DIR/reset_dec2024.sh
+
+$SCRIPT_DIR/stats_all.sh "> $STATS_FILE"
