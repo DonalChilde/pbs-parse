@@ -8,6 +8,7 @@ from uuid import NAMESPACE_DNS, UUID, uuid5
 from pfmsoft.simple_serializer import DataclassSerializer
 from pfmsoft.state_parser import model
 
+from pbs_parse.pbs_2022_01.models.external_data import ExternalData, ExternalDataTD
 from pbs_parse.snippets.file.data_file_loader import DataFileLoader
 
 PARSED_TRIP_NS = uuid5(NAMESPACE_DNS, "pbs_parse.pbs_2022_01.parsed_trip")
@@ -25,6 +26,7 @@ class ParsedTripTD(TypedDict):
     """A simple object version of ParsedTrip."""
 
     source: ParsedTripSourceTD
+    external: ExternalDataTD
     uuid: str
     source_uuid: str
     idx: str
@@ -45,6 +47,7 @@ class ParsedTrip:
     """ParsedTrip contains the parsed lines of a pbs trip."""
 
     source: ParsedTripSource
+    external: ExternalData
     source_uuid: str
     idx: str
     uuid: str = ""
@@ -70,6 +73,7 @@ class ParsedTrip:
         """Reconstitute a ParsedTrip from a simple object."""
         result = ParsedTrip(
             source=ParsedTripSource(**simple_obj["source"]),
+            external=ExternalData(**simple_obj["external"]),
             uuid=simple_obj["uuid"],
             source_uuid=simple_obj["source_uuid"],
             idx=simple_obj["idx"],

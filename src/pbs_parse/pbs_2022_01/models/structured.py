@@ -9,6 +9,7 @@ from uuid import NAMESPACE_DNS, UUID, uuid5
 from pfmsoft.simple_serializer import DataclassSerializer
 
 from pbs_parse.pbs_2022_01.models import structured_TD as TD
+from pbs_parse.pbs_2022_01.models.external_data import ExternalData
 from pbs_parse.snippets.datetime.date_range import date_range
 from pbs_parse.snippets.datetime.duration_regex import pattern_HHHMM
 from pbs_parse.snippets.file.data_file_loader import DataFileLoader
@@ -225,12 +226,12 @@ class PageFooter:
     page: str
 
 
-@dataclass(slots=True)
-class ExternalData:
-    """ExternalData."""
+# @dataclass(slots=True)
+# class ExternalData:
+#     """ExternalData."""
 
-    effective_from: str
-    effective_to: str
+#     effective_from: str
+#     effective_to: str
 
 
 @dataclass(slots=True)

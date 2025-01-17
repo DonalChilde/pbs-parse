@@ -9,6 +9,7 @@ from pfmsoft.indexed_string.index_strings import make_uuid_iter
 from pfmsoft.indexed_string.model import IndexedString, IndexedStringTD
 from pfmsoft.simple_serializer import DataclassSerializer
 
+from pbs_parse.pbs_2022_01.models.external_data import ExternalData, ExternalDataTD
 from pbs_parse.snippets.file.data_file_loader import DataFileLoader
 
 TRIP_LINES_NS = uuid5(NAMESPACE_DNS, "pbs_split.pbs_2022_01.trip_lines")
@@ -25,6 +26,7 @@ class TripLinesTD(TypedDict):
     """TripLinesTD."""
 
     source: TripLinesSourceTD
+    external: ExternalDataTD
     uuid: str
     source_uuid: str
     idx: str
@@ -44,6 +46,7 @@ class TripLines:
     """TripLines."""
 
     source: TripLinesSource
+    external: ExternalData
     source_uuid: str
     idx: str
     uuid: str = ""
@@ -76,6 +79,7 @@ class TripLines:
         """
         result = TripLines(
             source=TripLinesSource(**simple_obj["source"]),
+            external=ExternalData(**simple_obj["external"]),
             uuid=simple_obj["uuid"],
             source_uuid=simple_obj["source_uuid"],
             idx=simple_obj["idx"],

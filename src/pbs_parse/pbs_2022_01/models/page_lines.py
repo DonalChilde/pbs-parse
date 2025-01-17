@@ -9,12 +9,15 @@ from pfmsoft.indexed_string.index_strings import make_uuid_iter
 from pfmsoft.indexed_string.model import IndexedString, IndexedStringTD
 from pfmsoft.simple_serializer import DataclassSerializer
 
+from pbs_parse.pbs_2022_01.models.external_data import ExternalData, ExternalDataTD
 from pbs_parse.snippets.file.data_file_loader import DataFileLoader
 
 PAGE_LINES_NS = uuid5(NAMESPACE_DNS, "pbs_split.pbs_2022_01.page_lines")
 
 
 class PageLinesSourceTD(TypedDict):
+    """PageLinesSourceTD."""
+
     txt_file: str
 
 
@@ -22,6 +25,7 @@ class PageLinesTD(TypedDict):
     """PageLinesTD."""
 
     source: PageLinesSourceTD
+    external: ExternalDataTD
     uuid: str
     idx: str
     lines: list[IndexedStringTD]
@@ -29,6 +33,8 @@ class PageLinesTD(TypedDict):
 
 @dataclass(slots=True)
 class PageLinesSource:
+    """PageLinesSource."""
+
     txt_file: str = "TXT_FILE"
 
 
@@ -37,6 +43,7 @@ class PageLines:
     """PageLines."""
 
     source: PageLinesSource
+    external: ExternalData
     idx: str
     uuid: str = ""
     lines: list[IndexedString] = field(default_factory=list)
@@ -68,6 +75,7 @@ class PageLines:
         """
         result = PageLines(
             source=PageLinesSource(**simple_obj["source"]),
+            external=ExternalData(**simple_obj["external"]),
             uuid=simple_obj["uuid"],
             idx=simple_obj["idx"],
             lines=[IndexedString(**x) for x in simple_obj["lines"]],

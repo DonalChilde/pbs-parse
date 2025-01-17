@@ -6,6 +6,8 @@ This can be used to represent imported json data, usually before conversion to t
 # ruff: noqa: D101
 from typing import TypedDict
 
+from pbs_parse.pbs_2022_01.models.external_data import ExternalDataTD
+
 
 class MonthDay(TypedDict):
     month: str
@@ -82,11 +84,6 @@ class PageFooter(TypedDict):
     page: str
 
 
-class ExternalData(TypedDict):
-    effective_from: str
-    effective_to: str
-
-
 class StructuredTripSourceTD(TypedDict):
     txt_file: str
     page_lines: str
@@ -105,7 +102,7 @@ class StructuredTripTD(TypedDict):
     synth: str
     total_pay: str
     tafb: str
-    external: ExternalData
+    external: ExternalDataTD
     page_header: PageHeader
     page_footer: PageFooter
     positions: list[str]
