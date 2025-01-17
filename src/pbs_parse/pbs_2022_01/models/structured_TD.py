@@ -87,7 +87,15 @@ class ExternalData(TypedDict):
     effective_to: str
 
 
+class StructuredTripSourceTD(TypedDict):
+    txt_file: str
+    page_lines: str
+    trip_lines: str
+    parsed_trip: str
+
+
 class StructuredTripTD(TypedDict):
+    source: StructuredTripSourceTD
     uuid: str
     source_uuid: str
     idx: str

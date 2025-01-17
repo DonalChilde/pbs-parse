@@ -13,9 +13,18 @@ from pbs_parse.snippets.file.data_file_loader import DataFileLoader
 PARSED_TRIP_NS = uuid5(NAMESPACE_DNS, "pbs_parse.pbs_2022_01.parsed_trip")
 
 
+class ParsedTripSourceTD(TypedDict):
+    """ParsedTripSourceTD."""
+
+    txt_file: str
+    page_lines: str
+    trip_lines: str
+
+
 class ParsedTripTD(TypedDict):
     """A simple object version of ParsedTrip."""
 
+    source: ParsedTripSourceTD
     uuid: str
     source_uuid: str
     idx: str
@@ -23,9 +32,19 @@ class ParsedTripTD(TypedDict):
 
 
 @dataclass(slots=True)
+class ParsedTripSource:
+    """ParsedTripSource."""
+
+    txt_file: str = "TXT_FILE"
+    page_lines: str = "PAGE_LINES"
+    trip_lines: str = "TRIP_LINES"
+
+
+@dataclass(slots=True)
 class ParsedTrip:
     """ParsedTrip contains the parsed lines of a pbs trip."""
 
+    source: ParsedTripSource
     source_uuid: str
     idx: str
     uuid: str = ""
@@ -50,6 +69,7 @@ class ParsedTrip:
     def from_simple(simple_obj: ParsedTripTD) -> "ParsedTrip":
         """Reconstitute a ParsedTrip from a simple object."""
         result = ParsedTrip(
+            source=ParsedTripSource(**simple_obj["source"]),
             uuid=simple_obj["uuid"],
             source_uuid=simple_obj["source_uuid"],
             idx=simple_obj["idx"],

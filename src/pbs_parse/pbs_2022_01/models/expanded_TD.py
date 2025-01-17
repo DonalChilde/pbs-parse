@@ -103,9 +103,20 @@ class DutyPeriod(TypedDict):
     layover: Layover | None
 
 
+class ExpandedTripSourceTD(TypedDict):
+    """ExpandedTripSource."""
+
+    txt_file: str
+    page_lines: str
+    trip_lines: str
+    parsed_trip: str
+    structured_trip: str
+
+
 class ExpandedTripTD(TypedDict):
     """A trip."""
 
+    source: ExpandedTripSourceTD
     source_uuid: str
     source_idx: str
     uuid: str

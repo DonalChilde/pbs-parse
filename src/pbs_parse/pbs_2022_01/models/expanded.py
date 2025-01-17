@@ -319,10 +319,32 @@ class DutyPeriod:
         return result
 
 
+@dataclass(slots=True)
+class ExpandedTripSource:
+    """StructuredTripSource."""
+
+    txt_file: str = "TXT_FILE"
+    page_lines: str = "PAGE_LINES"
+    trip_lines: str = "TRIP_LINES"
+    parsed_trip: str = "PARSED_TRIP"
+    structured_trip: str = "STRUCTURED_TRIP"
+
+    def to_simple(self) -> TD.ExpandedTripSourceTD:
+        """Turn into simple object."""
+        return TD.ExpandedTripSourceTD(
+            txt_file=self.txt_file,
+            page_lines=self.page_lines,
+            trip_lines=self.trip_lines,
+            parsed_trip=self.parsed_trip,
+            structured_trip=self.structured_trip,
+        )
+
+
 @dataclass(slots=True, kw_only=True)
 class ExpandedTrip:
     """A trip."""
 
+    source: ExpandedTripSource
     source_uuid: str
     source_idx: str
     uuid: str = ""
@@ -380,6 +402,7 @@ class ExpandedTrip:
     def from_simple(simple_obj: TD.ExpandedTripTD) -> "ExpandedTrip":
         """Turn simple object into Trip."""
         result = ExpandedTrip(
+            source=ExpandedTripSource(**simple_obj["source"]),
             source_uuid=simple_obj["source_uuid"],
             source_idx=simple_obj["source_idx"],
             uuid=simple_obj["uuid"],
@@ -407,6 +430,7 @@ class ExpandedTrip:
     def to_simple(self) -> TD.ExpandedTripTD:
         """Trip to simple object."""
         result = TD.ExpandedTripTD(
+            source=self.source.to_simple(),
             source_uuid=self.source_uuid,
             source_idx=self.source_idx,
             uuid=self.uuid,

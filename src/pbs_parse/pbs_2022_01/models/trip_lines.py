@@ -14,19 +14,36 @@ from pbs_parse.snippets.file.data_file_loader import DataFileLoader
 TRIP_LINES_NS = uuid5(NAMESPACE_DNS, "pbs_split.pbs_2022_01.trip_lines")
 
 
+class TripLinesSourceTD(TypedDict):
+    """TripLinesSourceTD."""
+
+    txt_file: str
+    page_lines: str
+
+
 class TripLinesTD(TypedDict):
     """TripLinesTD."""
 
+    source: TripLinesSourceTD
     uuid: str
     source_uuid: str
     idx: str
     lines: list[IndexedStringTD]
 
 
+@dataclass
+class TripLinesSource:
+    """TripLinesSource."""
+
+    txt_file: str = "TXT_FILE"
+    page_lines: str = "PAGE_LINES"
+
+
 @dataclass(slots=True)
 class TripLines:
     """TripLines."""
 
+    source: TripLinesSource
     source_uuid: str
     idx: str
     uuid: str = ""
@@ -58,6 +75,7 @@ class TripLines:
             TripLines: _description_
         """
         result = TripLines(
+            source=TripLinesSource(**simple_obj["source"]),
             uuid=simple_obj["uuid"],
             source_uuid=simple_obj["source_uuid"],
             idx=simple_obj["idx"],

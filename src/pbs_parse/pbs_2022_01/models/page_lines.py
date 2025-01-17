@@ -14,18 +14,29 @@ from pbs_parse.snippets.file.data_file_loader import DataFileLoader
 PAGE_LINES_NS = uuid5(NAMESPACE_DNS, "pbs_split.pbs_2022_01.page_lines")
 
 
+class PageLinesSourceTD(TypedDict):
+    txt_file: str
+
+
 class PageLinesTD(TypedDict):
     """PageLinesTD."""
 
+    source: PageLinesSourceTD
     uuid: str
     idx: str
     lines: list[IndexedStringTD]
 
 
 @dataclass(slots=True)
+class PageLinesSource:
+    txt_file: str = "TXT_FILE"
+
+
+@dataclass(slots=True)
 class PageLines:
     """PageLines."""
 
+    source: PageLinesSource
     idx: str
     uuid: str = ""
     lines: list[IndexedString] = field(default_factory=list)
@@ -56,6 +67,7 @@ class PageLines:
             PageLines: _description_
         """
         result = PageLines(
+            source=PageLinesSource(**simple_obj["source"]),
             uuid=simple_obj["uuid"],
             idx=simple_obj["idx"],
             lines=[IndexedString(**x) for x in simple_obj["lines"]],

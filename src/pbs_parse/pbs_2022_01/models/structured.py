@@ -234,9 +234,20 @@ class ExternalData:
 
 
 @dataclass(slots=True)
+class StructuredTripSource:
+    """StructuredTripSource."""
+
+    txt_file: str = "TXT_FILE"
+    page_lines: str = "PAGE_LINES"
+    trip_lines: str = "TRIP_LINES"
+    parsed_trip: str = "PARSED_TRIP"
+
+
+@dataclass(slots=True)
 class StructuredTrip:
     """StructuredTrip."""
 
+    source: StructuredTripSource
     source_uuid: str
     idx: str
     number: str
@@ -302,6 +313,7 @@ class StructuredTrip:
             StructuredTrip: _description_
         """
         result = StructuredTrip(
+            source=StructuredTripSource(**simple_obj["source"]),
             uuid=simple_obj["uuid"],
             source_uuid=simple_obj["source_uuid"],
             idx=simple_obj["idx"],
