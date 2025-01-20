@@ -6,16 +6,14 @@ from pathlib import Path
 from typer.testing import CliRunner
 
 from pbs_parse.cli.main_typer import app
+from tests.resources.eff_2024_11_01_2024_12_01.LAX import PAGES_ANCHOR
 from tests.resources.models.file_system_resource import FileResource
-from tests.resources.page_lines import PAGE_LINES_ANCHOR
 
 SINGLE_FILE_TEST = FileResource(
-    anchor=PAGE_LINES_ANCHOR,
-    pathname=f"2024-11-01_2024-12-01/page-lines_00001-00_15d7d139-d7bc-5253-b541-529a3a4bce4c.json",
+    anchor=PAGES_ANCHOR,
+    pathname=f"page-lines_LAX_2024-11-01_00001-00.json",
 )
-DIRECTORY_TEST = FileResource(
-    anchor=PAGE_LINES_ANCHOR, pathname=f"2024-11-01_2024-12-01"
-)
+DIRECTORY_TEST = FileResource(anchor=PAGES_ANCHOR, pathname="")
 
 
 def test_split_page_to_trips_file(runner: CliRunner, test_output_dir: Path):  # noqa: D103
@@ -30,6 +28,8 @@ def test_split_page_to_trips_file(runner: CliRunner, test_output_dir: Path):  # 
         assert result.exit_code == 0
         assert "to 4 trips" in result.stdout
         assert "error" not in result.stdout
+        output_files = list(path_out.glob("trip-lines*"))
+        assert len(output_files) == 4
 
 
 def test_split_page_to_trips_dir(runner: CliRunner, test_output_dir: Path):  # noqa: D103
@@ -45,3 +45,5 @@ def test_split_page_to_trips_dir(runner: CliRunner, test_output_dir: Path):  # n
         assert result.exit_code == 0
         assert "to 18 trips" in result.stdout
         assert "error" not in result.stdout
+        output_files = list(path_out.glob("trip-lines*"))
+        assert len(output_files) == 18
