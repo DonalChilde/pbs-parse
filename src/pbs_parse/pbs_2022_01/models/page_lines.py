@@ -98,12 +98,10 @@ class PageLines:
         Returns:
             str: _description_
         """
-        return self.assemble_file_name(
-            idx=self.idx, external=self.external, uuid=self.uuid
-        )
+        return self.assemble_file_name(idx=self.idx, external=self.external)
 
     @staticmethod
-    def assemble_file_name(idx: str, external: ExternalData, uuid: str) -> str:
+    def assemble_file_name(idx: str, external: ExternalData) -> str:
         """assemble_file_name.
 
         Args:

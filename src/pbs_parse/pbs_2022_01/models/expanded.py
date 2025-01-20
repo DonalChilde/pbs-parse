@@ -389,13 +389,14 @@ class ExpandedTrip:
         """Assemble a file name from trip data."""
         ret_value: list[str] = []
         ret_value.append("expanded-trip")
-        ret_value.append(f"_{self.source_idx}")
-        ret_value.append(f"_{self.start_lcl.date().isoformat()}")
         ret_value.append(f"_{self.base_equipment.base.iata}")
         if self.base_equipment.satellite_base:
             ret_value.append(f"_{self.base_equipment.satellite_base.iata}")
         ret_value.append(f"_{self.base_equipment.equipment}")
-        ret_value.append(f"_{self.trip_number}.json")
+        ret_value.append(f"_{self.start_lcl.date().isoformat()}")
+        ret_value.append(f"_{self.trip_number}")
+        ret_value.append(f"_{self.source_idx}")
+        ret_value.append(".json")
         return "".join(ret_value)
 
     @staticmethod
@@ -462,18 +463,6 @@ def get_airport_code_from_iata(iata: str) -> AirportCode:
     return AirportCode(
         iata=airport["iata"], icao=airport["icao"], tz_name=airport["tz"]
     )
-
-
-# def default_file_name(trip: ExpandedTrip) -> str:
-#     """Assemble a file name from trip data."""
-#     ret_value: list[str] = []
-#     ret_value.append(trip.start_lcl.date().isoformat())
-#     ret_value.append(f"_{trip.base_equipment.base.iata}")
-#     if trip.base_equipment.satellite_base:
-#         ret_value.append(f"_{trip.base_equipment.satellite_base.iata}")
-#     ret_value.append(f"_{trip.base_equipment.equipment}")
-#     ret_value.append(f"_{trip.trip_number}.json")
-#     return "".join(ret_value)
 
 
 def trip_serializer() -> DataclassSerializer[ExpandedTrip, TD.ExpandedTripTD]:

@@ -390,20 +390,20 @@ class StructuredTrip:
         Returns:
             str: _description_
         """
-        return self.assemble_file_name(idx=self.idx, uuid=self.uuid)
+        return self.assemble_file_name(idx=self.idx, external=self.external)
 
     @staticmethod
-    def assemble_file_name(idx: str, uuid: str) -> str:
+    def assemble_file_name(idx: str, external: ExternalData) -> str:
         """assemble_file_name.
 
         Args:
             idx (str): _description_
-            uuid (str): _description_
+            external (ExternalData): _description_
 
         Returns:
             str: _description_
         """
-        return f"structured-trip_{idx}_{uuid}.json"
+        return f"structured-trip_{external.base}_{external.effective_from}_{idx}.json"
 
     @staticmethod
     def from_simple(simple_obj: TD.StructuredTripTD) -> "StructuredTrip":
