@@ -1,7 +1,7 @@
 """Translate a parsed to structured trip."""
 
 import logging
-from collections.abc import Callable, Iterable, Iterator
+from copy import deepcopy
 from dataclasses import dataclass, field
 from datetime import date
 from pathlib import Path
@@ -51,50 +51,44 @@ def structure_trip_from_file(
 ) -> structured.StructuredTrip:
     """Load a ParsedTrip from file and translate it."""
     parsed_trip = PARSED_TRIP_SERIALIZER.load_from_json(path_in=path_in)
-    return structure_trip(
-        parsed_trip=parsed_trip,
-        effective_from=effective_from,
-        effective_to=effective_to,
-    )
+    return structure_trip(parsed_trip=parsed_trip, source_file=path_in.name)
 
 
-def structure_trips(
-    parsed_trips: Iterable[ParsedTrip],
-    effective_from: date,
-    effective_to: date,
-    observer: Callable[[structured.StructuredTrip], None] | None = None,
-) -> Iterator[structured.StructuredTrip]:
-    """Structure parsed trips, with optional observer.
+# def structure_trips(
+#     parsed_trips: Iterable[ParsedTrip],
+#     effective_from: date,
+#     effective_to: date,
+#     observer: Callable[[structured.StructuredTrip], None] | None = None,
+# ) -> Iterator[structured.StructuredTrip]:
+#     """Structure parsed trips, with optional observer.
 
-    All trips are expected to have the same effective from-to dates.
+#     All trips are expected to have the same effective from-to dates.
 
-    Args:
-        parsed_trips (Iterable[ParsedTrip]): _description_
-        effective_from (date): _description_
-        effective_to (date): _description_
-        observer (Callable[[structured.StructuredTrip], None] | None, optional): _description_. Defaults to None.
+#     Args:
+#         parsed_trips (Iterable[ParsedTrip]): _description_
+#         effective_from (date): _description_
+#         effective_to (date): _description_
+#         observer (Callable[[structured.StructuredTrip], None] | None, optional): _description_. Defaults to None.
 
-    Yields:
-        Iterator[structured.StructuredTrip]: _description_
-    """
-    for parsed in parsed_trips:
-        structured = structure_trip(
-            parsed_trip=parsed, effective_from=effective_from, effective_to=effective_to
-        )
-        if observer:
-            observer(structured)
-        yield structured
+#     Yields:
+#         Iterator[structured.StructuredTrip]: _description_
+#     """
+#     for parsed in parsed_trips:
+#         structured = structure_trip(
+#             parsed_trip=parsed, effective_from=effective_from, effective_to=effective_to
+#         )
+#         if observer:
+#             observer(structured)
+#         yield structured
 
 
 def structure_trip(
-    parsed_trip: ParsedTrip, effective_from: date, effective_to: date
+    parsed_trip: ParsedTrip, source_file: str
 ) -> structured.StructuredTrip:
     """Translate a ParsedTrip."""
     trip = _translate_trip(
+        source_file=source_file,
         parsed_trip=parsed_trip,
-        effective_from=effective_from,
-        effective_to=effective_to,
-        source_uuid=parsed_trip.uuid,
     )
     return trip
 
@@ -135,8 +129,8 @@ def _translate_dutyperiod(
         layover = _translate_layover(dutyperiod_lines.layover)
     dutyperiod = structured.DutyPeriod(
         idx=str(idx),
-        report_time=dutyperiod_lines.report.data["report"],
-        release_time=dutyperiod_lines.release.data["release"],
+        report_time=structured.DualTime(**dutyperiod_lines.report.data["report"]),
+        release_time=structured.DualTime(**dutyperiod_lines.release.data["release"]),
         block=dutyperiod_lines.release.data["block"],
         synth=dutyperiod_lines.release.data["synth"],
         total_pay=dutyperiod_lines.release.data["total_pay"],
@@ -189,9 +183,10 @@ def _translate_hotels(
 
 def _translate_trip(
     parsed_trip: ParsedTrip,
-    effective_from: date,
-    effective_to: date,
-    source_uuid: str,
+    source_file: str,
+    # effective_from: date,
+    # effective_to: date,
+    # source_uuid: str,
 ) -> structured.StructuredTrip:
     trip_lines = _organize_lines(parsed_trip=parsed_trip)
     calendar = _collect_calendar(parsed_trip=parsed_trip)
@@ -199,10 +194,11 @@ def _translate_trip(
         _translate_dutyperiod(x, idx)
         for idx, x in enumerate(trip_lines.duty_periods, start=1)
     ]
-    external = structured.ExternalData(
-        effective_from=effective_from.isoformat(),
-        effective_to=effective_to.isoformat(),
-    )
+    # external = structured.ExternalData(
+    #     effective_from=effective_from.isoformat(),
+    #     effective_to=effective_to.isoformat(),
+    # )
+    external = deepcopy(parsed_trip.external)
     page_header = structured.PageHeader(
         from_date=structured.MonthDay(**trip_lines.page_header_2.data["from_date"]),
         to_date=structured.MonthDay(**trip_lines.page_header_2.data["to_date"]),
@@ -216,7 +212,14 @@ def _translate_trip(
         division=trip_lines.page_footer.data["division"],
         page=trip_lines.page_footer.data["page"],
     )
+    source = structured.StructuredTripSource(
+        txt_file=parsed_trip.source.txt_file,
+        page_lines=parsed_trip.source.page_lines,
+        trip_lines=parsed_trip.source.trip_lines,
+        parsed_trip=source_file,
+    )
     trip = structured.StructuredTrip(
+        source=source,
         source_uuid=parsed_trip.uuid,
         idx=parsed_trip.idx,
         number=trip_lines.trip_header.data["trip_number"],

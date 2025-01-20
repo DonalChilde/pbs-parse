@@ -1,5 +1,6 @@
 """FILE: common.py."""
 
+from dataclasses import dataclass
 from pathlib import Path
 
 from pbs_parse.pbs_2022_01.models.expanded import ExpandedTrip
@@ -45,3 +46,11 @@ def load_structured(
     path_in = structured_dir / structured_name
     parsed = STRUCTURED_TRIP_SERIALIZER.load_from_json(path_in=path_in)
     return FileResource(resource=parsed, file_path=path_in)
+
+
+@dataclass(slots=True)
+class KeyedResource[T]:
+    """KeyedResource."""
+
+    resource: T
+    key: str

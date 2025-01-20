@@ -1,6 +1,7 @@
 """FILE: split_to_pages.py."""
 
 import logging
+from datetime import datetime
 from pathlib import Path
 from typing import Annotated, TypedDict
 
@@ -8,6 +9,7 @@ import typer
 from rich.progress import TaskID
 
 from pbs_parse import APP_NAME
+from pbs_parse.pbs_2022_01.models.external_data import ExternalData
 from pbs_parse.snippets.typer.task_complete import task_complete
 
 from ..work.progress import progress
@@ -30,6 +32,19 @@ def split_to_pages(
         Path,
         typer.Argument(help="The output directory."),
     ],
+    effective_from: Annotated[
+        datetime,
+        typer.Argument(
+            help="Effective From date for bid package.", formats=["%Y-%m-%d"]
+        ),
+    ],
+    effective_to: Annotated[
+        datetime,
+        typer.Argument(help="Effective to date for bid package", formats=["%Y-%m-%d"]),
+    ],
+    base: Annotated[
+        str, typer.Option(help="The three letter base name, eg. PHX")
+    ] = "auto-detect",
     overwrite: Annotated[
         bool,
         typer.Option(help="Allow overwriting output files."),
@@ -37,39 +52,44 @@ def split_to_pages(
 ):
     """Split the text version of a PBS pairing package into pages.
 
-    The output file name will be in the form of `page-lines_00001-00_<uuid>.json
-    If splitting multiple files, files will be output to PATH_OUT/<PATH_IN/file.stem>/pages/
+    If the base is `auto-detect` then the base name will be parsed from the file name,
+    assuming the file name matches the pattern `PBS_CLT_December_2024_20241108121007.pdf`.
+
+    The output directory will be PATH_OUT/BASE/pages
+    The output file name will be in the form of `page-lines_EFFECTIVE_FROM_EFFECTIVE_TO_BASE_00001-00.json
+
     """
     _ = ctx
     if path_out.is_file():
         typer.BadParameter(f"Path out must be a directory, not a file. {path_out=}")
     if not path_in.exists():
         typer.BadParameter(f"Path in must be an existing file or directory. {path_in=}")
+    external = ExternalData(
+        effective_from=effective_from.date(), effective_to=effective_to.date()
+    )
     if path_in.is_file():
-        do_one(path_in=path_in, path_out=path_out, overwrite=overwrite)
+        if base == "auto-detect":
+            external.base = parse_base_name(path_in.stem)
+        else:
+            external.base = base
+        do_one(
+            path_in=path_in, path_out=path_out, external=external, overwrite=overwrite
+        )
     else:
-        do_many(path_in=path_in, path_out=path_out, overwrite=overwrite)
+        do_many(
+            path_in=path_in, path_out=path_out, external=external, overwrite=overwrite
+        )
     start_perf = ctx.obj[APP_NAME]["start_perf"]
     task_complete(start_perf=start_perf)
 
 
-def do_one(path_in: Path, path_out: Path, overwrite: bool):
-    """do_one.
+def parse_base_name(file_name: str) -> str:
+    """Get the base name from a file name.
 
-    Args:
-        path_in (Path): _description_
-        path_out (Path): _description_
-        overwrite (bool): _description_
+    Expects a file name in the form of `PBS_CLT_December_2024_20241108121007.pdf`
     """
-    with progress:
-        task_id = progress.add_task(description="Splitting package....", total=0)
-        split_to_pages_disk(
-            path_in=path_in,
-            path_out=path_out,
-            task_id=task_id,
-            progress=progress,
-            overwrite=overwrite,
-        )
+    tokens = file_name.split("_")
+    return tokens[1]
 
 
 class Job(TypedDict):
@@ -77,27 +97,55 @@ class Job(TypedDict):
 
     path_in: Path
     path_out: Path
+    external: ExternalData
     task_id: TaskID
 
 
-def do_many(path_in: Path, path_out: Path, overwrite: bool):
+def do_one(path_in: Path, path_out: Path, external: ExternalData, overwrite: bool):
+    """do_one.
+
+    Args:
+        path_in (Path): _description_
+        path_out (Path): _description_
+        external (ExternalData): _description_
+        overwrite (bool): _description_
+    """
+    with progress:
+        task_id = progress.add_task(description="Splitting package....", total=0)
+        job = Job(
+            path_in=path_in,
+            path_out=path_out / external.base / "pages",
+            external=external,
+            task_id=task_id,
+        )
+        split_to_pages_disk(**job, progress=progress, overwrite=overwrite)
+
+
+def do_many(path_in: Path, path_out: Path, external: ExternalData, overwrite: bool):
     """do_many.
 
     Args:
         path_in (Path): _description_
         path_out (Path): _description_
+        external (ExternalData): _description_
         overwrite (bool): _description_
     """
-    txt_files = list(path_in.glob("*.txt", case_sensitive=False))
+    txt_files = list(path_in.glob("PBS_*.txt", case_sensitive=False))
     jobs: list[Job] = []
     task_job = progress.add_task(
         description="Splitting packages to pages....", total=len(txt_files)
     )
     for txt_file in txt_files:
+        _external = ExternalData(
+            base=parse_base_name(txt_file.stem),
+            effective_from=external.effective_from,
+            effective_to=external.effective_to,
+        )
         jobs.append(
             Job(
                 path_in=txt_file,
-                path_out=path_out / path_in.stem,
+                path_out=path_out / _external.base / "pages",
+                external=_external,
                 task_id=progress.add_task(
                     description="Splitting package....WAITING", total=0
                 ),

@@ -7,17 +7,19 @@ from rich.progress import Progress, TaskID
 
 import pbs_parse.pbs_2022_01.pbs_manifest as STORE
 from pbs_parse.pbs_2022_01.models import manifest
+from pbs_parse.pbs_2022_01.models.external_data import ExternalData
 from pbs_parse.pbs_2022_01.models.page_lines import PageLines, PageLinesSaver
 from pbs_parse.pbs_2022_01.split.extract_pages import parse_page_lines_from_file
 
 
 def split_to_pages(
-    path_in: Path, task_id: TaskID, progress: Progress
+    path_in: Path, external: ExternalData, task_id: TaskID, progress: Progress
 ) -> Iterator[PageLines]:
     """split_to_pages.
 
     Args:
         path_in (Path): _description_
+        external (ExternalData): _description_
         task_id (TaskID): _description_
         progress (Progress): _description_
 
@@ -25,7 +27,7 @@ def split_to_pages(
         Iterator[PageLines]: _description_
     """
     pages_found = 0
-    pages = parse_page_lines_from_file(path_in=path_in)
+    pages = parse_page_lines_from_file(path_in=path_in, external=external)
     for page in pages:
         pages_found += 1
         progress.update(
@@ -54,28 +56,42 @@ def split_to_pages_store(
     source_info = store.get_file_info_by_type(
         base=base, file_type=manifest.FileTypes.TXT_PACKAGE
     )
+    effective_from, effective_to = STORE.get.effective_dates(store=store)
     source_path = source_info[0]["file_path"]
+    external = ExternalData(
+        base=base, effective_from=effective_from, effective_to=effective_to
+    )
     progress.update(task_id=task_id, total=1, description="Splitting package....")
     path_in = store.manifest_directory / source_path
-    for page in split_to_pages(path_in=path_in, task_id=task_id, progress=progress):
+    for page in split_to_pages(
+        path_in=path_in, external=external, task_id=task_id, progress=progress
+    ):
         STORE.save.page_lines(store=store, base=base, page=page, overwrite=overwrite)
     progress.update(task_id=task_id, advance=1)
 
 
 def split_to_pages_disk(
-    path_in: Path, path_out: Path, overwrite: bool, task_id: TaskID, progress: Progress
+    path_in: Path,
+    path_out: Path,
+    external: ExternalData,
+    overwrite: bool,
+    task_id: TaskID,
+    progress: Progress,
 ):
     """split_to_pages_disk.
 
     Args:
         path_in (Path): _description_
         path_out (Path): _description_
+        external (ExternalData): _description_
         overwrite (bool): _description_
         task_id (TaskID): _description_
         progress (Progress): _description_
     """
     progress.update(task_id=task_id, total=1, description="Splitting package....")
-    pages = split_to_pages(path_in=path_in, task_id=task_id, progress=progress)
+    pages = split_to_pages(
+        path_in=path_in, external=external, task_id=task_id, progress=progress
+    )
     page_saver = PageLinesSaver(path_out=path_out)
     for page in pages:
         page_saver(page_lines=page, overwrite=overwrite)

@@ -7,6 +7,7 @@ from pfmsoft.state_parser import ParseContext
 from rich.progress import Progress, TaskID
 
 import pbs_parse.pbs_2022_01.pbs_manifest as STORE
+from pbs_parse.cli.work.common import KeyedResource
 from pbs_parse.pbs_2022_01.models import manifest
 from pbs_parse.pbs_2022_01.models.parsed_trip import ParsedTrip, ParsedTripSaver
 from pbs_parse.pbs_2022_01.models.trip_lines import TripLines
@@ -15,7 +16,7 @@ from pbs_parse.snippets.file.data_file_loader import FileResource
 
 
 def parse_trips(
-    trip_lines: Iterable[TripLines],
+    trip_lines: Iterable[KeyedResource[TripLines]],
     task_id: TaskID,
     progress: Progress,
 ) -> Iterator[ParsedTrip]:
@@ -34,7 +35,7 @@ def parse_trips(
     parser = TripLinesParser()
     for trip in trip_lines:
         ctx = ParseContext()
-        parsed_trip = parser.parse(ctx=ctx, trip_lines=trip)
+        parsed_trip = parser.parse(ctx=ctx, trip_lines=trip.resource, source=trip.key)
         trips_parsed += 1
         if is_prior_month(parsed_trip=parsed_trip):
             prior_trips += 1
@@ -69,7 +70,11 @@ def parse_trips_store(
         task_id=task_id, total=len(trip_infos), description="Parsing trips...."
     )
     trip_lines = (
-        STORE.load.trip_lines(store=store, base=base, uuid=x["key"]) for x in trip_infos
+        KeyedResource[TripLines](
+            resource=STORE.load.trip_lines(store=store, base=base, uuid=x["key"]),
+            key=x["key"],
+        )
+        for x in trip_infos
     )
     for parsed_trip in parse_trips(
         trip_lines=trip_lines,
@@ -105,7 +110,10 @@ def parse_trips_disk(
         progress (Progress): _description_
     """
     # loader = TripLinesLoader(path_in=path_in)
-    trip_lines = (x.resource for x in trip_resources)
+    trip_lines = (
+        KeyedResource[TripLines](resource=x.resource, key=x.file_path.name)
+        for x in trip_resources
+    )
     progress.update(task_id=task_id, total=trip_count, description="Parsing trips....")
     saver = ParsedTripSaver(path_out=path_out)
     prior_saver = ParsedTripSaver(path_out=path_out / "prior")

@@ -38,7 +38,7 @@ class PageLinesSource:
     txt_file: str = "TXT_FILE"
 
 
-@dataclass(slots=True)
+@dataclass(slots=True, kw_only=True)
 class PageLines:
     """PageLines."""
 
@@ -75,12 +75,22 @@ class PageLines:
         """
         result = PageLines(
             source=PageLinesSource(**simple_obj["source"]),
-            external=ExternalData(**simple_obj["external"]),
+            external=ExternalData.from_simple(simple_obj["external"]),
             uuid=simple_obj["uuid"],
             idx=simple_obj["idx"],
             lines=[IndexedString(**x) for x in simple_obj["lines"]],
         )
         return result
+
+    def to_simple(self) -> PageLinesTD:
+        """To simple."""
+        return PageLinesTD(
+            source=PageLinesSourceTD(txt_file=self.source.txt_file),
+            external=self.external.to_simple(),
+            uuid=self.uuid,
+            idx=self.idx,
+            lines=[IndexedStringTD(idx=x.idx, txt=x.txt) for x in self.lines],
+        )
 
     def default_file_name(self) -> str:
         """default_file_name.
@@ -88,20 +98,23 @@ class PageLines:
         Returns:
             str: _description_
         """
-        return self.assemble_file_name(idx=self.idx, uuid=self.uuid)
+        return self.assemble_file_name(
+            idx=self.idx, external=self.external, uuid=self.uuid
+        )
 
     @staticmethod
-    def assemble_file_name(idx: str, uuid: str) -> str:
+    def assemble_file_name(idx: str, external: ExternalData, uuid: str) -> str:
         """assemble_file_name.
 
         Args:
             idx (str): _description_
+            external (ExternalData): _description_
             uuid (str): _description_
 
         Returns:
             str: _description_
         """
-        return f"page-lines_{idx}_{uuid}.json"
+        return f"page-lines_{external.base}_{external.effective_from}_{idx}.json"
 
 
 def page_lines_serializer() -> DataclassSerializer[PageLines, PageLinesTD]:
@@ -111,7 +124,7 @@ def page_lines_serializer() -> DataclassSerializer[PageLines, PageLinesTD]:
         DataclassSerializer[PageLines, PageLinesTD]: _description_
     """
     return DataclassSerializer[PageLines, PageLinesTD](
-        complex_factory=PageLines.from_simple
+        complex_factory=PageLines.from_simple, simple_factory=PageLines.to_simple
     )
 
 

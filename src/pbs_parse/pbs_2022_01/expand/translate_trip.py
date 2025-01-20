@@ -14,7 +14,7 @@ UTC = ZoneInfo("UTC")
 
 
 def translate_trip(
-    s_trip: ST.StructuredTrip, start_date: date, state: State
+    s_trip: ST.StructuredTrip, start_date: date, source_file: str, state: State
 ) -> tuple[ET.ExpandedTrip, State]:
     """Translate a StructuredTrip that starts on a particular date."""
     logger.info(
@@ -52,7 +52,15 @@ def translate_trip(
         satellite_base=satellite_base,
         equipment=s_trip.page_footer.equipment,
     )
+    source = ET.ExpandedTripSource(
+        txt_file=s_trip.source.txt_file,
+        page_lines=s_trip.source.page_lines,
+        trip_lines=s_trip.source.trip_lines,
+        parsed_trip=s_trip.source.parsed_trip,
+        structured_trip=source_file,
+    )
     e_trip = ET.ExpandedTrip(
+        source=source,
         source_uuid=s_trip.uuid,
         source_idx=s_trip.idx,
         trip_number=s_trip.number,

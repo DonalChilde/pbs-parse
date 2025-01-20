@@ -1,5 +1,6 @@
 """Structured model of a parsed trip, no translations from strings to more complex data."""
 
+from copy import deepcopy
 from dataclasses import dataclass, field
 from datetime import date, timedelta
 from pathlib import Path
@@ -25,6 +26,9 @@ class DualTime:
     lcl: str
     hbt: str
 
+    def to_simple(self) -> TD.DualTime:
+        return TD.DualTime(lcl=self.lcl, hbt=self.hbt)
+
 
 @dataclass(slots=True)
 class Transportation:
@@ -32,6 +36,9 @@ class Transportation:
 
     name: str
     phone: str
+
+    def to_simple(self) -> TD.Transportation:
+        return TD.Transportation(name=self.name, phone=self.phone)
 
 
 @dataclass(slots=True)
@@ -60,6 +67,13 @@ class Hotel:
 
         return result
 
+    def to_simple(self) -> TD.Hotel:
+        return TD.Hotel(
+            name=self.name,
+            phone=self.phone,
+            transportation=[x.to_simple() for x in self.transportation],
+        )
+
 
 @dataclass(slots=True)
 class Layover:
@@ -84,6 +98,12 @@ class Layover:
             hotels=[Hotel.from_simple(x) for x in simple_obj["hotels"]],
         )
         return result
+
+    def to_simple(self) -> TD.Layover:
+        """To simple."""
+        return TD.Layover(
+            rest=self.rest, city=self.city, hotels=[x.to_simple() for x in self.hotels]
+        )
 
 
 @dataclass(slots=True)
@@ -140,6 +160,28 @@ class Flight:
 
         return result
 
+    def to_simple(self) -> TD.Flight:
+        """To simple."""
+        return TD.Flight(
+            dutyperiod_idx=self.dutyperiod_idx,
+            idx=self.idx,
+            depart_day=self.depart_day,
+            arrive_day=self.arrive_day,
+            equipment_code=self.equipment_code,
+            flight_number=self.flight_number,
+            deadhead=self.deadhead,
+            deadhead_code=self.deadhead_code,
+            departure_station=self.departure_station,
+            departure_time=self.departure_time.to_simple(),
+            crew_meal=self.crew_meal,
+            arrival_station=self.arrival_station,
+            arrival_time=self.arrival_time.to_simple(),
+            block=self.block,
+            synth=self.synth,
+            ground=self.ground,
+            equipment_change=self.equipment_change,
+        )
+
 
 @dataclass(slots=True)
 class DutyPeriod:
@@ -180,6 +222,25 @@ class DutyPeriod:
         )
         return result
 
+    def to_simple(self) -> TD.DutyPeriod:
+        """To simple."""
+        if self.layover is not None:
+            layover = self.layover.to_simple()
+        else:
+            layover = None
+        return TD.DutyPeriod(
+            idx=self.idx,
+            report_time=self.report_time.to_simple(),
+            release_time=self.release_time.to_simple(),
+            block=self.block,
+            synth=self.synth,
+            total_pay=self.total_pay,
+            duty=self.duty,
+            flight_duty=self.flight_duty,
+            layover=layover,
+            flights=[x.to_simple() for x in self.flights],
+        )
+
 
 @dataclass(slots=True)
 class MonthDay:
@@ -187,6 +248,10 @@ class MonthDay:
 
     month: str
     day: str
+
+    def to_simple(self) -> TD.MonthDay:
+        """To simple."""
+        return TD.MonthDay(month=self.month, day=self.day)
 
 
 @dataclass(slots=True)
@@ -212,6 +277,12 @@ class PageHeader:
         )
         return result
 
+    def to_simple(self) -> TD.PageHeader:
+        """To simple."""
+        return TD.PageHeader(
+            from_date=self.from_date.to_simple(), to_date=self.to_date.to_simple()
+        )
+
 
 @dataclass(slots=True)
 class PageFooter:
@@ -224,6 +295,18 @@ class PageFooter:
     equipment: str
     division: str
     page: str
+
+    def to_simple(self) -> TD.PageFooter:
+        """To simple."""
+        return TD.PageFooter(
+            issued=self.issued,
+            effective=self.effective,
+            base=self.base,
+            satellite_base=self.satellite_base,
+            equipment=self.equipment,
+            division=self.division,
+            page=self.page,
+        )
 
 
 # @dataclass(slots=True)
@@ -242,6 +325,25 @@ class StructuredTripSource:
     page_lines: str = "PAGE_LINES"
     trip_lines: str = "TRIP_LINES"
     parsed_trip: str = "PARSED_TRIP"
+
+    def to_simple(self) -> TD.StructuredTripSourceTD:
+        """To simple."""
+        return TD.StructuredTripSourceTD(
+            txt_file=self.txt_file,
+            page_lines=self.page_lines,
+            trip_lines=self.trip_lines,
+            parsed_trip=self.parsed_trip,
+        )
+
+    @staticmethod
+    def from_simple(value: TD.StructuredTripSourceTD):
+        """From simple."""
+        return StructuredTripSource(
+            txt_file=value["txt_file"],
+            page_lines=value["page_lines"],
+            trip_lines=value["trip_lines"],
+            parsed_trip=value["parsed_trip"],
+        )
 
 
 @dataclass(slots=True)
@@ -314,7 +416,7 @@ class StructuredTrip:
             StructuredTrip: _description_
         """
         result = StructuredTrip(
-            source=StructuredTripSource(**simple_obj["source"]),
+            source=StructuredTripSource.from_simple(simple_obj["source"]),
             uuid=simple_obj["uuid"],
             source_uuid=simple_obj["source_uuid"],
             idx=simple_obj["idx"],
@@ -324,16 +426,39 @@ class StructuredTrip:
             synth=simple_obj["synth"],
             total_pay=simple_obj["total_pay"],
             tafb=simple_obj["tafb"],
-            external=ExternalData(**simple_obj["external"]),
+            external=ExternalData.from_simple(simple_obj["external"]),
             page_header=PageHeader.from_simple(simple_obj=simple_obj["page_header"]),
             page_footer=PageFooter(**simple_obj["page_footer"]),
-            positions=simple_obj["positions"],
-            operations=simple_obj["operations"],
+            positions=deepcopy(simple_obj["positions"]),
+            operations=deepcopy(simple_obj["operations"]),
             special_qual=simple_obj["special_qual"],
             dutyperiods=[DutyPeriod.from_simple(x) for x in simple_obj["dutyperiods"]],
-            calendar=simple_obj["calendar"],
+            calendar=deepcopy(simple_obj["calendar"]),
         )
         return result
+
+    def to_simple(self) -> TD.StructuredTripTD:
+        """To simple."""
+        return TD.StructuredTripTD(
+            source=self.source.to_simple(),
+            uuid=self.uuid,
+            source_uuid=self.source_uuid,
+            idx=self.idx,
+            number=self.number,
+            ops_count=self.ops_count,
+            block=self.block,
+            synth=self.synth,
+            total_pay=self.total_pay,
+            tafb=self.tafb,
+            external=self.external.to_simple(),
+            page_header=self.page_header.to_simple(),
+            page_footer=self.page_footer.to_simple(),
+            positions=deepcopy(self.positions),
+            operations=deepcopy(self.operations),
+            special_qual=self.special_qual,
+            dutyperiods=[x.to_simple() for x in self.dutyperiods],
+            calendar=deepcopy(self.calendar),
+        )
 
 
 def build_start_dates(
@@ -392,7 +517,8 @@ def structured_trip_serializer() -> (
         _type_: _description_
     """
     return DataclassSerializer[StructuredTrip, TD.StructuredTripTD](
-        complex_factory=StructuredTrip.from_simple
+        complex_factory=StructuredTrip.from_simple,
+        simple_factory=StructuredTrip.to_simple,
     )
 
 

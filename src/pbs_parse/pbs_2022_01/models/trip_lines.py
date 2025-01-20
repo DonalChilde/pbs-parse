@@ -40,6 +40,17 @@ class TripLinesSource:
     txt_file: str = "TXT_FILE"
     page_lines: str = "PAGE_LINES"
 
+    @staticmethod
+    def from_simple(value: TripLinesSourceTD) -> "TripLinesSource":
+        """From Simple."""
+        return TripLinesSource(
+            txt_file=value["txt_file"], page_lines=value["page_lines"]
+        )
+
+    def to_simple(self) -> TripLinesSourceTD:
+        """To Simple."""
+        return TripLinesSourceTD(txt_file=self.txt_file, page_lines=self.page_lines)
+
 
 @dataclass(slots=True)
 class TripLines:
@@ -78,14 +89,25 @@ class TripLines:
             TripLines: _description_
         """
         result = TripLines(
-            source=TripLinesSource(**simple_obj["source"]),
-            external=ExternalData(**simple_obj["external"]),
+            source=TripLinesSource.from_simple(simple_obj["source"]),
+            external=ExternalData.from_simple(simple_obj["external"]),
             uuid=simple_obj["uuid"],
             source_uuid=simple_obj["source_uuid"],
             idx=simple_obj["idx"],
             lines=[IndexedString(**x) for x in simple_obj["lines"]],
         )
         return result
+
+    def to_simple(self) -> TripLinesTD:
+        """To simple."""
+        return TripLinesTD(
+            source=self.source.to_simple(),
+            external=self.external.to_simple(),
+            uuid=self.uuid,
+            source_uuid=self.source_uuid,
+            idx=self.idx,
+            lines=[IndexedStringTD(idx=x.idx, txt=x.txt) for x in self.lines],
+        )
 
     def default_file_name(self) -> str:
         """default_file_name.
@@ -116,7 +138,7 @@ def trip_lines_serializer() -> DataclassSerializer[TripLines, TripLinesTD]:
         DataclassSerializer[TripLines, TripLinesTD]: _description_
     """
     return DataclassSerializer[TripLines, TripLinesTD](
-        complex_factory=TripLines.from_simple
+        complex_factory=TripLines.from_simple, simple_factory=TripLines.to_simple
     )
 
 

@@ -1,13 +1,13 @@
 """Parser for TripLines."""
 
-from collections.abc import Callable, Iterable
+from copy import deepcopy
 from pathlib import Path
 
 from pfmsoft.state_parser import ParseContext, ParseScheme, StateParser
 from pfmsoft.state_parser.parse_exception import ParseException
 from pfmsoft.state_parser.result_handler import CollectResults
 
-from pbs_parse.pbs_2022_01.models.parsed_trip import ParsedTrip
+from pbs_parse.pbs_2022_01.models.parsed_trip import ParsedTrip, ParsedTripSource
 from pbs_parse.pbs_2022_01.models.trip_lines import TRIP_LINES_SERIALIZER, TripLines
 from pbs_parse.pbs_2022_01.parse.parse_table import parse_table
 
@@ -24,9 +24,11 @@ class TripLinesParser:
     def parse_file(self, ctx: ParseContext, path_in: Path) -> ParsedTrip:
         """Parse TripLines from file."""
         trip_lines = TRIP_LINES_SERIALIZER.load_from_json(path_in=path_in)
-        return self.parse(ctx=ctx, trip_lines=trip_lines)
+        return self.parse(ctx=ctx, source=path_in.name, trip_lines=trip_lines)
 
-    def parse(self, ctx: ParseContext, trip_lines: TripLines) -> ParsedTrip:
+    def parse(
+        self, ctx: ParseContext, source: str, trip_lines: TripLines
+    ) -> ParsedTrip:
         """Parse TripLines."""
         handler = CollectResults()
         parser = StateParser(parse_scheme=self.scheme, result_handler=handler)
@@ -34,8 +36,14 @@ class TripLinesParser:
             parser.parse(ctx=ctx, data=trip_lines.lines)
         except ParseException as e:
             print(e)
-
+        _source = ParsedTripSource(
+            txt_file=trip_lines.source.txt_file,
+            page_lines=trip_lines.source.page_lines,
+            trip_lines=source,
+        )
         trip = ParsedTrip(
+            source=_source,
+            external=deepcopy(trip_lines.external),
             source_uuid=trip_lines.uuid,
             idx=trip_lines.idx,
             parsed_lines=[x.parsed_indexed_string for x in handler.results],
@@ -43,28 +51,28 @@ class TripLinesParser:
         return trip
 
 
-def parse_trips(
-    trip_lines: Iterable[TripLines],
-    parser: TripLinesParser,
-    ctx: ParseContext,
-    observer: Callable[[ParsedTrip], None] | None = None,
-) -> Iterable[ParsedTrip]:
-    """Parse an iterable of trip_lines, with an optional observer.
+# def parse_trips(
+#     trip_lines: Iterable[TripLines],
+#     parser: TripLinesParser,
+#     ctx: ParseContext,
+#     observer: Callable[[ParsedTrip], None] | None = None,
+# ) -> Iterable[ParsedTrip]:
+#     """Parse an iterable of trip_lines, with an optional observer.
 
-    Args:
-        trip_lines (Iterable[TripLines]): _description_
-        parser (TripLinesParser): _description_
-        ctx (ParseContext): _description_
-        observer (Callable[[ParsedTrip], None] | None, optional): _description_. Defaults to None.
+#     Args:
+#         trip_lines (Iterable[TripLines]): _description_
+#         parser (TripLinesParser): _description_
+#         ctx (ParseContext): _description_
+#         observer (Callable[[ParsedTrip], None] | None, optional): _description_. Defaults to None.
 
-    Returns:
-        Iterable[ParsedTrip]: _description_
+#     Returns:
+#         Iterable[ParsedTrip]: _description_
 
-    Yields:
-        Iterator[Iterable[ParsedTrip]]: _description_
-    """
-    for trip in trip_lines:
-        parsed_trip = parser.parse(ctx=ctx, trip_lines=trip)
-        if observer:
-            observer(parsed_trip)
-        yield parsed_trip
+#     Yields:
+#         Iterator[Iterable[ParsedTrip]]: _description_
+#     """
+#     for trip in trip_lines:
+#         parsed_trip = parser.parse(ctx=ctx, trip_lines=trip)
+#         if observer:
+#             observer(parsed_trip)
+#         yield parsed_trip

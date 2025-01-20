@@ -1,7 +1,6 @@
 """Translate structured to expanded."""
 
 import logging
-from collections.abc import Callable, Iterable, Iterator
 from datetime import date, datetime, time
 from pathlib import Path
 from typing import Self
@@ -19,13 +18,14 @@ UTC = ZoneInfo("UTC")
 class StructuredToExpanded:
     """StructuredToExpanded."""
 
-    def __init__(self, structured_trip: ST.StructuredTrip) -> None:
+    def __init__(self, structured_trip: ST.StructuredTrip, source_file: str) -> None:
         """__init__.
 
         Args:
             structured_trip (ST.StructuredTrip): _description_
         """
         self.s_trip = structured_trip
+        self.source_file = source_file
         self.base = model.get_airport_code_from_iata(self.s_trip.page_footer.base)
         self.hbt_tzinfo = ZoneInfo(self.base.tz_name)
         self.dp_idx = 0
@@ -44,13 +44,16 @@ class StructuredToExpanded:
         return cls(
             structured_trip=ST.STRUCTURED_TRIP_SERIALIZER.load_from_json(
                 path_in=path_in
-            )
+            ),
+            source_file=path_in.name,
         )
 
     def translate(self) -> list[model.ExpandedTrip]:
         """Translate a pbs_2022_01 structured trip to Trip."""
         state = State(base=self.base, hbt_tzinfo=self.hbt_tzinfo)
-        e_trips, state = translate_trips(s_trip=self.s_trip, state=state)
+        e_trips, state = translate_trips(
+            s_trip=self.s_trip, source_file=self.source_file, state=state
+        )
         return e_trips
 
     # def _translate_flight(
@@ -504,23 +507,23 @@ def assemble_datetime(date_obj: date, time_str: str, tz_name: str) -> datetime:
 #     return next_datetime.astimezone(UTC)
 
 
-def expand_trips(
-    structured_trips: Iterable[ST.StructuredTrip],
-    observer: Callable[[model.ExpandedTrip], None] | None = None,
-) -> Iterator[model.ExpandedTrip]:
-    """Expand structured trips, with an optional observer.
+# def expand_trips(
+#     structured_trips: Iterable[ST.StructuredTrip],
+#     observer: Callable[[model.ExpandedTrip], None] | None = None,
+# ) -> Iterator[model.ExpandedTrip]:
+#     """Expand structured trips, with an optional observer.
 
-    Args:
-        structured_trips (Iterable[ST.StructuredTrip]): _description_
-        observer (Callable[[model.ExpandedTrip], None] | None, optional): _description_. Defaults to None.
+#     Args:
+#         structured_trips (Iterable[ST.StructuredTrip]): _description_
+#         observer (Callable[[model.ExpandedTrip], None] | None, optional): _description_. Defaults to None.
 
-    Yields:
-        Iterator[model.ExpandedTrip]: _description_
-    """
-    for trip in structured_trips:
-        expander = StructuredToExpanded(structured_trip=trip)
-        expanded_trips = expander.translate()
-        for expanded in expanded_trips:
-            if observer:
-                observer(expanded)
-            yield expanded
+#     Yields:
+#         Iterator[model.ExpandedTrip]: _description_
+#     """
+#     for trip in structured_trips:
+#         expander = StructuredToExpanded(structured_trip=trip)
+#         expanded_trips = expander.translate()
+#         for expanded in expanded_trips:
+#             if observer:
+#                 observer(expanded)
+#             yield expanded

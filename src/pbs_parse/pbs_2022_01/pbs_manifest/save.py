@@ -34,7 +34,7 @@ def page_lines(
             "Store is opened in read-only mode. No changes allowed."
         )
     page_info = FileInfo(
-        key=page.uuid,
+        key=page.default_file_name(),
         type=FileTypes.SPLIT_PAGE,
         file_path=f"{base}/pages/{page.default_file_name()}",
     )

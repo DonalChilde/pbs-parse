@@ -75,8 +75,8 @@ def possible_start_dates(structured_trip: StructuredTrip) -> list[date]:
         list[date]: _description_
     """
     try:
-        start_date = date.fromisoformat(structured_trip.external.effective_from)
-        end_date = date.fromisoformat(structured_trip.external.effective_to)
+        start_date = structured_trip.external.effective_from
+        end_date = structured_trip.external.effective_to
         start_dates = list(date_range(start_date=start_date, end_date=end_date))
     except ValueError as e:
         logger.exception(

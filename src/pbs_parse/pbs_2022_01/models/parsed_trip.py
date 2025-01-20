@@ -5,6 +5,7 @@ from pathlib import Path
 from typing import TypedDict
 from uuid import NAMESPACE_DNS, UUID, uuid5
 
+from pfmsoft.indexed_string.model import IndexedStringTD
 from pfmsoft.simple_serializer import DataclassSerializer
 from pfmsoft.state_parser import model
 
@@ -41,6 +42,23 @@ class ParsedTripSource:
     page_lines: str = "PAGE_LINES"
     trip_lines: str = "TRIP_LINES"
 
+    @staticmethod
+    def from_simple(value: ParsedTripSourceTD) -> "ParsedTripSource":
+        """From simple."""
+        return ParsedTripSource(
+            txt_file=value["txt_file"],
+            page_lines=value["page_lines"],
+            trip_lines=value["trip_lines"],
+        )
+
+    def to_simple(self) -> ParsedTripSourceTD:
+        """to_simple."""
+        return ParsedTripSourceTD(
+            txt_file=self.txt_file,
+            page_lines=self.page_lines,
+            trip_lines=self.trip_lines,
+        )
+
 
 @dataclass(slots=True)
 class ParsedTrip:
@@ -72,8 +90,8 @@ class ParsedTrip:
     def from_simple(simple_obj: ParsedTripTD) -> "ParsedTrip":
         """Reconstitute a ParsedTrip from a simple object."""
         result = ParsedTrip(
-            source=ParsedTripSource(**simple_obj["source"]),
-            external=ExternalData(**simple_obj["external"]),
+            source=ParsedTripSource.from_simple(simple_obj["source"]),
+            external=ExternalData.from_simple(simple_obj["external"]),
             uuid=simple_obj["uuid"],
             source_uuid=simple_obj["source_uuid"],
             idx=simple_obj["idx"],
@@ -83,6 +101,26 @@ class ParsedTrip:
             ],
         )
         return result
+
+    def to_simple(self) -> ParsedTripTD:
+        """To_simple."""
+        return ParsedTripTD(
+            source=self.source.to_simple(),
+            external=self.external.to_simple(),
+            uuid=self.uuid,
+            source_uuid=self.source_uuid,
+            idx=self.idx,
+            parsed_lines=[
+                model.ParsedIndexedStringTD(
+                    id=x.id,
+                    indexed_string=IndexedStringTD(
+                        idx=x.indexed_string.idx, txt=x.indexed_string.txt
+                    ),
+                    data=x.data,
+                )
+                for x in self.parsed_lines
+            ],
+        )
 
     def default_file_name(self) -> str:
         """default_file_name.
@@ -135,7 +173,7 @@ class ParsedTrip:
 def parsed_trip_serializer() -> DataclassSerializer[ParsedTrip, ParsedTripTD]:
     """Construct a serializer for Parsedtrip."""
     return DataclassSerializer[ParsedTrip, ParsedTripTD](
-        complex_factory=ParsedTrip.from_simple
+        complex_factory=ParsedTrip.from_simple, simple_factory=ParsedTrip.to_simple
     )
 
 

@@ -6,6 +6,7 @@ from pathlib import Path
 from rich.progress import Progress, TaskID
 
 import pbs_parse.pbs_2022_01.pbs_manifest as STORE
+from pbs_parse.cli.work.common import KeyedResource
 from pbs_parse.pbs_2022_01.models import manifest
 from pbs_parse.pbs_2022_01.models.page_lines import PageLines
 from pbs_parse.pbs_2022_01.models.trip_lines import TripLines, TripLinesSaver
@@ -14,12 +15,13 @@ from pbs_parse.snippets.file.data_file_loader import FileResource
 
 
 def split_to_trips(
-    pages: Iterable[PageLines], task_id: TaskID, progress: Progress
+    pages: Iterable[KeyedResource[PageLines]], task_id: TaskID, progress: Progress
 ) -> Iterator[TripLines]:
     """split_to_trips.
 
     Args:
         pages (Iterable[PageLines]): _description_
+        source_file (str): _description_
         task_id (TaskID): _description_
         progress (Progress): _description_
 
@@ -28,7 +30,7 @@ def split_to_trips(
     """
     trips_found = 0
     for page in pages:
-        for trip in parse_trip_lines(page):
+        for trip in parse_trip_lines(page=page.resource, source=page.key):
             trips_found += 1
             progress.update(
                 task_id,
@@ -61,7 +63,11 @@ def split_to_trips_store(
         task_id=task_id, total=len(page_infos), description="Splitting pages...."
     )
     pages = (
-        STORE.load.page_lines(store=store, base=base, uuid=x["key"]) for x in page_infos
+        KeyedResource[PageLines](
+            resource=STORE.load.page_lines(store=store, base=base, uuid=x["key"]),
+            key=x["key"],
+        )
+        for x in page_infos
     )
     for trip in split_to_trips(
         pages=pages,
@@ -90,7 +96,9 @@ def split_to_trips_disk(
         progress (Progress): _description_
     """
     # page_loader = PageLinesLoader(path_in=path_in)
-    pages = (x.resource for x in page_resources)
+    pages = (
+        KeyedResource(resource=x.resource, key=x.file_path.name) for x in page_resources
+    )
     progress.update(
         task_id=task_id, total=page_count, description="Splitting pages...."
     )

@@ -6,15 +6,16 @@ from pathlib import Path
 from rich.progress import Progress, TaskID
 
 import pbs_parse.pbs_2022_01.pbs_manifest as STORE
+from pbs_parse.cli.work.common import KeyedResource
 from pbs_parse.pbs_2022_01.expand.structured_to_expanded import StructuredToExpanded
 from pbs_parse.pbs_2022_01.models import manifest
 from pbs_parse.pbs_2022_01.models.expanded import ExpandedTrip, ExpandedTripSaver
-from pbs_parse.pbs_2022_01.models.structured import StructuredTrip, StructuredTripLoader
+from pbs_parse.pbs_2022_01.models.structured import StructuredTrip
 from pbs_parse.snippets.file.data_file_loader import FileResource
 
 
 def expand_trips(
-    structured_trips: Iterable[StructuredTrip],
+    structured_trips: Iterable[KeyedResource[StructuredTrip]],
     task_id: TaskID,
     progress: Progress,
 ) -> Iterator[ExpandedTrip]:
@@ -30,7 +31,9 @@ def expand_trips(
     """
     trips_found = 0
     for idx, s_trip in enumerate(structured_trips, start=1):
-        expander = StructuredToExpanded(structured_trip=s_trip)
+        expander = StructuredToExpanded(
+            structured_trip=s_trip.resource, source_file=s_trip.key
+        )
         for e_trip in expander.translate():
             trips_found += 1
             progress.update(
@@ -63,8 +66,15 @@ def expand_trips_store(
     progress.update(
         task_id=task_id, total=len(trip_infos), description="Expanding trips...."
     )
+    structured_trips = (
+        KeyedResource[StructuredTrip](
+            resource=STORE.load.structured_trip(store=store, base=base, uuid=x["key"]),
+            key=x["key"],
+        )
+        for x in trip_infos
+    )
     for e_trip in expand_trips(
-        structured_trips=STORE.load.all_structured_trips(store=store, base=base),
+        structured_trips=structured_trips,
         task_id=task_id,
         progress=progress,
     ):
@@ -91,7 +101,10 @@ def expand_trips_disk(
         task_id (TaskID): _description_
         progress (Progress): _description_
     """
-    s_trips = (x.resource for x in structured_resources)
+    s_trips = (
+        KeyedResource[StructuredTrip](resource=x.resource, key=x.file_path.name)
+        for x in structured_resources
+    )
     progress.update(
         task_id=task_id,
         total=structured_count,
