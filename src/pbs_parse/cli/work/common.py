@@ -22,8 +22,8 @@ def load_parsed(parsed_dir: Path, s_trip: StructuredTrip) -> FileResource[Parsed
     Returns:
         FileResource[ParsedTrip]: _description_
     """
-    parsed_name = ParsedTrip.assemble_file_name(idx=s_trip.idx, uuid=s_trip.source_uuid)
-    path_in = parsed_dir / parsed_name
+    # parsed_name = ParsedTrip.assemble_file_name(idx=s_trip.idx, uuid=s_trip.source_uuid)
+    path_in = parsed_dir / s_trip.source.parsed_trip
     parsed = PARSED_TRIP_SERIALIZER.load_from_json(path_in=path_in)
     return FileResource(resource=parsed, file_path=path_in)
 
@@ -40,10 +40,10 @@ def load_structured(
     Returns:
         FileResource[StructuredTrip]: _description_
     """
-    structured_name = StructuredTrip.assemble_file_name(
-        idx=e_trip.source_idx, uuid=e_trip.source_uuid
-    )
-    path_in = structured_dir / structured_name
+    # structured_name = StructuredTrip.assemble_file_name(
+    #     idx=e_trip.source_idx, uuid=e_trip.source_uuid
+    # )
+    path_in = structured_dir / e_trip.source.structured_trip
     parsed = STRUCTURED_TRIP_SERIALIZER.load_from_json(path_in=path_in)
     return FileResource(resource=parsed, file_path=path_in)
 

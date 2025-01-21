@@ -1,7 +1,6 @@
 """FILE: structure_trips.py."""
 
 from collections.abc import Iterable, Iterator
-from datetime import date
 from pathlib import Path
 
 from rich.progress import Progress, TaskID
@@ -19,8 +18,6 @@ from pbs_parse.snippets.file.data_file_loader import FileResource
 
 def structure_trips(
     parsed_trips: Iterable[KeyedResource[ParsedTrip]],
-    effective_from: date,
-    effective_to: date,
     task_id: TaskID,
     progress: Progress,
 ) -> Iterator[StructuredTrip]:
@@ -70,7 +67,6 @@ def structure_trips_store(
     progress.update(
         task_id=task_id, total=total_trips, description="Structuring trips...."
     )
-    effective_from, effective_to = STORE.get.effective_dates(store=store)
     parsed_trips = (
         KeyedResource[ParsedTrip](
             resource=STORE.load.parsed_trip(store=store, base=base, uuid=x["key"]),
@@ -80,8 +76,6 @@ def structure_trips_store(
     )
     structured_trips = structure_trips(
         parsed_trips=parsed_trips,
-        effective_from=effective_from,
-        effective_to=effective_to,
         task_id=task_id,
         progress=progress,
     )
@@ -96,8 +90,6 @@ def structure_trips_disk(
     parsed_count: int,
     path_out: Path,
     overwrite: bool,
-    effective_from: date,
-    effective_to: date,
     task_id: TaskID,
     progress: Progress,
 ):
@@ -125,8 +117,6 @@ def structure_trips_disk(
     saver = StructuredTripSaver(path_out=path_out)
     structured_trips = structure_trips(
         parsed_trips=parsed_trips,
-        effective_from=effective_from,
-        effective_to=effective_to,
         task_id=task_id,
         progress=progress,
     )

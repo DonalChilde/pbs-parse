@@ -1,7 +1,6 @@
 """FILE: structure.py."""
 
 import logging
-from datetime import datetime
 from pathlib import Path
 from typing import Annotated
 
@@ -35,16 +34,6 @@ def structure(
         Path,
         typer.Argument(help="The output directory."),
     ],
-    effective_from: Annotated[
-        datetime,
-        typer.Argument(
-            help="Effective From date for bid package.", formats=["%Y-%m-%d"]
-        ),
-    ],
-    effective_to: Annotated[
-        datetime,
-        typer.Argument(help="Effective to date for bid package", formats=["%Y-%m-%d"]),
-    ],
     overwrite: Annotated[
         bool,
         typer.Option(help="Allow overwriting output files."),
@@ -77,8 +66,6 @@ def structure(
             parsed_count=parsed_count,
             path_out=path_out,
             overwrite=overwrite,
-            effective_from=effective_from.date(),
-            effective_to=effective_to.date(),
             task_id=task,
             progress=progress,
         )
