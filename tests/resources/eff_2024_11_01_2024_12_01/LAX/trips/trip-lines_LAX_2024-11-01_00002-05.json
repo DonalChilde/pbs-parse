@@ -1,0 +1,68 @@
+{
+ "source": {
+  "txt_file": "PBS_LAX_November_2024_20241010125833_partial.txt",
+  "page_lines": "page-lines_LAX_2024-11-01_00002-00.json"
+ },
+ "external": {
+  "base": "LAX",
+  "effective_from": "2024-11-01",
+  "effective_to": "2024-12-01"
+ },
+ "uuid": "baec7f22-8bc4-5a8f-99be-c8625d84456b",
+ "source_uuid": "fb4a4ba8-405d-5899-a113-7cc6438cd249",
+ "idx": "00002-05",
+ "lines": [
+  {
+   "idx": 74,
+   "txt": "\f   DAY          \u2212\u2212DEPARTURE\u2212\u2212    \u2212\u2212\u2212ARRIVAL\u2212\u2212\u2212                GRND/        REST/\n"
+  },
+  {
+   "idx": 75,
+   "txt": "DP D/A EQ FLT#  STA DLCL/DHBT ML STA ALCL/AHBT  BLOCK  SYNTH   TPAY   DUTY  TAFB   FDP CALENDAR 11/01\u221212/01\n"
+  },
+  {
+   "idx": 135,
+   "txt": "SEQ 770     2 OPS   POSN CA FO                                                         MO TU WE TH FR SA SU\n"
+  },
+  {
+   "idx": 136,
+   "txt": "                RPT 1725/1725                                                                       1  2 \u2212\u2212\n"
+  },
+  {
+   "idx": 137,
+   "txt": "1  1/2 82  134  LAX 1825/1825  D LHR 1200/0500  10.35                                  \u2212\u2212 \u2212\u2212 \u2212\u2212 \u2212\u2212 \u2212\u2212 \u2212\u2212 \u2212\u2212\n"
+  },
+  {
+   "idx": 138,
+   "txt": "                                 RLS 1230/0530  10.35   0.00  10.35  12.05       11.35 \u2212\u2212 \u2212\u2212 \u2212\u2212 \u2212\u2212 \u2212\u2212 \u2212\u2212 \u2212\u2212\n"
+  },
+  {
+   "idx": 139,
+   "txt": "                LHR PARK PLAZA VICTORIA LONDON              443334006142   21.45       \u2212\u2212 \u2212\u2212 \u2212\u2212 \u2212\u2212 \u2212\u2212 \u2212\u2212 \u2212\u2212\n"
+  },
+  {
+   "idx": 140,
+   "txt": "                    COMET CAR HIRE (CCH) LTD                442088979984               \u2212\u2212 \u2212\u2212 \u2212\u2212 \u2212\u2212 \u2212\u2212 \u2212\u2212 \u2212\u2212\n"
+  },
+  {
+   "idx": 141,
+   "txt": "                RPT 1015/0215\n"
+  },
+  {
+   "idx": 142,
+   "txt": "2  3/3 83  137  LHR 1115/0315  L LAX 1433/1433  11.18\n"
+  },
+  {
+   "idx": 143,
+   "txt": "                                 RLS 1503/1503  11.18   0.00  11.18  12.48       12.18\n"
+  },
+  {
+   "idx": 144,
+   "txt": "TTL                                             21.53   0.00  21.53        46.38\n"
+  },
+  {
+   "idx": 147,
+   "txt": "COCKPIT  ISSUED 09OCT2024  EFF 01NOV2024               LAX 777  INTL                             PAGE  1912\n"
+  }
+ ]
+}

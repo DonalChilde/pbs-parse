@@ -1,0 +1,185 @@
+{
+ "source": {
+  "txt_file": "PBS_LAX_November_2024_20241010125833_partial.txt",
+  "page_lines": "page-lines_LAX_2024-11-01_00002-00.json",
+  "trip_lines": "trip-lines_LAX_2024-11-01_00002-02.json",
+  "parsed_trip": "parsed-trip_LAX_2024-11-01_00002-02.json"
+ },
+ "uuid": "23bdf380-eaf4-5500-9238-ba5069bb6999",
+ "source_uuid": "4c902645-fee1-5ade-b7de-7a17ba0ad223",
+ "idx": "00002-02",
+ "number": "762",
+ "ops_count": "2",
+ "block": "29.20",
+ "synth": "0.00",
+ "total_pay": "29.20",
+ "tafb": "57.05",
+ "external": {
+  "base": "LAX",
+  "effective_from": "2024-11-01",
+  "effective_to": "2024-12-01"
+ },
+ "page_header": {
+  "from_date": {
+   "month": "11",
+   "day": "01"
+  },
+  "to_date": {
+   "month": "12",
+   "day": "01"
+  }
+ },
+ "page_footer": {
+  "issued": "09OCT2024",
+  "effective": "01NOV2024",
+  "base": "LAX",
+  "satellite_base": "",
+  "equipment": "777",
+  "division": "INTL",
+  "page": "1912"
+ },
+ "positions": [
+  "CA",
+  "FO"
+ ],
+ "operations": [],
+ "special_qual": false,
+ "dutyperiods": [
+  {
+   "idx": "1",
+   "report_time": {
+    "lcl": "2230",
+    "hbt": "2230"
+   },
+   "release_time": {
+    "lcl": "0930",
+    "hbt": "1430"
+   },
+   "block": "15.30",
+   "synth": "0.00",
+   "total_pay": "15.30",
+   "duty": "17.00",
+   "flight_duty": "16.30",
+   "layover": {
+    "rest": "24.45",
+    "city": "SYD",
+    "hotels": [
+     {
+      "name": "SYDNEY HARBOUR MARRIOTT",
+      "phone": "61292597000",
+      "transportation": [
+       {
+        "name": "SYDNEY GROUND TRANSPORT",
+        "phone": "61296671563"
+       }
+      ]
+     }
+    ]
+   },
+   "flights": [
+    {
+     "dutyperiod_idx": "1",
+     "idx": "1",
+     "depart_day": "1",
+     "arrive_day": "3",
+     "equipment_code": "82",
+     "flight_number": "73",
+     "deadhead": false,
+     "deadhead_code": "",
+     "departure_station": "LAX",
+     "departure_time": {
+      "lcl": "2330",
+      "hbt": "2330"
+     },
+     "crew_meal": "",
+     "arrival_station": "SYD",
+     "arrival_time": {
+      "lcl": "0900",
+      "hbt": "1400"
+     },
+     "block": "15.30",
+     "synth": "0.00",
+     "ground": "0.00",
+     "equipment_change": false
+    }
+   ]
+  },
+  {
+   "idx": "2",
+   "report_time": {
+    "lcl": "1015",
+    "hbt": "1515"
+   },
+   "release_time": {
+    "lcl": "0635",
+    "hbt": "0635"
+   },
+   "block": "13.50",
+   "synth": "0.00",
+   "total_pay": "13.50",
+   "duty": "15.20",
+   "flight_duty": "14.50",
+   "layover": null,
+   "flights": [
+    {
+     "dutyperiod_idx": "2",
+     "idx": "1",
+     "depart_day": "4",
+     "arrive_day": "4",
+     "equipment_code": "82",
+     "flight_number": "72",
+     "deadhead": false,
+     "deadhead_code": "",
+     "departure_station": "SYD",
+     "departure_time": {
+      "lcl": "1115",
+      "hbt": "1615"
+     },
+     "crew_meal": "",
+     "arrival_station": "LAX",
+     "arrival_time": {
+      "lcl": "0605",
+      "hbt": "0605"
+     },
+     "block": "13.50",
+     "synth": "0.00",
+     "ground": "0.00",
+     "equipment_change": false
+    }
+   ]
+  }
+ ],
+ "calendar": [
+  "1",
+  "2",
+  "\u2212\u2212",
+  "\u2212\u2212",
+  "\u2212\u2212",
+  "\u2212\u2212",
+  "\u2212\u2212",
+  "\u2212\u2212",
+  "\u2212\u2212",
+  "\u2212\u2212",
+  "\u2212\u2212",
+  "\u2212\u2212",
+  "\u2212\u2212",
+  "\u2212\u2212",
+  "\u2212\u2212",
+  "\u2212\u2212",
+  "\u2212\u2212",
+  "\u2212\u2212",
+  "\u2212\u2212",
+  "\u2212\u2212",
+  "\u2212\u2212",
+  "\u2212\u2212",
+  "\u2212\u2212",
+  "\u2212\u2212",
+  "\u2212\u2212",
+  "\u2212\u2212",
+  "\u2212\u2212",
+  "\u2212\u2212",
+  "\u2212\u2212",
+  "\u2212\u2212",
+  "\u2212\u2212"
+ ]
+}

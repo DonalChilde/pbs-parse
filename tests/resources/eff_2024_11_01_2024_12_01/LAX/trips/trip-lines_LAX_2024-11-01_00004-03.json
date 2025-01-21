@@ -1,0 +1,108 @@
+{
+ "source": {
+  "txt_file": "PBS_LAX_November_2024_20241010125833_partial.txt",
+  "page_lines": "page-lines_LAX_2024-11-01_00004-00.json"
+ },
+ "external": {
+  "base": "LAX",
+  "effective_from": "2024-11-01",
+  "effective_to": "2024-12-01"
+ },
+ "uuid": "d074fd2e-bb67-517c-9688-3f7377d3a4dd",
+ "source_uuid": "a9e3382a-1205-50a5-bfe2-da849fe82e61",
+ "idx": "00004-03",
+ "lines": [
+  {
+   "idx": 218,
+   "txt": "\f   DAY          \u2212\u2212DEPARTURE\u2212\u2212    \u2212\u2212\u2212ARRIVAL\u2212\u2212\u2212                GRND/        REST/\n"
+  },
+  {
+   "idx": 219,
+   "txt": "DP D/A EQ FLT#  STA DLCL/DHBT ML STA ALCL/AHBT  BLOCK  SYNTH   TPAY   DUTY  TAFB   FDP CALENDAR 11/01\u221212/01\n"
+  },
+  {
+   "idx": 237,
+   "txt": "SEQ 8063    2 OPS   POSN CA FO                                                         MO TU WE TH FR SA SU\n"
+  },
+  {
+   "idx": 238,
+   "txt": "                RPT 1153/1153                                                                      \u2212\u2212 \u2212\u2212 \u2212\u2212\n"
+  },
+  {
+   "idx": 239,
+   "txt": "1  1/1 29 1792  ONT 1253/1253    PHX 1512/1412   1.19          1.33X                   \u2212\u2212 \u2212\u2212  6 \u2212\u2212 \u2212\u2212  9 \u2212\u2212\n"
+  },
+  {
+   "idx": 240,
+   "txt": "1  1/1 29 1479  PHX 1645/1545  D JAX 2238/1938   3.53                                  \u2212\u2212 \u2212\u2212 \u2212\u2212 \u2212\u2212 \u2212\u2212 \u2212\u2212 \u2212\u2212\n"
+  },
+  {
+   "idx": 241,
+   "txt": "                                 RLS 2308/2008   5.12   0.00   5.12   8.15        7.45 \u2212\u2212 \u2212\u2212 \u2212\u2212 \u2212\u2212 \u2212\u2212 \u2212\u2212 \u2212\u2212\n"
+  },
+  {
+   "idx": 242,
+   "txt": "                JAX HYATT REGENCY RIVERFRONT                19045881234    17.46       \u2212\u2212 \u2212\u2212 \u2212\u2212 \u2212\u2212 \u2212\u2212 \u2212\u2212 \u2212\u2212\n"
+  },
+  {
+   "idx": 243,
+   "txt": "                    654LIMO                                 8505742312\n"
+  },
+  {
+   "idx": 244,
+   "txt": "                RPT 1654/1354\n"
+  },
+  {
+   "idx": 245,
+   "txt": "2  2/2 67 1918  JAX 1754/1454    PHL 1958/1658   2.04          1.22X\n"
+  },
+  {
+   "idx": 246,
+   "txt": "2  2/2 92 2979  PHL 2120/1820  D IND 2326/2026   2.06\n"
+  },
+  {
+   "idx": 247,
+   "txt": "                                 RLS 2356/2056   4.10   0.00   4.10   7.02        6.32\n"
+  },
+  {
+   "idx": 248,
+   "txt": "                IND HYATT REGENCY INDIANAPOLIS              3176321234     13.10\n"
+  },
+  {
+   "idx": 249,
+   "txt": "                    CAPITOL CITY COACH                      3174848484\n"
+  },
+  {
+   "idx": 250,
+   "txt": "               +IND DELTA HOTELS BY MARRIOTT                3172479700\n"
+  },
+  {
+   "idx": 251,
+   "txt": "                    SHUTTLE\n"
+  },
+  {
+   "idx": 252,
+   "txt": "                RPT 1306/1006\n"
+  },
+  {
+   "idx": 253,
+   "txt": "3  3/3 63 2085  IND 1406/1106    CLT 1545/1245   1.39          2.40X\n"
+  },
+  {
+   "idx": 254,
+   "txt": "3  3/3 63 2276  CLT 1825/1525  D ONT 2036/2036   5.11\n"
+  },
+  {
+   "idx": 255,
+   "txt": "                                 RLS 2106/2106   6.50   0.00   6.50  11.00       10.30\n"
+  },
+  {
+   "idx": 256,
+   "txt": "TTL                                             16.12   0.08  16.20        57.13\n"
+  },
+  {
+   "idx": 285,
+   "txt": "COCKPIT  ISSUED 09OCT2024  EFF 01NOV2024           LAX ONT 320  INTL                             PAGE  2062\n"
+  }
+ ]
+}

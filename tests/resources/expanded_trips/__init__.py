@@ -1,1 +1,0 @@
-"""Expanded trips test data."""

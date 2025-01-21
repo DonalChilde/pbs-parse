@@ -1,0 +1,322 @@
+{
+ "source": {
+  "txt_file": "PBS_LAX_November_2024_20241010125833_partial.txt",
+  "page_lines": "page-lines_LAX_2024-11-01_00003-00.json",
+  "trip_lines": "trip-lines_LAX_2024-11-01_00003-04.json",
+  "parsed_trip": "parsed-trip_LAX_2024-11-01_00003-04.json",
+  "structured_trip": "structured-trip_LAX_2024-11-01_00003-04.json"
+ },
+ "source_uuid": "09276f11-d18b-5e94-a04d-adc0753ba841",
+ "source_idx": "00003-04",
+ "uuid": "fb33391e-29b9-5ef4-aa2a-bd773927ef4d",
+ "trip_number": "8590",
+ "base_equipment": {
+  "base": {
+   "iata": "LAX",
+   "icao": "KLAX",
+   "tz_name": "America/Los_Angeles"
+  },
+  "satellite_base": null,
+  "equipment": "320"
+ },
+ "positions": [
+  {
+   "name": "CA"
+  },
+  {
+   "name": "FO"
+  }
+ ],
+ "operations": [],
+ "special_qual": false,
+ "start_station": {
+  "iata": "LAX",
+  "icao": "KLAX",
+  "tz_name": "America/Los_Angeles"
+ },
+ "start_utc": "2024-11-27T05:59:00+00:00",
+ "start_lcl": "2024-11-26T21:59:00-08:00",
+ "start_hbt": "2024-11-26T21:59:00-08:00",
+ "end_station": {
+  "iata": "LAX",
+  "icao": "KLAX",
+  "tz_name": "America/Los_Angeles"
+ },
+ "end_utc": "2024-11-30T07:32:00+00:00",
+ "end_lcl": "2024-11-29T23:32:00-08:00",
+ "end_hbt": "2024-11-29T23:32:00-08:00",
+ "flight_time": "PT15H2M",
+ "operating_time": "PT15H2M",
+ "soft_time": "PT5H58M",
+ "tafb": "P3DT1H33M",
+ "dutyperiods": [
+  {
+   "report_station": {
+    "iata": "LAX",
+    "icao": "KLAX",
+    "tz_name": "America/Los_Angeles"
+   },
+   "report_utc": "2024-11-27T05:59:00+00:00",
+   "report_lcl": "2024-11-26T21:59:00-08:00",
+   "report_hbt": "2024-11-26T21:59:00-08:00",
+   "release_station": {
+    "iata": "MCO",
+    "icao": "KMCO",
+    "tz_name": "America/New_York"
+   },
+   "release_utc": "2024-11-27T12:15:00+00:00",
+   "release_lcl": "2024-11-27T07:15:00-05:00",
+   "release_hbt": "2024-11-27T04:15:00-08:00",
+   "flights": [
+    {
+     "eq_code": "64",
+     "number": "2091",
+     "departure_station": {
+      "iata": "LAX",
+      "icao": "KLAX",
+      "tz_name": "America/Los_Angeles"
+     },
+     "departure_utc": "2024-11-27T06:59:00+00:00",
+     "departure_lcl": "2024-11-26T22:59:00-08:00",
+     "departure_hbt": "2024-11-26T22:59:00-08:00",
+     "arrival_station": {
+      "iata": "MCO",
+      "icao": "KMCO",
+      "tz_name": "America/New_York"
+     },
+     "arrival_utc": "2024-11-27T11:45:00+00:00",
+     "arrival_lcl": "2024-11-27T06:45:00-05:00",
+     "arrival_hbt": "2024-11-27T03:45:00-08:00",
+     "deadhead": false,
+     "deadhead_code": "",
+     "crewmeal": "",
+     "eq_change": false,
+     "flight_time": "PT4H46M",
+     "operating_time": "PT4H46M",
+     "soft_time": "PT0S",
+     "ground_time": "PT0S"
+    }
+   ],
+   "duty": "PT6H16M",
+   "flight_duty": "PT5H46M",
+   "operating_time": "PT4H46M",
+   "flight_time": "PT4H46M",
+   "soft_time": "PT0S",
+   "layover": {
+    "layover_station": {
+     "iata": "MCO",
+     "icao": "KMCO",
+     "tz_name": "America/New_York"
+    },
+    "start_utc": "2024-11-27T12:15:00+00:00",
+    "start_lcl": "2024-11-27T07:15:00-05:00",
+    "start_hbt": "2024-11-27T04:15:00-08:00",
+    "end_utc": "2024-11-27T23:40:00+00:00",
+    "end_lcl": "2024-11-27T18:40:00-05:00",
+    "end_hbt": "2024-11-27T15:40:00-08:00",
+    "hotels": [
+     {
+      "name": "MARRIOTT MCO AIRPORT",
+      "phone": "14078519000",
+      "transportation": [
+       {
+        "name": "SHUTTLE",
+        "phone": ""
+       }
+      ]
+     }
+    ],
+    "rest": "PT11H25M"
+   }
+  },
+  {
+   "report_station": {
+    "iata": "MCO",
+    "icao": "KMCO",
+    "tz_name": "America/New_York"
+   },
+   "report_utc": "2024-11-27T23:40:00+00:00",
+   "report_lcl": "2024-11-27T18:40:00-05:00",
+   "report_hbt": "2024-11-27T15:40:00-08:00",
+   "release_station": {
+    "iata": "PIT",
+    "icao": "KPIT",
+    "tz_name": "America/New_York"
+   },
+   "release_utc": "2024-11-28T05:41:00+00:00",
+   "release_lcl": "2024-11-28T00:41:00-05:00",
+   "release_hbt": "2024-11-27T21:41:00-08:00",
+   "flights": [
+    {
+     "eq_code": "63",
+     "number": "2502",
+     "departure_station": {
+      "iata": "MCO",
+      "icao": "KMCO",
+      "tz_name": "America/New_York"
+     },
+     "departure_utc": "2024-11-28T00:40:00+00:00",
+     "departure_lcl": "2024-11-27T19:40:00-05:00",
+     "departure_hbt": "2024-11-27T16:40:00-08:00",
+     "arrival_station": {
+      "iata": "CLT",
+      "icao": "KCLT",
+      "tz_name": "America/New_York"
+     },
+     "arrival_utc": "2024-11-28T02:32:00+00:00",
+     "arrival_lcl": "2024-11-27T21:32:00-05:00",
+     "arrival_hbt": "2024-11-27T18:32:00-08:00",
+     "deadhead": false,
+     "deadhead_code": "",
+     "crewmeal": "",
+     "eq_change": false,
+     "flight_time": "PT1H52M",
+     "operating_time": "PT1H52M",
+     "soft_time": "PT0S",
+     "ground_time": "PT1H13M"
+    },
+    {
+     "eq_code": "63",
+     "number": "1962",
+     "departure_station": {
+      "iata": "CLT",
+      "icao": "KCLT",
+      "tz_name": "America/New_York"
+     },
+     "departure_utc": "2024-11-28T03:45:00+00:00",
+     "departure_lcl": "2024-11-27T22:45:00-05:00",
+     "departure_hbt": "2024-11-27T19:45:00-08:00",
+     "arrival_station": {
+      "iata": "PIT",
+      "icao": "KPIT",
+      "tz_name": "America/New_York"
+     },
+     "arrival_utc": "2024-11-28T05:11:00+00:00",
+     "arrival_lcl": "2024-11-28T00:11:00-05:00",
+     "arrival_hbt": "2024-11-27T21:11:00-08:00",
+     "deadhead": false,
+     "deadhead_code": "",
+     "crewmeal": "",
+     "eq_change": false,
+     "flight_time": "PT1H26M",
+     "operating_time": "PT1H26M",
+     "soft_time": "PT0S",
+     "ground_time": "PT0S"
+    }
+   ],
+   "duty": "PT6H1M",
+   "flight_duty": "PT5H31M",
+   "operating_time": "PT3H18M",
+   "flight_time": "PT3H18M",
+   "soft_time": "PT0S",
+   "layover": {
+    "layover_station": {
+     "iata": "PIT",
+     "icao": "KPIT",
+     "tz_name": "America/New_York"
+    },
+    "start_utc": "2024-11-28T05:41:00+00:00",
+    "start_lcl": "2024-11-28T00:41:00-05:00",
+    "start_hbt": "2024-11-27T21:41:00-08:00",
+    "end_utc": "2024-11-29T21:37:00+00:00",
+    "end_lcl": "2024-11-29T16:37:00-05:00",
+    "end_hbt": "2024-11-29T13:37:00-08:00",
+    "hotels": [
+     {
+      "name": "WESTIN CONVENTION CENTER",
+      "phone": "14122813700",
+      "transportation": [
+       {
+        "name": "THREE RIVERS LIMO",
+        "phone": "4122212006"
+       }
+      ]
+     }
+    ],
+    "rest": "P1DT15H56M"
+   }
+  },
+  {
+   "report_station": {
+    "iata": "PIT",
+    "icao": "KPIT",
+    "tz_name": "America/New_York"
+   },
+   "report_utc": "2024-11-29T21:37:00+00:00",
+   "report_lcl": "2024-11-29T16:37:00-05:00",
+   "report_hbt": "2024-11-29T13:37:00-08:00",
+   "release_station": {
+    "iata": "LAX",
+    "icao": "KLAX",
+    "tz_name": "America/Los_Angeles"
+   },
+   "release_utc": "2024-11-30T07:32:00+00:00",
+   "release_lcl": "2024-11-29T23:32:00-08:00",
+   "release_hbt": "2024-11-29T23:32:00-08:00",
+   "flights": [
+    {
+     "eq_code": "77",
+     "number": "2319",
+     "departure_station": {
+      "iata": "PIT",
+      "icao": "KPIT",
+      "tz_name": "America/New_York"
+     },
+     "departure_utc": "2024-11-29T22:37:00+00:00",
+     "departure_lcl": "2024-11-29T17:37:00-05:00",
+     "departure_hbt": "2024-11-29T14:37:00-08:00",
+     "arrival_station": {
+      "iata": "CLT",
+      "icao": "KCLT",
+      "tz_name": "America/New_York"
+     },
+     "arrival_utc": "2024-11-30T00:08:00+00:00",
+     "arrival_lcl": "2024-11-29T19:08:00-05:00",
+     "arrival_hbt": "2024-11-29T16:08:00-08:00",
+     "deadhead": false,
+     "deadhead_code": "",
+     "crewmeal": "",
+     "eq_change": true,
+     "flight_time": "PT1H31M",
+     "operating_time": "PT1H31M",
+     "soft_time": "PT0S",
+     "ground_time": "PT1H27M"
+    },
+    {
+     "eq_code": "26",
+     "number": "2017",
+     "departure_station": {
+      "iata": "CLT",
+      "icao": "KCLT",
+      "tz_name": "America/New_York"
+     },
+     "departure_utc": "2024-11-30T01:35:00+00:00",
+     "departure_lcl": "2024-11-29T20:35:00-05:00",
+     "departure_hbt": "2024-11-29T17:35:00-08:00",
+     "arrival_station": {
+      "iata": "LAX",
+      "icao": "KLAX",
+      "tz_name": "America/Los_Angeles"
+     },
+     "arrival_utc": "2024-11-30T07:02:00+00:00",
+     "arrival_lcl": "2024-11-29T23:02:00-08:00",
+     "arrival_hbt": "2024-11-29T23:02:00-08:00",
+     "deadhead": false,
+     "deadhead_code": "",
+     "crewmeal": "",
+     "eq_change": false,
+     "flight_time": "PT5H27M",
+     "operating_time": "PT5H27M",
+     "soft_time": "PT0S",
+     "ground_time": "PT0S"
+    }
+   ],
+   "duty": "PT9H55M",
+   "flight_duty": "PT9H25M",
+   "operating_time": "PT6H58M",
+   "flight_time": "PT6H58M",
+   "soft_time": "PT0S",
+   "layover": null
+  }
+ ]
+}

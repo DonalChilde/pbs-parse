@@ -1,0 +1,437 @@
+{
+ "source": {
+  "txt_file": "PBS_LAX_November_2024_20241010125833_partial.txt",
+  "page_lines": "page-lines_LAX_2024-11-01_00003-00.json",
+  "trip_lines": "trip-lines_LAX_2024-11-01_00003-04.json"
+ },
+ "external": {
+  "base": "LAX",
+  "effective_from": "2024-11-01",
+  "effective_to": "2024-12-01"
+ },
+ "uuid": "0c9de44b-40eb-50e6-ba0f-d5354262e176",
+ "source_uuid": "4a3a17c5-fc69-59f6-be75-2e2f0afc0f79",
+ "idx": "00003-04",
+ "parsed_lines": [
+  {
+   "id": "page_header_1",
+   "indexed_string": {
+    "idx": 149,
+    "txt": "\f   DAY          \u2212\u2212DEPARTURE\u2212\u2212    \u2212\u2212\u2212ARRIVAL\u2212\u2212\u2212                GRND/        REST/\n"
+   },
+   "data": {}
+  },
+  {
+   "id": "page_header_2",
+   "indexed_string": {
+    "idx": 150,
+    "txt": "DP D/A EQ FLT#  STA DLCL/DHBT ML STA ALCL/AHBT  BLOCK  SYNTH   TPAY   DUTY  TAFB   FDP CALENDAR 11/01\u221212/01\n"
+   },
+   "data": {
+    "from_date": {
+     "month": "11",
+     "day": "01"
+    },
+    "to_date": {
+     "month": "12",
+     "day": "01"
+    }
+   }
+  },
+  {
+   "id": "trip_header",
+   "indexed_string": {
+    "idx": 198,
+    "txt": "SEQ 8590    1 OPS   POSN CA FO                                                         MO TU WE TH FR SA SU\n"
+   },
+   "data": {
+    "trip_number": "8590",
+    "ops_count": "1",
+    "positions": [
+     "CA",
+     "FO"
+    ],
+    "operations": [],
+    "special_qual": false,
+    "prior_month_trip": false
+   }
+  },
+  {
+   "id": "duty_period_report",
+   "indexed_string": {
+    "idx": 199,
+    "txt": "                RPT 2159/2159                                                                      \u2212\u2212 \u2212\u2212 \u2212\u2212\n"
+   },
+   "data": {
+    "report": {
+     "lcl": "2159",
+     "hbt": "2159"
+    },
+    "calendar_entries": [
+     "\u2212\u2212",
+     "\u2212\u2212",
+     "\u2212\u2212"
+    ]
+   }
+  },
+  {
+   "id": "flight",
+   "indexed_string": {
+    "idx": 200,
+    "txt": "1  1/2 64 2091  LAX 2259/2259  M MCO 0645/0345   4.46                                  \u2212\u2212 \u2212\u2212 \u2212\u2212 \u2212\u2212 \u2212\u2212 \u2212\u2212 \u2212\u2212\n"
+   },
+   "data": {
+    "dutyperiod_idx": "1",
+    "depart_day": "1",
+    "arrive_day": "2",
+    "equipment_code": "64",
+    "flight_number": "2091",
+    "deadhead": false,
+    "deadhead_code": "",
+    "departure_station": "LAX",
+    "departure_time": {
+     "lcl": "2259",
+     "hbt": "2259"
+    },
+    "crew_meal": "",
+    "arrival_station": "MCO",
+    "arrival_time": {
+     "lcl": "0645",
+     "hbt": "0345"
+    },
+    "block": "4.46",
+    "synth": "0.00",
+    "ground": "0.00",
+    "equipment_change": false,
+    "calendar_entries": [
+     "\u2212\u2212",
+     "\u2212\u2212",
+     "\u2212\u2212",
+     "\u2212\u2212",
+     "\u2212\u2212",
+     "\u2212\u2212",
+     "\u2212\u2212"
+    ]
+   }
+  },
+  {
+   "id": "duty_period_release",
+   "indexed_string": {
+    "idx": 201,
+    "txt": "                                 RLS 0715/0415   4.46   0.00   4.46   6.16        5.46 \u2212\u2212 \u2212\u2212 \u2212\u2212 \u2212\u2212 \u2212\u2212 \u2212\u2212 \u2212\u2212\n"
+   },
+   "data": {
+    "release": {
+     "lcl": "0715",
+     "hbt": "0415"
+    },
+    "block": "4.46",
+    "synth": "0.00",
+    "total_pay": "4.46",
+    "duty": "6.16",
+    "flight_duty": "5.46",
+    "calendar_entries": [
+     "\u2212\u2212",
+     "\u2212\u2212",
+     "\u2212\u2212",
+     "\u2212\u2212",
+     "\u2212\u2212",
+     "\u2212\u2212",
+     "\u2212\u2212"
+    ]
+   }
+  },
+  {
+   "id": "layover",
+   "indexed_string": {
+    "idx": 202,
+    "txt": "                MCO MARRIOTT MCO AIRPORT                    14078519000    11.25       \u2212\u2212 \u2212\u2212 \u2212\u2212 \u2212\u2212 \u2212\u2212 \u2212\u2212 \u2212\u2212\n"
+   },
+   "data": {
+    "layover_city": "MCO",
+    "hotel_name": "MARRIOTT MCO AIRPORT",
+    "hotel_phone": "14078519000",
+    "rest": "11.25",
+    "calendar_entries": [
+     "\u2212\u2212",
+     "\u2212\u2212",
+     "\u2212\u2212",
+     "\u2212\u2212",
+     "\u2212\u2212",
+     "\u2212\u2212",
+     "\u2212\u2212"
+    ]
+   }
+  },
+  {
+   "id": "transportation",
+   "indexed_string": {
+    "idx": 203,
+    "txt": "                    SHUTTLE                                                            \u2212\u2212 26 \u2212\u2212 \u2212\u2212 \u2212\u2212 \u2212\u2212 \u2212\u2212\n"
+   },
+   "data": {
+    "name": "SHUTTLE",
+    "phone": "",
+    "calendar_entries": [
+     "\u2212\u2212",
+     "26",
+     "\u2212\u2212",
+     "\u2212\u2212",
+     "\u2212\u2212",
+     "\u2212\u2212",
+     "\u2212\u2212"
+    ]
+   }
+  },
+  {
+   "id": "duty_period_report",
+   "indexed_string": {
+    "idx": 204,
+    "txt": "                RPT 1840/1540\n"
+   },
+   "data": {
+    "report": {
+     "lcl": "1840",
+     "hbt": "1540"
+    },
+    "calendar_entries": []
+   }
+  },
+  {
+   "id": "flight",
+   "indexed_string": {
+    "idx": 205,
+    "txt": "2  2/2 63 2502  MCO 1940/1640    CLT 2132/1832   1.52          1.13\n"
+   },
+   "data": {
+    "dutyperiod_idx": "2",
+    "depart_day": "2",
+    "arrive_day": "2",
+    "equipment_code": "63",
+    "flight_number": "2502",
+    "deadhead": false,
+    "deadhead_code": "",
+    "departure_station": "MCO",
+    "departure_time": {
+     "lcl": "1940",
+     "hbt": "1640"
+    },
+    "crew_meal": "",
+    "arrival_station": "CLT",
+    "arrival_time": {
+     "lcl": "2132",
+     "hbt": "1832"
+    },
+    "block": "1.52",
+    "synth": "0.00",
+    "ground": "1.13",
+    "equipment_change": false,
+    "calendar_entries": []
+   }
+  },
+  {
+   "id": "flight",
+   "indexed_string": {
+    "idx": 206,
+    "txt": "2  2/3 63 1962  CLT 2245/1945    PIT 0011/2111   1.26\n"
+   },
+   "data": {
+    "dutyperiod_idx": "2",
+    "depart_day": "2",
+    "arrive_day": "3",
+    "equipment_code": "63",
+    "flight_number": "1962",
+    "deadhead": false,
+    "deadhead_code": "",
+    "departure_station": "CLT",
+    "departure_time": {
+     "lcl": "2245",
+     "hbt": "1945"
+    },
+    "crew_meal": "",
+    "arrival_station": "PIT",
+    "arrival_time": {
+     "lcl": "0011",
+     "hbt": "2111"
+    },
+    "block": "1.26",
+    "synth": "0.00",
+    "ground": "0.00",
+    "equipment_change": false,
+    "calendar_entries": []
+   }
+  },
+  {
+   "id": "duty_period_release",
+   "indexed_string": {
+    "idx": 207,
+    "txt": "                                 RLS 0041/2141   3.18   0.00   3.18   6.01        5.31\n"
+   },
+   "data": {
+    "release": {
+     "lcl": "0041",
+     "hbt": "2141"
+    },
+    "block": "3.18",
+    "synth": "0.00",
+    "total_pay": "3.18",
+    "duty": "6.01",
+    "flight_duty": "5.31",
+    "calendar_entries": []
+   }
+  },
+  {
+   "id": "layover",
+   "indexed_string": {
+    "idx": 208,
+    "txt": "                PIT WESTIN CONVENTION CENTER                14122813700    39.56\n"
+   },
+   "data": {
+    "layover_city": "PIT",
+    "hotel_name": "WESTIN CONVENTION CENTER",
+    "hotel_phone": "14122813700",
+    "rest": "39.56",
+    "calendar_entries": []
+   }
+  },
+  {
+   "id": "transportation",
+   "indexed_string": {
+    "idx": 209,
+    "txt": "                    THREE RIVERS LIMO                       4122212006\n"
+   },
+   "data": {
+    "name": "THREE RIVERS LIMO",
+    "phone": "4122212006",
+    "calendar_entries": []
+   }
+  },
+  {
+   "id": "duty_period_report",
+   "indexed_string": {
+    "idx": 210,
+    "txt": "                RPT 1637/1337\n"
+   },
+   "data": {
+    "report": {
+     "lcl": "1637",
+     "hbt": "1337"
+    },
+    "calendar_entries": []
+   }
+  },
+  {
+   "id": "flight",
+   "indexed_string": {
+    "idx": 211,
+    "txt": "3  4/4 77 2319  PIT 1737/1437    CLT 1908/1608   1.31          1.27X\n"
+   },
+   "data": {
+    "dutyperiod_idx": "3",
+    "depart_day": "4",
+    "arrive_day": "4",
+    "equipment_code": "77",
+    "flight_number": "2319",
+    "deadhead": false,
+    "deadhead_code": "",
+    "departure_station": "PIT",
+    "departure_time": {
+     "lcl": "1737",
+     "hbt": "1437"
+    },
+    "crew_meal": "",
+    "arrival_station": "CLT",
+    "arrival_time": {
+     "lcl": "1908",
+     "hbt": "1608"
+    },
+    "block": "1.31",
+    "synth": "0.00",
+    "ground": "1.27",
+    "equipment_change": true,
+    "calendar_entries": []
+   }
+  },
+  {
+   "id": "flight",
+   "indexed_string": {
+    "idx": 212,
+    "txt": "3  4/4 26 2017  CLT 2035/1735  D LAX 2302/2302   5.27\n"
+   },
+   "data": {
+    "dutyperiod_idx": "3",
+    "depart_day": "4",
+    "arrive_day": "4",
+    "equipment_code": "26",
+    "flight_number": "2017",
+    "deadhead": false,
+    "deadhead_code": "",
+    "departure_station": "CLT",
+    "departure_time": {
+     "lcl": "2035",
+     "hbt": "1735"
+    },
+    "crew_meal": "",
+    "arrival_station": "LAX",
+    "arrival_time": {
+     "lcl": "2302",
+     "hbt": "2302"
+    },
+    "block": "5.27",
+    "synth": "0.00",
+    "ground": "0.00",
+    "equipment_change": false,
+    "calendar_entries": []
+   }
+  },
+  {
+   "id": "duty_period_release",
+   "indexed_string": {
+    "idx": 213,
+    "txt": "                                 RLS 2332/2332   6.58   0.00   6.58   9.55        9.25\n"
+   },
+   "data": {
+    "release": {
+     "lcl": "2332",
+     "hbt": "2332"
+    },
+    "block": "6.58",
+    "synth": "0.00",
+    "total_pay": "6.58",
+    "duty": "9.55",
+    "flight_duty": "9.25",
+    "calendar_entries": []
+   }
+  },
+  {
+   "id": "trip_footer",
+   "indexed_string": {
+    "idx": 214,
+    "txt": "TTL                                             15.02   5.58  21.00        73.33\n"
+   },
+   "data": {
+    "block": "15.02",
+    "synth": "5.58",
+    "total_pay": "21.00",
+    "tafb": "73.33",
+    "calendar_entries": []
+   }
+  },
+  {
+   "id": "page_footer",
+   "indexed_string": {
+    "idx": 217,
+    "txt": "COCKPIT  ISSUED 09OCT2024  EFF 01NOV2024               LAX 320  INTL                             PAGE  2035\n"
+   },
+   "data": {
+    "issued": "09OCT2024",
+    "effective": "01NOV2024",
+    "base": "LAX",
+    "satellite_base": "",
+    "equipment": "320",
+    "division": "INTL",
+    "page": "2035"
+   }
+  }
+ ]
+}

@@ -1,0 +1,494 @@
+{
+ "source": {
+  "txt_file": "PBS_LAX_November_2024_20241010125833_partial.txt",
+  "page_lines": "page-lines_LAX_2024-11-01_00004-00.json",
+  "trip_lines": "trip-lines_LAX_2024-11-01_00004-03.json"
+ },
+ "external": {
+  "base": "LAX",
+  "effective_from": "2024-11-01",
+  "effective_to": "2024-12-01"
+ },
+ "uuid": "3edb2805-6093-5916-b666-43780d126e38",
+ "source_uuid": "d074fd2e-bb67-517c-9688-3f7377d3a4dd",
+ "idx": "00004-03",
+ "parsed_lines": [
+  {
+   "id": "page_header_1",
+   "indexed_string": {
+    "idx": 218,
+    "txt": "\f   DAY          \u2212\u2212DEPARTURE\u2212\u2212    \u2212\u2212\u2212ARRIVAL\u2212\u2212\u2212                GRND/        REST/\n"
+   },
+   "data": {}
+  },
+  {
+   "id": "page_header_2",
+   "indexed_string": {
+    "idx": 219,
+    "txt": "DP D/A EQ FLT#  STA DLCL/DHBT ML STA ALCL/AHBT  BLOCK  SYNTH   TPAY   DUTY  TAFB   FDP CALENDAR 11/01\u221212/01\n"
+   },
+   "data": {
+    "from_date": {
+     "month": "11",
+     "day": "01"
+    },
+    "to_date": {
+     "month": "12",
+     "day": "01"
+    }
+   }
+  },
+  {
+   "id": "trip_header",
+   "indexed_string": {
+    "idx": 237,
+    "txt": "SEQ 8063    2 OPS   POSN CA FO                                                         MO TU WE TH FR SA SU\n"
+   },
+   "data": {
+    "trip_number": "8063",
+    "ops_count": "2",
+    "positions": [
+     "CA",
+     "FO"
+    ],
+    "operations": [],
+    "special_qual": false,
+    "prior_month_trip": false
+   }
+  },
+  {
+   "id": "duty_period_report",
+   "indexed_string": {
+    "idx": 238,
+    "txt": "                RPT 1153/1153                                                                      \u2212\u2212 \u2212\u2212 \u2212\u2212\n"
+   },
+   "data": {
+    "report": {
+     "lcl": "1153",
+     "hbt": "1153"
+    },
+    "calendar_entries": [
+     "\u2212\u2212",
+     "\u2212\u2212",
+     "\u2212\u2212"
+    ]
+   }
+  },
+  {
+   "id": "flight",
+   "indexed_string": {
+    "idx": 239,
+    "txt": "1  1/1 29 1792  ONT 1253/1253    PHX 1512/1412   1.19          1.33X                   \u2212\u2212 \u2212\u2212  6 \u2212\u2212 \u2212\u2212  9 \u2212\u2212\n"
+   },
+   "data": {
+    "dutyperiod_idx": "1",
+    "depart_day": "1",
+    "arrive_day": "1",
+    "equipment_code": "29",
+    "flight_number": "1792",
+    "deadhead": false,
+    "deadhead_code": "",
+    "departure_station": "ONT",
+    "departure_time": {
+     "lcl": "1253",
+     "hbt": "1253"
+    },
+    "crew_meal": "",
+    "arrival_station": "PHX",
+    "arrival_time": {
+     "lcl": "1512",
+     "hbt": "1412"
+    },
+    "block": "1.19",
+    "synth": "0.00",
+    "ground": "1.33",
+    "equipment_change": true,
+    "calendar_entries": [
+     "\u2212\u2212",
+     "\u2212\u2212",
+     "6",
+     "\u2212\u2212",
+     "\u2212\u2212",
+     "9",
+     "\u2212\u2212"
+    ]
+   }
+  },
+  {
+   "id": "flight",
+   "indexed_string": {
+    "idx": 240,
+    "txt": "1  1/1 29 1479  PHX 1645/1545  D JAX 2238/1938   3.53                                  \u2212\u2212 \u2212\u2212 \u2212\u2212 \u2212\u2212 \u2212\u2212 \u2212\u2212 \u2212\u2212\n"
+   },
+   "data": {
+    "dutyperiod_idx": "1",
+    "depart_day": "1",
+    "arrive_day": "1",
+    "equipment_code": "29",
+    "flight_number": "1479",
+    "deadhead": false,
+    "deadhead_code": "",
+    "departure_station": "PHX",
+    "departure_time": {
+     "lcl": "1645",
+     "hbt": "1545"
+    },
+    "crew_meal": "",
+    "arrival_station": "JAX",
+    "arrival_time": {
+     "lcl": "2238",
+     "hbt": "1938"
+    },
+    "block": "3.53",
+    "synth": "0.00",
+    "ground": "0.00",
+    "equipment_change": false,
+    "calendar_entries": [
+     "\u2212\u2212",
+     "\u2212\u2212",
+     "\u2212\u2212",
+     "\u2212\u2212",
+     "\u2212\u2212",
+     "\u2212\u2212",
+     "\u2212\u2212"
+    ]
+   }
+  },
+  {
+   "id": "duty_period_release",
+   "indexed_string": {
+    "idx": 241,
+    "txt": "                                 RLS 2308/2008   5.12   0.00   5.12   8.15        7.45 \u2212\u2212 \u2212\u2212 \u2212\u2212 \u2212\u2212 \u2212\u2212 \u2212\u2212 \u2212\u2212\n"
+   },
+   "data": {
+    "release": {
+     "lcl": "2308",
+     "hbt": "2008"
+    },
+    "block": "5.12",
+    "synth": "0.00",
+    "total_pay": "5.12",
+    "duty": "8.15",
+    "flight_duty": "7.45",
+    "calendar_entries": [
+     "\u2212\u2212",
+     "\u2212\u2212",
+     "\u2212\u2212",
+     "\u2212\u2212",
+     "\u2212\u2212",
+     "\u2212\u2212",
+     "\u2212\u2212"
+    ]
+   }
+  },
+  {
+   "id": "layover",
+   "indexed_string": {
+    "idx": 242,
+    "txt": "                JAX HYATT REGENCY RIVERFRONT                19045881234    17.46       \u2212\u2212 \u2212\u2212 \u2212\u2212 \u2212\u2212 \u2212\u2212 \u2212\u2212 \u2212\u2212\n"
+   },
+   "data": {
+    "layover_city": "JAX",
+    "hotel_name": "HYATT REGENCY RIVERFRONT",
+    "hotel_phone": "19045881234",
+    "rest": "17.46",
+    "calendar_entries": [
+     "\u2212\u2212",
+     "\u2212\u2212",
+     "\u2212\u2212",
+     "\u2212\u2212",
+     "\u2212\u2212",
+     "\u2212\u2212",
+     "\u2212\u2212"
+    ]
+   }
+  },
+  {
+   "id": "transportation",
+   "indexed_string": {
+    "idx": 243,
+    "txt": "                    654LIMO                                 8505742312\n"
+   },
+   "data": {
+    "name": "654LIMO",
+    "phone": "8505742312",
+    "calendar_entries": []
+   }
+  },
+  {
+   "id": "duty_period_report",
+   "indexed_string": {
+    "idx": 244,
+    "txt": "                RPT 1654/1354\n"
+   },
+   "data": {
+    "report": {
+     "lcl": "1654",
+     "hbt": "1354"
+    },
+    "calendar_entries": []
+   }
+  },
+  {
+   "id": "flight",
+   "indexed_string": {
+    "idx": 245,
+    "txt": "2  2/2 67 1918  JAX 1754/1454    PHL 1958/1658   2.04          1.22X\n"
+   },
+   "data": {
+    "dutyperiod_idx": "2",
+    "depart_day": "2",
+    "arrive_day": "2",
+    "equipment_code": "67",
+    "flight_number": "1918",
+    "deadhead": false,
+    "deadhead_code": "",
+    "departure_station": "JAX",
+    "departure_time": {
+     "lcl": "1754",
+     "hbt": "1454"
+    },
+    "crew_meal": "",
+    "arrival_station": "PHL",
+    "arrival_time": {
+     "lcl": "1958",
+     "hbt": "1658"
+    },
+    "block": "2.04",
+    "synth": "0.00",
+    "ground": "1.22",
+    "equipment_change": true,
+    "calendar_entries": []
+   }
+  },
+  {
+   "id": "flight",
+   "indexed_string": {
+    "idx": 246,
+    "txt": "2  2/2 92 2979  PHL 2120/1820  D IND 2326/2026   2.06\n"
+   },
+   "data": {
+    "dutyperiod_idx": "2",
+    "depart_day": "2",
+    "arrive_day": "2",
+    "equipment_code": "92",
+    "flight_number": "2979",
+    "deadhead": false,
+    "deadhead_code": "",
+    "departure_station": "PHL",
+    "departure_time": {
+     "lcl": "2120",
+     "hbt": "1820"
+    },
+    "crew_meal": "",
+    "arrival_station": "IND",
+    "arrival_time": {
+     "lcl": "2326",
+     "hbt": "2026"
+    },
+    "block": "2.06",
+    "synth": "0.00",
+    "ground": "0.00",
+    "equipment_change": false,
+    "calendar_entries": []
+   }
+  },
+  {
+   "id": "duty_period_release",
+   "indexed_string": {
+    "idx": 247,
+    "txt": "                                 RLS 2356/2056   4.10   0.00   4.10   7.02        6.32\n"
+   },
+   "data": {
+    "release": {
+     "lcl": "2356",
+     "hbt": "2056"
+    },
+    "block": "4.10",
+    "synth": "0.00",
+    "total_pay": "4.10",
+    "duty": "7.02",
+    "flight_duty": "6.32",
+    "calendar_entries": []
+   }
+  },
+  {
+   "id": "layover",
+   "indexed_string": {
+    "idx": 248,
+    "txt": "                IND HYATT REGENCY INDIANAPOLIS              3176321234     13.10\n"
+   },
+   "data": {
+    "layover_city": "IND",
+    "hotel_name": "HYATT REGENCY INDIANAPOLIS",
+    "hotel_phone": "3176321234",
+    "rest": "13.10",
+    "calendar_entries": []
+   }
+  },
+  {
+   "id": "transportation",
+   "indexed_string": {
+    "idx": 249,
+    "txt": "                    CAPITOL CITY COACH                      3174848484\n"
+   },
+   "data": {
+    "name": "CAPITOL CITY COACH",
+    "phone": "3174848484",
+    "calendar_entries": []
+   }
+  },
+  {
+   "id": "hotel_additional",
+   "indexed_string": {
+    "idx": 250,
+    "txt": "               +IND DELTA HOTELS BY MARRIOTT                3172479700\n"
+   },
+   "data": {
+    "layover_city": "IND",
+    "name": "DELTA HOTELS BY MARRIOTT                3172479700",
+    "phone": "",
+    "calendar_entries": []
+   }
+  },
+  {
+   "id": "transportation_additional",
+   "indexed_string": {
+    "idx": 251,
+    "txt": "                    SHUTTLE\n"
+   },
+   "data": {
+    "name": "SHUTTLE",
+    "phone": "",
+    "calendar_entries": []
+   }
+  },
+  {
+   "id": "duty_period_report",
+   "indexed_string": {
+    "idx": 252,
+    "txt": "                RPT 1306/1006\n"
+   },
+   "data": {
+    "report": {
+     "lcl": "1306",
+     "hbt": "1006"
+    },
+    "calendar_entries": []
+   }
+  },
+  {
+   "id": "flight",
+   "indexed_string": {
+    "idx": 253,
+    "txt": "3  3/3 63 2085  IND 1406/1106    CLT 1545/1245   1.39          2.40X\n"
+   },
+   "data": {
+    "dutyperiod_idx": "3",
+    "depart_day": "3",
+    "arrive_day": "3",
+    "equipment_code": "63",
+    "flight_number": "2085",
+    "deadhead": false,
+    "deadhead_code": "",
+    "departure_station": "IND",
+    "departure_time": {
+     "lcl": "1406",
+     "hbt": "1106"
+    },
+    "crew_meal": "",
+    "arrival_station": "CLT",
+    "arrival_time": {
+     "lcl": "1545",
+     "hbt": "1245"
+    },
+    "block": "1.39",
+    "synth": "0.00",
+    "ground": "2.40",
+    "equipment_change": true,
+    "calendar_entries": []
+   }
+  },
+  {
+   "id": "flight",
+   "indexed_string": {
+    "idx": 254,
+    "txt": "3  3/3 63 2276  CLT 1825/1525  D ONT 2036/2036   5.11\n"
+   },
+   "data": {
+    "dutyperiod_idx": "3",
+    "depart_day": "3",
+    "arrive_day": "3",
+    "equipment_code": "63",
+    "flight_number": "2276",
+    "deadhead": false,
+    "deadhead_code": "",
+    "departure_station": "CLT",
+    "departure_time": {
+     "lcl": "1825",
+     "hbt": "1525"
+    },
+    "crew_meal": "",
+    "arrival_station": "ONT",
+    "arrival_time": {
+     "lcl": "2036",
+     "hbt": "2036"
+    },
+    "block": "5.11",
+    "synth": "0.00",
+    "ground": "0.00",
+    "equipment_change": false,
+    "calendar_entries": []
+   }
+  },
+  {
+   "id": "duty_period_release",
+   "indexed_string": {
+    "idx": 255,
+    "txt": "                                 RLS 2106/2106   6.50   0.00   6.50  11.00       10.30\n"
+   },
+   "data": {
+    "release": {
+     "lcl": "2106",
+     "hbt": "2106"
+    },
+    "block": "6.50",
+    "synth": "0.00",
+    "total_pay": "6.50",
+    "duty": "11.00",
+    "flight_duty": "10.30",
+    "calendar_entries": []
+   }
+  },
+  {
+   "id": "trip_footer",
+   "indexed_string": {
+    "idx": 256,
+    "txt": "TTL                                             16.12   0.08  16.20        57.13\n"
+   },
+   "data": {
+    "block": "16.12",
+    "synth": "0.08",
+    "total_pay": "16.20",
+    "tafb": "57.13",
+    "calendar_entries": []
+   }
+  },
+  {
+   "id": "page_footer",
+   "indexed_string": {
+    "idx": 285,
+    "txt": "COCKPIT  ISSUED 09OCT2024  EFF 01NOV2024           LAX ONT 320  INTL                             PAGE  2062\n"
+   },
+   "data": {
+    "issued": "09OCT2024",
+    "effective": "01NOV2024",
+    "base": "LAX",
+    "satellite_base": "ONT",
+    "equipment": "320",
+    "division": "INTL",
+    "page": "2062"
+   }
+  }
+ ]
+}
