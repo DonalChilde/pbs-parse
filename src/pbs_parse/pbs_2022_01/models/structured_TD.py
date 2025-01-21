@@ -93,8 +93,8 @@ class StructuredTripSourceTD(TypedDict):
 
 class StructuredTripTD(TypedDict):
     source: StructuredTripSourceTD
-    uuid: str
-    source_uuid: str
+    # uuid: str
+    # source_uuid: str
     idx: str
     number: str
     ops_count: str
@@ -110,3 +110,4 @@ class StructuredTripTD(TypedDict):
     special_qual: bool
     dutyperiods: list[DutyPeriod]
     calendar: list[str]
+    errors: list[str]

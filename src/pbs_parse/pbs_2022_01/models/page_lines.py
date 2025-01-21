@@ -26,7 +26,7 @@ class PageLinesTD(TypedDict):
 
     source: PageLinesSourceTD
     external: ExternalDataTD
-    uuid: str
+    # uuid: str
     idx: str
     lines: list[IndexedStringTD]
 
@@ -45,19 +45,19 @@ class PageLines:
     source: PageLinesSource
     external: ExternalData
     idx: str
-    uuid: str = ""
+    # uuid: str = ""
     lines: list[IndexedString] = field(default_factory=list)
 
-    def __post_init__(self):
-        """Init the uuid if missing, validate if not missing."""
-        current_uuid_str = str(self.make_uuid())
-        if self.uuid == "":
-            self.uuid = current_uuid_str
-            return
-        if self.uuid != current_uuid_str:
-            raise ValueError(
-                f"Supplied uuid: {self.uuid} does not match calculated uuid: {current_uuid_str}"
-            )
+    # def __post_init__(self):
+    #     """Init the uuid if missing, validate if not missing."""
+    #     current_uuid_str = str(self.make_uuid())
+    #     if self.uuid == "":
+    #         self.uuid = current_uuid_str
+    #         return
+    #     if self.uuid != current_uuid_str:
+    #         raise ValueError(
+    #             f"Supplied uuid: {self.uuid} does not match calculated uuid: {current_uuid_str}"
+    #         )
 
     def make_uuid(self) -> UUID:
         """Make a uuid from a namespace and the lines."""
@@ -76,7 +76,7 @@ class PageLines:
         result = PageLines(
             source=PageLinesSource(**simple_obj["source"]),
             external=ExternalData.from_simple(simple_obj["external"]),
-            uuid=simple_obj["uuid"],
+            # uuid=simple_obj["uuid"],
             idx=simple_obj["idx"],
             lines=[IndexedString(**x) for x in simple_obj["lines"]],
         )
@@ -87,7 +87,7 @@ class PageLines:
         return PageLinesTD(
             source=PageLinesSourceTD(txt_file=self.source.txt_file),
             external=self.external.to_simple(),
-            uuid=self.uuid,
+            # uuid=self.uuid,
             idx=self.idx,
             lines=[IndexedStringTD(idx=x.idx, txt=x.txt) for x in self.lines],
         )

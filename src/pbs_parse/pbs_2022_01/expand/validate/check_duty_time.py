@@ -18,7 +18,7 @@ def check_duty_time(vm: ExpandedValidation) -> None:
                 f"Expanded duty time for dutyperiod {dp_idx} does not match calculated duty time. "
                 f"{e_calculated_duty_time=}, {e_dutyperiod.duty=}, {e_dutyperiod.report_utc=}, {e_dutyperiod.release_utc=}"
             )
-            vm.errors.append(msg)
+            vm.expanded.errors.append(msg)
         hours, minutes = s_dutyperiod.duty.split(".", maxsplit=1)
         s_duty_time = timedelta(hours=int(hours), minutes=int(minutes))
         if e_calculated_duty_time != s_duty_time:
@@ -27,4 +27,4 @@ def check_duty_time(vm: ExpandedValidation) -> None:
                 f"{e_calculated_duty_time=}, {s_dutyperiod.duty=}, {e_dutyperiod.report_utc=}, {e_dutyperiod.release_utc=}"
             )
 
-            vm.errors.append(msg)
+            vm.expanded.errors.append(msg)

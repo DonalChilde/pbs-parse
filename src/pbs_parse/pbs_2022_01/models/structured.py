@@ -5,7 +5,7 @@ from dataclasses import dataclass, field
 from datetime import date, timedelta
 from pathlib import Path
 from typing import Optional
-from uuid import NAMESPACE_DNS, UUID, uuid5
+from uuid import NAMESPACE_DNS, uuid5
 
 from pfmsoft.simple_serializer import DataclassSerializer
 
@@ -351,7 +351,6 @@ class StructuredTrip:
     """StructuredTrip."""
 
     source: StructuredTripSource
-    source_uuid: str
     idx: str
     number: str
     ops_count: str
@@ -363,26 +362,11 @@ class StructuredTrip:
     external: ExternalData
     page_header: PageHeader
     page_footer: PageFooter
-    uuid: str = ""
     positions: list[str] = field(default_factory=list)
     operations: list[str] = field(default_factory=list)
     dutyperiods: list[DutyPeriod] = field(default_factory=list)
     calendar: list[str] = field(default_factory=list)
-
-    def __post_init__(self):
-        """Init the uuid if missing, validate if not missing."""
-        current_uuid_str = str(self.make_uuid())
-        if self.uuid == "":
-            self.uuid = current_uuid_str
-            return
-        if self.uuid != current_uuid_str:
-            raise ValueError(
-                f"Supplied uuid: {self.uuid} does not match calculated uuid: {current_uuid_str}"
-            )
-
-    def make_uuid(self) -> UUID:
-        """Make a uuid from a namespace and the source uuid string."""
-        return uuid5(namespace=STRUCTURED_TRIP_NS, name=self.source_uuid)
+    errors: list[str] = field(default_factory=list)
 
     def default_file_name(self) -> str:
         """default_file_name.
@@ -417,8 +401,8 @@ class StructuredTrip:
         """
         result = StructuredTrip(
             source=StructuredTripSource.from_simple(simple_obj["source"]),
-            uuid=simple_obj["uuid"],
-            source_uuid=simple_obj["source_uuid"],
+            # uuid=simple_obj["uuid"],
+            # source_uuid=simple_obj["source_uuid"],
             idx=simple_obj["idx"],
             number=simple_obj["number"],
             ops_count=simple_obj["ops_count"],
@@ -434,6 +418,7 @@ class StructuredTrip:
             special_qual=simple_obj["special_qual"],
             dutyperiods=[DutyPeriod.from_simple(x) for x in simple_obj["dutyperiods"]],
             calendar=deepcopy(simple_obj["calendar"]),
+            errors=deepcopy(simple_obj["errors"]),
         )
         return result
 
@@ -441,8 +426,8 @@ class StructuredTrip:
         """To simple."""
         return TD.StructuredTripTD(
             source=self.source.to_simple(),
-            uuid=self.uuid,
-            source_uuid=self.source_uuid,
+            # uuid=self.uuid,
+            # source_uuid=self.source_uuid,
             idx=self.idx,
             number=self.number,
             ops_count=self.ops_count,
@@ -458,6 +443,7 @@ class StructuredTrip:
             special_qual=self.special_qual,
             dutyperiods=[x.to_simple() for x in self.dutyperiods],
             calendar=deepcopy(self.calendar),
+            errors=deepcopy(self.errors),
         )
 
 

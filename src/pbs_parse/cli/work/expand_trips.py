@@ -68,7 +68,7 @@ def expand_trips_store(
     )
     structured_trips = (
         KeyedResource[StructuredTrip](
-            resource=STORE.load.structured_trip(store=store, base=base, uuid=x["key"]),
+            resource=STORE.load.structured_trip(store=store, base=base, key=x["key"]),
             key=x["key"],
         )
         for x in trip_infos

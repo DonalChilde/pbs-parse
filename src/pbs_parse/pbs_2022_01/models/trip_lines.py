@@ -27,8 +27,8 @@ class TripLinesTD(TypedDict):
 
     source: TripLinesSourceTD
     external: ExternalDataTD
-    uuid: str
-    source_uuid: str
+    # uuid: str
+    # source_uuid: str
     idx: str
     lines: list[IndexedStringTD]
 
@@ -58,21 +58,21 @@ class TripLines:
 
     source: TripLinesSource
     external: ExternalData
-    source_uuid: str
+    # source_uuid: str
     idx: str
-    uuid: str = ""
+    # uuid: str = ""
     lines: list[IndexedString] = field(default_factory=list)
 
-    def __post_init__(self):
-        """Init the uuid if missing, validate if not missing."""
-        current_uuid_str = str(self.make_uuid())
-        if self.uuid == "":
-            self.uuid = current_uuid_str
-            return
-        if self.uuid != current_uuid_str:
-            raise ValueError(
-                f"Supplied uuid: {self.uuid} does not match calculated uuid: {current_uuid_str}"
-            )
+    # def __post_init__(self):
+    #     """Init the uuid if missing, validate if not missing."""
+    #     current_uuid_str = str(self.make_uuid())
+    #     if self.uuid == "":
+    #         self.uuid = current_uuid_str
+    #         return
+    #     if self.uuid != current_uuid_str:
+    #         raise ValueError(
+    #             f"Supplied uuid: {self.uuid} does not match calculated uuid: {current_uuid_str}"
+    #         )
 
     def make_uuid(self) -> UUID:
         """Make a uuid from a namespace and the repr of asdict(self), minus the uuid field."""
@@ -91,8 +91,8 @@ class TripLines:
         result = TripLines(
             source=TripLinesSource.from_simple(simple_obj["source"]),
             external=ExternalData.from_simple(simple_obj["external"]),
-            uuid=simple_obj["uuid"],
-            source_uuid=simple_obj["source_uuid"],
+            # uuid=simple_obj["uuid"],
+            # source_uuid=simple_obj["source_uuid"],
             idx=simple_obj["idx"],
             lines=[IndexedString(**x) for x in simple_obj["lines"]],
         )
@@ -103,8 +103,8 @@ class TripLines:
         return TripLinesTD(
             source=self.source.to_simple(),
             external=self.external.to_simple(),
-            uuid=self.uuid,
-            source_uuid=self.source_uuid,
+            # uuid=self.uuid,
+            # source_uuid=self.source_uuid,
             idx=self.idx,
             lines=[IndexedStringTD(idx=x.idx, txt=x.txt) for x in self.lines],
         )

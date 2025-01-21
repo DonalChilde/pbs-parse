@@ -220,7 +220,7 @@ def _translate_trip(
     )
     trip = structured.StructuredTrip(
         source=source,
-        source_uuid=parsed_trip.uuid,
+        # source_uuid=parsed_trip.uuid,
         idx=parsed_trip.idx,
         number=trip_lines.trip_header.data["trip_number"],
         ops_count=trip_lines.trip_header.data["ops_count"],

@@ -42,9 +42,9 @@ def validate_structured(
     errors_found_detailed = 0
     for vm in vms:
         validate_structured_trip(vm=vm)
-        if vm.errors:
+        if vm.structured.errors:
             errors_found += 1
-            errors_found_detailed += len(vm.errors)
+            errors_found_detailed += len(vm.structured.errors)
             progress.update(
                 task_id,
                 advance=1,
@@ -81,13 +81,13 @@ def validate_structured_store(
         description="Validating structured trips....",
     )
     structured_trips = (
-        STORE.load.structured_trip(store=store, base=base, uuid=x["key"])
+        STORE.load.structured_trip(store=store, base=base, key=x["key"])
         for x in structured_infos
     )
     validation_models = (
         validation_model_from_objects(
             parsed_trip=STORE.load.parsed_trip(
-                store=store, base=base, uuid=x.source_uuid
+                store=store, base=base, key=x.source.parsed_trip
             ),
             structured_trip=x,
             parsed_trip_path="",
@@ -98,7 +98,7 @@ def validate_structured_store(
     for sv in validate_structured(
         vms=validation_models, task_id=task_id, progress=progress
     ):
-        if sv.errors:
+        if sv.structured.errors:
             STORE.save.structured_trip_validation_error(
                 store=store, base=base, validation_model=sv, overwrite=overwrite
             )
@@ -135,7 +135,7 @@ def validate_structured_disk(
     for sv in validate_structured(
         vms=validation_models, task_id=task_id, progress=progress
     ):
-        if sv.errors:
+        if sv.structured.errors:
             file_out = path_out / sv.default_file_name()
             STRUCTURED_VALIDATION_SERIALIZER.save_as_json(
                 path_out=file_out, complex_obj=sv, overwrite=overwrite

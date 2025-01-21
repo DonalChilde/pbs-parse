@@ -69,7 +69,7 @@ def structure_trips_store(
     )
     parsed_trips = (
         KeyedResource[ParsedTrip](
-            resource=STORE.load.parsed_trip(store=store, base=base, uuid=x["key"]),
+            resource=STORE.load.parsed_trip(store=store, base=base, key=x["key"]),
             key=x["key"],
         )
         for x in trip_infos

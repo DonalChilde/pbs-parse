@@ -167,16 +167,16 @@ class StoreManager:
             raise err
         self.manifest["bases"][base]["files"][info["key"]] = info
 
-    def load_resource(self, base: str, uuid: str) -> dict[str, Any]:
+    def load_resource(self, base: str, key: str) -> dict[str, Any]:
         """Load a json object from the store."""
-        file_info = self.get_file_info_by_id(base=base, file_id=uuid)
+        file_info = self.get_file_info_by_id(base=base, file_id=key)
         path_in = self.manifest_directory / file_info["file_path"]
         try:
-            with open(path_in) as file_in:
+            with open(path_in, mode="b") as file_in:
                 value = json.load(file_in)
             return value
         except Exception as e:
-            msg = f"Unable to load json resource. {base=}, {uuid=}, {file_info=!r}, {path_in=!r}"
+            msg = f"Unable to load json resource. {base=}, {key=}, {file_info=!r}, {path_in=!r}"
             logger.exception(msg)
             raise UnableToLoadError(msg) from e
 

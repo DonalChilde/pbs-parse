@@ -44,7 +44,7 @@ class TripLinesParser:
         trip = ParsedTrip(
             source=_source,
             external=deepcopy(trip_lines.external),
-            source_uuid=trip_lines.uuid,
+            # source_uuid=trip_lines.uuid,
             idx=trip_lines.idx,
             parsed_lines=[x.parsed_indexed_string for x in handler.results],
         )

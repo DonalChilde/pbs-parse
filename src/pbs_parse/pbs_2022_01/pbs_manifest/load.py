@@ -26,13 +26,13 @@ from pbs_parse.pbs_2022_01.pbs_manifest.store_manager import StoreManager
 logger = logging.getLogger(__name__)
 
 
-def page_lines(store: StoreManager, base: str, uuid: str) -> PageLines:
+def page_lines(store: StoreManager, base: str, key: str) -> PageLines:
     """page_lines.
 
     Args:
         store (StoreManager): _description_
         base (str): _description_
-        uuid (str): _description_
+        key (str): _description_
 
     Raises:
         UnableToLoadError: _description_
@@ -40,14 +40,14 @@ def page_lines(store: StoreManager, base: str, uuid: str) -> PageLines:
     Returns:
         PageLines: _description_
     """
-    data = store.load_resource(base=base, uuid=uuid)
+    data = store.load_resource(base=base, key=key)
     try:
         value = PAGE_LINES_SERIALIZER.from_simple(data)  # type: ignore
         return value
     except Exception as e:
         msg = (
             f"Tried to make PageLines from json, but there was an error. "
-            f"error={e,} {store=}, {base=}, {uuid=}"
+            f"error={e,} {store=}, {base=}, {key=}"
         )
         logger.exception(msg)
         raise UnableToLoadError(msg) from e
@@ -65,16 +65,16 @@ def all_page_lines(store: StoreManager, base: str) -> Iterator[PageLines]:
     """
     page_infos = store.get_file_info_by_type(base=base, file_type=FileTypes.SPLIT_PAGE)
     for page_info in page_infos:
-        yield page_lines(store=store, base=base, uuid=page_info["key"])
+        yield page_lines(store=store, base=base, key=page_info["key"])
 
 
-def trip_lines(store: StoreManager, base: str, uuid: str) -> TripLines:
+def trip_lines(store: StoreManager, base: str, key: str) -> TripLines:
     """trip_lines.
 
     Args:
         store (StoreManager): _description_
         base (str): _description_
-        uuid (str): _description_
+        key (str): _description_
 
     Raises:
         UnableToLoadError: _description_
@@ -82,14 +82,14 @@ def trip_lines(store: StoreManager, base: str, uuid: str) -> TripLines:
     Returns:
         TripLines: _description_
     """
-    data = store.load_resource(base=base, uuid=uuid)
+    data = store.load_resource(base=base, key=key)
     try:
         value = TRIP_LINES_SERIALIZER.from_simple(data)  # type: ignore
         return value
     except Exception as e:
         msg = (
             f"Tried to make TripLines from json, but there was an error. "
-            f"error={e,} {store=}, {base=}, {uuid=}"
+            f"error={e,} {store=}, {base=}, {key=}"
         )
         logger.exception(msg)
         raise UnableToLoadError(msg) from e
@@ -107,16 +107,16 @@ def all_trip_lines(store: StoreManager, base: str) -> Iterator[TripLines]:
     """
     trip_infos = store.get_file_info_by_type(base=base, file_type=FileTypes.SPLIT_TRIP)
     for page_info in trip_infos:
-        yield trip_lines(store=store, base=base, uuid=page_info["key"])
+        yield trip_lines(store=store, base=base, key=page_info["key"])
 
 
-def parsed_trip(store: StoreManager, base: str, uuid: str) -> ParsedTrip:
+def parsed_trip(store: StoreManager, base: str, key: str) -> ParsedTrip:
     """parsed_trip.
 
     Args:
         store (StoreManager): _description_
         base (str): _description_
-        uuid (str): _description_
+        key (str): _description_
 
     Raises:
         UnableToLoadError: _description_
@@ -124,7 +124,7 @@ def parsed_trip(store: StoreManager, base: str, uuid: str) -> ParsedTrip:
     Returns:
         ParsedTrip: _description_
     """
-    data = store.load_resource(base=base, uuid=uuid)
+    data = store.load_resource(base=base, key=key)
     try:
         logger.info(data)
         value = PARSED_TRIP_SERIALIZER.from_simple(data)  # type: ignore
@@ -132,7 +132,7 @@ def parsed_trip(store: StoreManager, base: str, uuid: str) -> ParsedTrip:
     except Exception as e:
         msg = (
             f"Tried to make ParsedTrip from json, but there was an error. "
-            f"error={e,} {store=}, {base=}, {uuid=}"
+            f"error={e,} {store=}, {base=}, {key=}"
         )
         logger.exception(msg)
         raise UnableToLoadError(msg) from e
@@ -150,16 +150,16 @@ def all_parsed_trips(store: StoreManager, base: str) -> Iterator[ParsedTrip]:
     """
     trip_infos = store.get_file_info_by_type(base=base, file_type=FileTypes.PARSED_TRIP)
     for page_info in trip_infos:
-        yield parsed_trip(store=store, base=base, uuid=page_info["key"])
+        yield parsed_trip(store=store, base=base, key=page_info["key"])
 
 
-def structured_trip(store: StoreManager, base: str, uuid: str) -> StructuredTrip:
+def structured_trip(store: StoreManager, base: str, key: str) -> StructuredTrip:
     """structured_trip.
 
     Args:
         store (StoreManager): _description_
         base (str): _description_
-        uuid (str): _description_
+        key (str): _description_
 
     Raises:
         UnableToLoadError: _description_
@@ -167,14 +167,14 @@ def structured_trip(store: StoreManager, base: str, uuid: str) -> StructuredTrip
     Returns:
         StructuredTrip: _description_
     """
-    data = store.load_resource(base=base, uuid=uuid)
+    data = store.load_resource(base=base, key=key)
     try:
         value = STRUCTURED_TRIP_SERIALIZER.from_simple(data)  # type: ignore
         return value
     except Exception as e:
         msg = (
             f"Tried to make StructuredTrip from json, but there was an error. "
-            f"error={e,} {store=}, {base=}, {uuid=}"
+            f"error={e,} {store=}, {base=}, {key=}"
         )
         logger.exception(msg)
         raise UnableToLoadError(msg) from e
@@ -194,18 +194,18 @@ def all_structured_trips(store: StoreManager, base: str) -> Iterator[StructuredT
         base=base, file_type=FileTypes.STRUCTURED_TRIP
     )
     for page_info in trip_infos:
-        yield structured_trip(store=store, base=base, uuid=page_info["key"])
+        yield structured_trip(store=store, base=base, key=page_info["key"])
 
 
 def structured_trip_validation(
-    store: StoreManager, base: str, uuid: str
+    store: StoreManager, base: str, key: str
 ) -> StructuredValidation:
     """structured_trip_validation.
 
     Args:
         store (StoreManager): _description_
         base (str): _description_
-        uuid (str): _description_
+        key (str): _description_
 
     Raises:
         UnableToLoadError: _description_
@@ -213,26 +213,26 @@ def structured_trip_validation(
     Returns:
         StructuredValidation: _description_
     """
-    data = store.load_resource(base=base, uuid=uuid)
+    data = store.load_resource(base=base, key=key)
     try:
         value = STRUCTURED_VALIDATION_SERIALIZER.from_simple(data)  # type: ignore
         return value
     except Exception as e:
         msg = (
             f"Tried to make StructuredValidation from json, but there was an error. "
-            f"error={e,} {store=}, {base=}, {uuid=}"
+            f"error={e,} {store=}, {base=}, {key=}"
         )
         logger.exception(msg)
         raise UnableToLoadError(msg) from e
 
 
-def expanded_trip(store: StoreManager, base: str, uuid: str) -> ExpandedTrip:
+def expanded_trip(store: StoreManager, base: str, key: str) -> ExpandedTrip:
     """expanded_trip.
 
     Args:
         store (StoreManager): _description_
         base (str): _description_
-        uuid (str): _description_
+        key (str): _description_
 
     Raises:
         UnableToLoadError: _description_
@@ -240,14 +240,14 @@ def expanded_trip(store: StoreManager, base: str, uuid: str) -> ExpandedTrip:
     Returns:
         ExpandedTrip: _description_
     """
-    data = store.load_resource(base=base, uuid=uuid)
+    data = store.load_resource(base=base, key=key)
     try:
         value = EXPANDED_TRIP_SERIALIZER.from_simple(data)  # type: ignore
         return value
     except Exception as e:
         msg = (
             f"Tried to make ExpandedTrip from json, but there was an error. "
-            f"error={e,} {store=}, {base=}, {uuid=}"
+            f"error={e,} {store=}, {base=}, {key=}"
         )
         logger.exception(msg)
         raise UnableToLoadError(msg) from e
@@ -267,18 +267,18 @@ def all_expanded_trips(store: StoreManager, base: str) -> Iterator[ExpandedTrip]
         base=base, file_type=FileTypes.EXPANDED_TRIP
     )
     for page_info in trip_infos:
-        yield expanded_trip(store=store, base=base, uuid=page_info["key"])
+        yield expanded_trip(store=store, base=base, key=page_info["key"])
 
 
 def expanded_trip_validation(
-    store: StoreManager, base: str, uuid: str
+    store: StoreManager, base: str, key: str
 ) -> ExpandedValidation:
     """expanded_trip_validation.
 
     Args:
         store (StoreManager): _description_
         base (str): _description_
-        uuid (str): _description_
+        key (str): _description_
 
     Raises:
         UnableToLoadError: _description_
@@ -286,14 +286,14 @@ def expanded_trip_validation(
     Returns:
         ExpandedValidation: _description_
     """
-    data = store.load_resource(base=base, uuid=uuid)
+    data = store.load_resource(base=base, key=key)
     try:
         value = EXPANDED_VALIDATION_SERIALIZER.from_simple(data)  # type: ignore
         return value
     except Exception as e:
         msg = (
             f"Tried to make ExpandedValidation from json, but there was an error. "
-            f"error={e,} {store=}, {base=}, {uuid=}"
+            f"error={e,} {store=}, {base=}, {key=}"
         )
         logger.exception(msg)
         raise UnableToLoadError(msg) from e

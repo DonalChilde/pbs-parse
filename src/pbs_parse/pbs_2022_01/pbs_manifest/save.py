@@ -58,7 +58,7 @@ def trip_lines(
             "Store is opened in read-only mode. No changes allowed."
         )
     trip_info = FileInfo(
-        key=trip.uuid,
+        key=trip.default_file_name(),
         type=FileTypes.SPLIT_TRIP,
         file_path=f"{base}/trip_lines/{trip.default_file_name()}",
     )
@@ -79,7 +79,7 @@ def parsed_trip(
             "Store is opened in read-only mode. No changes allowed."
         )
     trip_info = FileInfo(
-        key=parsed.uuid,
+        key=parsed.default_file_name(),
         type=FileTypes.PARSED_TRIP,
         file_path=f"{base}/parsed/{parsed.default_file_name()}",
     )
@@ -100,7 +100,7 @@ def parsed_prior_month_trip(
             "Store is opened in read-only mode. No changes allowed."
         )
     trip_info = FileInfo(
-        key=parsed.uuid,
+        key=parsed.default_file_name(),
         type=FileTypes.PARSED_PRIOR_MONTH_TRIP,
         file_path=f"{base}/parsed_prior/{parsed.default_file_name()}",
     )
@@ -121,7 +121,7 @@ def structured_trip(
             "Store is opened in read-only mode. No changes allowed."
         )
     trip_info = FileInfo(
-        key=structured.uuid,
+        key=structured.default_file_name(),
         type=FileTypes.STRUCTURED_TRIP,
         file_path=f"{base}/structured/{structured.default_file_name()}",
     )
@@ -145,7 +145,7 @@ def structured_trip_validation_error(
             "Store is opened in read-only mode. No changes allowed."
         )
     trip_info = FileInfo(
-        key=validation_model.uuid,
+        key=validation_model.default_file_name(),
         type=FileTypes.STRUCTURED_TRIP_VALIDATION,
         file_path=f"{base}/structured/errors/{validation_model.default_file_name()}",
     )
@@ -166,7 +166,7 @@ def expanded_trip(
             "Store is opened in read-only mode. No changes allowed."
         )
     trip_info = FileInfo(
-        key=expanded.uuid,
+        key=expanded.default_file_name(),
         type=FileTypes.EXPANDED_TRIP,
         file_path=f"{base}/expanded/{expanded.default_file_name()}",
     )
@@ -190,7 +190,7 @@ def expanded_trip_validation_error(
             "Store is opened in read-only mode. No changes allowed."
         )
     trip_info = FileInfo(
-        key=validation_model.uuid,
+        key=validation_model.default_file_name(),
         type=FileTypes.EXPANDED_TRIP_VALIDATION,
         file_path=f"{base}/expanded/errors/{validation_model.default_file_name()}",
     )

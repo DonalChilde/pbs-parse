@@ -117,9 +117,9 @@ class ExpandedTripTD(TypedDict):
     """A trip."""
 
     source: ExpandedTripSourceTD
-    source_uuid: str
+    # source_uuid: str
     source_idx: str
-    uuid: str
+    # uuid: str
     trip_number: str
     base_equipment: BaseEquipment
     positions: list[Position]
@@ -138,3 +138,4 @@ class ExpandedTripTD(TypedDict):
     soft_time: str
     tafb: str
     dutyperiods: list[DutyPeriod]
+    errors: list[str]

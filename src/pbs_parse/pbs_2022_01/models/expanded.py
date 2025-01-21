@@ -1,9 +1,10 @@
 """Data model for a `Trip`."""
 
+from copy import deepcopy
 from dataclasses import dataclass, field
 from datetime import datetime, timedelta
 from pathlib import Path
-from uuid import NAMESPACE_DNS, UUID, uuid5
+from uuid import NAMESPACE_DNS, uuid5
 from zoneinfo import ZoneInfo
 
 from pfmsoft.simple_serializer import DataclassSerializer
@@ -345,9 +346,7 @@ class ExpandedTrip:
     """A trip."""
 
     source: ExpandedTripSource
-    source_uuid: str
     source_idx: str
-    uuid: str = ""
     trip_number: str
     base_equipment: BaseEquipment
     special_qual: bool
@@ -366,24 +365,7 @@ class ExpandedTrip:
     dutyperiods: list[DutyPeriod] = field(default_factory=list)
     positions: list[Position] = field(default_factory=list)
     operations: list[Operation] = field(default_factory=list)
-
-    def __post_init__(self):
-        """Init the uuid if missing, validate if not missing."""
-        current_uuid_str = str(self.make_uuid())
-        if self.uuid == "":
-            self.uuid = current_uuid_str
-            return
-        if self.uuid != current_uuid_str:
-            raise ValueError(
-                f"Supplied uuid: {self.uuid} does not match calculated uuid: {current_uuid_str}"
-            )
-
-    def make_uuid(self) -> UUID:
-        """Make a uuid from a namespace and the source uuid string, start date, and trip number."""
-        return uuid5(
-            namespace=TRIP_NS,
-            name=f"{self.source_uuid}{self.start_utc.isoformat()}{self.trip_number}",
-        )
+    errors: list[str] = field(default_factory=list)
 
     def default_file_name(self) -> str:
         """Assemble a file name from trip data."""
@@ -404,9 +386,9 @@ class ExpandedTrip:
         """Turn simple object into Trip."""
         result = ExpandedTrip(
             source=ExpandedTripSource(**simple_obj["source"]),
-            source_uuid=simple_obj["source_uuid"],
+            # source_uuid=simple_obj["source_uuid"],
             source_idx=simple_obj["source_idx"],
-            uuid=simple_obj["uuid"],
+            # uuid=simple_obj["uuid"],
             trip_number=simple_obj["trip_number"],
             base_equipment=BaseEquipment.from_simple(simple_obj["base_equipment"]),
             positions=[Position(name=x["name"]) for x in simple_obj["positions"]],
@@ -425,6 +407,7 @@ class ExpandedTrip:
             soft_time=isoformat_to_timedelta(simple_obj["soft_time"]),
             tafb=isoformat_to_timedelta(simple_obj["tafb"]),
             dutyperiods=[DutyPeriod.from_simple(x) for x in simple_obj["dutyperiods"]],
+            errors=deepcopy(simple_obj["errors"]),
         )
         return result
 
@@ -432,9 +415,7 @@ class ExpandedTrip:
         """Trip to simple object."""
         result = TD.ExpandedTripTD(
             source=self.source.to_simple(),
-            source_uuid=self.source_uuid,
             source_idx=self.source_idx,
-            uuid=self.uuid,
             trip_number=self.trip_number,
             base_equipment=self.base_equipment.to_simple(),
             positions=[TD.Position(name=x.name) for x in self.positions],
@@ -453,6 +434,7 @@ class ExpandedTrip:
             soft_time=timedelta_to_isoformat(self.soft_time),
             tafb=timedelta_to_isoformat(self.tafb),
             dutyperiods=[x.to_simple() for x in self.dutyperiods],
+            errors=deepcopy(self.errors),
         )
         return result
 

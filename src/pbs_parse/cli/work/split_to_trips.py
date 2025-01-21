@@ -64,7 +64,7 @@ def split_to_trips_store(
     )
     pages = (
         KeyedResource[PageLines](
-            resource=STORE.load.page_lines(store=store, base=base, uuid=x["key"]),
+            resource=STORE.load.page_lines(store=store, base=base, key=x["key"]),
             key=x["key"],
         )
         for x in page_infos

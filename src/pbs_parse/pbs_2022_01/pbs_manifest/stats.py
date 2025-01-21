@@ -114,11 +114,11 @@ def make_structured_trip_errors(
     )
     for info in structured_error_infos:
         validation = load.structured_trip_validation(
-            store=store, base=base, uuid=info["key"]
+            store=store, base=base, key=info["key"]
         )
         s_trip = validation.structured
         stats.append(f"{s_trip.number} {s_trip.idx}")
-        for error in validation.errors:
+        for error in validation.structured.errors:
             stats.append(f"{indent}{error}")
     return stats
 
@@ -142,12 +142,12 @@ def make_expanded_trip_errors(
     )
     for info in expanded_error_infos:
         validation = load.expanded_trip_validation(
-            store=store, base=base, uuid=info["key"]
+            store=store, base=base, key=info["key"]
         )
         e_trip = validation.expanded
         stats.append(
             f"{e_trip.trip_number} {e_trip.start_lcl.date()} {e_trip.source_idx}"
         )
-        for error in validation.errors:
+        for error in validation.expanded.errors:
             stats.append(f"{indent}{error}")
     return stats

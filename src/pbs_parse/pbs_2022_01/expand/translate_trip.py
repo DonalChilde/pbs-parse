@@ -18,11 +18,10 @@ def translate_trip(
 ) -> tuple[ET.ExpandedTrip, State]:
     """Translate a StructuredTrip that starts on a particular date."""
     logger.info(
-        "Translating trip %s - %s with start date %s uuid: %s",
+        "Translating trip %s - %s with start date %s",
         s_trip.number,
         s_trip.page_footer.base,
         start_date.isoformat(),
-        s_trip.uuid,
     )
     # base_airport = model.get_airport_code_from_iata(s_trip.page_footer.base)
     first_report = time.fromisoformat(s_trip.dutyperiods[0].report_time.lcl)
@@ -61,7 +60,7 @@ def translate_trip(
     )
     e_trip = ET.ExpandedTrip(
         source=source,
-        source_uuid=s_trip.uuid,
+        # source_uuid=s_trip.uuid,
         source_idx=s_trip.idx,
         trip_number=s_trip.number,
         base_equipment=base_equipment,

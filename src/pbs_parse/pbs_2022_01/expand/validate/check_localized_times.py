@@ -21,7 +21,7 @@ def check_localized_times(vm: ExpandedValidation) -> None:
             hb_tz_name=vm.expanded.start_station.tz_name,
         )
         if dp_errors:
-            vm.errors.extend(dp_errors)
+            vm.expanded.errors.extend(dp_errors)
         for flt_idx, flights in enumerate(
             zip(dutyperiods[0].flights, dutyperiods[1].flights, strict=True), start=1
         ):
@@ -32,9 +32,9 @@ def check_localized_times(vm: ExpandedValidation) -> None:
                 dp_idx=dp_idx,
                 flt_idx=flt_idx,
             )
-            vm.errors.extend(flt_errors)
+            vm.expanded.errors.extend(flt_errors)
     trip_errors = trip_report_release(e_trip=vm.expanded, s_trip=vm.structured)
-    vm.errors.extend(trip_errors)
+    vm.expanded.errors.extend(trip_errors)
 
 
 def dutyperiod_times(

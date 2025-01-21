@@ -3,7 +3,7 @@
 from dataclasses import dataclass, field
 from pathlib import Path
 from typing import TypedDict
-from uuid import NAMESPACE_DNS, UUID, uuid5
+from uuid import NAMESPACE_DNS, uuid5
 
 from pfmsoft.indexed_string.model import IndexedStringTD
 from pfmsoft.simple_serializer import DataclassSerializer
@@ -28,8 +28,8 @@ class ParsedTripTD(TypedDict):
 
     source: ParsedTripSourceTD
     external: ExternalDataTD
-    uuid: str
-    source_uuid: str
+    # uuid: str
+    # source_uuid: str
     idx: str
     parsed_lines: list[model.ParsedIndexedStringTD]
 
@@ -66,25 +66,25 @@ class ParsedTrip:
 
     source: ParsedTripSource
     external: ExternalData
-    source_uuid: str
+    # source_uuid: str
     idx: str
-    uuid: str = ""
+    # uuid: str = ""
     parsed_lines: list[model.ParsedIndexedString] = field(default_factory=list)
 
-    def __post_init__(self):
-        """Init the uuid if missing, validate if not missing."""
-        current_uuid_str = str(self.make_uuid())
-        if self.uuid == "":
-            self.uuid = current_uuid_str
-            return
-        if self.uuid != current_uuid_str:
-            raise ValueError(
-                f"Supplied uuid: {self.uuid} does not match calculated uuid: {current_uuid_str}"
-            )
+    # def __post_init__(self):
+    #     """Init the uuid if missing, validate if not missing."""
+    #     current_uuid_str = str(self.make_uuid())
+    #     if self.uuid == "":
+    #         self.uuid = current_uuid_str
+    #         return
+    #     if self.uuid != current_uuid_str:
+    #         raise ValueError(
+    #             f"Supplied uuid: {self.uuid} does not match calculated uuid: {current_uuid_str}"
+    #         )
 
-    def make_uuid(self) -> UUID:
-        """Make a uuid from a namespace and the source uuid as a string."""
-        return uuid5(namespace=PARSED_TRIP_NS, name=self.source_uuid)
+    # def make_uuid(self) -> UUID:
+    #     """Make a uuid from a namespace and the source uuid as a string."""
+    #     return uuid5(namespace=PARSED_TRIP_NS, name=self.source_uuid)
 
     @staticmethod
     def from_simple(simple_obj: ParsedTripTD) -> "ParsedTrip":
@@ -92,8 +92,8 @@ class ParsedTrip:
         result = ParsedTrip(
             source=ParsedTripSource.from_simple(simple_obj["source"]),
             external=ExternalData.from_simple(simple_obj["external"]),
-            uuid=simple_obj["uuid"],
-            source_uuid=simple_obj["source_uuid"],
+            # uuid=simple_obj["uuid"],
+            # source_uuid=simple_obj["source_uuid"],
             idx=simple_obj["idx"],
             parsed_lines=[
                 model.ParsedIndexedString.from_simple(x)
@@ -107,8 +107,8 @@ class ParsedTrip:
         return ParsedTripTD(
             source=self.source.to_simple(),
             external=self.external.to_simple(),
-            uuid=self.uuid,
-            source_uuid=self.source_uuid,
+            # uuid=self.uuid,
+            # source_uuid=self.source_uuid,
             idx=self.idx,
             parsed_lines=[
                 model.ParsedIndexedStringTD(
@@ -160,9 +160,10 @@ class ParsedTrip:
         """Make a str rep of ParsedTrip."""
         return (
             "ParsedTrip:\n"
-            f"{self.uuid=}\n"
+            # f"{self.uuid=}\n"
             f"{self.idx=}\n"
-            f"{self.source_uuid=}\n"
+            f"{self.source=}\n"
+            # f"{self.source_uuid=}\n"
             "\nText Input:\n"
             f"{self.original_text()}\n"
             "Parsed Data:\n"

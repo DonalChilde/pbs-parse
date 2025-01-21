@@ -6,9 +6,7 @@
   "parsed_trip": "parsed-trip_LAX_2024-11-01_00003-02.json",
   "structured_trip": "structured-trip_LAX_2024-11-01_00003-02.json"
  },
- "source_uuid": "b3ccd89c-9983-54d7-a985-a5f0ec994e86",
  "source_idx": "00003-02",
- "uuid": "98150fcd-87df-50a5-aff9-2389d69e540d",
  "trip_number": "8587",
  "base_equipment": {
   "base": {
@@ -318,5 +316,6 @@
    "soft_time": "PT1H42M",
    "layover": null
   }
- ]
+ ],
+ "errors": []
 }

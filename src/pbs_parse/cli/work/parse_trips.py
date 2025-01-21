@@ -71,7 +71,7 @@ def parse_trips_store(
     )
     trip_lines = (
         KeyedResource[TripLines](
-            resource=STORE.load.trip_lines(store=store, base=base, uuid=x["key"]),
+            resource=STORE.load.trip_lines(store=store, base=base, key=x["key"]),
             key=x["key"],
         )
         for x in trip_infos

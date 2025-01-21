@@ -1,5 +1,4 @@
 {
- "uuid": "704b5d5f-80eb-5769-891e-137ffad90a72",
  "expanded": {
   "source": {
    "txt_file": "PBS_LAX_November_2024_20241010125833_partial.txt",
@@ -8,9 +7,7 @@
    "parsed_trip": "parsed-trip_LAX_2024-11-01_00002-05.json",
    "structured_trip": "structured-trip_LAX_2024-11-01_00002-05.json"
   },
-  "source_uuid": "62496f56-c41a-5b29-8575-678c13d5a353",
   "source_idx": "00002-05",
-  "uuid": "d083098c-f8b2-51b1-9230-d3583b8318e5",
   "trip_number": "770",
   "base_equipment": {
    "base": {
@@ -185,6 +182,10 @@
     "soft_time": "PT0S",
     "layover": null
    }
+  ],
+  "errors": [
+   "Expanded 2024-11-03T04:30:00-08:00 time 04:30:00 does not match Structured 0530 for dutyperiod-1, field `hbt release`, tz_name=America/Los_Angeles, utc=2024-11-03 12:30:00+00:00 ",
+   "Expanded 2024-11-03T04:00:00-08:00 time 04:00:00 does not match Structured 0500 for dutyperiod-1 flight-1 field `hbt arrival`"
   ]
  },
  "parsed": {
@@ -198,8 +199,6 @@
    "effective_from": "2024-11-01",
    "effective_to": "2024-12-01"
   },
-  "uuid": "7292b6f7-5139-5484-83af-7cfced7035df",
-  "source_uuid": "baec7f22-8bc4-5a8f-99be-c8625d84456b",
   "idx": "00002-05",
   "parsed_lines": [
    {
@@ -476,8 +475,6 @@
    "trip_lines": "trip-lines_LAX_2024-11-01_00002-05.json",
    "parsed_trip": "parsed-trip_LAX_2024-11-01_00002-05.json"
   },
-  "uuid": "62496f56-c41a-5b29-8575-678c13d5a353",
-  "source_uuid": "7292b6f7-5139-5484-83af-7cfced7035df",
   "idx": "00002-05",
   "number": "770",
   "ops_count": "2",
@@ -652,13 +649,10 @@
    "\u2212\u2212",
    "\u2212\u2212",
    "\u2212\u2212"
-  ]
+  ],
+  "errors": []
  },
  "parsed_path": "/home/chad/projects/tmp/test_resources/nov2024/LAX/parsed/parsed-trip_LAX_2024-11-01_00002-05.json",
  "structured_path": "/home/chad/projects/tmp/test_resources/nov2024/LAX/expanded/expanded-trip_LAX_777_2024-11-02_770_00002-05.json",
- "expanded_path": "/home/chad/projects/tmp/test_resources/nov2024/LAX/expanded/expanded-trip_LAX_777_2024-11-02_770_00002-05.json",
- "errors": [
-  "Expanded 2024-11-03T04:30:00-08:00 time 04:30:00 does not match Structured 0530 for dutyperiod-1, field `hbt release`, tz_name=America/Los_Angeles, utc=2024-11-03 12:30:00+00:00 ",
-  "Expanded 2024-11-03T04:00:00-08:00 time 04:00:00 does not match Structured 0500 for dutyperiod-1 flight-1 field `hbt arrival`"
- ]
+ "expanded_path": "/home/chad/projects/tmp/test_resources/nov2024/LAX/expanded/expanded-trip_LAX_777_2024-11-02_770_00002-05.json"
 }

@@ -12,4 +12,4 @@ def calendar_starts_count(vm: StructuredValidation) -> None:
             f"\tctx.structured_trip.calendar -> {vm.structured.calendar!r}\n"
             f"\tctx.external_start_dates -> {vm.valid_start_dates}\n"
         )
-        vm.errors.append(msg)
+        vm.structured.errors.append(msg)

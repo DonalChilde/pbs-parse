@@ -5,8 +5,6 @@
   "trip_lines": "trip-lines_LAX_2024-11-01_00003-03.json",
   "parsed_trip": "parsed-trip_LAX_2024-11-01_00003-03.json"
  },
- "uuid": "592a6d0d-7959-5ecc-8d20-261497dd48ae",
- "source_uuid": "55140173-4cfe-522d-add9-43d5d9d1fdd0",
  "idx": "00003-03",
  "number": "8588",
  "ops_count": "1",
@@ -265,5 +263,6 @@
   "\u2212\u2212",
   "\u2212\u2212",
   "\u2212\u2212"
- ]
+ ],
+ "errors": []
 }

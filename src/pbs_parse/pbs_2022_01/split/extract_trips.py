@@ -90,7 +90,7 @@ def parse_trip_lines(page: PageLines, source: str) -> Iterator[TripLines]:
         trip = TripLines(
             source=_source,
             external=deepcopy(page.external),
-            source_uuid=page.uuid,
+            # source_uuid=page.uuid,
             idx=f"{page_number}-{idx:02}",
             lines=[page.lines[0], page.lines[1], *trip_lines, page.lines[-1]],
         )

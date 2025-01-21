@@ -38,9 +38,9 @@ def validate_expanded(
     errors_found_detailed = 0
     for vm in validation_models:
         validate_expanded_trip(vm=vm)
-        if vm.errors:
+        if vm.expanded.errors:
             errors_found += 1
-            errors_found_detailed += len(vm.errors)
+            errors_found_detailed += len(vm.expanded.errors)
             progress.update(
                 task_id,
                 advance=1,
@@ -77,14 +77,14 @@ def validate_expanded_store(
         description="Validating expanded trips....",
     )
     expanded_trips = (
-        STORE.load.expanded_trip(store=store, base=base, uuid=x["key"])
+        STORE.load.expanded_trip(store=store, base=base, key=x["key"])
         for x in expanded_infos
     )
     validation_models = (
         ExpandedValidation(
             expanded=x,
             structured=STORE.load.structured_trip(
-                store=store, base=base, uuid=x.source_uuid
+                store=store, base=base, key=x.source.structured_trip
             ),
         )
         for x in expanded_trips
@@ -92,9 +92,9 @@ def validate_expanded_store(
     for vm in validate_expanded(
         validation_models=validation_models, task_id=task_id, progress=progress
     ):
-        if vm.errors:
+        if vm.expanded.errors:
             vm.parsed = STORE.load.parsed_trip(
-                store=store, base=base, uuid=vm.structured.source_uuid
+                store=store, base=base, key=vm.expanded.source.parsed_trip
             )
             STORE.save.expanded_trip_validation_error(
                 store=store, base=base, validation_model=vm, overwrite=overwrite
@@ -134,7 +134,7 @@ def validate_expanded_disk(
     for vm in validate_expanded(
         validation_models=validation_models, task_id=task_id, progress=progress
     ):
-        if vm.errors:
+        if vm.expanded.errors:
             parsed = load_parsed(parsed_dir=parsed_dir, s_trip=vm.structured)
             vm.parsed = parsed.resource
             vm.parsed_path = str(parsed.file_path)

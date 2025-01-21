@@ -16,4 +16,4 @@ def check_tafb(vm: ExpandedValidation) -> None:
     hours, minutes = structured_tafb.split(".", maxsplit=1)
     if expanded_tafb != timedelta(hours=int(hours), minutes=int(minutes)):
         msg = f"Expanded TAFB does not match structured TAFB for trip. {expanded_tafb=!s} {structured_tafb=!r}"
-        vm.errors.append(msg)
+        vm.expanded.errors.append(msg)

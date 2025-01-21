@@ -1,9 +1,9 @@
 """FILE: expanded_validation.py."""
 
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 from pathlib import Path
 from typing import TypedDict
-from uuid import NAMESPACE_DNS, UUID, uuid5
+from uuid import NAMESPACE_DNS, uuid5
 
 from pfmsoft.simple_serializer import DataclassSerializer
 
@@ -21,14 +21,12 @@ EXPANDED_VALIDATION_NS = uuid5(
 class ExpandedValidationTD(TypedDict):
     """A simple container for all the information required to validate a structured trip."""
 
-    uuid: str
     expanded: ExpandedTripTD
     parsed: ParsedTripTD | None
     structured: StructuredTripTD
     parsed_path: str
     structured_path: str
     expanded_path: str
-    errors: list[str]
 
 
 @dataclass(slots=True)
@@ -38,22 +36,9 @@ class ExpandedValidation:
     expanded: ExpandedTrip
     structured: StructuredTrip
     parsed: ParsedTrip | None = None
-    uuid: str = ""
     expanded_path: str = ""
     structured_path: str = ""
     parsed_path: str = ""
-    errors: list[str] = field(default_factory=list)
-
-    def __post_init__(self):
-        """Init the uuid if missing, validate if not missing."""
-        current_uuid_str = str(self.make_uuid())
-        if self.uuid == "":
-            self.uuid = current_uuid_str
-            return
-        if self.uuid != current_uuid_str:
-            raise ValueError(
-                f"Supplied uuid: {self.uuid} does not match calculated uuid: {current_uuid_str}"
-            )
 
     def __str__(self) -> str:
         """Custom str output."""
@@ -62,17 +47,17 @@ class ExpandedValidation:
             f"{self.parsed_path=}\n"
             f"{self.structured_path=}\n"
             f"{self.expanded_path=}\n"
-            f"{self.uuid=}\n"
-            f"\nErrors:\n{"\n".join(self.errors)}\n"
+            # f"{self.uuid=}\n"
+            f"\nErrors:\n{"\n".join(self.expanded.errors)}\n"
             f"\n{self.parsed}\n"
             f"\nStructured:\n{self.structured}\n"
             f"\nExpanded:\n{self.expanded}\n"
             "\n"
         )
 
-    def make_uuid(self) -> UUID:
-        """Make a uuid from a namespace and the expanded uuid."""
-        return uuid5(namespace=EXPANDED_VALIDATION_NS, name=self.expanded.uuid)
+    # def make_uuid(self) -> UUID:
+    #     """Make a uuid from a namespace and the expanded uuid."""
+    #     return uuid5(namespace=EXPANDED_VALIDATION_NS, name=self.expanded.uuid)
 
     def default_file_name(self) -> str:
         """Make a default file name."""
@@ -86,14 +71,14 @@ class ExpandedValidation:
         else:
             parsed = self.parsed
         simple = ExpandedValidationTD(
-            uuid=self.uuid,
+            # uuid=self.uuid,
             expanded=EXPANDED_TRIP_SERIALIZER.to_simple(self.expanded),
             parsed=parsed,
             structured=STRUCTURED_TRIP_SERIALIZER.to_simple(self.structured),
             parsed_path=self.parsed_path,
             structured_path=self.structured_path,
             expanded_path=self.expanded_path,
-            errors=self.errors,
+            # errors=self.errors,
         )
         return simple
 
@@ -115,7 +100,7 @@ class ExpandedValidation:
             expanded_path=simple_obj["expanded_path"],
             parsed_path=simple_obj["parsed_path"],
             structured_path=simple_obj["structured_path"],
-            errors=simple_obj["errors"],
+            # errors=simple_obj["errors"],
         )
         return result
 
