@@ -5,12 +5,12 @@ from importlib import resources
 from pathlib import Path
 
 from pbs_parse.pbs_2022_01.models.parsed_trip import PARSED_TRIP_SERIALIZER
+from tests.resources.eff_2024_11_01_2024_12_01.LAX import PARSED_ANCHOR
 from tests.resources.models.file_system_resource import FileResource
-from tests.resources.parsed_trips import PARSED_TRIPS_ANCHOR
 
 SINGLE_FILE_TEST = FileResource(
-    anchor=PARSED_TRIPS_ANCHOR,
-    pathname=f"2024-11-01_2024-12-01/parsed-trip_00001-04_9726d2fb-4892-5e06-b43b-360c3f347874.json",
+    anchor=PARSED_ANCHOR,
+    pathname=f"parsed-trip_LAX_2024-11-01_00001-01.json",
 )
 
 

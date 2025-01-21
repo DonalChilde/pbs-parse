@@ -6,16 +6,14 @@ from pathlib import Path
 from typer.testing import CliRunner
 
 from pbs_parse.cli.main_typer import app
+from tests.resources.eff_2024_11_01_2024_12_01.LAX import PARSED_ANCHOR
 from tests.resources.models.file_system_resource import FileResource
-from tests.resources.parsed_trips import PARSED_TRIPS_ANCHOR
 
 SINGLE_FILE_TEST = FileResource(
-    anchor=PARSED_TRIPS_ANCHOR,
-    pathname=f"2024-11-01_2024-12-01/parsed-trip_00001-01_dc7bc881-4c37-537b-a7bf-fe7ee7971ad4.json",
+    anchor=PARSED_ANCHOR,
+    pathname=f"parsed-trip_LAX_2024-11-01_00001-01.json",
 )
-DIRECTORY_TEST = FileResource(
-    anchor=PARSED_TRIPS_ANCHOR, pathname=f"2024-11-01_2024-12-01"
-)
+DIRECTORY_TEST = FileResource(anchor=PARSED_ANCHOR, pathname="")
 
 
 def test_structure_trips_file(runner: CliRunner, test_output_dir: Path):  # noqa: D103
@@ -28,8 +26,6 @@ def test_structure_trips_file(runner: CliRunner, test_output_dir: Path):  # noqa
                 "structure",
                 str(input_path),
                 str(path_out),
-                "2024-11-01",
-                "2024-12-01",
             ],
         )
         if result.stderr_bytes is not None:
@@ -50,8 +46,6 @@ def test_structure_trips_dir(runner: CliRunner, test_output_dir: Path):  # noqa:
                 "structure",
                 str(input_path),
                 str(path_out),
-                "2024-11-01",
-                "2024-12-01",
             ],
         )
         if result.stderr_bytes is not None:

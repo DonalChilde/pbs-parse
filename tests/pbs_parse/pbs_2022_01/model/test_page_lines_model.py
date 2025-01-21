@@ -5,12 +5,12 @@ from importlib import resources
 from pathlib import Path
 
 from pbs_parse.pbs_2022_01.models.page_lines import PAGE_LINES_SERIALIZER
+from tests.resources.eff_2024_11_01_2024_12_01.LAX import PAGES_ANCHOR
 from tests.resources.models.file_system_resource import FileResource
-from tests.resources.page_lines import PAGE_LINES_ANCHOR
 
 SINGLE_FILE_TEST = FileResource(
-    anchor=PAGE_LINES_ANCHOR,
-    pathname=f"2024-11-01_2024-12-01/page-lines_00004-00_a9e3382a-1205-50a5-bfe2-da849fe82e61.json",
+    anchor=PAGES_ANCHOR,
+    pathname=f"page-lines_LAX_2024-11-01_00001-00.json",
 )
 
 

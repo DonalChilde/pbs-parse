@@ -6,16 +6,14 @@ from pathlib import Path
 from typer.testing import CliRunner
 
 from pbs_parse.cli.main_typer import app
+from tests.resources.eff_2024_11_01_2024_12_01.LAX import TRIPS_ANCHOR
 from tests.resources.models.file_system_resource import FileResource
-from tests.resources.trip_lines import TRIP_LINES_ANCHOR
 
 SINGLE_FILE_TEST = FileResource(
-    anchor=TRIP_LINES_ANCHOR,
-    pathname=f"2024-11-01_2024-12-01/trip-lines_00001-01_2565ba54-18cd-53d1-a4d1-6155478cb42e.json",
+    anchor=TRIPS_ANCHOR,
+    pathname=f"trip-lines_LAX_2024-11-01_00001-01.json",
 )
-DIRECTORY_TEST = FileResource(
-    anchor=TRIP_LINES_ANCHOR, pathname=f"2024-11-01_2024-12-01"
-)
+DIRECTORY_TEST = FileResource(anchor=TRIPS_ANCHOR, pathname=f"")
 
 
 def test_parse_trips_file(runner: CliRunner, test_output_dir: Path):  # noqa: D103
