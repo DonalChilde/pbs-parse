@@ -9,7 +9,7 @@ class Position(TypedDict):
     name: str
 
 
-class AirportCode(TypedDict):
+class AirportInfo(TypedDict):
     """Airport/city identifiers."""
 
     iata: str
@@ -20,8 +20,8 @@ class AirportCode(TypedDict):
 class BaseEquipment(TypedDict):
     """Base and equipment in the bidding context."""
 
-    base: AirportCode
-    satellite_base: AirportCode | None
+    base: AirportInfo
+    satellite_base: AirportInfo | None
     equipment: str
 
 
@@ -36,11 +36,11 @@ class Flight(TypedDict):
 
     eq_code: str
     number: str
-    departure_station: AirportCode
+    departure_station: AirportInfo
     departure_utc: str
     departure_lcl: str
     departure_hbt: str
-    arrival_station: AirportCode
+    arrival_station: AirportInfo
     arrival_utc: str
     arrival_lcl: str
     arrival_hbt: str
@@ -72,7 +72,7 @@ class Hotel(TypedDict):
 class Layover(TypedDict):
     """A Layover."""
 
-    layover_station: AirportCode
+    layover_station: AirportInfo
     start_utc: str
     start_lcl: str
     start_hbt: str
@@ -86,11 +86,11 @@ class Layover(TypedDict):
 class DutyPeriod(TypedDict):
     """A dutyperiod."""
 
-    report_station: AirportCode
+    report_station: AirportInfo
     report_utc: str
     report_lcl: str
     report_hbt: str
-    release_station: AirportCode
+    release_station: AirportInfo
     release_utc: str
     release_lcl: str
     release_hbt: str
@@ -110,7 +110,6 @@ class ExpandedTripSourceTD(TypedDict):
     page_lines: str
     trip_lines: str
     parsed_trip: str
-    structured_trip: str
 
 
 class ExpandedTripTD(TypedDict):
@@ -118,18 +117,18 @@ class ExpandedTripTD(TypedDict):
 
     source: ExpandedTripSourceTD
     # source_uuid: str
-    source_idx: str
+    # source_idx: str
     # uuid: str
     trip_number: str
     base_equipment: BaseEquipment
     positions: list[Position]
     operations: list[Operation]
     special_qual: bool
-    start_station: AirportCode
+    start_station: AirportInfo
     start_utc: str
     start_lcl: str
     start_hbt: str
-    end_station: AirportCode
+    end_station: AirportInfo
     end_utc: str
     end_lcl: str
     end_hbt: str

@@ -8,6 +8,7 @@ from rich.progress import Progress, TaskID
 
 import pbs_parse.pbs_2022_01.pbs_manifest as STORE
 from pbs_parse.cli.work.common import KeyedResource
+from pbs_parse.common.is_prior_month import is_prior_month
 from pbs_parse.pbs_2022_01.models import manifest
 from pbs_parse.pbs_2022_01.models.parsed_trip import ParsedTrip, ParsedTripSaver
 from pbs_parse.pbs_2022_01.models.trip_lines import TripLines
@@ -124,12 +125,3 @@ def parse_trips_disk(
             prior_saver(parsed_trip=parsed_trip, overwrite=overwrite)
         else:
             saver(parsed_trip=parsed_trip, overwrite=overwrite)
-
-
-def is_prior_month(parsed_trip: ParsedTrip) -> bool:
-    """Check to see if the trip is a `prior month` trip."""
-    for line in parsed_trip.parsed_lines:
-        if "trip_header" == line.id:
-            if "prior" not in line.indexed_string.txt:
-                return False
-    return True

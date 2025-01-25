@@ -1,0 +1,184 @@
+{
+ "source": {
+  "txt_file": "PBS_LAX_November_2024_20241010125833_partial.txt",
+  "page_lines": "page-lines_LAX_2024-11-01_00002-00.json",
+  "trip_lines": "trip-lines_LAX_2024-11-01_00002-04.json",
+  "parsed_trip": "parsed-trip_LAX_2024-11-01_00002-04.json"
+ },
+ "trip_number": "764",
+ "base_equipment": {
+  "base": {
+   "iata": "LAX",
+   "icao": "KLAX",
+   "tz_name": "America/Los_Angeles"
+  },
+  "satellite_base": null,
+  "equipment": "777"
+ },
+ "positions": [
+  {
+   "name": "CA"
+  },
+  {
+   "name": "FO"
+  }
+ ],
+ "operations": [],
+ "special_qual": false,
+ "start_station": {
+  "iata": "LAX",
+  "icao": "KLAX",
+  "tz_name": "America/Los_Angeles"
+ },
+ "start_utc": "2024-11-08T05:40:00+00:00",
+ "start_lcl": "2024-11-07T21:40:00-08:00",
+ "start_hbt": "2024-11-07T21:40:00-08:00",
+ "end_station": {
+  "iata": "LAX",
+  "icao": "KLAX",
+  "tz_name": "America/Los_Angeles"
+ },
+ "end_utc": "2024-11-10T14:35:00+00:00",
+ "end_lcl": "2024-11-10T06:35:00-08:00",
+ "end_hbt": "2024-11-10T06:35:00-08:00",
+ "flight_time": "P1DT5H10M",
+ "operating_time": "P1DT5H10M",
+ "soft_time": "PT0S",
+ "tafb": "P2DT8H55M",
+ "dutyperiods": [
+  {
+   "report_station": {
+    "iata": "LAX",
+    "icao": "KLAX",
+    "tz_name": "America/Los_Angeles"
+   },
+   "report_utc": "2024-11-08T05:40:00+00:00",
+   "report_lcl": "2024-11-07T21:40:00-08:00",
+   "report_hbt": "2024-11-07T21:40:00-08:00",
+   "release_station": {
+    "iata": "SYD",
+    "icao": "YSSY",
+    "tz_name": "Australia/Sydney"
+   },
+   "release_utc": "2024-11-08T22:30:00+00:00",
+   "release_lcl": "2024-11-09T09:30:00+11:00",
+   "release_hbt": "2024-11-08T14:30:00-08:00",
+   "flights": [
+    {
+     "eq_code": "82",
+     "number": "73",
+     "departure_station": {
+      "iata": "LAX",
+      "icao": "KLAX",
+      "tz_name": "America/Los_Angeles"
+     },
+     "departure_utc": "2024-11-08T06:40:00+00:00",
+     "departure_lcl": "2024-11-07T22:40:00-08:00",
+     "departure_hbt": "2024-11-07T22:40:00-08:00",
+     "arrival_station": {
+      "iata": "SYD",
+      "icao": "YSSY",
+      "tz_name": "Australia/Sydney"
+     },
+     "arrival_utc": "2024-11-08T22:00:00+00:00",
+     "arrival_lcl": "2024-11-09T09:00:00+11:00",
+     "arrival_hbt": "2024-11-08T14:00:00-08:00",
+     "deadhead": false,
+     "deadhead_code": "",
+     "crewmeal": "",
+     "eq_change": false,
+     "flight_time": "PT15H20M",
+     "operating_time": "PT15H20M",
+     "soft_time": "PT0S",
+     "ground_time": "PT0S"
+    }
+   ],
+   "duty": "PT16H50M",
+   "flight_duty": "PT16H20M",
+   "operating_time": "PT15H20M",
+   "flight_time": "PT15H20M",
+   "soft_time": "PT0S",
+   "layover": {
+    "layover_station": {
+     "iata": "SYD",
+     "icao": "YSSY",
+     "tz_name": "Australia/Sydney"
+    },
+    "start_utc": "2024-11-08T22:30:00+00:00",
+    "start_lcl": "2024-11-09T09:30:00+11:00",
+    "start_hbt": "2024-11-08T14:30:00-08:00",
+    "end_utc": "2024-11-09T23:15:00+00:00",
+    "end_lcl": "2024-11-10T10:15:00+11:00",
+    "end_hbt": "2024-11-09T15:15:00-08:00",
+    "hotels": [
+     {
+      "name": "SYDNEY HARBOUR MARRIOTT",
+      "phone": "61292597000",
+      "transportation": [
+       {
+        "name": "SYDNEY GROUND TRANSPORT",
+        "phone": "61296671563"
+       }
+      ]
+     }
+    ],
+    "rest": "P1DT45M"
+   }
+  },
+  {
+   "report_station": {
+    "iata": "SYD",
+    "icao": "YSSY",
+    "tz_name": "Australia/Sydney"
+   },
+   "report_utc": "2024-11-09T23:15:00+00:00",
+   "report_lcl": "2024-11-10T10:15:00+11:00",
+   "report_hbt": "2024-11-09T15:15:00-08:00",
+   "release_station": {
+    "iata": "LAX",
+    "icao": "KLAX",
+    "tz_name": "America/Los_Angeles"
+   },
+   "release_utc": "2024-11-10T14:35:00+00:00",
+   "release_lcl": "2024-11-10T06:35:00-08:00",
+   "release_hbt": "2024-11-10T06:35:00-08:00",
+   "flights": [
+    {
+     "eq_code": "82",
+     "number": "72",
+     "departure_station": {
+      "iata": "SYD",
+      "icao": "YSSY",
+      "tz_name": "Australia/Sydney"
+     },
+     "departure_utc": "2024-11-10T00:15:00+00:00",
+     "departure_lcl": "2024-11-10T11:15:00+11:00",
+     "departure_hbt": "2024-11-09T16:15:00-08:00",
+     "arrival_station": {
+      "iata": "LAX",
+      "icao": "KLAX",
+      "tz_name": "America/Los_Angeles"
+     },
+     "arrival_utc": "2024-11-10T14:05:00+00:00",
+     "arrival_lcl": "2024-11-10T06:05:00-08:00",
+     "arrival_hbt": "2024-11-10T06:05:00-08:00",
+     "deadhead": false,
+     "deadhead_code": "",
+     "crewmeal": "",
+     "eq_change": false,
+     "flight_time": "PT13H50M",
+     "operating_time": "PT13H50M",
+     "soft_time": "PT0S",
+     "ground_time": "PT0S"
+    }
+   ],
+   "duty": "PT15H20M",
+   "flight_duty": "PT14H50M",
+   "operating_time": "PT13H50M",
+   "flight_time": "PT13H50M",
+   "soft_time": "PT0S",
+   "layover": null
+  }
+ ],
+ "errors": []
+}

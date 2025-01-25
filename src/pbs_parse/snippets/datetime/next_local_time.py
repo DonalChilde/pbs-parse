@@ -4,6 +4,7 @@ from datetime import date, datetime, time, timedelta
 from math import ceil
 
 
+# TODO change delta variable name to something more clear, like delta_over_24_hrs. then refactor to make it work.
 def next_local_time(
     dt_ref: datetime, next_time: time, delta: timedelta | None = None
 ) -> datetime:
@@ -63,6 +64,15 @@ def next_local_time(
 
 
 def is_before_raw(ref_time: time, comp_time: time) -> bool:
+    """is_before_raw.
+
+    Args:
+        ref_time (time): _description_
+        comp_time (time): _description_
+
+    Returns:
+        bool: _description_
+    """
     raw_ref = time.fromisoformat(ref_time.strftime("%H%M%S.%f"))
     raw_comp = time.fromisoformat(comp_time.strftime("%H%M%S.%f"))
     return raw_comp < raw_ref

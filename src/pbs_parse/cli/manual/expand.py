@@ -7,9 +7,9 @@ from typing import Annotated
 import typer
 
 from pbs_parse import APP_NAME
-from pbs_parse.pbs_2022_01.models.structured import (
-    STRUCTURED_TRIP_SERIALIZER,
-    StructuredTripLoader,
+from pbs_parse.pbs_2022_01.models.parsed_trip import (
+    PARSED_TRIP_SERIALIZER,
+    ParsedTripLoader,
 )
 from pbs_parse.snippets.file.data_file_loader import FileResource
 from pbs_parse.snippets.typer.task_complete import task_complete
@@ -27,7 +27,7 @@ def expand(
     path_in: Annotated[
         Path,
         typer.Argument(
-            help="The StructuredTrip json file, or a directory containing StructuredTrip json files.",
+            help="The ParsedTrip json file, or a directory containing ParsedTrip json files.",
         ),
     ],
     path_out: Annotated[
@@ -39,7 +39,7 @@ def expand(
         typer.Option(help="Allow overwriting output files."),
     ] = False,
 ):
-    """Expand a StructuredTrip.
+    """Expand a ParsedTrip.
 
     The output file name will be in the form of `expanded-trip_00001-01_<uuid>.json`
     """
@@ -50,20 +50,20 @@ def expand(
         typer.BadParameter(f"Path in must be an existing file or directory. {path_in=}")
     if path_in.is_file():
         structured_resource = FileResource(
-            resource=STRUCTURED_TRIP_SERIALIZER.load_from_json(path_in=path_in),
+            resource=PARSED_TRIP_SERIALIZER.load_from_json(path_in=path_in),
             file_path=path_in,
         )
-        structured_resources = [structured_resource]
-        structured_count = 1
+        parsed_resources = [structured_resource]
+        parsed_count = 1
     else:
-        loader = StructuredTripLoader(path_in=path_in)
-        structured_resources = iter(loader)
-        structured_count = len(loader)
+        loader = ParsedTripLoader(path_in=path_in)
+        parsed_resources = iter(loader)
+        parsed_count = len(loader)
     with progress:
         task = progress.add_task(description="Expand trips.....")
         expand_trips_disk(
-            structured_resources=structured_resources,
-            structured_count=structured_count,
+            parsed_resources=parsed_resources,
+            parsed_count=parsed_count,
             path_out=path_out,
             overwrite=overwrite,
             task_id=task,

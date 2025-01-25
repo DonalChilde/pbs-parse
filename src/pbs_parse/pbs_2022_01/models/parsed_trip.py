@@ -1,6 +1,8 @@
 """Models for Parsed trips."""
 
+from copy import deepcopy
 from dataclasses import dataclass, field
+from datetime import date
 from pathlib import Path
 from typing import TypedDict
 from uuid import NAMESPACE_DNS, uuid5
@@ -28,10 +30,10 @@ class ParsedTripTD(TypedDict):
 
     source: ParsedTripSourceTD
     external: ExternalDataTD
-    # uuid: str
-    # source_uuid: str
     idx: str
     parsed_lines: list[model.ParsedIndexedStringTD]
+    calendar_entries: list[str]
+    start_dates: list[str]
 
 
 @dataclass(slots=True)
@@ -66,25 +68,10 @@ class ParsedTrip:
 
     source: ParsedTripSource
     external: ExternalData
-    # source_uuid: str
     idx: str
-    # uuid: str = ""
     parsed_lines: list[model.ParsedIndexedString] = field(default_factory=list)
-
-    # def __post_init__(self):
-    #     """Init the uuid if missing, validate if not missing."""
-    #     current_uuid_str = str(self.make_uuid())
-    #     if self.uuid == "":
-    #         self.uuid = current_uuid_str
-    #         return
-    #     if self.uuid != current_uuid_str:
-    #         raise ValueError(
-    #             f"Supplied uuid: {self.uuid} does not match calculated uuid: {current_uuid_str}"
-    #         )
-
-    # def make_uuid(self) -> UUID:
-    #     """Make a uuid from a namespace and the source uuid as a string."""
-    #     return uuid5(namespace=PARSED_TRIP_NS, name=self.source_uuid)
+    calendar_entries: list[str] = field(default_factory=list)
+    start_dates: list[date] = field(default_factory=list)
 
     @staticmethod
     def from_simple(simple_obj: ParsedTripTD) -> "ParsedTrip":
@@ -92,13 +79,13 @@ class ParsedTrip:
         result = ParsedTrip(
             source=ParsedTripSource.from_simple(simple_obj["source"]),
             external=ExternalData.from_simple(simple_obj["external"]),
-            # uuid=simple_obj["uuid"],
-            # source_uuid=simple_obj["source_uuid"],
             idx=simple_obj["idx"],
             parsed_lines=[
                 model.ParsedIndexedString.from_simple(x)
                 for x in simple_obj["parsed_lines"]
             ],
+            calendar_entries=deepcopy(simple_obj["calendar_entries"]),
+            start_dates=[date.fromisoformat(x) for x in simple_obj["start_dates"]],
         )
         return result
 
@@ -107,8 +94,6 @@ class ParsedTrip:
         return ParsedTripTD(
             source=self.source.to_simple(),
             external=self.external.to_simple(),
-            # uuid=self.uuid,
-            # source_uuid=self.source_uuid,
             idx=self.idx,
             parsed_lines=[
                 model.ParsedIndexedStringTD(
@@ -120,6 +105,8 @@ class ParsedTrip:
                 )
                 for x in self.parsed_lines
             ],
+            calendar_entries=deepcopy(self.calendar_entries),
+            start_dates=[x.isoformat() for x in self.start_dates],
         )
 
     def default_file_name(self) -> str:
@@ -160,10 +147,8 @@ class ParsedTrip:
         """Make a str rep of ParsedTrip."""
         return (
             "ParsedTrip:\n"
-            # f"{self.uuid=}\n"
             f"{self.idx=}\n"
             f"{self.source=}\n"
-            # f"{self.source_uuid=}\n"
             "\nText Input:\n"
             f"{self.original_text()}\n"
             "Parsed Data:\n"

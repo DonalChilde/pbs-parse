@@ -1,23 +1,12 @@
 """FILE: save.py."""
 
+from copy import deepcopy
 from pathlib import Path
 
 from pbs_parse.pbs_2022_01.models.expanded import EXPANDED_TRIP_SERIALIZER, ExpandedTrip
-from pbs_parse.pbs_2022_01.models.expanded_validation import (
-    EXPANDED_VALIDATION_SERIALIZER,
-    ExpandedValidation,
-)
 from pbs_parse.pbs_2022_01.models.manifest import FileInfo, FileTypes
 from pbs_parse.pbs_2022_01.models.page_lines import PAGE_LINES_SERIALIZER, PageLines
 from pbs_parse.pbs_2022_01.models.parsed_trip import PARSED_TRIP_SERIALIZER, ParsedTrip
-from pbs_parse.pbs_2022_01.models.structured import (
-    STRUCTURED_TRIP_SERIALIZER,
-    StructuredTrip,
-)
-from pbs_parse.pbs_2022_01.models.structured_validation import (
-    STRUCTURED_VALIDATION_SERIALIZER,
-    StructuredValidation,
-)
 from pbs_parse.pbs_2022_01.models.trip_lines import TRIP_LINES_SERIALIZER, TripLines
 from pbs_parse.pbs_2022_01.pbs_manifest.exceptions import (
     StoreOperationError,
@@ -112,51 +101,6 @@ def parsed_prior_month_trip(
     return path_out
 
 
-def structured_trip(
-    store: StoreManager, base: str, structured: StructuredTrip, overwrite: bool = False
-) -> Path:
-    """Save a StructuredTrip in the store."""
-    if store.read_only:
-        raise StoreOperationError(
-            "Store is opened in read-only mode. No changes allowed."
-        )
-    trip_info = FileInfo(
-        key=structured.default_file_name(),
-        type=FileTypes.STRUCTURED_TRIP,
-        file_path=f"{base}/structured/{structured.default_file_name()}",
-    )
-    path_out = store.manifest_directory / trip_info["file_path"]
-    STRUCTURED_TRIP_SERIALIZER.save_as_json(
-        path_out=path_out, complex_obj=structured, overwrite=overwrite
-    )
-    store.record_file(base=base, info=trip_info)
-    return path_out
-
-
-def structured_trip_validation_error(
-    store: StoreManager,
-    base: str,
-    validation_model: StructuredValidation,
-    overwrite: bool = False,
-) -> Path:
-    """Fix type of error."""
-    if store.read_only:
-        raise StoreOperationError(
-            "Store is opened in read-only mode. No changes allowed."
-        )
-    trip_info = FileInfo(
-        key=validation_model.default_file_name(),
-        type=FileTypes.STRUCTURED_TRIP_VALIDATION,
-        file_path=f"{base}/structured/errors/{validation_model.default_file_name()}",
-    )
-    path_out = store.manifest_directory / trip_info["file_path"]
-    STRUCTURED_VALIDATION_SERIALIZER.save_as_json(
-        path_out=path_out, complex_obj=validation_model, overwrite=overwrite
-    )
-    store.record_file(base=base, info=trip_info)
-    return path_out
-
-
 def expanded_trip(
     store: StoreManager, base: str, expanded: ExpandedTrip, overwrite: bool = False
 ) -> Path:
@@ -175,28 +119,26 @@ def expanded_trip(
         path_out=path_out, complex_obj=expanded, overwrite=overwrite
     )
     store.record_file(base=base, info=trip_info)
+    if expanded.errors:
+        expanded_trip_errors(
+            store=store, base=base, key=trip_info["key"], errors=expanded.errors
+        )
     return path_out
 
 
-def expanded_trip_validation_error(
-    store: StoreManager,
-    base: str,
-    validation_model: ExpandedValidation,
-    overwrite: bool = False,
-) -> Path:
-    """Fix type of error."""
+def expanded_trip_errors(store: StoreManager, base: str, key: str, errors: list[str]):
+    """Save a copy of the errors found in an expanded trip.
+
+    key should be the default file name for the expanded trip.
+    """
     if store.read_only:
         raise StoreOperationError(
             "Store is opened in read-only mode. No changes allowed."
         )
-    trip_info = FileInfo(
-        key=validation_model.default_file_name(),
-        type=FileTypes.EXPANDED_TRIP_VALIDATION,
-        file_path=f"{base}/expanded/errors/{validation_model.default_file_name()}",
+    expanded_errors_dict = store.manifest["bases"][base]["errors"].get(
+        FileTypes.EXPANDED_TRIP, {}
     )
-    path_out = store.manifest_directory / trip_info["file_path"]
-    EXPANDED_VALIDATION_SERIALIZER.save_as_json(
-        path_out=path_out, complex_obj=validation_model, overwrite=overwrite
+    expanded_errors_dict[key] = deepcopy(errors)
+    store.manifest["bases"][base]["errors"][FileTypes.EXPANDED_TRIP] = (
+        expanded_errors_dict
     )
-    store.record_file(base=base, info=trip_info)
-    return path_out

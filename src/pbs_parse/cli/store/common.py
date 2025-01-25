@@ -12,9 +12,6 @@ from ..work.parse_trips import parse_trips_store
 from ..work.progress import progress
 from ..work.split_to_pages import split_to_pages_store
 from ..work.split_to_trips import split_to_trips_store
-from ..work.structure_trips import structure_trips_store
-from ..work.validate_expanded import validate_expanded_store
-from ..work.validate_structured import validate_structured_store
 
 # pbs-parse data-store create ~/projects/tmp/store November 2024-11-01 2024-12-01
 # pbs-parse data-store add-all-bases ~/projects/tmp/store ~/projects/tmp/pbs-data/2024.11.01-2024.12.01/
@@ -27,10 +24,7 @@ class ParseActions(StrEnum):
     SPLIT_TO_PAGES = "split_to_pages"
     SPLIT_TO_TRIPS = "split_to_trips"
     PARSE_TRIPS = "parse_trips"
-    STRUCTURE_TRIPS = "structure_trips"
-    VALIDATE_STRUCTURED_TRIPS = "validate_structured_trips"
     EXPAND_TRIPS = "expand_trips"
-    VALIDATE_EXPANDED_TRIPS = "validate_expanded_trips"
 
     @staticmethod
     def action_list(
@@ -65,7 +59,7 @@ class ParseJob:
 
     base: str
     start: ParseActions = ParseActions.SPLIT_TO_PAGES
-    end: ParseActions = ParseActions.VALIDATE_EXPANDED_TRIPS
+    end: ParseActions = ParseActions.EXPAND_TRIPS
     overwrite: bool = False
     action_items: list[ActionItem] = field(default_factory=list)
 
@@ -146,32 +140,8 @@ def action_dispatch(action: ActionItem, store: STORE.StoreManager):
                 progress=progress,
                 overwrite=action.overwrite,
             )
-        case ParseActions.STRUCTURE_TRIPS:
-            structure_trips_store(
-                base=action.base,
-                store=store,
-                task_id=action.task_id,
-                progress=progress,
-                overwrite=action.overwrite,
-            )
-        case ParseActions.VALIDATE_STRUCTURED_TRIPS:
-            validate_structured_store(
-                base=action.base,
-                store=store,
-                task_id=action.task_id,
-                progress=progress,
-                overwrite=action.overwrite,
-            )
         case ParseActions.EXPAND_TRIPS:
             expand_trips_store(
-                base=action.base,
-                store=store,
-                task_id=action.task_id,
-                progress=progress,
-                overwrite=action.overwrite,
-            )
-        case ParseActions.VALIDATE_EXPANDED_TRIPS:
-            validate_expanded_store(
                 base=action.base,
                 store=store,
                 task_id=action.task_id,

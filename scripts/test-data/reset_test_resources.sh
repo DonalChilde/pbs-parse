@@ -15,10 +15,4 @@ pbs-parse manual split-to-trips "$OUTPUT_DIR/LAX/pages" "$OUTPUT_DIR/LAX/trip_li
 
 pbs-parse manual parse "$OUTPUT_DIR/LAX/trip_lines" "$OUTPUT_DIR/LAX/parsed"
 
-pbs-parse manual structure "$OUTPUT_DIR/LAX/parsed" "$OUTPUT_DIR/LAX/structured"
-
-pbs-parse manual validate-structured "$OUTPUT_DIR/LAX/structured" "$OUTPUT_DIR/LAX/structured/errors" --parsed-dir="$OUTPUT_DIR/LAX/parsed"
-
-pbs-parse manual expand "$OUTPUT_DIR/LAX/structured" "$OUTPUT_DIR/LAX/expanded"
-
-pbs-parse manual validate-expanded "$OUTPUT_DIR/LAX/expanded" "$OUTPUT_DIR/LAX/expanded/errors" --parsed-dir="$OUTPUT_DIR/LAX/parsed" --structured-dir="$OUTPUT_DIR/LAX/structured"
+pbs-parse manual expand "$OUTPUT_DIR/LAX/parsed" "$OUTPUT_DIR/LAX/expanded"

@@ -7,8 +7,11 @@ from pfmsoft.state_parser import ParseContext, ParseScheme, StateParser
 from pfmsoft.state_parser.parse_exception import ParseException
 from pfmsoft.state_parser.result_handler import CollectResults
 
+from pbs_parse.common.is_prior_month import is_prior_month
 from pbs_parse.pbs_2022_01.models.parsed_trip import ParsedTrip, ParsedTripSource
 from pbs_parse.pbs_2022_01.models.trip_lines import TRIP_LINES_SERIALIZER, TripLines
+from pbs_parse.pbs_2022_01.parse.build_start_dates import build_start_dates
+from pbs_parse.pbs_2022_01.parse.collect_calendar import collect_calendar
 from pbs_parse.pbs_2022_01.parse.parse_table import parse_table
 
 
@@ -48,6 +51,13 @@ class TripLinesParser:
             idx=trip_lines.idx,
             parsed_lines=[x.parsed_indexed_string for x in handler.results],
         )
+        if not is_prior_month(parsed_trip=trip):
+            trip.calendar_entries = collect_calendar(parsed_trip=trip)
+            trip.start_dates = build_start_dates(
+                effective_from=trip.external.effective_from,
+                effective_to=trip.external.effective_to,
+                calendar=trip.calendar_entries,
+            )
         return trip
 
 

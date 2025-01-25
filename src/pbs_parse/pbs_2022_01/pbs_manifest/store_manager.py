@@ -125,7 +125,7 @@ class StoreManager:
             raise StoreOperationError(
                 f"Cannot create new base, it already exists. {name=}"
             )
-        base = M.Base(base_name=name, files={})
+        base = M.Base(base_name=name, files={}, errors={})
         pdf_info = M.FileInfo(
             key=M.FileTypes.PDF_PACKAGE,
             type=M.FileTypes.PDF_PACKAGE,
@@ -172,11 +172,11 @@ class StoreManager:
         file_info = self.get_file_info_by_id(base=base, file_id=key)
         path_in = self.manifest_directory / file_info["file_path"]
         try:
-            with open(path_in, mode="b") as file_in:
+            with open(path_in, mode="rb") as file_in:
                 value = json.load(file_in)
             return value
         except Exception as e:
-            msg = f"Unable to load json resource. {base=}, {key=}, {file_info=!r}, {path_in=!r}"
+            msg = f"Unable to load json resource. {base=}, {key=}, {file_info=!r}, {path_in=!r} exception={e}"
             logger.exception(msg)
             raise UnableToLoadError(msg) from e
 

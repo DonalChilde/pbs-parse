@@ -7,5 +7,5 @@ BID_PACKAGE_ANCHOR = f"{RESOURCES_ANCHOR}.eff_2024_11_01_2024_12_01.LAX.source"
 PAGES_ANCHOR = f"{LAX}.pages"
 TRIPS_ANCHOR = f"{LAX}.trips"
 PARSED_ANCHOR = f"{LAX}.parsed"
-STRUCTURED_ANCHOR = f"{LAX}.structured"
+
 EXPANDED_ANCHOR = f"{LAX}.expanded"

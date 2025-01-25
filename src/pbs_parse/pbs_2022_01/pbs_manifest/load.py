@@ -4,21 +4,9 @@ import logging
 from collections.abc import Iterator
 
 from pbs_parse.pbs_2022_01.models.expanded import EXPANDED_TRIP_SERIALIZER, ExpandedTrip
-from pbs_parse.pbs_2022_01.models.expanded_validation import (
-    EXPANDED_VALIDATION_SERIALIZER,
-    ExpandedValidation,
-)
 from pbs_parse.pbs_2022_01.models.manifest import FileTypes
 from pbs_parse.pbs_2022_01.models.page_lines import PAGE_LINES_SERIALIZER, PageLines
 from pbs_parse.pbs_2022_01.models.parsed_trip import PARSED_TRIP_SERIALIZER, ParsedTrip
-from pbs_parse.pbs_2022_01.models.structured import (
-    STRUCTURED_TRIP_SERIALIZER,
-    StructuredTrip,
-)
-from pbs_parse.pbs_2022_01.models.structured_validation import (
-    STRUCTURED_VALIDATION_SERIALIZER,
-    StructuredValidation,
-)
 from pbs_parse.pbs_2022_01.models.trip_lines import TRIP_LINES_SERIALIZER, TripLines
 from pbs_parse.pbs_2022_01.pbs_manifest.exceptions import UnableToLoadError
 from pbs_parse.pbs_2022_01.pbs_manifest.store_manager import StoreManager
@@ -47,7 +35,7 @@ def page_lines(store: StoreManager, base: str, key: str) -> PageLines:
     except Exception as e:
         msg = (
             f"Tried to make PageLines from json, but there was an error. "
-            f"error={e,} {store=}, {base=}, {key=}"
+            f"error={(e,)} {store=}, {base=}, {key=}"
         )
         logger.exception(msg)
         raise UnableToLoadError(msg) from e
@@ -89,7 +77,7 @@ def trip_lines(store: StoreManager, base: str, key: str) -> TripLines:
     except Exception as e:
         msg = (
             f"Tried to make TripLines from json, but there was an error. "
-            f"error={e,} {store=}, {base=}, {key=}"
+            f"error={(e,)} {store=}, {base=}, {key=}"
         )
         logger.exception(msg)
         raise UnableToLoadError(msg) from e
@@ -132,7 +120,7 @@ def parsed_trip(store: StoreManager, base: str, key: str) -> ParsedTrip:
     except Exception as e:
         msg = (
             f"Tried to make ParsedTrip from json, but there was an error. "
-            f"error={e,} {store=}, {base=}, {key=}"
+            f"error={(e,)} {store=}, {base=}, {key=}"
         )
         logger.exception(msg)
         raise UnableToLoadError(msg) from e
@@ -151,79 +139,6 @@ def all_parsed_trips(store: StoreManager, base: str) -> Iterator[ParsedTrip]:
     trip_infos = store.get_file_info_by_type(base=base, file_type=FileTypes.PARSED_TRIP)
     for page_info in trip_infos:
         yield parsed_trip(store=store, base=base, key=page_info["key"])
-
-
-def structured_trip(store: StoreManager, base: str, key: str) -> StructuredTrip:
-    """structured_trip.
-
-    Args:
-        store (StoreManager): _description_
-        base (str): _description_
-        key (str): _description_
-
-    Raises:
-        UnableToLoadError: _description_
-
-    Returns:
-        StructuredTrip: _description_
-    """
-    data = store.load_resource(base=base, key=key)
-    try:
-        value = STRUCTURED_TRIP_SERIALIZER.from_simple(data)  # type: ignore
-        return value
-    except Exception as e:
-        msg = (
-            f"Tried to make StructuredTrip from json, but there was an error. "
-            f"error={e,} {store=}, {base=}, {key=}"
-        )
-        logger.exception(msg)
-        raise UnableToLoadError(msg) from e
-
-
-def all_structured_trips(store: StoreManager, base: str) -> Iterator[StructuredTrip]:
-    """all_structured_trips.
-
-    Args:
-        store (StoreManager): _description_
-        base (str): _description_
-
-    Yields:
-        Iterator[StructuredTrip]: _description_
-    """
-    trip_infos = store.get_file_info_by_type(
-        base=base, file_type=FileTypes.STRUCTURED_TRIP
-    )
-    for page_info in trip_infos:
-        yield structured_trip(store=store, base=base, key=page_info["key"])
-
-
-def structured_trip_validation(
-    store: StoreManager, base: str, key: str
-) -> StructuredValidation:
-    """structured_trip_validation.
-
-    Args:
-        store (StoreManager): _description_
-        base (str): _description_
-        key (str): _description_
-
-    Raises:
-        UnableToLoadError: _description_
-
-    Returns:
-        StructuredValidation: _description_
-    """
-    data = store.load_resource(base=base, key=key)
-    try:
-        value = STRUCTURED_VALIDATION_SERIALIZER.from_simple(data)  # type: ignore
-        return value
-    except Exception as e:
-        msg = (
-            f"Tried to make StructuredValidation from json, but there was an error. "
-            f"error={e,} {store=}, {base=}, {key=}"
-        )
-        logger.exception(msg)
-        raise UnableToLoadError(msg) from e
 
 
 def expanded_trip(store: StoreManager, base: str, key: str) -> ExpandedTrip:
@@ -247,10 +162,24 @@ def expanded_trip(store: StoreManager, base: str, key: str) -> ExpandedTrip:
     except Exception as e:
         msg = (
             f"Tried to make ExpandedTrip from json, but there was an error. "
-            f"error={e,} {store=}, {base=}, {key=}"
+            f"error={(e,)} {store=}, {base=}, {key=}"
         )
         logger.exception(msg)
         raise UnableToLoadError(msg) from e
+
+
+def expanded_trip_errors(store: StoreManager, base: str, key: str) -> list[str]:
+    """Get the list of errors for an expanded trip.
+
+    returns an empty list if no errors found.
+    """
+    errors = store.manifest["bases"][base]["errors"].get(FileTypes.EXPANDED_TRIP, None)
+    if errors is None:
+        return []
+    errors = store.manifest["bases"][base]["errors"][FileTypes.EXPANDED_TRIP].get(
+        key, []
+    )
+    return errors
 
 
 def all_expanded_trips(store: StoreManager, base: str) -> Iterator[ExpandedTrip]:
@@ -270,30 +199,12 @@ def all_expanded_trips(store: StoreManager, base: str) -> Iterator[ExpandedTrip]
         yield expanded_trip(store=store, base=base, key=page_info["key"])
 
 
-def expanded_trip_validation(
-    store: StoreManager, base: str, key: str
-) -> ExpandedValidation:
-    """expanded_trip_validation.
+def all_expanded_trip_errors(store: StoreManager, base: str) -> dict[str, list[str]]:
+    """Get the dict of all errors for expanded trips.
 
-    Args:
-        store (StoreManager): _description_
-        base (str): _description_
-        key (str): _description_
-
-    Raises:
-        UnableToLoadError: _description_
-
-    Returns:
-        ExpandedValidation: _description_
+    returns an empty dict if no errors found.
     """
-    data = store.load_resource(base=base, key=key)
-    try:
-        value = EXPANDED_VALIDATION_SERIALIZER.from_simple(data)  # type: ignore
-        return value
-    except Exception as e:
-        msg = (
-            f"Tried to make ExpandedValidation from json, but there was an error. "
-            f"error={e,} {store=}, {base=}, {key=}"
-        )
-        logger.exception(msg)
-        raise UnableToLoadError(msg) from e
+    errors = store.manifest["bases"][base]["errors"].get(FileTypes.EXPANDED_TRIP, None)
+    if errors is None:
+        return {}
+    return errors

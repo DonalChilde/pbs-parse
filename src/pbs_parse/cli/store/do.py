@@ -38,7 +38,7 @@ def do(
     end: Annotated[
         ParseActions,
         typer.Option(help="The action to end at. defaults to `expand_trip`"),
-    ] = ParseActions.VALIDATE_EXPANDED_TRIPS,
+    ] = ParseActions.EXPAND_TRIPS,
     overwrite: Annotated[
         bool, typer.Option(help="Overwrite existing output file.")
     ] = False,

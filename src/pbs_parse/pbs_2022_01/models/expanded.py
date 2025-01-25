@@ -27,16 +27,16 @@ class Position:
 
 
 @dataclass(slots=True, kw_only=True)
-class AirportCode:
+class AirportInfo:
     """Airport/city identifiers."""
 
     iata: str
     icao: str
     tz_name: str
 
-    def to_simple(self) -> TD.AirportCode:
+    def to_simple(self) -> TD.AirportInfo:
         """AirportCode to simple."""
-        result = TD.AirportCode(iata=self.iata, icao=self.icao, tz_name=self.tz_name)
+        result = TD.AirportInfo(iata=self.iata, icao=self.icao, tz_name=self.tz_name)
         return result
 
 
@@ -44,8 +44,8 @@ class AirportCode:
 class BaseEquipment:
     """Base and equipment in the bidding context."""
 
-    base: AirportCode
-    satellite_base: AirportCode | None
+    base: AirportInfo
+    satellite_base: AirportInfo | None
     equipment: str
 
     def to_simple(self) -> TD.BaseEquipment:
@@ -67,9 +67,9 @@ class BaseEquipment:
         if simple_obj["satellite_base"] is None:
             satellite_base = None
         else:
-            satellite_base = AirportCode(**simple_obj["satellite_base"])
+            satellite_base = AirportInfo(**simple_obj["satellite_base"])
         result = BaseEquipment(
-            base=AirportCode(**simple_obj["base"]),
+            base=AirportInfo(**simple_obj["base"]),
             satellite_base=satellite_base,
             equipment=simple_obj["equipment"],
         )
@@ -89,11 +89,11 @@ class Flight:
 
     eq_code: str
     number: str
-    departure_station: AirportCode
+    departure_station: AirportInfo
     departure_utc: datetime
     departure_lcl: datetime
     departure_hbt: datetime
-    arrival_station: AirportCode
+    arrival_station: AirportInfo
     arrival_utc: datetime
     arrival_lcl: datetime
     arrival_hbt: datetime
@@ -137,13 +137,13 @@ class Flight:
         result = Flight(
             eq_code=simple_obj["eq_code"],
             number=simple_obj["number"],
-            departure_station=AirportCode(**simple_obj["departure_station"]),
+            departure_station=AirportInfo(**simple_obj["departure_station"]),
             departure_utc=datetime.fromisoformat(
                 simple_obj["departure_utc"]
             ).astimezone(UTC),
             departure_lcl=datetime.fromisoformat(simple_obj["departure_lcl"]),
             departure_hbt=datetime.fromisoformat(simple_obj["departure_hbt"]),
-            arrival_station=AirportCode(**simple_obj["arrival_station"]),
+            arrival_station=AirportInfo(**simple_obj["arrival_station"]),
             arrival_utc=datetime.fromisoformat(simple_obj["arrival_utc"])
             .astimezone(UTC)
             .astimezone(UTC),
@@ -204,7 +204,7 @@ class Hotel:
 class Layover:
     """A Layover."""
 
-    layover_station: AirportCode
+    layover_station: AirportInfo
     start_utc: datetime
     start_lcl: datetime
     start_hbt: datetime
@@ -233,7 +233,7 @@ class Layover:
     def from_simple(simple_obj: TD.Layover) -> "Layover":
         """Layover from simple."""
         result = Layover(
-            layover_station=AirportCode(**simple_obj["layover_station"]),
+            layover_station=AirportInfo(**simple_obj["layover_station"]),
             start_utc=datetime.fromisoformat(simple_obj["start_utc"]).astimezone(UTC),
             start_lcl=datetime.fromisoformat(simple_obj["start_lcl"]),
             start_hbt=datetime.fromisoformat(simple_obj["start_hbt"]),
@@ -250,11 +250,11 @@ class Layover:
 class DutyPeriod:
     """A dutyperiod."""
 
-    report_station: AirportCode
+    report_station: AirportInfo
     report_utc: datetime
     report_lcl: datetime
     report_hbt: datetime
-    release_station: AirportCode
+    release_station: AirportInfo
     release_utc: datetime
     release_lcl: datetime
     release_hbt: datetime
@@ -299,11 +299,11 @@ class DutyPeriod:
         else:
             layover = Layover.from_simple(simple_obj["layover"])
         result = DutyPeriod(
-            report_station=AirportCode(**simple_obj["report_station"]),
+            report_station=AirportInfo(**simple_obj["report_station"]),
             report_utc=datetime.fromisoformat(simple_obj["report_utc"]).astimezone(UTC),
             report_lcl=datetime.fromisoformat(simple_obj["report_lcl"]),
             report_hbt=datetime.fromisoformat(simple_obj["report_hbt"]),
-            release_station=AirportCode(**simple_obj["release_station"]),
+            release_station=AirportInfo(**simple_obj["release_station"]),
             release_utc=datetime.fromisoformat(simple_obj["release_utc"]).astimezone(
                 UTC
             ),
@@ -328,7 +328,6 @@ class ExpandedTripSource:
     page_lines: str = "PAGE_LINES"
     trip_lines: str = "TRIP_LINES"
     parsed_trip: str = "PARSED_TRIP"
-    structured_trip: str = "STRUCTURED_TRIP"
 
     def to_simple(self) -> TD.ExpandedTripSourceTD:
         """Turn into simple object."""
@@ -337,7 +336,6 @@ class ExpandedTripSource:
             page_lines=self.page_lines,
             trip_lines=self.trip_lines,
             parsed_trip=self.parsed_trip,
-            structured_trip=self.structured_trip,
         )
 
 
@@ -346,15 +344,15 @@ class ExpandedTrip:
     """A trip."""
 
     source: ExpandedTripSource
-    source_idx: str
+    # source_idx: str
     trip_number: str
     base_equipment: BaseEquipment
     special_qual: bool
-    start_station: AirportCode
+    start_station: AirportInfo
     start_utc: datetime
     start_lcl: datetime
     start_hbt: datetime
-    end_station: AirportCode
+    end_station: AirportInfo
     end_utc: datetime
     end_lcl: datetime
     end_hbt: datetime
@@ -377,7 +375,6 @@ class ExpandedTrip:
         ret_value.append(f"_{self.base_equipment.equipment}")
         ret_value.append(f"_{self.start_lcl.date().isoformat()}")
         ret_value.append(f"_{self.trip_number}")
-        ret_value.append(f"_{self.source_idx}")
         ret_value.append(".json")
         return "".join(ret_value)
 
@@ -387,18 +384,18 @@ class ExpandedTrip:
         result = ExpandedTrip(
             source=ExpandedTripSource(**simple_obj["source"]),
             # source_uuid=simple_obj["source_uuid"],
-            source_idx=simple_obj["source_idx"],
+            # source_idx=simple_obj["source_idx"],
             # uuid=simple_obj["uuid"],
             trip_number=simple_obj["trip_number"],
             base_equipment=BaseEquipment.from_simple(simple_obj["base_equipment"]),
             positions=[Position(name=x["name"]) for x in simple_obj["positions"]],
             operations=[Operation(name=x["name"]) for x in simple_obj["operations"]],
             special_qual=simple_obj["special_qual"],
-            start_station=AirportCode(**simple_obj["start_station"]),
+            start_station=AirportInfo(**simple_obj["start_station"]),
             start_utc=datetime.fromisoformat(simple_obj["start_utc"]).astimezone(UTC),
             start_lcl=datetime.fromisoformat(simple_obj["start_lcl"]),
             start_hbt=datetime.fromisoformat(simple_obj["start_hbt"]),
-            end_station=AirportCode(**simple_obj["end_station"]),
+            end_station=AirportInfo(**simple_obj["end_station"]),
             end_utc=datetime.fromisoformat(simple_obj["end_utc"]).astimezone(UTC),
             end_lcl=datetime.fromisoformat(simple_obj["end_lcl"]),
             end_hbt=datetime.fromisoformat(simple_obj["end_hbt"]),
@@ -415,7 +412,7 @@ class ExpandedTrip:
         """Trip to simple object."""
         result = TD.ExpandedTripTD(
             source=self.source.to_simple(),
-            source_idx=self.source_idx,
+            # source_idx=self.source_idx,
             trip_number=self.trip_number,
             base_equipment=self.base_equipment.to_simple(),
             positions=[TD.Position(name=x.name) for x in self.positions],
@@ -439,10 +436,10 @@ class ExpandedTrip:
         return result
 
 
-def get_airport_code_from_iata(iata: str) -> AirportCode:
+def get_airport_code_from_iata(iata: str) -> AirportInfo:
     """Get airport info from database."""
     airport = airport_from_iata(iata=iata)
-    return AirportCode(
+    return AirportInfo(
         iata=airport["iata"], icao=airport["icao"], tz_name=airport["tz"]
     )
 
