@@ -70,7 +70,7 @@ def test_split_package_to_pages_file(runner: CliRunner, test_output_dir: Path):
             print(result.stderr)
         print(result.stdout)
         assert result.exit_code == 0
-        assert "to 4 pages" in result.stdout
+        assert "4/1" in result.stdout
         assert "error" not in result.stdout
 
 
@@ -100,5 +100,5 @@ def test_split_package_to_pages_dir(runner: CliRunner, test_output_dir: Path):
             print(result.stderr)
         print(result.stdout)
         assert result.exit_code == 0
-        assert "to 4 pages" in result.stdout
+        assert "4/1" in result.stdout
         assert "error" not in result.stdout

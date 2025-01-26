@@ -6,10 +6,10 @@ from pathlib import Path
 from rich.progress import Progress, TaskID
 
 import pbs_parse.pbs_2022_01.pbs_manifest as STORE
+from pbs_parse.pbs_2022_01 import api as API
 from pbs_parse.pbs_2022_01.models import manifest
 from pbs_parse.pbs_2022_01.models.external_data import ExternalData
-from pbs_parse.pbs_2022_01.models.page_lines import PageLines, PageLinesSaver
-from pbs_parse.pbs_2022_01.split.extract_pages import parse_page_lines_from_file
+from pbs_parse.pbs_2022_01.models.page_lines import PageLines
 
 
 def split_to_pages(
@@ -26,13 +26,12 @@ def split_to_pages(
     Yields:
         Iterator[PageLines]: _description_
     """
-    pages_found = 0
-    pages = parse_page_lines_from_file(path_in=path_in, external=external)
-    for page in pages:
-        pages_found += 1
+    for idx, page in enumerate(
+        API.transform.source_to_pages(path_in=path_in, external=external), start=1
+    ):
         progress.update(
             task_id=task_id,
-            description=f"Splitting package to {pages_found} pages.",
+            completed=idx,
         )
         yield page
 
@@ -63,11 +62,14 @@ def split_to_pages_store(
     )
     progress.update(task_id=task_id, total=1, description="Splitting package....")
     path_in = store.manifest_directory / source_path
-    for page in split_to_pages(
-        path_in=path_in, external=external, task_id=task_id, progress=progress
+    for idx, page in enumerate(
+        split_to_pages(
+            path_in=path_in, external=external, task_id=task_id, progress=progress
+        ),
+        start=1,
     ):
         STORE.save.page_lines(store=store, base=base, page=page, overwrite=overwrite)
-    progress.update(task_id=task_id, advance=1)
+        progress.update(task_id=task_id, completed=idx)
 
 
 def split_to_pages_disk(
@@ -92,7 +94,5 @@ def split_to_pages_disk(
     pages = split_to_pages(
         path_in=path_in, external=external, task_id=task_id, progress=progress
     )
-    page_saver = PageLinesSaver(path_out=path_out)
     for page in pages:
-        page_saver(page_lines=page, overwrite=overwrite)
-    progress.update(task_id=task_id, advance=1)
+        API.save.page_lines(dir_out=path_out, page_lines=page, overwrite=overwrite)

@@ -27,11 +27,9 @@ class TripLinesParser:
     def parse_file(self, ctx: ParseContext, path_in: Path) -> ParsedTrip:
         """Parse TripLines from file."""
         trip_lines = TRIP_LINES_SERIALIZER.load_from_json(path_in=path_in)
-        return self.parse(ctx=ctx, source=path_in.name, trip_lines=trip_lines)
+        return self.parse(ctx=ctx, trip_lines=trip_lines)
 
-    def parse(
-        self, ctx: ParseContext, source: str, trip_lines: TripLines
-    ) -> ParsedTrip:
+    def parse(self, ctx: ParseContext, trip_lines: TripLines) -> ParsedTrip:
         """Parse TripLines."""
         handler = CollectResults()
         parser = StateParser(parse_scheme=self.scheme, result_handler=handler)
@@ -42,7 +40,7 @@ class TripLinesParser:
         _source = ParsedTripSource(
             txt_file=trip_lines.source.txt_file,
             page_lines=trip_lines.source.page_lines,
-            trip_lines=source,
+            trip_lines=trip_lines.default_file_name(),
         )
         trip = ParsedTrip(
             source=_source,
@@ -61,28 +59,33 @@ class TripLinesParser:
         return trip
 
 
-# def parse_trips(
-#     trip_lines: Iterable[TripLines],
-#     parser: TripLinesParser,
-#     ctx: ParseContext,
-#     observer: Callable[[ParsedTrip], None] | None = None,
-# ) -> Iterable[ParsedTrip]:
-#     """Parse an iterable of trip_lines, with an optional observer.
+SCHEME = ParseScheme(beginning_state="start", parser_lookup=parse_table())
 
-#     Args:
-#         trip_lines (Iterable[TripLines]): _description_
-#         parser (TripLinesParser): _description_
-#         ctx (ParseContext): _description_
-#         observer (Callable[[ParsedTrip], None] | None, optional): _description_. Defaults to None.
 
-#     Returns:
-#         Iterable[ParsedTrip]: _description_
-
-#     Yields:
-#         Iterator[Iterable[ParsedTrip]]: _description_
-#     """
-#     for trip in trip_lines:
-#         parsed_trip = parser.parse(ctx=ctx, trip_lines=trip)
-#         if observer:
-#             observer(parsed_trip)
-#         yield parsed_trip
+def parse_trip(ctx: ParseContext, trip: TripLines) -> ParsedTrip:
+    """Parse TripLines."""
+    handler = CollectResults()
+    parser = StateParser(parse_scheme=SCHEME, result_handler=handler)
+    try:
+        parser.parse(ctx=ctx, data=trip.lines)
+    except ParseException as e:
+        print(e)
+    _source = ParsedTripSource(
+        txt_file=trip.source.txt_file,
+        page_lines=trip.source.page_lines,
+        trip_lines=trip.default_file_name(),
+    )
+    parsed = ParsedTrip(
+        source=_source,
+        external=deepcopy(trip.external),
+        idx=trip.idx,
+        parsed_lines=[x.parsed_indexed_string for x in handler.results],
+    )
+    if not is_prior_month(parsed_trip=parsed):
+        parsed.calendar_entries = collect_calendar(parsed_trip=parsed)
+        parsed.start_dates = build_start_dates(
+            effective_from=trip.external.effective_from,
+            effective_to=trip.external.effective_to,
+            calendar=parsed.calendar_entries,
+        )
+    return parsed

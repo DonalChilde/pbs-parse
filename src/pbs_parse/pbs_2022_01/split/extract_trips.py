@@ -69,15 +69,14 @@ def parse_trip_lines_from_file(path_in: Path) -> Iterator[TripLines]:
         Iterator[TripLines]: The TripLines in a PageLines.
     """
     page = PAGE_LINES_SERIALIZER.load_from_json(path_in=path_in)
-    yield from parse_trip_lines(page=page, source=path_in.name)
+    yield from parse_trip_lines(page=page)
 
 
-def parse_trip_lines(page: PageLines, source: str) -> Iterator[TripLines]:
+def parse_trip_lines(page: PageLines) -> Iterator[TripLines]:
     """parse_trip_lines.
 
     Args:
         page (PageLines): _description_
-        source (str): _description_
 
     Yields:
         Iterator[TripLines]: _description_
@@ -86,11 +85,12 @@ def parse_trip_lines(page: PageLines, source: str) -> Iterator[TripLines]:
         lines_of_page_to_lines_of_trips(page.lines), start=1
     ):
         page_number = page.idx.split("-")[0]
-        _source = TripLinesSource(txt_file=page.source.txt_file, page_lines=source)
+        source = TripLinesSource(
+            txt_file=page.source.txt_file, page_lines=page.default_file_name()
+        )
         trip = TripLines(
-            source=_source,
+            source=source,
             external=deepcopy(page.external),
-            # source_uuid=page.uuid,
             idx=f"{page_number}-{idx:02}",
             lines=[page.lines[0], page.lines[1], *trip_lines, page.lines[-1]],
         )

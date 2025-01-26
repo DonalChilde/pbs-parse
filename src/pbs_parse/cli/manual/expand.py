@@ -7,11 +7,7 @@ from typing import Annotated
 import typer
 
 from pbs_parse import APP_NAME
-from pbs_parse.pbs_2022_01.models.parsed_trip import (
-    PARSED_TRIP_SERIALIZER,
-    ParsedTripLoader,
-)
-from pbs_parse.snippets.file.data_file_loader import FileResource
+from pbs_parse.pbs_2022_01 import api as API
 from pbs_parse.snippets.typer.task_complete import task_complete
 
 from ..work.expand_trips import expand_trips_disk
@@ -49,21 +45,13 @@ def expand(
     if not path_in.exists():
         typer.BadParameter(f"Path in must be an existing file or directory. {path_in=}")
     if path_in.is_file():
-        structured_resource = FileResource(
-            resource=PARSED_TRIP_SERIALIZER.load_from_json(path_in=path_in),
-            file_path=path_in,
-        )
-        parsed_resources = [structured_resource]
-        parsed_count = 1
+        parsed_paths = [path_in]
     else:
-        loader = ParsedTripLoader(path_in=path_in)
-        parsed_resources = iter(loader)
-        parsed_count = len(loader)
+        parsed_paths = API.find.parsed_trips(dir_in=path_in)
     with progress:
         task = progress.add_task(description="Expand trips.....")
         expand_trips_disk(
-            parsed_resources=parsed_resources,
-            parsed_count=parsed_count,
+            parsed_paths=parsed_paths,
             path_out=path_out,
             overwrite=overwrite,
             task_id=task,

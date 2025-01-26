@@ -1,23 +1,20 @@
 """FILE: parse_trips.py."""
 
-from collections.abc import Iterable, Iterator
+from collections.abc import Iterable, Iterator, Sequence
 from pathlib import Path
 
-from pfmsoft.state_parser import ParseContext
 from rich.progress import Progress, TaskID
 
 import pbs_parse.pbs_2022_01.pbs_manifest as STORE
-from pbs_parse.cli.work.common import KeyedResource
 from pbs_parse.common.is_prior_month import is_prior_month
+from pbs_parse.pbs_2022_01 import api as API
 from pbs_parse.pbs_2022_01.models import manifest
-from pbs_parse.pbs_2022_01.models.parsed_trip import ParsedTrip, ParsedTripSaver
+from pbs_parse.pbs_2022_01.models.parsed_trip import ParsedTrip
 from pbs_parse.pbs_2022_01.models.trip_lines import TripLines
-from pbs_parse.pbs_2022_01.parse.trip_lines_parser import TripLinesParser
-from pbs_parse.snippets.file.data_file_loader import FileResource
 
 
 def parse_trips(
-    trip_lines: Iterable[KeyedResource[TripLines]],
+    trip_lines: Iterable[TripLines],
     task_id: TaskID,
     progress: Progress,
 ) -> Iterator[ParsedTrip]:
@@ -33,10 +30,8 @@ def parse_trips(
     """
     trips_parsed = 0
     prior_trips = 0
-    parser = TripLinesParser()
-    for trip in trip_lines:
-        ctx = ParseContext()
-        parsed_trip = parser.parse(ctx=ctx, trip_lines=trip.resource, source=trip.key)
+
+    for parsed_trip in API.transform.trips_to_parsed(trips=trip_lines):
         trips_parsed += 1
         if is_prior_month(parsed_trip=parsed_trip):
             prior_trips += 1
@@ -71,11 +66,7 @@ def parse_trips_store(
         task_id=task_id, total=len(trip_infos), description="Parsing trips...."
     )
     trip_lines = (
-        KeyedResource[TripLines](
-            resource=STORE.load.trip_lines(store=store, base=base, key=x["key"]),
-            key=x["key"],
-        )
-        for x in trip_infos
+        STORE.load.trip_lines(store=store, base=base, key=x["key"]) for x in trip_infos
     )
     for parsed_trip in parse_trips(
         trip_lines=trip_lines,
@@ -93,8 +84,7 @@ def parse_trips_store(
 
 
 def parse_trips_disk(
-    trip_resources: Iterable[FileResource[TripLines]],
-    trip_count: int,
+    trip_paths: Sequence[Path],
     path_out: Path,
     overwrite: bool,
     task_id: TaskID,
@@ -103,25 +93,25 @@ def parse_trips_disk(
     """parse_trips_disk.
 
     Args:
-        trip_resources (Iterable[FileResource[TripLines]]): _description_
-        trip_count (int): _description_
+        trip_paths (Sequence[Path]): _description_
         path_out (Path): _description_
         overwrite (bool): _description_
         task_id (TaskID): _description_
         progress (Progress): _description_
     """
-    # loader = TripLinesLoader(path_in=path_in)
-    trip_lines = (
-        KeyedResource[TripLines](resource=x.resource, key=x.file_path.name)
-        for x in trip_resources
+    trip_lines = (API.load.trip_lines(file_in=x) for x in trip_paths)
+    progress.update(
+        task_id=task_id, total=len(trip_paths), description="Parsing trips...."
     )
-    progress.update(task_id=task_id, total=trip_count, description="Parsing trips....")
-    saver = ParsedTripSaver(path_out=path_out)
-    prior_saver = ParsedTripSaver(path_out=path_out / "prior")
+    prior_dir = path_out / "prior"
     for parsed_trip in parse_trips(
         trip_lines=trip_lines, task_id=task_id, progress=progress
     ):
         if is_prior_month(parsed_trip=parsed_trip):
-            prior_saver(parsed_trip=parsed_trip, overwrite=overwrite)
+            API.save.parsed_trip(
+                dir_out=prior_dir, parsed_trip=parsed_trip, overwrite=overwrite
+            )
         else:
-            saver(parsed_trip=parsed_trip, overwrite=overwrite)
+            API.save.parsed_trip(
+                dir_out=path_out, parsed_trip=parsed_trip, overwrite=overwrite
+            )

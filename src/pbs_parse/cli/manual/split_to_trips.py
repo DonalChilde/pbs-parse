@@ -7,12 +7,7 @@ from typing import Annotated
 import typer
 
 from pbs_parse import APP_NAME
-from pbs_parse.pbs_2022_01.models.page_lines import (
-    PAGE_LINES_SERIALIZER,
-    PageLines,
-    PageLinesLoader,
-)
-from pbs_parse.snippets.file.data_file_loader import FileResource
+from pbs_parse.pbs_2022_01 import api as API
 from pbs_parse.snippets.typer.task_complete import task_complete
 
 from ..work.progress import progress
@@ -51,23 +46,16 @@ def split_to_trips(
         typer.BadParameter(f"Path in must be an existing file or directory. {path_in=}")
 
     if path_in.is_file():
-        page_resource = FileResource[PageLines](
-            resource=PAGE_LINES_SERIALIZER.load_from_json(path_in=path_in),
-            file_path=path_in,
-        )
-        page_resources = [page_resource]
-        page_count = 1
-
+        page_paths = [path_in]
     else:
-        page_loader = PageLinesLoader(path_in=path_in)
-        page_resources = iter(page_loader)
-        page_count = len(page_loader)
+        page_paths = API.find.page_lines(dir_in=path_in)
 
     with progress:
-        task = progress.add_task(description="Splitting pages to trips....")
+        task = progress.add_task(
+            description="Splitting pages....", total=len(page_paths)
+        )
         split_to_trips_disk(
-            page_resources=page_resources,
-            page_count=page_count,
+            page_paths=page_paths,
             path_out=path_out,
             task_id=task,
             overwrite=overwrite,

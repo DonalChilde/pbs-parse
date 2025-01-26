@@ -9,6 +9,7 @@ import typer
 from rich.progress import TaskID
 
 from pbs_parse import APP_NAME
+from pbs_parse.pbs_2022_01 import api as API
 from pbs_parse.pbs_2022_01.models.external_data import ExternalData
 from pbs_parse.snippets.typer.task_complete import task_complete
 
@@ -130,7 +131,7 @@ def do_many(path_in: Path, path_out: Path, external: ExternalData, overwrite: bo
         external (ExternalData): _description_
         overwrite (bool): _description_
     """
-    txt_files = list(path_in.glob("PBS_*.txt", case_sensitive=False))
+    txt_files = API.find.source_files(dir_in=path_in)
     jobs: list[Job] = []
     task_job = progress.add_task(
         description="Splitting packages to pages....", total=len(txt_files)

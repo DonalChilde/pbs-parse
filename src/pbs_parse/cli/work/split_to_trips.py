@@ -1,21 +1,19 @@
 """FILE: split_to_trips.py."""
 
-from collections.abc import Iterable, Iterator
+from collections.abc import Iterable, Iterator, Sequence
 from pathlib import Path
 
 from rich.progress import Progress, TaskID
 
 import pbs_parse.pbs_2022_01.pbs_manifest as STORE
-from pbs_parse.cli.work.common import KeyedResource
+from pbs_parse.pbs_2022_01 import api as API
 from pbs_parse.pbs_2022_01.models import manifest
 from pbs_parse.pbs_2022_01.models.page_lines import PageLines
-from pbs_parse.pbs_2022_01.models.trip_lines import TripLines, TripLinesSaver
-from pbs_parse.pbs_2022_01.split.extract_trips import parse_trip_lines
-from pbs_parse.snippets.file.data_file_loader import FileResource
+from pbs_parse.pbs_2022_01.models.trip_lines import TripLines
 
 
 def split_to_trips(
-    pages: Iterable[KeyedResource[PageLines]], task_id: TaskID, progress: Progress
+    pages: Iterable[PageLines], task_id: TaskID, progress: Progress
 ) -> Iterator[TripLines]:
     """split_to_trips.
 
@@ -28,16 +26,9 @@ def split_to_trips(
     Yields:
         Iterator[TripLines]: _description_
     """
-    trips_found = 0
-    for page in pages:
-        for trip in parse_trip_lines(page=page.resource, source=page.key):
-            trips_found += 1
-            progress.update(
-                task_id,
-                description=f"Splitting pages to {trips_found} trips.",
-            )
-            yield trip
-        progress.update(task_id=task_id, advance=1)
+    for idx, trip in enumerate(API.transform.pages_to_trips(pages=pages), start=1):
+        progress.update(task_id, completed=idx)
+        yield trip
 
 
 def split_to_trips_store(
@@ -63,11 +54,7 @@ def split_to_trips_store(
         task_id=task_id, total=len(page_infos), description="Splitting pages...."
     )
     pages = (
-        KeyedResource[PageLines](
-            resource=STORE.load.page_lines(store=store, base=base, key=x["key"]),
-            key=x["key"],
-        )
-        for x in page_infos
+        STORE.load.page_lines(store=store, base=base, key=x["key"]) for x in page_infos
     )
     for trip in split_to_trips(
         pages=pages,
@@ -78,8 +65,7 @@ def split_to_trips_store(
 
 
 def split_to_trips_disk(
-    page_resources: Iterable[FileResource[PageLines]],
-    page_count: int,
+    page_paths: Sequence[Path],
     path_out: Path,
     overwrite: bool,
     task_id: TaskID,
@@ -88,20 +74,12 @@ def split_to_trips_disk(
     """split_to_trips_disk.
 
     Args:
-        page_resources (Iterable[FileResource[PageLines]]): _description_
-        page_count (int): _description_
+        page_paths (Sequence[Path]): _description_
         path_out (Path): _description_
         overwrite (bool): _description_
         task_id (TaskID): _description_
         progress (Progress): _description_
     """
-    # page_loader = PageLinesLoader(path_in=path_in)
-    pages = (
-        KeyedResource(resource=x.resource, key=x.file_path.name) for x in page_resources
-    )
-    progress.update(
-        task_id=task_id, total=page_count, description="Splitting pages...."
-    )
-    trip_saver = TripLinesSaver(path_out=path_out)
+    pages = (API.load.page_lines(file_in=x) for x in page_paths)
     for trip in split_to_trips(pages=pages, task_id=task_id, progress=progress):
-        trip_saver(trip_lines=trip, overwrite=overwrite)
+        API.save.trip_lines(dir_out=path_out, trip_lines=trip, overwrite=overwrite)

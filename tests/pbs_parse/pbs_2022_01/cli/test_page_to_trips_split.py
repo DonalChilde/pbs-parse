@@ -26,7 +26,7 @@ def test_split_page_to_trips_file(runner: CliRunner, test_output_dir: Path):  # 
             print(result.stderr)
         print(result.stdout)
         assert result.exit_code == 0
-        assert "to 4 trips" in result.stdout
+        assert "4/1" in result.stdout
         assert "error" not in result.stdout
         output_files = list(path_out.glob("trip-lines*"))
         assert len(output_files) == 4
@@ -43,7 +43,7 @@ def test_split_page_to_trips_dir(runner: CliRunner, test_output_dir: Path):  # n
             print(result.stderr)
         print(result.stdout)
         assert result.exit_code == 0
-        assert "to 18 trips" in result.stdout
+        assert "18/4" in result.stdout
         assert "error" not in result.stdout
         output_files = list(path_out.glob("trip-lines*"))
         assert len(output_files) == 18

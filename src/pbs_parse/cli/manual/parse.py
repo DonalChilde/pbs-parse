@@ -7,11 +7,7 @@ from typing import Annotated
 import typer
 
 from pbs_parse import APP_NAME
-from pbs_parse.pbs_2022_01.models.trip_lines import (
-    TRIP_LINES_SERIALIZER,
-    TripLinesLoader,
-)
-from pbs_parse.snippets.file.data_file_loader import FileResource
+from pbs_parse.pbs_2022_01 import api as API
 from pbs_parse.snippets.typer.task_complete import task_complete
 
 from ..work.parse_trips import parse_trips_disk
@@ -49,21 +45,13 @@ def parse(
     if not path_in.exists():
         typer.BadParameter(f"Path in must be an existing file or directory. {path_in=}")
     if path_in.is_file():
-        trip_resource = FileResource(
-            resource=TRIP_LINES_SERIALIZER.load_from_json(path_in=path_in),
-            file_path=path_in,
-        )
-        trip_resources = [trip_resource]
-        trip_count = 1
+        trip_paths = [path_in]
     else:
-        loader = TripLinesLoader(path_in=path_in)
-        trip_resources = iter(loader)
-        trip_count = len(loader)
+        trip_paths = API.find.trip_lines(dir_in=path_in)
     with progress:
         task = progress.add_task(description="Parsing trips.....", total=0)
         parse_trips_disk(
-            trip_resources=trip_resources,
-            trip_count=trip_count,
+            trip_paths=trip_paths,
             path_out=path_out,
             overwrite=overwrite,
             task_id=task,
