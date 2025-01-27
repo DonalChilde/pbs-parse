@@ -2,6 +2,7 @@
 
 from datetime import date
 
+from pbs_parse.pbs_2022_01.models.manifest import FileTypes
 from pbs_parse.pbs_2022_01.pbs_manifest.stats import make_stats
 from pbs_parse.pbs_2022_01.pbs_manifest.store_manager import StoreManager
 
@@ -40,3 +41,11 @@ def stats(store: StoreManager) -> str:
     _bases = bases(store=store)
     stats = make_stats(store=store, bases=_bases, indent="  ")
     return stats
+
+
+def expanded_errors_keys(store: StoreManager, base: str) -> list[str]:
+    """Get a list of expanded trip keys with errors."""
+    base_data = store.manifest["bases"][base]
+    base_errors = base_data["errors"]
+    error_infos = base_errors.get(FileTypes.EXPANDED_TRIP, {})
+    return list(error_infos.keys())

@@ -1,7 +1,9 @@
 """FILE: save.py."""
 
+import json
 from collections.abc import Iterable
 from pathlib import Path
+from typing import Any
 
 from pbs_parse.pbs_2022_01.api.common import DataType
 from pbs_parse.pbs_2022_01.models.expanded import EXPANDED_TRIP_SERIALIZER, ExpandedTrip
@@ -9,6 +11,8 @@ from pbs_parse.pbs_2022_01.models.page_lines import PAGE_LINES_SERIALIZER, PageL
 from pbs_parse.pbs_2022_01.models.parsed_trip import PARSED_TRIP_SERIALIZER, ParsedTrip
 from pbs_parse.pbs_2022_01.models.trip_lines import TRIP_LINES_SERIALIZER, TripLines
 from pbs_parse.snippets.file.check_file import check_file
+
+from . import style
 
 
 def page_lines(
@@ -213,6 +217,31 @@ def expanded_trip(
             check_file(path_out=file_out, overwrite=overwrite, ensure_parents=True)
             file_out.write_text(str(expanded_trip))
             return file_out
+
+
+def expanded_debug(dir_out: Path, parsed: ParsedTrip, expanded: ExpandedTrip) -> Path:
+    """expanded_debug.
+
+    Args:
+        dir_out (Path): _description_
+        parsed (ParsedTrip): _description_
+        expanded (ExpandedTrip): _description_
+
+    Returns:
+        Path: _description_
+    """
+    file_out = dir_out / expanded.default_file_name()
+    json_out = file_out.with_name(f"{file_out.stem}_debug.json")
+    check_file(json_out, overwrite=True)
+    with open(json_out, mode="w") as fp:
+        data: dict[str, Any] = {
+            "parsed": parsed.to_simple(),
+            "expanded": expanded.to_simple(),
+        }
+        json.dump(data, fp, indent=1)
+    txt_out = json_out.with_suffix(".txt")
+    txt_out.write_text(style.expanded_debug(parsed=parsed, expanded=expanded))
+    return json_out
 
 
 def all_page_lines(

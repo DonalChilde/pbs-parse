@@ -15,4 +15,4 @@ pbs-parse manual split-to-trips "$OUTPUT_DIR/LAX/pages" "$OUTPUT_DIR/LAX/trip_li
 
 pbs-parse manual parse "$OUTPUT_DIR/LAX/trip_lines" "$OUTPUT_DIR/LAX/parsed"
 
-pbs-parse manual expand "$OUTPUT_DIR/LAX/parsed" "$OUTPUT_DIR/LAX/expanded"
+pbs-parse manual expand "$OUTPUT_DIR/LAX/parsed" "$OUTPUT_DIR/LAX/expanded" "--debug-dir=$OUTPUT_DIR/LAX/expanded/debug"

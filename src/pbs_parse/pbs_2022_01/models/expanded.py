@@ -1,6 +1,5 @@
 """Data model for a `Trip`."""
 
-from copy import deepcopy
 from dataclasses import dataclass, field
 from datetime import datetime, timedelta
 from pathlib import Path
@@ -11,6 +10,7 @@ from pfmsoft.simple_serializer import DataclassSerializer
 
 import pbs_parse.pbs_2022_01.models.expanded_TD as TD
 from pbs_parse.airports import airport_from_iata
+from pbs_parse.common.format_duration import format_td
 from pbs_parse.snippets.datetime.factored_timedelta import timedelta_to_isoformat
 from pbs_parse.snippets.datetime.iso8601_duration_2 import isoformat_to_timedelta
 from pbs_parse.snippets.file.data_file_loader import DataFileLoader
@@ -38,6 +38,19 @@ class AirportInfo:
         """AirportCode to simple."""
         result = TD.AirportInfo(iata=self.iata, icao=self.icao, tz_name=self.tz_name)
         return result
+
+    def __str__(self) -> str:
+        """__str__.
+
+        Returns:
+            str: _description_
+        """
+        return (
+            f"AirportInfo:\n"
+            f"{"iata:":>12} {self.iata}\n"
+            f"{"icao:":>12} {self.icao}\n"
+            f"{"tz_name:":>12} {self.tz_name}\n"
+        )
 
 
 @dataclass(slots=True, kw_only=True)
@@ -160,6 +173,21 @@ class Flight:
         )
         return result
 
+    def __str__(self) -> str:
+        """__str__.
+
+        Returns:
+            str: _description_
+        """
+        return (
+            f"{f"Flight:":>14} {self.number} equip: {self.eq_code} DH: {self.deadhead}\n"
+            f"{"utc:":>38} {self.departure_utc}{f"utc:":>18} {self.arrival_utc} BLOCK: {format_td(self.arrival_utc-self.departure_utc)}\n"
+            f"{f"Depart {self.departure_station.iata} BLOCK: {format_td(self.flight_time)} lcl:":>38} {self.departure_lcl}{f"Arrive {self.arrival_station.iata} lcl:":>18} {self.arrival_lcl} BLOCK: {format_td(self.arrival_lcl-self.departure_lcl)}\n"
+            f"{"hbt:":>38} {self.departure_hbt}{f"hbt:":>18} {self.arrival_hbt} BLOCK: {format_td(self.arrival_hbt-self.departure_hbt)}\n"
+            f"{"flight:":>38} {format_td(self.flight_time)} soft: {format_td(self.soft_time)} operating: {format_td(self.operating_time)} ground: {format_td(self.ground_time)}\n"
+            f"{" "*14}{self!r}\n"
+        )
+
 
 @dataclass(slots=True, kw_only=True)
 class Transportation:
@@ -213,6 +241,14 @@ class Layover:
     end_hbt: datetime
     rest: timedelta
     hotels: list[Hotel] = field(default_factory=list)
+
+    def __str__(self) -> str:
+        return (
+            f"{"utc:":>35} {self.start_utc}{f"utc:":>18} {self.end_utc} REST: {format_td(self.end_utc-self.start_utc)}\n"
+            f"{f"Layover {self.layover_station.iata} REST: {format_td(self.rest)} lcl:":>35} {self.start_lcl}{f"End lcl:":>18} {self.end_lcl} REST: {format_td(self.end_lcl-self.start_lcl)}\n"
+            f"{"hbt:":>35} {self.start_hbt}{f"hbt:":>18} {self.end_hbt} REST: {format_td(self.end_hbt-self.start_hbt)}\n"
+            f"{" "*14}{self!r}\n"
+        )
 
     def to_simple(self) -> TD.Layover:
         """Layover to simple."""
@@ -319,6 +355,23 @@ class DutyPeriod:
         )
         return result
 
+    def __str__(self) -> str:
+        """__str__.
+
+        Returns:
+            str: _description_
+        """
+        return (
+            f"{"utc:":>30} {self.report_utc}{f"utc:":>18} {self.release_utc} DUTY: {format_td(self.release_utc-self.report_utc)}\n"
+            f"{f"Report {self.report_station.iata} DUTY: {format_td(self.duty)} lcl:":>30} {self.report_lcl}{f"Release {self.release_station.iata} lcl:":>18} {self.release_lcl} DUTY: {format_td(self.release_lcl-self.report_lcl)}\n"
+            f"{"hbt:":>30} {self.report_hbt}{f"hbt:":>18} {self.release_hbt} DUTY: {format_td(self.release_hbt-self.report_hbt)}\n"
+            "\n"
+            "       FLIGHTS\n"
+            f"{"\n".join([str(x) for x in self.flights])}"
+            "\n"
+            f"{f"       LAYOVER\n{self.layover}" if self.layover is not None else ""}"
+        )
+
 
 @dataclass(slots=True)
 class ExpandedTripSource:
@@ -344,7 +397,6 @@ class ExpandedTrip:
     """A trip."""
 
     source: ExpandedTripSource
-    # source_idx: str
     trip_number: str
     base_equipment: BaseEquipment
     special_qual: bool
@@ -378,14 +430,30 @@ class ExpandedTrip:
         ret_value.append(".json")
         return "".join(ret_value)
 
+    def __str__(self) -> str:
+        return (
+            f"EXPANDED TRIP {self.trip_number}-{self.start_lcl.date()} {self.base_equipment!r}\n\n"
+            f'SOURCE: {self.source!r}\n'
+            f"ERRORS: {len(self.errors)}\n"
+            f"{"\n".join([f"  {x}" for x in self.errors])}\n"
+            f"\n\n"
+            f"Positions: {" ".join([x.name for x in self.positions])} "
+            f"SpecialQual: {self.special_qual} "
+            f"Operations: {" ".join([x.name for x in self.operations])}\n\n"
+            f"{"utc:":>30} {self.start_utc}{f"utc:":>18} {self.end_utc} TAFB: {format_td(self.end_utc-self.start_utc)}\n"
+            f"{f"Start {self.start_station.iata} TAFB: {format_td(self.tafb)} lcl:":>30} {self.start_lcl}{f"End {self.end_station.iata} lcl:":>18} {self.end_lcl} TAFB: {format_td(self.end_lcl-self.start_lcl)}\n"
+            f"{"hbt:":>30} {self.start_hbt}{f"hbt:":>18} {self.end_hbt} TAFB: {format_td(self.end_hbt-self.start_hbt)}\n"
+            "\n"
+            "DUTYPERIODS\n"
+            f"{"\n".join([str(x) for x in self.dutyperiods])}\n"
+            f"{"\n".join([str(x) for x in airports_in_trip(self).values()])}"
+        )
+
     @staticmethod
     def from_simple(simple_obj: TD.ExpandedTripTD) -> "ExpandedTrip":
         """Turn simple object into Trip."""
         result = ExpandedTrip(
             source=ExpandedTripSource(**simple_obj["source"]),
-            # source_uuid=simple_obj["source_uuid"],
-            # source_idx=simple_obj["source_idx"],
-            # uuid=simple_obj["uuid"],
             trip_number=simple_obj["trip_number"],
             base_equipment=BaseEquipment.from_simple(simple_obj["base_equipment"]),
             positions=[Position(name=x["name"]) for x in simple_obj["positions"]],
@@ -404,7 +472,7 @@ class ExpandedTrip:
             soft_time=isoformat_to_timedelta(simple_obj["soft_time"]),
             tafb=isoformat_to_timedelta(simple_obj["tafb"]),
             dutyperiods=[DutyPeriod.from_simple(x) for x in simple_obj["dutyperiods"]],
-            errors=deepcopy(simple_obj["errors"]),
+            errors=[x for x in simple_obj["errors"]],
         )
         return result
 
@@ -412,7 +480,6 @@ class ExpandedTrip:
         """Trip to simple object."""
         result = TD.ExpandedTripTD(
             source=self.source.to_simple(),
-            # source_idx=self.source_idx,
             trip_number=self.trip_number,
             base_equipment=self.base_equipment.to_simple(),
             positions=[TD.Position(name=x.name) for x in self.positions],
@@ -431,9 +498,32 @@ class ExpandedTrip:
             soft_time=timedelta_to_isoformat(self.soft_time),
             tafb=timedelta_to_isoformat(self.tafb),
             dutyperiods=[x.to_simple() for x in self.dutyperiods],
-            errors=deepcopy(self.errors),
+            errors=[x for x in self.errors],
         )
         return result
+
+
+def airports_in_trip(expanded: ExpandedTrip) -> dict[str, AirportInfo]:
+    """airports_in_trip.
+
+    Args:
+        expanded (ExpandedTrip): _description_
+
+    Returns:
+        dict[str, AirportInfo]: _description_
+    """
+    airports: dict[str, AirportInfo] = {}
+    airports[expanded.start_station.iata] = expanded.start_station
+    airports[expanded.end_station.iata] = expanded.end_station
+    for dp in expanded.dutyperiods:
+        airports[dp.report_station.iata] = dp.report_station
+        airports[dp.release_station.iata] = dp.release_station
+        if dp.layover is not None:
+            airports[dp.layover.layover_station.iata] = dp.layover.layover_station
+        for flight in dp.flights:
+            airports[flight.departure_station.iata] = flight.departure_station
+            airports[flight.arrival_station.iata] = flight.arrival_station
+    return airports
 
 
 def get_airport_code_from_iata(iata: str) -> AirportInfo:

@@ -16,13 +16,15 @@ def expand_trips(
     parsed_trips: Iterable[ParsedTrip],
     task_id: TaskID,
     progress: Progress,
+    debug_dir: Path | None = None,
 ) -> Iterator[ExpandedTrip]:
     """expand_trips.
 
     Args:
-        parsed_trips (Iterable[KeyedResource[ParsedTrip]]): _description_
+        parsed_trips (Iterable[ParsedTrip]): _description_
         task_id (TaskID): _description_
         progress (Progress): _description_
+        debug_dir (Path | None, optional): _description_. Defaults to None.
 
     Yields:
         Iterator[ExpandedTrip]: _description_
@@ -30,7 +32,10 @@ def expand_trips(
     with_errors = 0
     total_errors = 0
     for idx, expanded_trip in enumerate(
-        API.transform.parsed_to_expanded(parsed_trips=parsed_trips), start=1
+        API.transform.parsed_to_expanded(
+            parsed_trips=parsed_trips, debug_dir=debug_dir
+        ),
+        start=1,
     ):
         if expanded_trip.errors:
             with_errors += 1
@@ -85,6 +90,7 @@ def expand_trips_disk(
     overwrite: bool,
     task_id: TaskID,
     progress: Progress,
+    debug_dir: Path | None,
 ):
     """expand_trips_disk.
 
@@ -94,6 +100,7 @@ def expand_trips_disk(
         overwrite (bool): _description_
         task_id (TaskID): _description_
         progress (Progress): _description_
+        debug_dir (Path | None): _description_
     """
     parsed_trips = (API.load.parsed_trip(file_in=x) for x in parsed_paths)
     progress.update(
@@ -102,7 +109,10 @@ def expand_trips_disk(
         description="Expanding trips....",
     )
     for e_trip in expand_trips(
-        parsed_trips=parsed_trips, task_id=task_id, progress=progress
+        parsed_trips=parsed_trips,
+        task_id=task_id,
+        progress=progress,
+        debug_dir=debug_dir,
     ):
         API.save.expanded_trip(
             dir_out=path_out, expanded_trip=e_trip, overwrite=overwrite

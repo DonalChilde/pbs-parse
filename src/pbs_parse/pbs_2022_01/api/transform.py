@@ -15,6 +15,8 @@ from pbs_parse.pbs_2022_01.parse.trip_lines_parser import parse_trip
 from pbs_parse.pbs_2022_01.split.extract_pages import parse_page_lines_from_file
 from pbs_parse.pbs_2022_01.split.extract_trips import parse_trip_lines
 
+from . import save
+
 
 def source_to_pages(path_in: Path, external: ExternalData) -> Iterator[PageLines]:
     """source_to_pages.
@@ -56,11 +58,14 @@ def trips_to_parsed(trips: Iterable[TripLines]) -> Iterator[ParsedTrip]:
         yield parse_trip(ctx=ctx, trip=trip)
 
 
-def parsed_to_expanded(parsed_trips: Iterable[ParsedTrip]) -> Iterator[ExpandedTrip]:
+def parsed_to_expanded(
+    parsed_trips: Iterable[ParsedTrip], debug_dir: Path | None = None
+) -> Iterator[ExpandedTrip]:
     """parsed_to_expanded.
 
     Args:
         parsed_trips (Iterable[ParsedTrip]): _description_
+        debug_dir (Path | None, optional): _description_. Defaults to None.
 
     Yields:
         Iterator[ExpandedTrip]: _description_
@@ -68,4 +73,7 @@ def parsed_to_expanded(parsed_trips: Iterable[ParsedTrip]) -> Iterator[ExpandedT
     for parsed in parsed_trips:
         parser = ParsedToExpanded(parsed_trip=parsed)
         expanded_trips = parser.translate()
-        yield from expanded_trips
+        for expanded in expanded_trips:
+            if expanded.errors and debug_dir is not None:
+                save.expanded_debug(dir_out=debug_dir, parsed=parsed, expanded=expanded)
+            yield expanded

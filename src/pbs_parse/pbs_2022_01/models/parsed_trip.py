@@ -1,6 +1,5 @@
 """Models for Parsed trips."""
 
-from copy import deepcopy
 from dataclasses import dataclass, field
 from datetime import date
 from pathlib import Path
@@ -34,6 +33,7 @@ class ParsedTripTD(TypedDict):
     parsed_lines: list[model.ParsedIndexedStringTD]
     calendar_entries: list[str]
     start_dates: list[str]
+    errors: list[str]
 
 
 @dataclass(slots=True)
@@ -72,6 +72,7 @@ class ParsedTrip:
     parsed_lines: list[model.ParsedIndexedString] = field(default_factory=list)
     calendar_entries: list[str] = field(default_factory=list)
     start_dates: list[date] = field(default_factory=list)
+    errors: list[str] = field(default_factory=list)
 
     @staticmethod
     def from_simple(simple_obj: ParsedTripTD) -> "ParsedTrip":
@@ -84,8 +85,9 @@ class ParsedTrip:
                 model.ParsedIndexedString.from_simple(x)
                 for x in simple_obj["parsed_lines"]
             ],
-            calendar_entries=deepcopy(simple_obj["calendar_entries"]),
+            calendar_entries=[x for x in simple_obj["calendar_entries"]],
             start_dates=[date.fromisoformat(x) for x in simple_obj["start_dates"]],
+            errors=[x for x in simple_obj["errors"]],
         )
         return result
 
@@ -105,8 +107,9 @@ class ParsedTrip:
                 )
                 for x in self.parsed_lines
             ],
-            calendar_entries=deepcopy(self.calendar_entries),
+            calendar_entries=[x for x in self.calendar_entries],
             start_dates=[x.isoformat() for x in self.start_dates],
+            errors=[x for x in self.errors],
         )
 
     def default_file_name(self) -> str:
@@ -137,7 +140,7 @@ class ParsedTrip:
     def original_text(self, with_line_num: bool = True, sep: str = "") -> str:
         """Get the original input text, with and without line numbers."""
         if with_line_num:
-            return f"{sep.join([f'{x.indexed_string.idx:06}: {x.indexed_string.txt}' for x in self.parsed_lines])}\n"
+            return f"{sep.join([f'[{x.indexed_string.idx:06}] {x.indexed_string.txt}' for x in self.parsed_lines])}\n"
         else:
             return (
                 f"{sep.join([f'{x.indexed_string.txt}' for x in self.parsed_lines])}\n"
@@ -149,10 +152,12 @@ class ParsedTrip:
             "ParsedTrip:\n"
             f"{self.idx=}\n"
             f"{self.source=}\n"
+            f"Errors: {len(self.errors)}\n"
+            f"{"\n".join(self.errors)}"
             "\nText Input:\n"
-            f"{self.original_text()}\n"
+            f"{self.original_text()}"
             "Parsed Data:\n"
-            f"{'\n'.join([f'{x.id:20} {x.indexed_string.idx:06}: {x.data!r}' for x in self.parsed_lines])}\n"
+            f"{'\n'.join([f'{x.id:20}[{x.indexed_string.idx:06}] {x.data!r}' for x in self.parsed_lines])}\n"
         )
 
 

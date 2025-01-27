@@ -34,12 +34,19 @@ def expand(
         bool,
         typer.Option(help="Allow overwriting output files."),
     ] = False,
+    debug_dir: Annotated[
+        Path | None, typer.Option(help="The directory for debug output.")
+    ] = None,
 ):
     """Expand a ParsedTrip.
 
     The output file name will be in the form of `expanded-trip_00001-01_<uuid>.json`
     """
     _ = ctx
+    if debug_dir is not None and debug_dir.is_file():
+        typer.BadParameter(
+            f"DEBUG_DIR must be a directory or None, not a file. {debug_dir=}"
+        )
     if path_out.is_file():
         typer.BadParameter(f"Path out must be a directory, not a file. {path_out=}")
     if not path_in.exists():
@@ -56,6 +63,7 @@ def expand(
             overwrite=overwrite,
             task_id=task,
             progress=progress,
+            debug_dir=debug_dir,
         )
     start_perf = ctx.obj[APP_NAME]["start_perf"]
     task_complete(start_perf=start_perf)

@@ -120,14 +120,14 @@ def expanded_trip(
     )
     store.record_file(base=base, info=trip_info)
     if expanded.errors:
-        expanded_trip_errors(
+        _expanded_trip_errors(
             store=store, base=base, key=trip_info["key"], errors=expanded.errors
         )
     return path_out
 
 
-def expanded_trip_errors(store: StoreManager, base: str, key: str, errors: list[str]):
-    """Save a copy of the errors found in an expanded trip.
+def _expanded_trip_errors(store: StoreManager, base: str, key: str, errors: list[str]):
+    """Save a copy of the errors found in an expanded trip in the store manifest.
 
     key should be the default file name for the expanded trip.
     """
