@@ -10,6 +10,7 @@ EFFECTIVE_FROM=$3
 EFFECTIVE_TO=$4
 INPUT_LOCATION=$5
 STORE="$STORES_DIR/$STORE_NAME"
+DEBUG_DIR="$HOME/projects/tmp/store-debug"
 
 echo "***** Delete the old store at $STORE. *****"
 rm -rf $STORE
@@ -25,3 +26,6 @@ echo
 echo "***** Parse the data *****"
 echo
 pbs-parse store do $STORE _all_
+echo
+echo "***** Exporting expanded trip debug data *****"
+pbs-parse store export expanded-debug "$STORE" "$DEBUG_DIR"

@@ -11,6 +11,7 @@ from pbs_parse.pbs_2022_01.pbs_manifest.store_manager import StoreManager
 from .add_all_bases import app as add_all_bases_app
 from .add_base import app as add_base_app
 from .do import app as do_app
+from .export import app as export_app
 from .stats import app as stats_app
 
 
@@ -73,3 +74,4 @@ app.add_typer(do_app)
 app.add_typer(add_base_app)
 app.add_typer(add_all_bases_app)
 app.add_typer(stats_app)
+app.add_typer(export_app, name="export", help="Export data from store.")

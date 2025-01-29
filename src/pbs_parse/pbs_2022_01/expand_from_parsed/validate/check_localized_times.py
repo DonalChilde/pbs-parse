@@ -137,22 +137,22 @@ def trip_report_release(expanded: ExpandedTrip, collated: CollatedTrip) -> list[
         (
             expanded.start_lcl,
             collated.dutyperiods[0].report.data["report"]["lcl"],
-            "local start",
+            "local trip start",
         ),
         (
             expanded.start_hbt,
             collated.dutyperiods[0].report.data["report"]["hbt"],
-            "hbt start",
+            "hbt trip start",
         ),
         (
             expanded.end_lcl,
             collated.dutyperiods[-1].release.data["release"]["lcl"],
-            "local end",
+            "local trip end",
         ),
         (
             expanded.end_hbt,
             collated.dutyperiods[-1].release.data["release"]["lcl"],
-            "hbt arrival",
+            "hbt trip end",
         ),
     ]
     for test in tests:

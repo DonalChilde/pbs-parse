@@ -14,4 +14,4 @@ def expanded_debug(parsed: ParsedTrip, expanded: ExpandedTrip) -> str:
     Returns:
         str: _description_
     """
-    return f"{parsed!s}\n{expanded!s}\n"
+    return f"Text Input:\n{parsed.original_text(with_line_num=False)!s}\n{expanded!s}\n{parsed!s}"
