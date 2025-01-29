@@ -26,6 +26,8 @@ dynamic = ["version", "description"]
 dependencies = [
     "typer",
     "pyparsing",
+    "tzdata",
+    "whenever",
     "pfmsoft-state-parser@git+https://github.com/donalchilde/pfmsoft-state-parser@dev",
     "pfmsoft-indexed-string@git+https://github.com/donalchilde/pfmsoft-indexed-string@dev",
     "pfmsoft-simple-serializer@git+https://github.com/donalchilde/pfmsoft-simple-serializer@dev",
