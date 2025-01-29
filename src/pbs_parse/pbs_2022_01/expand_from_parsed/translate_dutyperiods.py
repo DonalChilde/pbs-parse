@@ -1,7 +1,7 @@
 """FILE: translate_dutyperiods.py."""
 
 import logging
-from datetime import datetime, timedelta
+from datetime import date, datetime, time, timedelta
 from zoneinfo import ZoneInfo
 
 from pbs_parse.common.get_airport_info import get_airport_info_from_iata
@@ -17,26 +17,29 @@ from pbs_parse.pbs_2022_01.expand_from_parsed.utc_to_local import utc_to_local
 from pbs_parse.pbs_2022_01.models.collated_trip import CollatedDutyPeriod
 from pbs_parse.pbs_2022_01.models.expanded import DutyPeriod
 
+UTC = ZoneInfo("UTC")
 logger = logging.getLogger(__name__)
 
 
 def translate_dutyperiods(
     collated_dutyperiods: list[CollatedDutyPeriod],
-    first_report_utc: datetime,
+    start_date: date,
     state: State,
 ) -> list[DutyPeriod]:
     """translate_dutyperiods.
 
     Args:
         collated_dutyperiods (list[CollatedDutyPeriod]): _description_
-        first_report_utc (datetime): _description_
+        start_date (date): _description_
         state (State): _description_
 
     Returns:
         list[DutyPeriod]: _description_
     """
     expanded_dutyperiods: list[DutyPeriod] = []
-    report_utc = first_report_utc
+    report_utc = assemble_first_report_utc(
+        collated_dutyperiods=collated_dutyperiods, start_date=start_date, state=state
+    )
     for idx, collated_dp in enumerate(collated_dutyperiods, start=1):
         state.dp_idx = idx
         logger.debug(
@@ -44,25 +47,21 @@ def translate_dutyperiods(
             state.dp_idx,
             report_utc.isoformat(),
         )
-        try:
-            next_report_lcl = collated_dutyperiods[idx].report.data["report"]["lcl"]
-        except IndexError:
-            next_report_lcl = ""
         expanded_dp = translate_dutyperiod(
             report_utc=report_utc,
-            next_report_lcl=next_report_lcl,
             collated_dp=collated_dp,
             state=state,
         )
         expanded_dutyperiods.append(expanded_dp)
         if expanded_dp.layover is not None:
-            report_utc = expanded_dp.release_utc + expanded_dp.layover.rest
+            report_utc = next_utc(
+                utc_datetime=expanded_dp.release_utc, delta=expanded_dp.layover.rest
+            )
     return expanded_dutyperiods
 
 
 def translate_dutyperiod(
     report_utc: datetime,
-    next_report_lcl: str,
     collated_dp: CollatedDutyPeriod,
     state: State,
 ) -> DutyPeriod:
@@ -104,9 +103,9 @@ def translate_dutyperiod(
     flight_time = timedelta(
         seconds=sum([x.flight_time.total_seconds() for x in flights])
     )
-    report_tzinfo = ZoneInfo(report_station.tz_name)
+    report_lcl_tzinfo = ZoneInfo(report_station.tz_name)
     report_lcl = utc_to_local(
-        report_utc, report_tzinfo, collated_dp.report.data["report"]["lcl"]
+        report_utc, report_lcl_tzinfo, collated_dp.report.data["report"]["lcl"]
     )
     expanded_dutyperiod = DutyPeriod(
         report_station=report_station,
@@ -126,3 +125,32 @@ def translate_dutyperiod(
         layover=layover,
     )
     return expanded_dutyperiod
+
+
+def assemble_first_report_utc(
+    collated_dutyperiods: list[CollatedDutyPeriod], start_date: date, state: State
+) -> datetime:
+    """assemble_first_report_utc.
+
+    As of 2024-01-29, AA trip start dates are based on first departure, not report time.
+    The start date for trips whose report/first departure time overlap 00:00 will have
+    to have report date adjusted.
+
+    Args:
+        collated_dutyperiods (list[CollatedDutyPeriod]): _description_
+        start_date (date): _description_
+        state (State): _description_
+
+    Returns:
+        datetime: _description_
+    """
+    first_dep = time.fromisoformat(
+        collated_dutyperiods[0].flights[0].data["departure_time"]["lcl"]
+    )
+    first_dep_utc = datetime.combine(
+        start_date, first_dep, state.hbt_tzinfo
+    ).astimezone(UTC)
+    first_report_utc = first_dep_utc - report_to_first_flight_delta(
+        collated_dp=collated_dutyperiods[0]
+    )
+    return first_report_utc

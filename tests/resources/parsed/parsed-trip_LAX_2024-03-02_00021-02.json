@@ -1,0 +1,529 @@
+{
+ "source": {
+  "txt_file": "PBS_LAX_March_2024_20240210110536.txt",
+  "page_lines": "page-lines_LAX_2024-03-02_00021-00.json",
+  "trip_lines": "trip-lines_LAX_2024-03-02_00021-02.json"
+ },
+ "external": {
+  "base": "LAX",
+  "effective_from": "2024-03-02",
+  "effective_to": "2024-03-31"
+ },
+ "idx": "00021-02",
+ "parsed_lines": [
+  {
+   "id": "page_header_1",
+   "indexed_string": {
+    "idx": 2716,
+    "txt": "\f   DAY          \u2212\u2212DEPARTURE\u2212\u2212    \u2212\u2212\u2212ARRIVAL\u2212\u2212\u2212                GRND/        REST/\n"
+   },
+   "data": {}
+  },
+  {
+   "id": "page_header_2",
+   "indexed_string": {
+    "idx": 2717,
+    "txt": "DP D/A EQ FLT#  STA DLCL/DHBT ML STA ALCL/AHBT  BLOCK  SYNTH   TPAY   DUTY  TAFB   FDP CALENDAR 03/02\u221203/31\n"
+   },
+   "data": {
+    "from_date": {
+     "month": "03",
+     "day": "02"
+    },
+    "to_date": {
+     "month": "03",
+     "day": "31"
+    }
+   }
+  },
+  {
+   "id": "trip_header",
+   "indexed_string": {
+    "idx": 2742,
+    "txt": "SEQ 25121   1 OPS   POSN CA FO                                                         MO TU WE TH FR SA SU \n"
+   },
+   "data": {
+    "trip_number": "25121",
+    "ops_count": "1",
+    "positions": [
+     "CA",
+     "FO"
+    ],
+    "operations": [],
+    "special_qual": false,
+    "prior_month_trip": false
+   }
+  },
+  {
+   "id": "duty_period_report",
+   "indexed_string": {
+    "idx": 2743,
+    "txt": "                RPT 2345/2345                                                                         \u2212\u2212 \u2212\u2212 \n"
+   },
+   "data": {
+    "report": {
+     "lcl": "2345",
+     "hbt": "2345"
+    },
+    "calendar_entries": [
+     "\u2212\u2212",
+     "\u2212\u2212"
+    ]
+   }
+  },
+  {
+   "id": "flight",
+   "indexed_string": {
+    "idx": 2744,
+    "txt": "1  1/1 65  789  LAX 0045/0045  M DFW 0541/0341   2.56                                  \u2212\u2212 \u2212\u2212 \u2212\u2212 \u2212\u2212  8 \u2212\u2212 \u2212\u2212 \n"
+   },
+   "data": {
+    "dutyperiod_idx": "1",
+    "depart_day": "1",
+    "arrive_day": "1",
+    "equipment_code": "65",
+    "flight_number": "789",
+    "deadhead": false,
+    "deadhead_code": "",
+    "departure_station": "LAX",
+    "departure_time": {
+     "lcl": "0045",
+     "hbt": "0045"
+    },
+    "crew_meal": "",
+    "arrival_station": "DFW",
+    "arrival_time": {
+     "lcl": "0541",
+     "hbt": "0341"
+    },
+    "block": "2.56",
+    "synth": "0.00",
+    "ground": "0.00",
+    "equipment_change": false,
+    "calendar_entries": [
+     "\u2212\u2212",
+     "\u2212\u2212",
+     "\u2212\u2212",
+     "\u2212\u2212",
+     "8",
+     "\u2212\u2212",
+     "\u2212\u2212"
+    ]
+   }
+  },
+  {
+   "id": "duty_period_release",
+   "indexed_string": {
+    "idx": 2745,
+    "txt": "                                 RLS 0556/0356   2.56   0.00   2.56   4.11        3.56 \u2212\u2212 \u2212\u2212 \u2212\u2212 \u2212\u2212 \u2212\u2212 \u2212\u2212 \u2212\u2212 \n"
+   },
+   "data": {
+    "release": {
+     "lcl": "0556",
+     "hbt": "0356"
+    },
+    "block": "2.56",
+    "synth": "0.00",
+    "total_pay": "2.56",
+    "duty": "4.11",
+    "flight_duty": "3.56",
+    "calendar_entries": [
+     "\u2212\u2212",
+     "\u2212\u2212",
+     "\u2212\u2212",
+     "\u2212\u2212",
+     "\u2212\u2212",
+     "\u2212\u2212",
+     "\u2212\u2212"
+    ]
+   }
+  },
+  {
+   "id": "layover",
+   "indexed_string": {
+    "idx": 2746,
+    "txt": "                DFW HYATT REGENCY DFW                       19724531234    11.54       \u2212\u2212 \u2212\u2212 \u2212\u2212 \u2212\u2212 \u2212\u2212 \u2212\u2212 \u2212\u2212 \n"
+   },
+   "data": {
+    "layover_city": "DFW",
+    "hotel_name": "HYATT REGENCY DFW",
+    "hotel_phone": "19724531234",
+    "rest": "11.54",
+    "calendar_entries": [
+     "\u2212\u2212",
+     "\u2212\u2212",
+     "\u2212\u2212",
+     "\u2212\u2212",
+     "\u2212\u2212",
+     "\u2212\u2212",
+     "\u2212\u2212"
+    ]
+   }
+  },
+  {
+   "id": "transportation",
+   "indexed_string": {
+    "idx": 2747,
+    "txt": "                    SHUTTLE                                                            \u2212\u2212 \u2212\u2212 \u2212\u2212 \u2212\u2212 \u2212\u2212 \u2212\u2212 \u2212\u2212 \n"
+   },
+   "data": {
+    "name": "SHUTTLE",
+    "phone": "",
+    "calendar_entries": [
+     "\u2212\u2212",
+     "\u2212\u2212",
+     "\u2212\u2212",
+     "\u2212\u2212",
+     "\u2212\u2212",
+     "\u2212\u2212",
+     "\u2212\u2212"
+    ]
+   }
+  },
+  {
+   "id": "duty_period_report",
+   "indexed_string": {
+    "idx": 2748,
+    "txt": "                RPT 1750/1550                                                                               \n"
+   },
+   "data": {
+    "report": {
+     "lcl": "1750",
+     "hbt": "1550"
+    },
+    "calendar_entries": []
+   }
+  },
+  {
+   "id": "flight",
+   "indexed_string": {
+    "idx": 2749,
+    "txt": "2  1/1 45 1434  DFW 1850/1650  D YVR 2120/2120   4.30                                                       \n"
+   },
+   "data": {
+    "dutyperiod_idx": "2",
+    "depart_day": "1",
+    "arrive_day": "1",
+    "equipment_code": "45",
+    "flight_number": "1434",
+    "deadhead": false,
+    "deadhead_code": "",
+    "departure_station": "DFW",
+    "departure_time": {
+     "lcl": "1850",
+     "hbt": "1650"
+    },
+    "crew_meal": "",
+    "arrival_station": "YVR",
+    "arrival_time": {
+     "lcl": "2120",
+     "hbt": "2120"
+    },
+    "block": "4.30",
+    "synth": "0.00",
+    "ground": "0.00",
+    "equipment_change": false,
+    "calendar_entries": []
+   }
+  },
+  {
+   "id": "duty_period_release",
+   "indexed_string": {
+    "idx": 2750,
+    "txt": "                                 RLS 2135/2135   4.30   0.00   4.30   5.45        5.30                      \n"
+   },
+   "data": {
+    "release": {
+     "lcl": "2135",
+     "hbt": "2135"
+    },
+    "block": "4.30",
+    "synth": "0.00",
+    "total_pay": "4.30",
+    "duty": "5.45",
+    "flight_duty": "5.30",
+    "calendar_entries": []
+   }
+  },
+  {
+   "id": "layover",
+   "indexed_string": {
+    "idx": 2751,
+    "txt": "                YVR VERSANTE HOTEL                          6042427777     14.25                            \n"
+   },
+   "data": {
+    "layover_city": "YVR",
+    "hotel_name": "VERSANTE HOTEL",
+    "hotel_phone": "6042427777",
+    "rest": "14.25",
+    "calendar_entries": []
+   }
+  },
+  {
+   "id": "transportation",
+   "indexed_string": {
+    "idx": 2752,
+    "txt": "                    SHUTTLE                                                                                 \n"
+   },
+   "data": {
+    "name": "SHUTTLE",
+    "phone": "",
+    "calendar_entries": []
+   }
+  },
+  {
+   "id": "duty_period_report",
+   "indexed_string": {
+    "idx": 2753,
+    "txt": "                RPT 1200/1200                                                                               \n"
+   },
+   "data": {
+    "report": {
+     "lcl": "1200",
+     "hbt": "1200"
+    },
+    "calendar_entries": []
+   }
+  },
+  {
+   "id": "flight",
+   "indexed_string": {
+    "idx": 2754,
+    "txt": "3  2/2 45 1415  YVR 1300/1300  L DFW 1910/1710   4.10          1.32X                                        \n"
+   },
+   "data": {
+    "dutyperiod_idx": "3",
+    "depart_day": "2",
+    "arrive_day": "2",
+    "equipment_code": "45",
+    "flight_number": "1415",
+    "deadhead": false,
+    "deadhead_code": "",
+    "departure_station": "YVR",
+    "departure_time": {
+     "lcl": "1300",
+     "hbt": "1300"
+    },
+    "crew_meal": "",
+    "arrival_station": "DFW",
+    "arrival_time": {
+     "lcl": "1910",
+     "hbt": "1710"
+    },
+    "block": "4.10",
+    "synth": "0.00",
+    "ground": "1.32",
+    "equipment_change": true,
+    "calendar_entries": []
+   }
+  },
+  {
+   "id": "flight",
+   "indexed_string": {
+    "idx": 2755,
+    "txt": "3  2/3 45 2090  DFW 2042/1842  D MIA 0027/2127   2.45                                                       \n"
+   },
+   "data": {
+    "dutyperiod_idx": "3",
+    "depart_day": "2",
+    "arrive_day": "3",
+    "equipment_code": "45",
+    "flight_number": "2090",
+    "deadhead": false,
+    "deadhead_code": "",
+    "departure_station": "DFW",
+    "departure_time": {
+     "lcl": "2042",
+     "hbt": "1842"
+    },
+    "crew_meal": "",
+    "arrival_station": "MIA",
+    "arrival_time": {
+     "lcl": "0027",
+     "hbt": "2127"
+    },
+    "block": "2.45",
+    "synth": "0.00",
+    "ground": "0.00",
+    "equipment_change": false,
+    "calendar_entries": []
+   }
+  },
+  {
+   "id": "duty_period_release",
+   "indexed_string": {
+    "idx": 2756,
+    "txt": "                                 RLS 0042/2142   6.55   0.00   6.55   9.42        9.27                      \n"
+   },
+   "data": {
+    "release": {
+     "lcl": "0042",
+     "hbt": "2142"
+    },
+    "block": "6.55",
+    "synth": "0.00",
+    "total_pay": "6.55",
+    "duty": "9.42",
+    "flight_duty": "9.27",
+    "calendar_entries": []
+   }
+  },
+  {
+   "id": "layover",
+   "indexed_string": {
+    "idx": 2757,
+    "txt": "                MIA EB HOTEL                                13058884662    15.03                            \n"
+   },
+   "data": {
+    "layover_city": "MIA",
+    "hotel_name": "EB HOTEL",
+    "hotel_phone": "13058884662",
+    "rest": "15.03",
+    "calendar_entries": []
+   }
+  },
+  {
+   "id": "transportation",
+   "indexed_string": {
+    "idx": 2758,
+    "txt": "                    SHUTTLE                                                                                 \n"
+   },
+   "data": {
+    "name": "SHUTTLE",
+    "phone": "",
+    "calendar_entries": []
+   }
+  },
+  {
+   "id": "duty_period_report",
+   "indexed_string": {
+    "idx": 2759,
+    "txt": "                RPT 1645/1345                                                                               \n"
+   },
+   "data": {
+    "report": {
+     "lcl": "1645",
+     "hbt": "1345"
+    },
+    "calendar_entries": []
+   }
+  },
+  {
+   "id": "flight",
+   "indexed_string": {
+    "idx": 2760,
+    "txt": "4  3/3 25   52  MIA 1745/1445  D LAX 2047/2047   6.02                                                       \n"
+   },
+   "data": {
+    "dutyperiod_idx": "4",
+    "depart_day": "3",
+    "arrive_day": "3",
+    "equipment_code": "25",
+    "flight_number": "52",
+    "deadhead": false,
+    "deadhead_code": "",
+    "departure_station": "MIA",
+    "departure_time": {
+     "lcl": "1745",
+     "hbt": "1445"
+    },
+    "crew_meal": "",
+    "arrival_station": "LAX",
+    "arrival_time": {
+     "lcl": "2047",
+     "hbt": "2047"
+    },
+    "block": "6.02",
+    "synth": "0.00",
+    "ground": "0.00",
+    "equipment_change": false,
+    "calendar_entries": []
+   }
+  },
+  {
+   "id": "duty_period_release",
+   "indexed_string": {
+    "idx": 2761,
+    "txt": "                                 RLS 2102/2102   6.02   0.00   6.02   7.17        7.02                      \n"
+   },
+   "data": {
+    "release": {
+     "lcl": "2102",
+     "hbt": "2102"
+    },
+    "block": "6.02",
+    "synth": "0.00",
+    "total_pay": "6.02",
+    "duty": "7.17",
+    "flight_duty": "7.02",
+    "calendar_entries": []
+   }
+  },
+  {
+   "id": "trip_footer",
+   "indexed_string": {
+    "idx": 2762,
+    "txt": "TTL                                             20.23   0.37  21.00        68.17                            \n"
+   },
+   "data": {
+    "block": "20.23",
+    "synth": "0.37",
+    "total_pay": "21.00",
+    "tafb": "68.17",
+    "calendar_entries": []
+   }
+  },
+  {
+   "id": "page_footer",
+   "indexed_string": {
+    "idx": 2783,
+    "txt": "COCKPIT  ISSUED 10FEB2024  EFF 02MAR2024               LAX 737  DOM                              PAGE   627\n"
+   },
+   "data": {
+    "issued": "10FEB2024",
+    "effective": "02MAR2024",
+    "base": "LAX",
+    "satellite_base": "",
+    "equipment": "737",
+    "division": "DOM",
+    "page": "627"
+   }
+  }
+ ],
+ "calendar_entries": [
+  "\u2212\u2212",
+  "\u2212\u2212",
+  "\u2212\u2212",
+  "\u2212\u2212",
+  "\u2212\u2212",
+  "\u2212\u2212",
+  "8",
+  "\u2212\u2212",
+  "\u2212\u2212",
+  "\u2212\u2212",
+  "\u2212\u2212",
+  "\u2212\u2212",
+  "\u2212\u2212",
+  "\u2212\u2212",
+  "\u2212\u2212",
+  "\u2212\u2212",
+  "\u2212\u2212",
+  "\u2212\u2212",
+  "\u2212\u2212",
+  "\u2212\u2212",
+  "\u2212\u2212",
+  "\u2212\u2212",
+  "\u2212\u2212",
+  "\u2212\u2212",
+  "\u2212\u2212",
+  "\u2212\u2212",
+  "\u2212\u2212",
+  "\u2212\u2212",
+  "\u2212\u2212",
+  "\u2212\u2212"
+ ],
+ "start_dates": [
+  "2024-03-08"
+ ],
+ "errors": []
+}

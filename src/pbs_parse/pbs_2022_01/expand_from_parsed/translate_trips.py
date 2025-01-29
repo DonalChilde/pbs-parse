@@ -1,7 +1,7 @@
 """FILE: translate_trips.py."""
 
 import logging
-from datetime import date, datetime, time, timedelta
+from datetime import date, timedelta
 from zoneinfo import ZoneInfo
 
 from pbs_parse.common.get_airport_info import get_airport_info_from_iata
@@ -56,14 +56,8 @@ def translate_trip(
     Returns:
         ExpandedTrip: _description_
     """
-    first_report = time.fromisoformat(
-        collated_trip.dutyperiods[0].report.data["report"]["lcl"]
-    )
-    report_utc = datetime.combine(
-        start_date, first_report, state.hbt_tzinfo
-    ).astimezone(UTC)
     dutyperiods = translate_dutyperiods(
-        first_report_utc=report_utc,
+        start_date=start_date,
         collated_dutyperiods=collated_trip.dutyperiods,
         state=state,
     )
@@ -96,7 +90,6 @@ def translate_trip(
     )
     expanded_trip = ExpandedTrip(
         source=source,
-        # source_idx="",
         trip_number=collated_trip.trip_header.data["trip_number"],
         base_equipment=base_equipment,
         positions=positions,

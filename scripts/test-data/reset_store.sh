@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # Argument validation check
 if [ "$#" -ne 5 ]; then
-    echo "Usage: $0 <store name> <effective_from> <effective_to> <input location>"
+    echo "Usage: $0 <stores_dir> <store_name> <effective_from> <effective_to> <input location>"
     exit 1
 fi
 STORES_DIR=$1
@@ -27,5 +27,10 @@ echo "***** Parse the data *****"
 echo
 pbs-parse store do $STORE _all_
 echo
+echo "***** Generating $STORE_NAME-stats.txt"
+echo
+pbs-parse store stats "$STORE" ">" "$STORE/$STORE_NAME-stats.txt"
+echo
 echo "***** Exporting expanded trip debug data *****"
 pbs-parse store export expanded-debug "$STORE" "$DEBUG_DIR"
+echo
