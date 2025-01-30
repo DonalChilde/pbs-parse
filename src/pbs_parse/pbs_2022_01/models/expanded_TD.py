@@ -2,6 +2,8 @@
 
 from typing import TypedDict
 
+from pbs_parse.pbs_2022_01.models.bid_data import BidDataTD
+
 
 class Position(TypedDict):
     """A position, eg. CA or FO."""
@@ -116,9 +118,7 @@ class ExpandedTripTD(TypedDict):
     """A trip."""
 
     source: ExpandedTripSourceTD
-    # source_uuid: str
-    # source_idx: str
-    # uuid: str
+    bid: BidDataTD
     trip_number: str
     base_equipment: BaseEquipment
     positions: list[Position]

@@ -1,40 +1,39 @@
 """This module handles splitting a bid package text file into `PageLines`."""
 
-from collections.abc import Callable, Iterable, Iterator
+from collections.abc import Iterable, Iterator
 from pathlib import Path
 
 from pfmsoft.indexed_string.index_strings import index_lines_in_file
 from pfmsoft.indexed_string.model import IndexedString
 
-from pbs_parse.pbs_2022_01.models.external_data import ExternalData
+from pbs_parse.pbs_2022_01.models.bid_data import BidData
 from pbs_parse.pbs_2022_01.models.page_lines import (
     PageLines,
     PageLinesSource,
     page_lines_serializer,
 )
 
+# def split_to_pages(
+#     path_in: Path,
+#     bid: BidData,
+#     observer: Callable[[PageLines], None] | None = None,
+# ) -> Iterator[PageLines]:
+#     """Split a text file to PageLines, with an optional observer.
 
-def split_to_pages(
-    path_in: Path,
-    external: ExternalData,
-    observer: Callable[[PageLines], None] | None = None,
-) -> Iterator[PageLines]:
-    """Split a text file to PageLines, with an optional observer.
+#     Args:
+#         path_in (Path): The path to the input text file.
+#         bid (BidData): Base and effective date info.
+#         observer (Callable[[PageLines], None] | None, optional): The optional observer.
+#             Defaults to None.
 
-    Args:
-        path_in (Path): The path to the input text file.
-        external (ExternalData): Base and effective date info.
-        observer (Callable[[PageLines], None] | None, optional): The optional observer.
-            Defaults to None.
-
-    Yields:
-        Iterator[PageLines]: _description_
-    """
-    reader = index_lines_in_file(file_path=path_in, index_start=1)
-    for page in parse_page_lines(source=path_in.name, external=external, lines=reader):
-        if observer:
-            observer(page)
-        yield page
+#     Yields:
+#         Iterator[PageLines]: _description_
+#     """
+#     reader = index_lines_in_file(file_path=path_in, index_start=1)
+#     for page in parse_page_lines(source=path_in.name, bid=bid, lines=reader):
+#         if observer:
+#             observer(page)
+#         yield page
 
 
 def lines_of_package_to_lines_of_pages(
@@ -65,31 +64,29 @@ def lines_of_package_to_lines_of_pages(
             yield result
 
 
-def parse_page_lines_from_file(
-    path_in: Path, external: ExternalData
-) -> Iterator[PageLines]:
+def parse_page_lines_from_file(path_in: Path, bid: BidData) -> Iterator[PageLines]:
     """Get the `PageLines` from a bid package text file.
 
     Args:
         path_in (Path): The path to a bid package text file.
-        external (ExternalData): Base and effective date info.
+        bid (BidData): Base and effective date info.
 
     Yields:
         Iterator[PageLines]: The `PageLines`
     """
     reader = index_lines_in_file(file_path=path_in, index_start=1)
-    yield from parse_page_lines(source=path_in.name, external=external, lines=reader)
+    yield from parse_page_lines(source=path_in.name, bid=bid, lines=reader)
 
 
 def parse_page_lines(
-    lines: Iterator[IndexedString], source: str, external: ExternalData
+    lines: Iterator[IndexedString], source: str, bid: BidData
 ) -> Iterator[PageLines]:
     """Get the `PageLines` from a collection of `IndexedString`s.
 
     Args:
         lines (Iterator[IndexedString]): The lines from a bid package.
         source (str): The file name of the source txt file.
-        external (ExternalData): Base and effective date info.
+        bid (BidData): Base and effective date info.
 
     Yields:
         Iterator[PageLines]: The PageLines.
@@ -99,7 +96,7 @@ def parse_page_lines(
     ):
         _source = PageLinesSource(txt_file=source)
         page = PageLines(
-            source=_source, external=external, idx=f"{idx:05}-00", lines=lines_of_page
+            source=_source, bid=bid, idx=f"{idx:05}-00", lines=lines_of_page
         )
         yield page
 

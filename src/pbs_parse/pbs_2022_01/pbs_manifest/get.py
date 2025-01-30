@@ -2,20 +2,25 @@
 
 from datetime import date
 
+from whenever import Date
+
 from pbs_parse.pbs_2022_01.models.manifest import FileTypes
 from pbs_parse.pbs_2022_01.pbs_manifest.stats import make_stats
 from pbs_parse.pbs_2022_01.pbs_manifest.store_manager import StoreManager
 
 
-def effective_dates(store: StoreManager) -> tuple[date, date]:
-    """get_effective_dates _summary_.
+def effective_dates(store: StoreManager) -> tuple[Date, Date]:
+    """effective_dates.
+
+    Args:
+        store (StoreManager): _description_
 
     Returns:
-        tuple[date, date]: (from,to)
+        tuple[Date, Date]: (from,to))
     """
     return (
-        date.fromisoformat(store.manifest["effective_from"]),
-        date.fromisoformat(store.manifest["effective_to"]),
+        Date.parse_common_iso(store.manifest["effective_from"]),
+        Date.parse_common_iso(store.manifest["effective_to"]),
     )
 
 

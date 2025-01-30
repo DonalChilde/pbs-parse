@@ -1,6 +1,7 @@
 """FILE: translate_trips.py."""
 
 import logging
+from copy import deepcopy
 from datetime import date, timedelta
 from zoneinfo import ZoneInfo
 
@@ -90,6 +91,7 @@ def translate_trip(
     )
     expanded_trip = ExpandedTrip(
         source=source,
+        bid=deepcopy(state.bid),
         trip_number=collated_trip.trip_header.data["trip_number"],
         base_equipment=base_equipment,
         positions=positions,

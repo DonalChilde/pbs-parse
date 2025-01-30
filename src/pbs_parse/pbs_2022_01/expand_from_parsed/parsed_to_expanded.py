@@ -32,6 +32,7 @@ class ParsedToExpanded:
             source_file=parsed_trip.default_file_name(),
             start_dates=self.parsed.start_dates,
             parsed_source=self.parsed.source,
+            bid=self.parsed.bid,
         )
 
     def translate(self) -> list[ExpandedTrip]:

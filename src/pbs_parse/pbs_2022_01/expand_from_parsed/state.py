@@ -4,6 +4,7 @@ from dataclasses import dataclass, field
 from datetime import date
 from zoneinfo import ZoneInfo
 
+from pbs_parse.pbs_2022_01.models.bid_data import BidData
 from pbs_parse.pbs_2022_01.models.expanded import AirportInfo
 from pbs_parse.pbs_2022_01.models.parsed_trip import ParsedTripSource
 
@@ -19,6 +20,7 @@ class State:
     source_file: str = ""
     start_dates: list[date] = field(default_factory=list)
     parsed_source: ParsedTripSource
+    bid: BidData
 
     def reset(self):
         """Reset the dp and flight counters before each trip expansion."""

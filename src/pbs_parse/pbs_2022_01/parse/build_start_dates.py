@@ -1,13 +1,13 @@
 """FILE: build_start_dates.py."""
 
-from datetime import date
+from whenever import Date
 
 from pbs_parse.snippets.datetime.date_range import date_range
 
 
 def build_start_dates(
-    effective_from: date, effective_to: date, calendar: list[str]
-) -> list[date]:
+    effective_from: Date, effective_to: Date, calendar: list[str]
+) -> list[Date]:
     """build_start_dates.
 
     Args:
@@ -22,12 +22,16 @@ def build_start_dates(
     Returns:
         list[date]: _description_
     """
-    effective_dates = list(date_range(start_date=effective_from, end_date=effective_to))
+    # Get a range of py dates to convert to whenever dates, waiting for whenever to implement date range.
+    py_dates = date_range(
+        start_date=effective_from.py_date(), end_date=effective_to.py_date()
+    )
+    effective_dates = [Date.from_py_date(x) for x in py_dates]
     if len(effective_dates) != len(calendar):
         raise ValueError(
             f"The length of effective_dates {effective_dates!r} does not match the length of calendar {calendar!r}"
         )
-    result: list[date] = []
+    result: list[Date] = []
     for idx, item in enumerate(calendar):
         if item.isnumeric():
             if effective_dates[idx].day != int(item):

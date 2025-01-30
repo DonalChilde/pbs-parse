@@ -6,8 +6,8 @@ from pathlib import Path
 from pfmsoft.state_parser import ParseContext
 
 from pbs_parse.pbs_2022_01.expand_from_parsed.parsed_to_expanded import ParsedToExpanded
+from pbs_parse.pbs_2022_01.models.bid_data import BidData
 from pbs_parse.pbs_2022_01.models.expanded import ExpandedTrip
-from pbs_parse.pbs_2022_01.models.external_data import ExternalData
 from pbs_parse.pbs_2022_01.models.page_lines import PageLines
 from pbs_parse.pbs_2022_01.models.parsed_trip import ParsedTrip
 from pbs_parse.pbs_2022_01.models.trip_lines import TripLines
@@ -18,17 +18,17 @@ from pbs_parse.pbs_2022_01.split.extract_trips import parse_trip_lines
 from . import save
 
 
-def source_to_pages(path_in: Path, external: ExternalData) -> Iterator[PageLines]:
+def source_to_pages(path_in: Path, bid: BidData) -> Iterator[PageLines]:
     """source_to_pages.
 
     Args:
         path_in (Path): _description_
-        external (ExternalData): _description_
+        bid (BidData): _description_
 
     Yields:
         Iterator[PageLines]: _description_
     """
-    yield from parse_page_lines_from_file(path_in=path_in, external=external)
+    yield from parse_page_lines_from_file(path_in=path_in, bid=bid)
 
 
 def pages_to_trips(pages: Iterable[PageLines]) -> Iterator[TripLines]:

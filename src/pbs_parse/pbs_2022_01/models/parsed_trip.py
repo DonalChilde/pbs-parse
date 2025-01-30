@@ -1,7 +1,6 @@
 """Models for Parsed trips."""
 
 from dataclasses import dataclass, field
-from datetime import date
 from pathlib import Path
 from typing import TypedDict
 from uuid import NAMESPACE_DNS, uuid5
@@ -9,8 +8,9 @@ from uuid import NAMESPACE_DNS, uuid5
 from pfmsoft.indexed_string.model import IndexedStringTD
 from pfmsoft.simple_serializer import DataclassSerializer
 from pfmsoft.state_parser import model
+from whenever import Date
 
-from pbs_parse.pbs_2022_01.models.external_data import ExternalData, ExternalDataTD
+from pbs_parse.pbs_2022_01.models.bid_data import BidData, BidDataTD
 from pbs_parse.snippets.file.data_file_loader import DataFileLoader
 
 PARSED_TRIP_NS = uuid5(NAMESPACE_DNS, "pbs_parse.pbs_2022_01.parsed_trip")
@@ -28,7 +28,7 @@ class ParsedTripTD(TypedDict):
     """A simple object version of ParsedTrip."""
 
     source: ParsedTripSourceTD
-    external: ExternalDataTD
+    bid: BidDataTD
     idx: str
     parsed_lines: list[model.ParsedIndexedStringTD]
     calendar_entries: list[str]
@@ -67,11 +67,11 @@ class ParsedTrip:
     """ParsedTrip contains the parsed lines of a pbs trip."""
 
     source: ParsedTripSource
-    external: ExternalData
+    bid: BidData
     idx: str
     parsed_lines: list[model.ParsedIndexedString] = field(default_factory=list)
     calendar_entries: list[str] = field(default_factory=list)
-    start_dates: list[date] = field(default_factory=list)
+    start_dates: list[Date] = field(default_factory=list)
     errors: list[str] = field(default_factory=list)
 
     @staticmethod
@@ -79,14 +79,14 @@ class ParsedTrip:
         """Reconstitute a ParsedTrip from a simple object."""
         result = ParsedTrip(
             source=ParsedTripSource.from_simple(simple_obj["source"]),
-            external=ExternalData.from_simple(simple_obj["external"]),
+            bid=BidData.from_simple(simple_obj["bid"]),
             idx=simple_obj["idx"],
             parsed_lines=[
                 model.ParsedIndexedString.from_simple(x)
                 for x in simple_obj["parsed_lines"]
             ],
             calendar_entries=[x for x in simple_obj["calendar_entries"]],
-            start_dates=[date.fromisoformat(x) for x in simple_obj["start_dates"]],
+            start_dates=[Date.parse_common_iso(x) for x in simple_obj["start_dates"]],
             errors=[x for x in simple_obj["errors"]],
         )
         return result
@@ -95,7 +95,7 @@ class ParsedTrip:
         """To_simple."""
         return ParsedTripTD(
             source=self.source.to_simple(),
-            external=self.external.to_simple(),
+            bid=self.bid.to_simple(),
             idx=self.idx,
             parsed_lines=[
                 model.ParsedIndexedStringTD(
@@ -108,7 +108,7 @@ class ParsedTrip:
                 for x in self.parsed_lines
             ],
             calendar_entries=[x for x in self.calendar_entries],
-            start_dates=[x.isoformat() for x in self.start_dates],
+            start_dates=[x.format_common_iso() for x in self.start_dates],
             errors=[x for x in self.errors],
         )
 
@@ -122,20 +122,20 @@ class ParsedTrip:
         Returns:
             str: _description_
         """
-        return self.assemble_file_name(idx=self.idx, external=self.external)
+        return self.assemble_file_name(idx=self.idx, bid=self.bid)
 
     @staticmethod
-    def assemble_file_name(idx: str, external: ExternalData) -> str:
+    def assemble_file_name(idx: str, bid: BidData) -> str:
         """assemble_file_name.
 
         Args:
             idx (str): _description_
-            external (ExternalData): _description_
+            bid (BidData): _description_
 
         Returns:
             str: _description_
         """
-        return f"parsed-trip_{external.base}_{external.effective_from}_{idx}.json"
+        return f"parsed-trip_{bid.name}_{bid.base}_{idx}.json"
 
     def original_text(self, with_line_num: bool = True, sep: str = "") -> str:
         """Get the original input text, with and without line numbers."""
@@ -153,7 +153,7 @@ class ParsedTrip:
             f"{self.idx=}\n"
             f"{self.source=}\n"
             f"Errors: {len(self.errors)}\n"
-            f"{"\n".join(self.errors)}"
+            f"{'\n'.join(self.errors)}"
             "\nText Input:\n"
             f"{self.original_text()}"
             "Parsed Data:\n"

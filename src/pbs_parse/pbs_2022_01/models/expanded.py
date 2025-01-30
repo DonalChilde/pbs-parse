@@ -11,6 +11,7 @@ from pfmsoft.simple_serializer import DataclassSerializer
 import pbs_parse.pbs_2022_01.models.expanded_TD as TD
 from pbs_parse.airports import airport_from_iata
 from pbs_parse.common.format_duration import format_td
+from pbs_parse.pbs_2022_01.models.bid_data import BidData
 from pbs_parse.snippets.datetime.factored_timedelta import timedelta_to_isoformat
 from pbs_parse.snippets.datetime.iso8601_duration_2 import isoformat_to_timedelta
 from pbs_parse.snippets.file.data_file_loader import DataFileLoader
@@ -47,9 +48,9 @@ class AirportInfo:
         """
         return (
             f"AirportInfo:\n"
-            f"{"iata:":>12} {self.iata}\n"
-            f"{"icao:":>12} {self.icao}\n"
-            f"{"tz_name:":>12} {self.tz_name}\n"
+            f"{'iata:':>12} {self.iata}\n"
+            f"{'icao:':>12} {self.icao}\n"
+            f"{'tz_name:':>12} {self.tz_name}\n"
         )
 
 
@@ -180,12 +181,12 @@ class Flight:
             str: _description_
         """
         return (
-            f"{f"Flight:":>14} {self.number} equip: {self.eq_code} DH: {self.deadhead}\n"
-            f"{"utc:":>38} {self.departure_utc}{f"utc:":>18} {self.arrival_utc} BLOCK: {format_td(self.arrival_utc-self.departure_utc)}\n"
-            f"{f"Depart {self.departure_station.iata} BLOCK: {format_td(self.flight_time)} lcl:":>38} {self.departure_lcl}{f"Arrive {self.arrival_station.iata} lcl:":>18} {self.arrival_lcl} BLOCK: {format_td(self.arrival_lcl-self.departure_lcl)}\n"
-            f"{"hbt:":>38} {self.departure_hbt}{f"hbt:":>18} {self.arrival_hbt} BLOCK: {format_td(self.arrival_hbt-self.departure_hbt)}\n"
-            f"{"flight:":>38} {format_td(self.flight_time)} soft: {format_td(self.soft_time)} operating: {format_td(self.operating_time)} ground: {format_td(self.ground_time)}\n"
-            f"{" "*14}{self!r}\n"
+            f"{f'Flight:':>14} {self.number} equip: {self.eq_code} DH: {self.deadhead}\n"
+            f"{'utc:':>38} {self.departure_utc}{f'utc:':>18} {self.arrival_utc} BLOCK: {format_td(self.arrival_utc - self.departure_utc)}\n"
+            f"{f'Depart {self.departure_station.iata} BLOCK: {format_td(self.flight_time)} lcl:':>38} {self.departure_lcl}{f'Arrive {self.arrival_station.iata} lcl:':>18} {self.arrival_lcl} BLOCK: {format_td(self.arrival_lcl - self.departure_lcl)}\n"
+            f"{'hbt:':>38} {self.departure_hbt}{f'hbt:':>18} {self.arrival_hbt} BLOCK: {format_td(self.arrival_hbt - self.departure_hbt)}\n"
+            f"{'flight:':>38} {format_td(self.flight_time)} soft: {format_td(self.soft_time)} operating: {format_td(self.operating_time)} ground: {format_td(self.ground_time)}\n"
+            f"{' ' * 14}{self!r}\n"
         )
 
 
@@ -243,11 +244,12 @@ class Layover:
     hotels: list[Hotel] = field(default_factory=list)
 
     def __str__(self) -> str:
+        """__str__."""
         return (
-            f"{"utc:":>35} {self.start_utc}{f"utc:":>18} {self.end_utc} REST: {format_td(self.end_utc-self.start_utc)}\n"
-            f"{f"Layover {self.layover_station.iata} REST: {format_td(self.rest)} lcl:":>35} {self.start_lcl}{f"End lcl:":>18} {self.end_lcl} REST: {format_td(self.end_lcl-self.start_lcl)}\n"
-            f"{"hbt:":>35} {self.start_hbt}{f"hbt:":>18} {self.end_hbt} REST: {format_td(self.end_hbt-self.start_hbt)}\n"
-            f"{" "*14}{self!r}\n"
+            f"{'utc:':>35} {self.start_utc}{f'utc:':>18} {self.end_utc} REST: {format_td(self.end_utc - self.start_utc)}\n"
+            f"{f'Layover {self.layover_station.iata} REST: {format_td(self.rest)} lcl:':>35} {self.start_lcl}{f'End lcl:':>18} {self.end_lcl} REST: {format_td(self.end_lcl - self.start_lcl)}\n"
+            f"{'hbt:':>35} {self.start_hbt}{f'hbt:':>18} {self.end_hbt} REST: {format_td(self.end_hbt - self.start_hbt)}\n"
+            f"{' ' * 14}{self!r}\n"
         )
 
     def to_simple(self) -> TD.Layover:
@@ -362,14 +364,14 @@ class DutyPeriod:
             str: _description_
         """
         return (
-            f"{"utc:":>30} {self.report_utc}{f"utc:":>18} {self.release_utc} DUTY: {format_td(self.release_utc-self.report_utc)}\n"
-            f"{f"Report {self.report_station.iata} DUTY: {format_td(self.duty)} lcl:":>30} {self.report_lcl}{f"Release {self.release_station.iata} lcl:":>18} {self.release_lcl} DUTY: {format_td(self.release_lcl-self.report_lcl)}\n"
-            f"{"hbt:":>30} {self.report_hbt}{f"hbt:":>18} {self.release_hbt} DUTY: {format_td(self.release_hbt-self.report_hbt)}\n"
+            f"{'utc:':>30} {self.report_utc}{f'utc:':>18} {self.release_utc} DUTY: {format_td(self.release_utc - self.report_utc)}\n"
+            f"{f'Report {self.report_station.iata} DUTY: {format_td(self.duty)} lcl:':>30} {self.report_lcl}{f'Release {self.release_station.iata} lcl:':>18} {self.release_lcl} DUTY: {format_td(self.release_lcl - self.report_lcl)}\n"
+            f"{'hbt:':>30} {self.report_hbt}{f'hbt:':>18} {self.release_hbt} DUTY: {format_td(self.release_hbt - self.report_hbt)}\n"
             "\n"
             "       FLIGHTS\n"
-            f"{"\n".join([str(x) for x in self.flights])}"
+            f"{'\n'.join([str(x) for x in self.flights])}"
             "\n"
-            f"{f"       LAYOVER\n{self.layover}" if self.layover is not None else ""}"
+            f"{f'       LAYOVER\n{self.layover}' if self.layover is not None else ''}"
         )
 
 
@@ -397,6 +399,7 @@ class ExpandedTrip:
     """A trip."""
 
     source: ExpandedTripSource
+    bid: BidData
     trip_number: str
     base_equipment: BaseEquipment
     special_qual: bool
@@ -419,34 +422,37 @@ class ExpandedTrip:
 
     def default_file_name(self) -> str:
         """Assemble a file name from trip data."""
-        ret_value: list[str] = []
-        ret_value.append("expanded-trip")
-        ret_value.append(f"_{self.base_equipment.base.iata}")
-        if self.base_equipment.satellite_base:
-            ret_value.append(f"_{self.base_equipment.satellite_base.iata}")
-        ret_value.append(f"_{self.base_equipment.equipment}")
-        ret_value.append(f"_{self.start_lcl.date().isoformat()}")
-        ret_value.append(f"_{self.trip_number}")
-        ret_value.append(".json")
-        return "".join(ret_value)
+        name = (
+            "expanded-trip"
+            f"_{self.bid.name}"
+            f"_{self.base_equipment.base.iata}"
+            f"{f'_{self.base_equipment.satellite_base.iata}' if self.base_equipment.satellite_base is not None else ''}"
+            f"_{self.base_equipment.equipment}"
+            f"_{self.start_lcl.date().isoformat()}"
+            f"_{self.trip_number}"
+            ".json"
+        )
+
+        return name
 
     def __str__(self) -> str:
+        """__str__."""
         return (
             f"EXPANDED TRIP {self.trip_number}-{self.start_lcl.date()} {self.base_equipment!r}\n\n"
-            f'SOURCE: {self.source!r}\n'
+            f"SOURCE: {self.source!r}\n"
             f"ERRORS: {len(self.errors)}\n"
-            f"{"\n".join([f"  {x}" for x in self.errors])}\n"
+            f"{'\n'.join([f'  {x}' for x in self.errors])}\n"
             f"\n\n"
-            f"Positions: {" ".join([x.name for x in self.positions])} "
+            f"Positions: {' '.join([x.name for x in self.positions])} "
             f"SpecialQual: {self.special_qual} "
-            f"Operations: {" ".join([x.name for x in self.operations])}\n\n"
-            f"{"utc:":>30} {self.start_utc}{f"utc:":>18} {self.end_utc} TAFB: {format_td(self.end_utc-self.start_utc)}\n"
-            f"{f"Start {self.start_station.iata} TAFB: {format_td(self.tafb)} lcl:":>30} {self.start_lcl}{f"End {self.end_station.iata} lcl:":>18} {self.end_lcl} TAFB: {format_td(self.end_lcl-self.start_lcl)}\n"
-            f"{"hbt:":>30} {self.start_hbt}{f"hbt:":>18} {self.end_hbt} TAFB: {format_td(self.end_hbt-self.start_hbt)}\n"
+            f"Operations: {' '.join([x.name for x in self.operations])}\n\n"
+            f"{'utc:':>30} {self.start_utc}{f'utc:':>18} {self.end_utc} TAFB: {format_td(self.end_utc - self.start_utc)}\n"
+            f"{f'Start {self.start_station.iata} TAFB: {format_td(self.tafb)} lcl:':>30} {self.start_lcl}{f'End {self.end_station.iata} lcl:':>18} {self.end_lcl} TAFB: {format_td(self.end_lcl - self.start_lcl)}\n"
+            f"{'hbt:':>30} {self.start_hbt}{f'hbt:':>18} {self.end_hbt} TAFB: {format_td(self.end_hbt - self.start_hbt)}\n"
             "\n"
             "DUTYPERIODS\n"
-            f"{"\n".join([str(x) for x in self.dutyperiods])}\n"
-            f"{"\n".join([str(x) for x in airports_in_trip(self).values()])}"
+            f"{'\n'.join([str(x) for x in self.dutyperiods])}\n"
+            f"{'\n'.join([str(x) for x in airports_in_trip(self).values()])}"
         )
 
     @staticmethod
@@ -454,6 +460,7 @@ class ExpandedTrip:
         """Turn simple object into Trip."""
         result = ExpandedTrip(
             source=ExpandedTripSource(**simple_obj["source"]),
+            bid=BidData.from_simple(simple_obj["bid"]),
             trip_number=simple_obj["trip_number"],
             base_equipment=BaseEquipment.from_simple(simple_obj["base_equipment"]),
             positions=[Position(name=x["name"]) for x in simple_obj["positions"]],
@@ -480,6 +487,7 @@ class ExpandedTrip:
         """Trip to simple object."""
         result = TD.ExpandedTripTD(
             source=self.source.to_simple(),
+            bid=self.bid.to_simple(),
             trip_number=self.trip_number,
             base_equipment=self.base_equipment.to_simple(),
             positions=[TD.Position(name=x.name) for x in self.positions],

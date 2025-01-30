@@ -44,16 +44,15 @@ class TripLinesParser:
         )
         trip = ParsedTrip(
             source=_source,
-            external=deepcopy(trip_lines.external),
-            # source_uuid=trip_lines.uuid,
+            bid=deepcopy(trip_lines.bid),
             idx=trip_lines.idx,
             parsed_lines=[x.parsed_indexed_string for x in handler.results],
         )
         if not is_prior_month(parsed_trip=trip):
             trip.calendar_entries = collect_calendar(parsed_trip=trip)
             trip.start_dates = build_start_dates(
-                effective_from=trip.external.effective_from,
-                effective_to=trip.external.effective_to,
+                effective_from=trip.bid.effective.start,
+                effective_to=trip.bid.effective.end,
                 calendar=trip.calendar_entries,
             )
         return trip
@@ -77,15 +76,15 @@ def parse_trip(ctx: ParseContext, trip: TripLines) -> ParsedTrip:
     )
     parsed = ParsedTrip(
         source=_source,
-        external=deepcopy(trip.external),
+        bid=deepcopy(trip.bid),
         idx=trip.idx,
         parsed_lines=[x.parsed_indexed_string for x in handler.results],
     )
     if not is_prior_month(parsed_trip=parsed):
         parsed.calendar_entries = collect_calendar(parsed_trip=parsed)
         parsed.start_dates = build_start_dates(
-            effective_from=trip.external.effective_from,
-            effective_to=trip.external.effective_to,
+            effective_from=trip.bid.effective.start,
+            effective_to=trip.bid.effective.end,
             calendar=parsed.calendar_entries,
         )
     return parsed

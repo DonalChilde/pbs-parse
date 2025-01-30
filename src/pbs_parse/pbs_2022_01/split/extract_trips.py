@@ -13,24 +13,6 @@ from pbs_parse.pbs_2022_01.models.trip_lines import (
     TripLinesSource,
 )
 
-# def split_to_trips(
-#     pages: Iterable[PageLines], observer: Callable[[TripLines], None] | None = None
-# ) -> Iterator[TripLines]:
-#     """Split an iterable of PageLines to TripLines, with an optional observer.
-
-#     Args:
-#         pages (Iterable[PageLines]): The PageLines.
-#         observer (Callable[[TripLines], None] | None, optional): The optional observer. Defaults to None.
-
-#     Yields:
-#         Iterator[TripLines]: _description_
-#     """
-#     for page in pages:
-#         for trip_lines in parse_trip_lines(page):
-#             if observer:
-#                 observer(trip_lines)
-#             yield trip_lines
-
 
 def lines_of_page_to_lines_of_trips(
     lines: Iterable[IndexedString],
@@ -90,7 +72,7 @@ def parse_trip_lines(page: PageLines) -> Iterator[TripLines]:
         )
         trip = TripLines(
             source=source,
-            external=deepcopy(page.external),
+            bid=deepcopy(page.bid),
             idx=f"{page_number}-{idx:02}",
             lines=[page.lines[0], page.lines[1], *trip_lines, page.lines[-1]],
         )

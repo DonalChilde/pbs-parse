@@ -8,18 +8,18 @@ from rich.progress import Progress, TaskID
 import pbs_parse.pbs_2022_01.pbs_manifest as STORE
 from pbs_parse.pbs_2022_01 import api as API
 from pbs_parse.pbs_2022_01.models import manifest
-from pbs_parse.pbs_2022_01.models.external_data import ExternalData
+from pbs_parse.pbs_2022_01.models.bid_data import BidData, Effective
 from pbs_parse.pbs_2022_01.models.page_lines import PageLines
 
 
 def split_to_pages(
-    path_in: Path, external: ExternalData, task_id: TaskID, progress: Progress
+    path_in: Path, bid: BidData, task_id: TaskID, progress: Progress
 ) -> Iterator[PageLines]:
     """split_to_pages.
 
     Args:
         path_in (Path): _description_
-        external (ExternalData): _description_
+        bid (BidData): _description_
         task_id (TaskID): _description_
         progress (Progress): _description_
 
@@ -27,7 +27,7 @@ def split_to_pages(
         Iterator[PageLines]: _description_
     """
     for idx, page in enumerate(
-        API.transform.source_to_pages(path_in=path_in, external=external), start=1
+        API.transform.source_to_pages(path_in=path_in, bid=bid), start=1
     ):
         progress.update(
             task_id=task_id,
@@ -56,16 +56,17 @@ def split_to_pages_store(
         base=base, file_type=manifest.FileTypes.TXT_PACKAGE
     )
     effective_from, effective_to = STORE.get.effective_dates(store=store)
+    name = STORE.get.name(store=store)
     source_path = source_info[0]["file_path"]
-    external = ExternalData(
-        base=base, effective_from=effective_from, effective_to=effective_to
+    bid = BidData(
+        name=name,
+        base=base,
+        effective=Effective(start=effective_from, end=effective_to),
     )
     progress.update(task_id=task_id, total=1, description="Splitting package....")
     path_in = store.manifest_directory / source_path
     for idx, page in enumerate(
-        split_to_pages(
-            path_in=path_in, external=external, task_id=task_id, progress=progress
-        ),
+        split_to_pages(path_in=path_in, bid=bid, task_id=task_id, progress=progress),
         start=1,
     ):
         STORE.save.page_lines(store=store, base=base, page=page, overwrite=overwrite)
@@ -75,7 +76,7 @@ def split_to_pages_store(
 def split_to_pages_disk(
     path_in: Path,
     path_out: Path,
-    external: ExternalData,
+    bid: BidData,
     overwrite: bool,
     task_id: TaskID,
     progress: Progress,
@@ -85,14 +86,12 @@ def split_to_pages_disk(
     Args:
         path_in (Path): _description_
         path_out (Path): _description_
-        external (ExternalData): _description_
+        bid (BidData): _description_
         overwrite (bool): _description_
         task_id (TaskID): _description_
         progress (Progress): _description_
     """
     progress.update(task_id=task_id, total=1, description="Splitting package....")
-    pages = split_to_pages(
-        path_in=path_in, external=external, task_id=task_id, progress=progress
-    )
+    pages = split_to_pages(path_in=path_in, bid=bid, task_id=task_id, progress=progress)
     for page in pages:
         API.save.page_lines(dir_out=path_out, page_lines=page, overwrite=overwrite)
