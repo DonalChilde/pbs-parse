@@ -1,19 +1,16 @@
 """FILE: translate_layover.py."""
 
-from datetime import datetime
-from zoneinfo import ZoneInfo
-
 from pfmsoft.state_parser.model import ParsedIndexedString
+from whenever import ZonedDateTime
 
 from pbs_parse.common.get_airport_info import get_airport_info_from_iata
-from pbs_parse.common.parse_duration import parse_duration
-from pbs_parse.pbs_2022_01.expand_from_parsed.next_utc import next_utc
+from pbs_parse.common.parse_duration_whenever import parse_duration
 from pbs_parse.pbs_2022_01.expand_from_parsed.state import State
 from pbs_parse.pbs_2022_01.models.expanded import Hotel, Layover, Transportation
 
 
 def translate_layover(
-    dutyperiod_release_utc: datetime,
+    dutyperiod_release: ZonedDateTime,
     layover: ParsedIndexedString | None,
     hotel_info: list[ParsedIndexedString],
     state: State,
@@ -21,7 +18,7 @@ def translate_layover(
     """translate_layover.
 
     Args:
-        dutyperiod_release_utc (datetime): _description_
+        dutyperiod_release (ZonedDateTime): _description_
         layover (ParsedIndexedString | None): _description_
         hotel_info (list[ParsedIndexedString]): _description_
         state (State): _description_
@@ -34,7 +31,7 @@ def translate_layover(
     layover_station = get_airport_info_from_iata(iata=layover.data["layover_city"])
 
     rest = parse_duration(layover.data["rest"])
-    end_utc = next_utc(utc_datetime=dutyperiod_release_utc, delta=rest)
+    end = dutyperiod_release + rest
     hotel = Hotel(
         name=layover.data["hotel_name"],
         phone=layover.data["hotel_phone"],
@@ -42,12 +39,8 @@ def translate_layover(
     )
     expanded_layover = Layover(
         layover_station=layover_station,
-        start_utc=dutyperiod_release_utc,
-        start_lcl=dutyperiod_release_utc.astimezone(ZoneInfo(layover_station.tz_name)),
-        start_hbt=dutyperiod_release_utc.astimezone(state.hbt_tzinfo),
-        end_utc=end_utc,
-        end_lcl=end_utc.astimezone(ZoneInfo(layover_station.tz_name)),
-        end_hbt=end_utc.astimezone(state.hbt_tzinfo),
+        start=dutyperiod_release,
+        end=end,
         rest=rest,
         hotels=[hotel],
     )

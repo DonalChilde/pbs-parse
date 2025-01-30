@@ -1,19 +1,16 @@
 """Data model for a `Trip`."""
 
 from dataclasses import dataclass, field
-from datetime import datetime, timedelta
 from pathlib import Path
 from uuid import NAMESPACE_DNS, uuid5
 from zoneinfo import ZoneInfo
 
 from pfmsoft.simple_serializer import DataclassSerializer
+from whenever import TimeDelta, ZonedDateTime
 
 import pbs_parse.pbs_2022_01.models.expanded_TD as TD
 from pbs_parse.airports import airport_from_iata
-from pbs_parse.common.format_duration import format_td
 from pbs_parse.pbs_2022_01.models.bid_data import BidData
-from pbs_parse.snippets.datetime.factored_timedelta import timedelta_to_isoformat
-from pbs_parse.snippets.datetime.iso8601_duration_2 import isoformat_to_timedelta
 from pbs_parse.snippets.file.data_file_loader import DataFileLoader
 
 UTC = ZoneInfo("UTC")
@@ -104,21 +101,17 @@ class Flight:
     eq_code: str
     number: str
     departure_station: AirportInfo
-    departure_utc: datetime
-    departure_lcl: datetime
-    departure_hbt: datetime
+    departure: ZonedDateTime
     arrival_station: AirportInfo
-    arrival_utc: datetime
-    arrival_lcl: datetime
-    arrival_hbt: datetime
+    arrival: ZonedDateTime
     deadhead: bool
     deadhead_code: str
     crewmeal: str
     eq_change: bool
-    flight_time: timedelta
-    operating_time: timedelta
-    soft_time: timedelta
-    ground_time: timedelta
+    flight_time: TimeDelta
+    operating_time: TimeDelta
+    soft_time: TimeDelta
+    ground_time: TimeDelta
 
     def to_simple(self) -> TD.Flight:
         """Flight to simple."""
@@ -126,21 +119,17 @@ class Flight:
             eq_code=self.eq_code,
             number=self.number,
             departure_station=self.departure_station.to_simple(),
-            departure_utc=self.departure_utc.isoformat(),
-            departure_lcl=self.departure_lcl.isoformat(),
-            departure_hbt=self.departure_hbt.isoformat(),
+            departure=self.departure.format_common_iso(),
             arrival_station=self.arrival_station.to_simple(),
-            arrival_utc=self.arrival_utc.isoformat(),
-            arrival_lcl=self.arrival_lcl.isoformat(),
-            arrival_hbt=self.arrival_hbt.isoformat(),
+            arrival=self.arrival.format_common_iso(),
             deadhead=self.deadhead,
             deadhead_code=self.deadhead_code,
             crewmeal=self.crewmeal,
             eq_change=self.eq_change,
-            flight_time=timedelta_to_isoformat(self.flight_time),
-            operating_time=timedelta_to_isoformat(self.operating_time),
-            soft_time=timedelta_to_isoformat(self.soft_time),
-            ground_time=timedelta_to_isoformat(self.ground_time),
+            flight_time=self.flight_time.format_common_iso(),
+            operating_time=self.operating_time.format_common_iso(),
+            soft_time=self.soft_time.format_common_iso(),
+            ground_time=self.ground_time.format_common_iso(),
         )
 
         return result
@@ -152,25 +141,17 @@ class Flight:
             eq_code=simple_obj["eq_code"],
             number=simple_obj["number"],
             departure_station=AirportInfo(**simple_obj["departure_station"]),
-            departure_utc=datetime.fromisoformat(
-                simple_obj["departure_utc"]
-            ).astimezone(UTC),
-            departure_lcl=datetime.fromisoformat(simple_obj["departure_lcl"]),
-            departure_hbt=datetime.fromisoformat(simple_obj["departure_hbt"]),
+            departure=ZonedDateTime.parse_common_iso(simple_obj["departure"]),
             arrival_station=AirportInfo(**simple_obj["arrival_station"]),
-            arrival_utc=datetime.fromisoformat(simple_obj["arrival_utc"])
-            .astimezone(UTC)
-            .astimezone(UTC),
-            arrival_lcl=datetime.fromisoformat(simple_obj["arrival_lcl"]),
-            arrival_hbt=datetime.fromisoformat(simple_obj["arrival_hbt"]),
+            arrival=ZonedDateTime.parse_common_iso(simple_obj["arrival"]),
             deadhead=simple_obj["deadhead"],
             deadhead_code=simple_obj["deadhead_code"],
             crewmeal=simple_obj["crewmeal"],
             eq_change=simple_obj["eq_change"],
-            flight_time=isoformat_to_timedelta(simple_obj["flight_time"]),
-            operating_time=isoformat_to_timedelta(simple_obj["operating_time"]),
-            soft_time=isoformat_to_timedelta(simple_obj["soft_time"]),
-            ground_time=isoformat_to_timedelta(simple_obj["ground_time"]),
+            flight_time=TimeDelta.parse_common_iso(simple_obj["flight_time"]),
+            operating_time=TimeDelta.parse_common_iso(simple_obj["operating_time"]),
+            soft_time=TimeDelta.parse_common_iso(simple_obj["soft_time"]),
+            ground_time=TimeDelta.parse_common_iso(simple_obj["ground_time"]),
         )
         return result
 
@@ -182,10 +163,10 @@ class Flight:
         """
         return (
             f"{f'Flight:':>14} {self.number} equip: {self.eq_code} DH: {self.deadhead}\n"
-            f"{'utc:':>38} {self.departure_utc}{f'utc:':>18} {self.arrival_utc} BLOCK: {format_td(self.arrival_utc - self.departure_utc)}\n"
-            f"{f'Depart {self.departure_station.iata} BLOCK: {format_td(self.flight_time)} lcl:':>38} {self.departure_lcl}{f'Arrive {self.arrival_station.iata} lcl:':>18} {self.arrival_lcl} BLOCK: {format_td(self.arrival_lcl - self.departure_lcl)}\n"
-            f"{'hbt:':>38} {self.departure_hbt}{f'hbt:':>18} {self.arrival_hbt} BLOCK: {format_td(self.arrival_hbt - self.departure_hbt)}\n"
-            f"{'flight:':>38} {format_td(self.flight_time)} soft: {format_td(self.soft_time)} operating: {format_td(self.operating_time)} ground: {format_td(self.ground_time)}\n"
+            # f"{'utc:':>38} {self.departure_utc}{f'utc:':>18} {self.arrival_utc} BLOCK: {format_td(self.arrival_utc - self.departure_utc)}\n"
+            f"{f'Depart {self.departure_station.iata} BLOCK: {self.flight_time} lcl:':>38} {self.departure}{f'Arrive {self.arrival_station.iata} lcl:':>18} {self.arrival} BLOCK: {self.arrival - self.departure}\n"
+            # f"{'hbt:':>38} {self.departure_hbt}{f'hbt:':>18} {self.arrival_hbt} BLOCK: {format_td(self.arrival_hbt - self.departure_hbt)}\n"
+            f"{'flight:':>38} {self.flight_time} soft: {self.soft_time} operating: {self.operating_time} ground: {self.ground_time}\n"
             f"{' ' * 14}{self!r}\n"
         )
 
@@ -234,21 +215,17 @@ class Layover:
     """A Layover."""
 
     layover_station: AirportInfo
-    start_utc: datetime
-    start_lcl: datetime
-    start_hbt: datetime
-    end_utc: datetime
-    end_lcl: datetime
-    end_hbt: datetime
-    rest: timedelta
+    start: ZonedDateTime
+    end: ZonedDateTime
+    rest: TimeDelta
     hotels: list[Hotel] = field(default_factory=list)
 
     def __str__(self) -> str:
         """__str__."""
         return (
-            f"{'utc:':>35} {self.start_utc}{f'utc:':>18} {self.end_utc} REST: {format_td(self.end_utc - self.start_utc)}\n"
-            f"{f'Layover {self.layover_station.iata} REST: {format_td(self.rest)} lcl:':>35} {self.start_lcl}{f'End lcl:':>18} {self.end_lcl} REST: {format_td(self.end_lcl - self.start_lcl)}\n"
-            f"{'hbt:':>35} {self.start_hbt}{f'hbt:':>18} {self.end_hbt} REST: {format_td(self.end_hbt - self.start_hbt)}\n"
+            # f"{'utc:':>35} {self.start_utc}{f'utc:':>18} {self.end_utc} REST: {format_td(self.end_utc - self.start_utc)}\n"
+            f"{f'Layover {self.layover_station.iata} REST: {self.rest} lcl:':>35} {self.start}{f'End lcl:':>18} {self.end} REST: {self.end - self.start}\n"
+            # f"{'hbt:':>35} {self.start_hbt}{f'hbt:':>18} {self.end_hbt} REST: {format_td(self.end_hbt - self.start_hbt)}\n"
             f"{' ' * 14}{self!r}\n"
         )
 
@@ -256,14 +233,10 @@ class Layover:
         """Layover to simple."""
         result = TD.Layover(
             layover_station=self.layover_station.to_simple(),
-            start_utc=self.start_utc.isoformat(),
-            start_lcl=self.start_lcl.isoformat(),
-            start_hbt=self.start_hbt.isoformat(),
-            end_utc=self.end_utc.isoformat(),
-            end_lcl=self.end_lcl.isoformat(),
-            end_hbt=self.end_hbt.isoformat(),
+            start=self.start.format_common_iso(),
+            end=self.end.format_common_iso(),
             hotels=[x.to_simple() for x in self.hotels],
-            rest=timedelta_to_isoformat(self.rest),
+            rest=self.rest.format_common_iso(),
         )
         return result
 
@@ -272,14 +245,10 @@ class Layover:
         """Layover from simple."""
         result = Layover(
             layover_station=AirportInfo(**simple_obj["layover_station"]),
-            start_utc=datetime.fromisoformat(simple_obj["start_utc"]).astimezone(UTC),
-            start_lcl=datetime.fromisoformat(simple_obj["start_lcl"]),
-            start_hbt=datetime.fromisoformat(simple_obj["start_hbt"]),
-            end_utc=datetime.fromisoformat(simple_obj["end_utc"]).astimezone(UTC),
-            end_lcl=datetime.fromisoformat(simple_obj["end_lcl"]),
-            end_hbt=datetime.fromisoformat(simple_obj["end_hbt"]),
+            start=ZonedDateTime.parse_common_iso(simple_obj["start"]),
+            end=ZonedDateTime.parse_common_iso(simple_obj["end"]),
             hotels=[Hotel.from_simple(x) for x in simple_obj["hotels"]],
-            rest=isoformat_to_timedelta(simple_obj["rest"]),
+            rest=TimeDelta.parse_common_iso(simple_obj["rest"]),
         )
         return result
 
@@ -289,18 +258,14 @@ class DutyPeriod:
     """A dutyperiod."""
 
     report_station: AirportInfo
-    report_utc: datetime
-    report_lcl: datetime
-    report_hbt: datetime
+    report: ZonedDateTime
     release_station: AirportInfo
-    release_utc: datetime
-    release_lcl: datetime
-    release_hbt: datetime
-    duty: timedelta
-    flight_duty: timedelta
-    operating_time: timedelta
-    flight_time: timedelta
-    soft_time: timedelta
+    release: ZonedDateTime
+    duty: TimeDelta
+    flight_duty: TimeDelta
+    operating_time: TimeDelta
+    flight_time: TimeDelta
+    soft_time: TimeDelta
     layover: Layover | None
     flights: list[Flight] = field(default_factory=list)
 
@@ -312,19 +277,15 @@ class DutyPeriod:
             layover = self.layover.to_simple()
         result = TD.DutyPeriod(
             report_station=self.report_station.to_simple(),
-            report_utc=self.report_utc.isoformat(),
-            report_lcl=self.report_lcl.isoformat(),
-            report_hbt=self.report_hbt.isoformat(),
+            report=self.report.format_common_iso(),
             release_station=self.release_station.to_simple(),
-            release_utc=self.release_utc.isoformat(),
-            release_lcl=self.release_lcl.isoformat(),
-            release_hbt=self.release_hbt.isoformat(),
+            release=self.release.format_common_iso(),
             flights=[x.to_simple() for x in self.flights],
-            duty=timedelta_to_isoformat(self.duty),
-            flight_duty=timedelta_to_isoformat(self.flight_duty),
-            operating_time=timedelta_to_isoformat(self.operating_time),
-            flight_time=timedelta_to_isoformat(self.operating_time),
-            soft_time=timedelta_to_isoformat(self.soft_time),
+            duty=self.duty.format_common_iso(),
+            flight_duty=self.flight_duty.format_common_iso(),
+            operating_time=self.operating_time.format_common_iso(),
+            flight_time=self.operating_time.format_common_iso(),
+            soft_time=self.soft_time.format_common_iso(),
             layover=layover,
         )
         return result
@@ -338,21 +299,15 @@ class DutyPeriod:
             layover = Layover.from_simple(simple_obj["layover"])
         result = DutyPeriod(
             report_station=AirportInfo(**simple_obj["report_station"]),
-            report_utc=datetime.fromisoformat(simple_obj["report_utc"]).astimezone(UTC),
-            report_lcl=datetime.fromisoformat(simple_obj["report_lcl"]),
-            report_hbt=datetime.fromisoformat(simple_obj["report_hbt"]),
+            report=ZonedDateTime.parse_common_iso(simple_obj["report"]),
             release_station=AirportInfo(**simple_obj["release_station"]),
-            release_utc=datetime.fromisoformat(simple_obj["release_utc"]).astimezone(
-                UTC
-            ),
-            release_lcl=datetime.fromisoformat(simple_obj["release_lcl"]),
-            release_hbt=datetime.fromisoformat(simple_obj["release_hbt"]),
+            release=ZonedDateTime.parse_common_iso(simple_obj["release"]),
             flights=[Flight.from_simple(x) for x in simple_obj["flights"]],
-            duty=isoformat_to_timedelta(simple_obj["duty"]),
-            flight_duty=isoformat_to_timedelta(simple_obj["flight_duty"]),
-            operating_time=isoformat_to_timedelta(simple_obj["operating_time"]),
-            flight_time=isoformat_to_timedelta(simple_obj["flight_time"]),
-            soft_time=isoformat_to_timedelta(simple_obj["soft_time"]),
+            duty=TimeDelta.parse_common_iso(simple_obj["duty"]),
+            flight_duty=TimeDelta.parse_common_iso(simple_obj["flight_duty"]),
+            operating_time=TimeDelta.parse_common_iso(simple_obj["operating_time"]),
+            flight_time=TimeDelta.parse_common_iso(simple_obj["flight_time"]),
+            soft_time=TimeDelta.parse_common_iso(simple_obj["soft_time"]),
             layover=layover,
         )
         return result
@@ -364,9 +319,9 @@ class DutyPeriod:
             str: _description_
         """
         return (
-            f"{'utc:':>30} {self.report_utc}{f'utc:':>18} {self.release_utc} DUTY: {format_td(self.release_utc - self.report_utc)}\n"
-            f"{f'Report {self.report_station.iata} DUTY: {format_td(self.duty)} lcl:':>30} {self.report_lcl}{f'Release {self.release_station.iata} lcl:':>18} {self.release_lcl} DUTY: {format_td(self.release_lcl - self.report_lcl)}\n"
-            f"{'hbt:':>30} {self.report_hbt}{f'hbt:':>18} {self.release_hbt} DUTY: {format_td(self.release_hbt - self.report_hbt)}\n"
+            # f"{'utc:':>30} {self.report_utc}{f'utc:':>18} {self.release_utc} DUTY: {format_td(self.release_utc - self.report_utc)}\n"
+            f"{f'Report {self.report_station.iata} DUTY: {self.duty} lcl:':>30} {self.report}{f'Release {self.release_station.iata} lcl:':>18} {self.release} DUTY: {self.release - self.report}\n"
+            # f"{'hbt:':>30} {self.report_hbt}{f'hbt:':>18} {self.release_hbt} DUTY: {format_td(self.release_hbt - self.report_hbt)}\n"
             "\n"
             "       FLIGHTS\n"
             f"{'\n'.join([str(x) for x in self.flights])}"
@@ -404,17 +359,13 @@ class ExpandedTrip:
     base_equipment: BaseEquipment
     special_qual: bool
     start_station: AirportInfo
-    start_utc: datetime
-    start_lcl: datetime
-    start_hbt: datetime
+    start: ZonedDateTime
     end_station: AirportInfo
-    end_utc: datetime
-    end_lcl: datetime
-    end_hbt: datetime
-    flight_time: timedelta
-    operating_time: timedelta
-    soft_time: timedelta
-    tafb: timedelta
+    end: ZonedDateTime
+    flight_time: TimeDelta
+    operating_time: TimeDelta
+    soft_time: TimeDelta
+    tafb: TimeDelta
     dutyperiods: list[DutyPeriod] = field(default_factory=list)
     positions: list[Position] = field(default_factory=list)
     operations: list[Operation] = field(default_factory=list)
@@ -428,7 +379,7 @@ class ExpandedTrip:
             f"_{self.base_equipment.base.iata}"
             f"{f'_{self.base_equipment.satellite_base.iata}' if self.base_equipment.satellite_base is not None else ''}"
             f"_{self.base_equipment.equipment}"
-            f"_{self.start_lcl.date().isoformat()}"
+            f"_{self.start.date().format_common_iso()}"
             f"_{self.trip_number}"
             ".json"
         )
@@ -438,7 +389,7 @@ class ExpandedTrip:
     def __str__(self) -> str:
         """__str__."""
         return (
-            f"EXPANDED TRIP {self.trip_number}-{self.start_lcl.date()} {self.base_equipment!r}\n\n"
+            f"EXPANDED TRIP {self.trip_number}-{self.start.date()} {self.base_equipment!r}\n\n"
             f"SOURCE: {self.source!r}\n"
             f"ERRORS: {len(self.errors)}\n"
             f"{'\n'.join([f'  {x}' for x in self.errors])}\n"
@@ -446,9 +397,9 @@ class ExpandedTrip:
             f"Positions: {' '.join([x.name for x in self.positions])} "
             f"SpecialQual: {self.special_qual} "
             f"Operations: {' '.join([x.name for x in self.operations])}\n\n"
-            f"{'utc:':>30} {self.start_utc}{f'utc:':>18} {self.end_utc} TAFB: {format_td(self.end_utc - self.start_utc)}\n"
-            f"{f'Start {self.start_station.iata} TAFB: {format_td(self.tafb)} lcl:':>30} {self.start_lcl}{f'End {self.end_station.iata} lcl:':>18} {self.end_lcl} TAFB: {format_td(self.end_lcl - self.start_lcl)}\n"
-            f"{'hbt:':>30} {self.start_hbt}{f'hbt:':>18} {self.end_hbt} TAFB: {format_td(self.end_hbt - self.start_hbt)}\n"
+            # f"{'utc:':>30} {self.start_utc}{f'utc:':>18} {self.end_utc} TAFB: {format_td(self.end_utc - self.start_utc)}\n"
+            f"{f'Start {self.start_station.iata} TAFB: {self.tafb} lcl:':>30} {self.start}{f'End {self.end_station.iata} lcl:':>18} {self.end} TAFB: {self.end - self.start}\n"
+            # f"{'hbt:':>30} {self.start_hbt}{f'hbt:':>18} {self.end_hbt} TAFB: {format_td(self.end_hbt - self.start_hbt)}\n"
             "\n"
             "DUTYPERIODS\n"
             f"{'\n'.join([str(x) for x in self.dutyperiods])}\n"
@@ -467,17 +418,13 @@ class ExpandedTrip:
             operations=[Operation(name=x["name"]) for x in simple_obj["operations"]],
             special_qual=simple_obj["special_qual"],
             start_station=AirportInfo(**simple_obj["start_station"]),
-            start_utc=datetime.fromisoformat(simple_obj["start_utc"]).astimezone(UTC),
-            start_lcl=datetime.fromisoformat(simple_obj["start_lcl"]),
-            start_hbt=datetime.fromisoformat(simple_obj["start_hbt"]),
+            start=ZonedDateTime.parse_common_iso(simple_obj["start"]),
             end_station=AirportInfo(**simple_obj["end_station"]),
-            end_utc=datetime.fromisoformat(simple_obj["end_utc"]).astimezone(UTC),
-            end_lcl=datetime.fromisoformat(simple_obj["end_lcl"]),
-            end_hbt=datetime.fromisoformat(simple_obj["end_hbt"]),
-            flight_time=isoformat_to_timedelta(simple_obj["flight_time"]),
-            operating_time=isoformat_to_timedelta(simple_obj["operating_time"]),
-            soft_time=isoformat_to_timedelta(simple_obj["soft_time"]),
-            tafb=isoformat_to_timedelta(simple_obj["tafb"]),
+            end=ZonedDateTime.parse_common_iso(simple_obj["end"]),
+            flight_time=TimeDelta.parse_common_iso(simple_obj["flight_time"]),
+            operating_time=TimeDelta.parse_common_iso(simple_obj["operating_time"]),
+            soft_time=TimeDelta.parse_common_iso(simple_obj["soft_time"]),
+            tafb=TimeDelta.parse_common_iso(simple_obj["tafb"]),
             dutyperiods=[DutyPeriod.from_simple(x) for x in simple_obj["dutyperiods"]],
             errors=[x for x in simple_obj["errors"]],
         )
@@ -494,17 +441,13 @@ class ExpandedTrip:
             operations=[TD.Operation(name=x.name) for x in self.operations],
             special_qual=self.special_qual,
             start_station=self.start_station.to_simple(),
-            start_utc=self.start_utc.isoformat(),
-            start_lcl=self.start_lcl.isoformat(),
-            start_hbt=self.start_hbt.isoformat(),
+            start=self.start.format_common_iso(),
             end_station=self.end_station.to_simple(),
-            end_utc=self.end_utc.isoformat(),
-            end_lcl=self.end_lcl.isoformat(),
-            end_hbt=self.end_hbt.isoformat(),
-            flight_time=timedelta_to_isoformat(self.flight_time),
-            operating_time=timedelta_to_isoformat(self.operating_time),
-            soft_time=timedelta_to_isoformat(self.soft_time),
-            tafb=timedelta_to_isoformat(self.tafb),
+            end=self.end.format_common_iso(),
+            flight_time=self.flight_time.format_common_iso(),
+            operating_time=self.operating_time.format_common_iso(),
+            soft_time=self.soft_time.format_common_iso(),
+            tafb=self.tafb.format_common_iso(),
             dutyperiods=[x.to_simple() for x in self.dutyperiods],
             errors=[x for x in self.errors],
         )

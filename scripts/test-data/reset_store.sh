@@ -29,7 +29,7 @@ pbs-parse store do $STORE _all_
 echo
 echo "***** Generating $STORE_NAME-stats.txt"
 echo
-pbs-parse store stats "$STORE" ">" "$STORE/$STORE_NAME-stats.txt"
+pbs-parse store stats "$STORE" >"$STORE/$STORE_NAME-stats.txt"
 echo
 echo "***** Exporting expanded trip debug data *****"
 pbs-parse store export expanded-debug "$STORE" "$DEBUG_DIR"

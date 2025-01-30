@@ -1,6 +1,6 @@
 """FILE: check_tafb.py."""
 
-from pbs_parse.common.parse_duration import parse_duration
+from pbs_parse.common.parse_duration_whenever import parse_duration
 from pbs_parse.pbs_2022_01.models.collated_trip import CollatedTrip
 from pbs_parse.pbs_2022_01.models.expanded import ExpandedTrip
 

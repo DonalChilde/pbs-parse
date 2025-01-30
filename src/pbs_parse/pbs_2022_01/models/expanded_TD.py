@@ -39,13 +39,9 @@ class Flight(TypedDict):
     eq_code: str
     number: str
     departure_station: AirportInfo
-    departure_utc: str
-    departure_lcl: str
-    departure_hbt: str
+    departure: str
     arrival_station: AirportInfo
-    arrival_utc: str
-    arrival_lcl: str
-    arrival_hbt: str
+    arrival: str
     deadhead: bool
     deadhead_code: str
     crewmeal: str
@@ -75,12 +71,8 @@ class Layover(TypedDict):
     """A Layover."""
 
     layover_station: AirportInfo
-    start_utc: str
-    start_lcl: str
-    start_hbt: str
-    end_utc: str
-    end_lcl: str
-    end_hbt: str
+    start: str
+    end: str
     hotels: list[Hotel]
     rest: str
 
@@ -89,13 +81,9 @@ class DutyPeriod(TypedDict):
     """A dutyperiod."""
 
     report_station: AirportInfo
-    report_utc: str
-    report_lcl: str
-    report_hbt: str
+    report: str
     release_station: AirportInfo
-    release_utc: str
-    release_lcl: str
-    release_hbt: str
+    release: str
     flights: list[Flight]
     duty: str
     flight_duty: str
@@ -125,13 +113,9 @@ class ExpandedTripTD(TypedDict):
     operations: list[Operation]
     special_qual: bool
     start_station: AirportInfo
-    start_utc: str
-    start_lcl: str
-    start_hbt: str
+    start: str
     end_station: AirportInfo
-    end_utc: str
-    end_lcl: str
-    end_hbt: str
+    end: str
     flight_time: str
     operating_time: str
     soft_time: str

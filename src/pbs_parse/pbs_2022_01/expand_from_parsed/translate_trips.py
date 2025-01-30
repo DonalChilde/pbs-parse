@@ -2,11 +2,12 @@
 
 import logging
 from copy import deepcopy
-from datetime import date, timedelta
 from zoneinfo import ZoneInfo
 
+from whenever import Date, TimeDelta
+
 from pbs_parse.common.get_airport_info import get_airport_info_from_iata
-from pbs_parse.common.parse_duration import parse_duration
+from pbs_parse.common.parse_duration_whenever import parse_duration
 from pbs_parse.pbs_2022_01.expand_from_parsed.state import State
 from pbs_parse.pbs_2022_01.expand_from_parsed.translate_dutyperiods import (
     translate_dutyperiods,
@@ -45,7 +46,7 @@ def translate_trips(collated_trip: CollatedTrip, state: State) -> list[ExpandedT
 
 
 def translate_trip(
-    collated_trip: CollatedTrip, start_date: date, state: State
+    collated_trip: CollatedTrip, start_date: Date, state: State
 ) -> ExpandedTrip:
     """translate_trip.
 
@@ -66,8 +67,8 @@ def translate_trip(
     operations = [
         Operation(name=x) for x in collated_trip.trip_header.data["operations"]
     ]
-    flight_time = timedelta(
-        seconds=sum([x.flight_time.total_seconds() for x in dutyperiods])
+    flight_time = TimeDelta(
+        nanoseconds=sum([x.flight_time.in_nanoseconds() for x in dutyperiods])
     )
     operating_time = parse_duration(collated_trip.trip_footer.data["block"])
     soft_time = parse_duration(collated_trip.trip_footer.data["synth"])
@@ -98,13 +99,9 @@ def translate_trip(
         operations=operations,
         special_qual=collated_trip.trip_header.data["special_qual"],
         start_station=dutyperiods[0].report_station,
-        start_utc=dutyperiods[0].report_utc,
-        start_lcl=dutyperiods[0].report_lcl,
-        start_hbt=dutyperiods[0].report_hbt,
+        start=deepcopy(dutyperiods[0].report),
         end_station=dutyperiods[-1].release_station,
-        end_utc=dutyperiods[-1].release_utc,
-        end_lcl=dutyperiods[-1].release_lcl,
-        end_hbt=dutyperiods[-1].release_hbt,
+        end=deepcopy(dutyperiods[-1].release),
         flight_time=flight_time,
         operating_time=operating_time,
         soft_time=soft_time,

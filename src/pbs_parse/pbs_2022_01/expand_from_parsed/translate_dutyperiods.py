@@ -1,19 +1,19 @@
 """FILE: translate_dutyperiods.py."""
 
 import logging
-from datetime import date, datetime, time, timedelta
 from zoneinfo import ZoneInfo
 
+from whenever import Date, TimeDelta, ZonedDateTime
+
 from pbs_parse.common.get_airport_info import get_airport_info_from_iata
-from pbs_parse.common.parse_duration import parse_duration
-from pbs_parse.pbs_2022_01.expand_from_parsed.next_utc import next_utc
+from pbs_parse.common.parse_duration_whenever import parse_duration
+from pbs_parse.common.parse_time_whenever import parse_time
 from pbs_parse.pbs_2022_01.expand_from_parsed.report_to_first_flight_delta import (
     report_to_first_flight_delta,
 )
 from pbs_parse.pbs_2022_01.expand_from_parsed.state import State
 from pbs_parse.pbs_2022_01.expand_from_parsed.translate_flights import translate_flights
 from pbs_parse.pbs_2022_01.expand_from_parsed.translate_layover import translate_layover
-from pbs_parse.pbs_2022_01.expand_from_parsed.utc_to_local import utc_to_local
 from pbs_parse.pbs_2022_01.models.collated_trip import CollatedDutyPeriod
 from pbs_parse.pbs_2022_01.models.expanded import DutyPeriod
 
@@ -23,7 +23,7 @@ logger = logging.getLogger(__name__)
 
 def translate_dutyperiods(
     collated_dutyperiods: list[CollatedDutyPeriod],
-    start_date: date,
+    start_date: Date,
     state: State,
 ) -> list[DutyPeriod]:
     """translate_dutyperiods.
@@ -37,39 +37,37 @@ def translate_dutyperiods(
         list[DutyPeriod]: _description_
     """
     expanded_dutyperiods: list[DutyPeriod] = []
-    report_utc = assemble_first_report_utc(
+    report = assemble_first_report(
         collated_dutyperiods=collated_dutyperiods, start_date=start_date, state=state
     )
     for idx, collated_dp in enumerate(collated_dutyperiods, start=1):
         state.dp_idx = idx
         logger.debug(
-            "Translating dutyperiod %d with report_utc %s",
+            "Translating dutyperiod %d with report %s",
             state.dp_idx,
-            report_utc.isoformat(),
+            report.format_common_iso(),
         )
         expanded_dp = translate_dutyperiod(
-            report_utc=report_utc,
+            report=report,
             collated_dp=collated_dp,
             state=state,
         )
         expanded_dutyperiods.append(expanded_dp)
         if expanded_dp.layover is not None:
-            report_utc = next_utc(
-                utc_datetime=expanded_dp.release_utc, delta=expanded_dp.layover.rest
-            )
+            report = expanded_dp.release + expanded_dp.layover.rest
+
     return expanded_dutyperiods
 
 
 def translate_dutyperiod(
-    report_utc: datetime,
+    report: ZonedDateTime,
     collated_dp: CollatedDutyPeriod,
     state: State,
 ) -> DutyPeriod:
     """translate_dutyperiod.
 
     Args:
-        report_utc (datetime): _description_
-        next_report_lcl (str): _description_
+        report (ZonedDateTime): _description_
         collated_dp (CollatedDutyPeriod): _description_
         state (State): _description_
 
@@ -79,43 +77,37 @@ def translate_dutyperiod(
     report_station = get_airport_info_from_iata(
         iata=collated_dp.flights[0].data["departure_station"]
     )
+    if report.tz != report_station.tz_name:
+        report = report.to_tz(report_station.tz_name)
     release_station = get_airport_info_from_iata(
         collated_dp.flights[-1].data["arrival_station"]
     )
     duty = parse_duration(collated_dp.release.data["duty"])
-    release_utc = next_utc(utc_datetime=report_utc, delta=duty)
+    release = (report + duty).to_tz(release_station.tz_name)
     flight_duty = parse_duration(collated_dp.release.data["flight_duty"])
     operating_time = parse_duration(collated_dp.release.data["block"])
     soft_time = parse_duration(collated_dp.release.data["synth"])
     first_departure_delta = report_to_first_flight_delta(collated_dp=collated_dp)
-    first_departure_utc = next_utc(utc_datetime=report_utc, delta=first_departure_delta)
+    first_departure = report + first_departure_delta
     flights = translate_flights(
-        first_departure_utc=first_departure_utc,
+        first_departure=first_departure,
         parsed_flights=collated_dp.flights,
         state=state,
     )
     layover = translate_layover(
-        dutyperiod_release_utc=release_utc,
+        dutyperiod_release=release,
         layover=collated_dp.layover,
         hotel_info=collated_dp.hotel,
         state=state,
     )
-    flight_time = timedelta(
-        seconds=sum([x.flight_time.total_seconds() for x in flights])
-    )
-    report_lcl_tzinfo = ZoneInfo(report_station.tz_name)
-    report_lcl = utc_to_local(
-        report_utc, report_lcl_tzinfo, collated_dp.report.data["report"]["lcl"]
+    flight_time = TimeDelta(
+        nanoseconds=sum([x.flight_time.in_nanoseconds() for x in flights])
     )
     expanded_dutyperiod = DutyPeriod(
         report_station=report_station,
-        report_utc=report_utc,
-        report_lcl=report_lcl,
-        report_hbt=report_utc.astimezone(state.hbt_tzinfo),
+        report=report,
         release_station=release_station,
-        release_utc=release_utc,
-        release_lcl=release_utc.astimezone(ZoneInfo(release_station.tz_name)),
-        release_hbt=release_utc.astimezone(state.hbt_tzinfo),
+        release=release,
         flights=flights,
         duty=duty,
         flight_duty=flight_duty,
@@ -127,9 +119,9 @@ def translate_dutyperiod(
     return expanded_dutyperiod
 
 
-def assemble_first_report_utc(
-    collated_dutyperiods: list[CollatedDutyPeriod], start_date: date, state: State
-) -> datetime:
+def assemble_first_report(
+    collated_dutyperiods: list[CollatedDutyPeriod], start_date: Date, state: State
+) -> ZonedDateTime:
     """assemble_first_report_utc.
 
     As of 2024-01-29, AA trip start dates are based on first departure, not report time.
@@ -144,13 +136,22 @@ def assemble_first_report_utc(
     Returns:
         datetime: _description_
     """
-    first_dep = time.fromisoformat(
+    departure_time = parse_time(
         collated_dutyperiods[0].flights[0].data["departure_time"]["lcl"]
     )
-    first_dep_utc = datetime.combine(
-        start_date, first_dep, state.hbt_tzinfo
-    ).astimezone(UTC)
-    first_report_utc = first_dep_utc - report_to_first_flight_delta(
+    departure_station = get_airport_info_from_iata(
+        collated_dutyperiods[0].flights[0].data["departure_station"]
+    )
+    first_departure = ZonedDateTime(
+        start_date.year,
+        start_date.month,
+        start_date.day,
+        departure_time.hour,
+        departure_time.minute,
+        departure_time.second,
+        tz=departure_station.tz_name,
+    )
+    first_report_utc = first_departure - report_to_first_flight_delta(
         collated_dp=collated_dutyperiods[0]
     )
     return first_report_utc
