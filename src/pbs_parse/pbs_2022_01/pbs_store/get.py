@@ -1,12 +1,10 @@
 """FILE: get.py."""
 
-from datetime import date
-
 from whenever import Date
 
 from pbs_parse.pbs_2022_01.models.manifest import FileTypes
-from pbs_parse.pbs_2022_01.pbs_manifest.stats import make_stats
-from pbs_parse.pbs_2022_01.pbs_manifest.store_manager import StoreManager
+from pbs_parse.pbs_2022_01.pbs_store.stats import make_stats
+from pbs_parse.pbs_2022_01.pbs_store.store_manager import StoreManager
 
 
 def effective_dates(store: StoreManager) -> tuple[Date, Date]:

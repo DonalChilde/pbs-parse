@@ -5,8 +5,8 @@ from typing import Annotated, TypedDict
 
 import typer
 
-from pbs_parse.pbs_2022_01.pbs_manifest.exceptions import StoreManagerException
-from pbs_parse.pbs_2022_01.pbs_manifest.store_manager import StoreManager
+from pbs_parse.pbs_2022_01.pbs_store.exceptions import StoreManagerException
+from pbs_parse.pbs_2022_01.pbs_store.store_manager import StoreManager
 
 from .add_all_bases import app as add_all_bases_app
 from .add_base import app as add_base_app

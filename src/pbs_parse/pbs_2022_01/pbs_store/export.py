@@ -3,7 +3,7 @@
 from pathlib import Path
 
 from pbs_parse.pbs_2022_01 import api as API
-from pbs_parse.pbs_2022_01.pbs_manifest.store_manager import StoreManager
+from pbs_parse.pbs_2022_01.pbs_store.store_manager import StoreManager
 
 from . import load
 from .get import expanded_errors_keys

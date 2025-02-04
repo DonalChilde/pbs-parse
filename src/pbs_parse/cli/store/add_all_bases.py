@@ -7,7 +7,7 @@ from typing import Annotated, TypedDict
 
 import typer
 
-import pbs_parse.pbs_2022_01.pbs_manifest as STORE
+import pbs_parse.pbs_2022_01.pbs_store as STORE
 from pbs_parse import APP_NAME
 from pbs_parse.snippets.typer.task_complete import task_complete
 

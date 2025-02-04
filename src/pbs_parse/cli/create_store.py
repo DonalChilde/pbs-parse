@@ -7,7 +7,7 @@ from typing import Annotated
 
 import typer
 
-from pbs_parse.pbs_2022_01.pbs_manifest.store_manager import StoreManager
+from pbs_parse.pbs_2022_01.pbs_store.store_manager import StoreManager
 
 logger = logging.getLogger(__name__)
 app = typer.Typer()

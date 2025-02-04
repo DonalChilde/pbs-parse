@@ -5,7 +5,7 @@ from enum import StrEnum
 
 from rich.progress import TaskID
 
-import pbs_parse.pbs_2022_01.pbs_manifest as STORE
+import pbs_parse.pbs_2022_01.pbs_store as STORE
 
 from ..work.expand_trips import expand_trips_store
 from ..work.parse_trips import parse_trips_store

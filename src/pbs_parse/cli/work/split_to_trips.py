@@ -5,7 +5,7 @@ from pathlib import Path
 
 from rich.progress import Progress, TaskID
 
-import pbs_parse.pbs_2022_01.pbs_manifest as STORE
+import pbs_parse.pbs_2022_01.pbs_store as STORE
 from pbs_parse.pbs_2022_01 import api as API
 from pbs_parse.pbs_2022_01.models import manifest
 from pbs_parse.pbs_2022_01.models.page_lines import PageLines
