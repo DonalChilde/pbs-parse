@@ -16,5 +16,7 @@ echo "**** Resetting all bids ****"
 "$SCRIPT_DIR/reset_oct2024.sh"
 "$SCRIPT_DIR/reset_nov2024.sh"
 "$SCRIPT_DIR/reset_dec2024.sh"
+"$SCRIPT_DIR/reset_2025-01.sh"
+"$SCRIPT_DIR/reset_2025-02.sh"
 
 "$SCRIPT_DIR/stats_all.sh" >"$STATS_FILE"
