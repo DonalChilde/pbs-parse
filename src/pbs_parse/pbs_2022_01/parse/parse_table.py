@@ -27,7 +27,7 @@ def parse_table() -> dict[str, Sequence[ParserABC]]:
         ],
         "trip_header": [
             SPP(state="duty_period_report", string_parser=G.dutyperiod_report),
-            # SPP(state="prior_month_deadhead",),
+            # SPP(state="prior_month_deadhead",)
         ],
         "prior_month_deadhead": [
             SPP(state="duty_period_report", string_parser=G.dutyperiod_report),
@@ -67,7 +67,7 @@ def parse_table() -> dict[str, Sequence[ParserABC]]:
             SPP(state="calendar_only", string_parser=G.calendar_only),
         ],
         "calendar_only": [
-            SPP(state="page_footer", string_parser=G.calendar_only),
+            SPP(state="page_footer", string_parser=G.page_footer),
         ],
     }
     return scheme

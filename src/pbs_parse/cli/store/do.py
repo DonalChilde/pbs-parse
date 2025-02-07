@@ -59,6 +59,10 @@ def do(
         for base in bases:
             job = ParseJob(base=base, start=start, end=end, overwrite=overwrite)
             jobs.append(job)
-        do_jobs(jobs=jobs, store=store)
+        try:
+            do_jobs(jobs=jobs, store=store)
+        except Exception as e:
+            print(f"{e!s}")
+            raise typer.Exit(code=1) from e
     start_perf = ctx.obj[APP_NAME]["start_perf"]
     task_complete(start_perf=start_perf)

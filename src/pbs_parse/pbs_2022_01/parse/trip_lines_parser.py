@@ -36,7 +36,8 @@ class TripLinesParser:
         try:
             parser.parse(ctx=ctx, data=trip_lines.lines)
         except ParseException as e:
-            print(e)
+            print(f"Error parsing {trip_lines.default_file_name()}, error={e}")
+            raise e
         _source = ParsedTripSource(
             txt_file=trip_lines.source.txt_file,
             page_lines=trip_lines.source.page_lines,
@@ -68,7 +69,8 @@ def parse_trip(ctx: ParseContext, trip: TripLines) -> ParsedTrip:
     try:
         parser.parse(ctx=ctx, data=trip.lines)
     except ParseException as e:
-        print(e)
+        print(f"Error parsing {trip.default_file_name()}, error={e}")
+        raise e
     _source = ParsedTripSource(
         txt_file=trip.source.txt_file,
         page_lines=trip.source.page_lines,

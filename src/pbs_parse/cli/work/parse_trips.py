@@ -6,7 +6,6 @@ from pathlib import Path
 from rich.progress import Progress, TaskID
 
 import pbs_parse.pbs_2022_01.pbs_store as STORE
-from pbs_parse.common.is_prior_month import is_prior_month
 from pbs_parse.pbs_2022_01 import api as API
 from pbs_parse.pbs_2022_01.models import manifest
 from pbs_parse.pbs_2022_01.models.parsed_trip import ParsedTrip
@@ -29,17 +28,10 @@ def parse_trips(
         Iterator[ParsedTrip]: _description_
     """
     trips_parsed = 0
-    prior_trips = 0
 
     for parsed_trip in API.transform.trips_to_parsed(trips=trip_lines):
         trips_parsed += 1
-        if is_prior_month(parsed_trip=parsed_trip):
-            prior_trips += 1
-        progress.update(
-            task_id,
-            advance=1,
-            description=f"Parsing trips..... {prior_trips} prior month trips found.",
-        )
+        progress.update(task_id, advance=1)
         yield parsed_trip
 
 
@@ -63,7 +55,7 @@ def parse_trips_store(
         base=base, file_type=manifest.FileTypes.SPLIT_TRIP
     )
     progress.update(
-        task_id=task_id, total=len(trip_infos), description="Parsing trips...."
+        task_id=task_id, total=len(trip_infos), description="Parsing Trips...."
     )
     trip_lines = (
         STORE.load.trip_lines(store=store, base=base, key=x["key"]) for x in trip_infos
@@ -73,14 +65,9 @@ def parse_trips_store(
         task_id=task_id,
         progress=progress,
     ):
-        if is_prior_month(parsed_trip=parsed_trip):
-            STORE.save.parsed_prior_month_trip(
-                store=store, base=base, parsed=parsed_trip, overwrite=overwrite
-            )
-        else:
-            STORE.save.parsed_trip(
-                store=store, base=base, parsed=parsed_trip, overwrite=overwrite
-            )
+        STORE.save.parsed_trip(
+            store=store, base=base, parsed=parsed_trip, overwrite=overwrite
+        )
 
 
 def parse_trips_disk(
@@ -101,17 +88,12 @@ def parse_trips_disk(
     """
     trip_lines = (API.load.trip_lines(file_in=x) for x in trip_paths)
     progress.update(
-        task_id=task_id, total=len(trip_paths), description="Parsing trips...."
+        task_id=task_id, total=len(trip_paths), description="Parsing Trips...."
     )
-    prior_dir = path_out / "prior"
+
     for parsed_trip in parse_trips(
         trip_lines=trip_lines, task_id=task_id, progress=progress
     ):
-        if is_prior_month(parsed_trip=parsed_trip):
-            API.save.parsed_trip(
-                dir_out=prior_dir, parsed_trip=parsed_trip, overwrite=overwrite
-            )
-        else:
-            API.save.parsed_trip(
-                dir_out=path_out, parsed_trip=parsed_trip, overwrite=overwrite
-            )
+        API.save.parsed_trip(
+            dir_out=path_out, parsed_trip=parsed_trip, overwrite=overwrite
+        )

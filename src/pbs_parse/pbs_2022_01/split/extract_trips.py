@@ -34,11 +34,11 @@ def lines_of_page_to_lines_of_trips(
             if indexed_line.txt.startswith("SEQ"):
                 is_trip = True
                 accumulated_lines.append(indexed_line)
-        if indexed_line.txt.startswith("TTL"):
-            result = accumulated_lines
-            accumulated_lines = []
+        if is_trip and indexed_line.txt.startswith("−−−"):
+            accumulated_lines.pop()
+            yield accumulated_lines
+            accumulated_lines = list()
             is_trip = False
-            yield result
 
 
 def parse_trip_lines_from_file(path_in: Path) -> Iterator[TripLines]:

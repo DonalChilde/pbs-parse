@@ -29,7 +29,8 @@ def build_start_dates(
     effective_dates = [Date.from_py_date(x) for x in py_dates]
     if len(effective_dates) != len(calendar):
         raise ValueError(
-            f"The length of effective_dates {effective_dates!r} does not match the length of calendar {calendar!r}"
+            f"The len(effective_dates)={len(effective_dates)} {effective_dates!r} does "
+            f"not match len(calendar)={len(calendar)} of calendar {calendar!r}"
         )
     result: list[Date] = []
     for idx, item in enumerate(calendar):

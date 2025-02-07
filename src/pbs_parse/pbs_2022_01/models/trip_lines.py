@@ -172,3 +172,10 @@ class TripLinesLoader(DataFileLoader[TripLines]):
 
     def _translate(self, obj_path: Path) -> TripLines:
         return TRIP_LINES_SERIALIZER.load_from_json(path_in=obj_path)
+
+
+def is_prior_month(trip: TripLines) -> bool:
+    """Check to see if the trip is a prior month trip."""
+    if "prior" in trip.lines[2].txt:
+        return True
+    return False

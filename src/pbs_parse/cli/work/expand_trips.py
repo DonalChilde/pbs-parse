@@ -44,7 +44,7 @@ def expand_trips(
         progress.update(
             task_id,
             completed=idx,
-            description=f"Expanding trips.... {error_msg}",
+            description=f"Expanding Trips.... {error_msg}",
         )
         yield expanded_trip
 
@@ -69,7 +69,7 @@ def expand_trips_store(
         base=base, file_type=manifest.FileTypes.PARSED_TRIP
     )
     progress.update(
-        task_id=task_id, total=len(trip_infos), description="Expanding trips...."
+        task_id=task_id, total=len(trip_infos), description="Expanding Trips...."
     )
     parsed_trips = (
         STORE.load.parsed_trip(store=store, base=base, key=x["key"]) for x in trip_infos
@@ -106,7 +106,7 @@ def expand_trips_disk(
     progress.update(
         task_id=task_id,
         total=len(parsed_paths),
-        description="Expanding trips....",
+        description="Expanding Trips....",
     )
     for e_trip in expand_trips(
         parsed_trips=parsed_trips,

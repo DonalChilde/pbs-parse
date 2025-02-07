@@ -9,7 +9,7 @@ import pbs_parse.pbs_2022_01.pbs_store as STORE
 from pbs_parse.pbs_2022_01 import api as API
 from pbs_parse.pbs_2022_01.models import manifest
 from pbs_parse.pbs_2022_01.models.page_lines import PageLines
-from pbs_parse.pbs_2022_01.models.trip_lines import TripLines
+from pbs_parse.pbs_2022_01.models.trip_lines import TripLines, is_prior_month
 
 
 def split_to_trips(
@@ -26,8 +26,15 @@ def split_to_trips(
     Yields:
         Iterator[TripLines]: _description_
     """
+    prior_trips = 0
     for idx, trip in enumerate(API.transform.pages_to_trips(pages=pages), start=1):
-        progress.update(task_id, completed=idx)
+        if is_prior_month(trip):
+            prior_trips += 1
+        progress.update(
+            task_id,
+            completed=idx,
+            description=f"Splitting Pages to Trips..... {prior_trips} prior month trips found.",
+        )
         yield trip
 
 
@@ -61,7 +68,14 @@ def split_to_trips_store(
         task_id=task_id,
         progress=progress,
     ):
-        STORE.save.trip_lines(store=store, base=base, trip=trip, overwrite=overwrite)
+        if is_prior_month(trip):
+            STORE.save.trip_lines_prior(
+                store=store, base=base, trip=trip, overwrite=overwrite
+            )
+        else:
+            STORE.save.trip_lines(
+                store=store, base=base, trip=trip, overwrite=overwrite
+            )
 
 
 def split_to_trips_disk(
@@ -81,5 +95,9 @@ def split_to_trips_disk(
         progress (Progress): _description_
     """
     pages = (API.load.page_lines(file_in=x) for x in page_paths)
+    prior_dir = path_out / "prior"
     for trip in split_to_trips(pages=pages, task_id=task_id, progress=progress):
-        API.save.trip_lines(dir_out=path_out, trip_lines=trip, overwrite=overwrite)
+        if is_prior_month(trip):
+            API.save.trip_lines(dir_out=prior_dir, trip_lines=trip, overwrite=overwrite)
+        else:
+            API.save.trip_lines(dir_out=path_out, trip_lines=trip, overwrite=overwrite)

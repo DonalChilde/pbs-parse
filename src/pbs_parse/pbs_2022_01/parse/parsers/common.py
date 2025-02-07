@@ -64,3 +64,7 @@ class SimplePyparsingParser(PyparsingParserABC):
                 id=self.state, indexed_string=input, data=data
             ),
         )
+
+    def __repr__(self) -> str:
+        """Repr."""
+        return f"SimplePyparsingParser(state={self.state}, string_parser={self.string_parser})"

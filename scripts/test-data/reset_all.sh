@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+set -euo pipefail
+
 SCRIPT_DIR="$(dirname "$(readlink -f "$0")")"
 STATS_FILE="$HOME/projects/tmp/stats-all.txt"
 echo "**** Resetting all bids ****"
@@ -18,5 +20,6 @@ echo "**** Resetting all bids ****"
 "$SCRIPT_DIR/reset_dec2024.sh"
 "$SCRIPT_DIR/reset_2025-01.sh"
 "$SCRIPT_DIR/reset_2025-02.sh"
+"$SCRIPT_DIR/reset_2025-03.sh"
 
 "$SCRIPT_DIR/stats_all.sh" >"$STATS_FILE"

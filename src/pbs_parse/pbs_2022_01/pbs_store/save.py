@@ -59,6 +59,30 @@ def trip_lines(
     return path_out
 
 
+def trip_lines_prior(
+    store: StoreManager,
+    base: str,
+    trip: TripLines,
+    overwrite: bool = False,
+):
+    """Save prior month TripLines in the store."""
+    if store.read_only:
+        raise StoreOperationError(
+            "Store is opened in read-only mode. No changes allowed."
+        )
+    trip_info = FileInfo(
+        key=trip.default_file_name(),
+        type=FileTypes.SPLIT_TRIP_PRIOR,
+        file_path=f"{base}/trip_lines/prior/{trip.default_file_name()}",
+    )
+    path_out = store.manifest_directory / trip_info["file_path"]
+    TRIP_LINES_SERIALIZER.save_as_json(
+        path_out=path_out, complex_obj=trip, overwrite=overwrite
+    )
+    store.record_file(base=base, info=trip_info)
+    return path_out
+
+
 def parsed_trip(
     store: StoreManager, base: str, parsed: ParsedTrip, overwrite: bool = False
 ) -> Path:
@@ -80,25 +104,25 @@ def parsed_trip(
     return path_out
 
 
-def parsed_prior_month_trip(
-    store: StoreManager, base: str, parsed: ParsedTrip, overwrite: bool = False
-) -> Path:
-    """Save a ParsedTrip in the store."""
-    if store.read_only:
-        raise StoreOperationError(
-            "Store is opened in read-only mode. No changes allowed."
-        )
-    trip_info = FileInfo(
-        key=parsed.default_file_name(),
-        type=FileTypes.PARSED_PRIOR_MONTH_TRIP,
-        file_path=f"{base}/parsed_prior/{parsed.default_file_name()}",
-    )
-    path_out = store.manifest_directory / trip_info["file_path"]
-    PARSED_TRIP_SERIALIZER.save_as_json(
-        path_out=path_out, complex_obj=parsed, overwrite=overwrite
-    )
-    store.record_file(base=base, info=trip_info)
-    return path_out
+# def parsed_prior_month_trip(
+#     store: StoreManager, base: str, parsed: ParsedTrip, overwrite: bool = False
+# ) -> Path:
+#     """Save a ParsedTrip in the store."""
+#     if store.read_only:
+#         raise StoreOperationError(
+#             "Store is opened in read-only mode. No changes allowed."
+#         )
+#     trip_info = FileInfo(
+#         key=parsed.default_file_name(),
+#         type=FileTypes.PARSED_PRIOR_MONTH_TRIP,
+#         file_path=f"{base}/parsed_prior/{parsed.default_file_name()}",
+#     )
+#     path_out = store.manifest_directory / trip_info["file_path"]
+#     PARSED_TRIP_SERIALIZER.save_as_json(
+#         path_out=path_out, complex_obj=parsed, overwrite=overwrite
+#     )
+#     store.record_file(base=base, info=trip_info)
+#     return path_out
 
 
 def expanded_trip(

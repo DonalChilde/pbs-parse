@@ -63,7 +63,9 @@ def split_to_pages_store(
         base=base,
         effective=Effective(start=effective_from, end=effective_to),
     )
-    progress.update(task_id=task_id, total=1, description="Splitting package....")
+    progress.update(
+        task_id=task_id, total=1, description="Splitting Package to Pages...."
+    )
     path_in = store.manifest_directory / source_path
     for idx, page in enumerate(
         split_to_pages(path_in=path_in, bid=bid, task_id=task_id, progress=progress),
@@ -91,7 +93,9 @@ def split_to_pages_disk(
         task_id (TaskID): _description_
         progress (Progress): _description_
     """
-    progress.update(task_id=task_id, total=1, description="Splitting package....")
+    progress.update(
+        task_id=task_id, total=1, description="Splitting Package to Pages...."
+    )
     pages = split_to_pages(path_in=path_in, bid=bid, task_id=task_id, progress=progress)
     for page in pages:
         API.save.page_lines(dir_out=path_out, page_lines=page, overwrite=overwrite)
