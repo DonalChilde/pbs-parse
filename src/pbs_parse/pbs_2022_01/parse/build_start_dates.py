@@ -30,14 +30,14 @@ def build_start_dates(
     if len(effective_dates) != len(calendar):
         raise ValueError(
             f"The len(effective_dates)={len(effective_dates)} {effective_dates!r} does "
-            f"not match len(calendar)={len(calendar)} of calendar {calendar!r}"
+            f"not match len(calendar)={len(calendar)} of calendar {calendar!r} locals={locals()!r}"
         )
     result: list[Date] = []
     for idx, item in enumerate(calendar):
         if item.isnumeric():
             if effective_dates[idx].day != int(item):
                 raise ValueError(
-                    f"Calendar item {item} does not have the same day as {effective_dates[idx]}"
+                    f"Calendar item {item} does not have the same day as {effective_dates[idx]} locals={locals()!r}"
                 )
             result.append(effective_dates[idx])
     return result

@@ -1,0 +1,506 @@
+{
+ "source": {
+  "txt_file": "PBS_PHX_March_2025_20250205124557.txt",
+  "page_lines": "page-lines_2025-03_PHX_00022-00.json",
+  "trip_lines": "trip-lines_2025-03_PHX_00022-03.json"
+ },
+ "bid": {
+  "name": "2025-03",
+  "base": "PHX",
+  "effective": {
+   "start": "2025-03-02",
+   "end": "2025-03-31"
+  }
+ },
+ "idx": "00022-03",
+ "parsed_lines": [
+  {
+   "id": "page_header_1",
+   "indexed_string": {
+    "idx": 2752,
+    "txt": "\f   DAY          \u2212\u2212DEPARTURE\u2212\u2212    \u2212\u2212\u2212ARRIVAL\u2212\u2212\u2212                GRND/        REST/\n"
+   },
+   "data": {}
+  },
+  {
+   "id": "page_header_2",
+   "indexed_string": {
+    "idx": 2753,
+    "txt": "DP D/A EQ FLT#  STA DLCL/DHBT ML STA ALCL/AHBT  BLOCK  SYNTH   TPAY   DUTY  TAFB   FDP CALENDAR 03/02\u221203/31\n"
+   },
+   "data": {
+    "from_date": {
+     "month": "03",
+     "day": "02"
+    },
+    "to_date": {
+     "month": "03",
+     "day": "31"
+    }
+   }
+  },
+  {
+   "id": "trip_header",
+   "indexed_string": {
+    "idx": 2793,
+    "txt": "SEQ 10756   1 OPS   POSN CA FO                                                         MO TU WE TH FR SA SU \n"
+   },
+   "data": {
+    "trip_number": "10756",
+    "ops_count": "1",
+    "positions": [
+     "CA",
+     "FO"
+    ],
+    "operations": [],
+    "special_qual": false,
+    "prior_month_trip": false
+   }
+  },
+  {
+   "id": "duty_period_report",
+   "indexed_string": {
+    "idx": 2794,
+    "txt": "                RPT 0915/0915                                                                             2 \n"
+   },
+   "data": {
+    "report": {
+     "lcl": "0915",
+     "hbt": "0915"
+    },
+    "calendar_entries": [
+     "2"
+    ]
+   }
+  },
+  {
+   "id": "flight",
+   "indexed_string": {
+    "idx": 2795,
+    "txt": "1  1/1 63 3268  PHX 1015/1015  L MCO 1614/1414   3.59          1.06                    \u2212\u2212 \u2212\u2212 \u2212\u2212 \u2212\u2212 \u2212\u2212 \u2212\u2212 \u2212\u2212 \n"
+   },
+   "data": {
+    "dutyperiod_idx": "1",
+    "depart_day": "1",
+    "arrive_day": "1",
+    "equipment_code": "63",
+    "flight_number": "3268",
+    "deadhead": false,
+    "deadhead_code": "",
+    "departure_station": "PHX",
+    "departure_time": {
+     "lcl": "1015",
+     "hbt": "1015"
+    },
+    "crew_meal": "",
+    "arrival_station": "MCO",
+    "arrival_time": {
+     "lcl": "1614",
+     "hbt": "1414"
+    },
+    "block": "3.59",
+    "synth": "0.00",
+    "ground": "1.06",
+    "equipment_change": false,
+    "calendar_entries": [
+     "\u2212\u2212",
+     "\u2212\u2212",
+     "\u2212\u2212",
+     "\u2212\u2212",
+     "\u2212\u2212",
+     "\u2212\u2212",
+     "\u2212\u2212"
+    ]
+   }
+  },
+  {
+   "id": "flight",
+   "indexed_string": {
+    "idx": 2796,
+    "txt": "1  1/1 63 2149  MCO 1720/1520    CLT 1914/1714   1.54          1.46X                   \u2212\u2212 \u2212\u2212 \u2212\u2212 \u2212\u2212 \u2212\u2212 \u2212\u2212 \u2212\u2212 \n"
+   },
+   "data": {
+    "dutyperiod_idx": "1",
+    "depart_day": "1",
+    "arrive_day": "1",
+    "equipment_code": "63",
+    "flight_number": "2149",
+    "deadhead": false,
+    "deadhead_code": "",
+    "departure_station": "MCO",
+    "departure_time": {
+     "lcl": "1720",
+     "hbt": "1520"
+    },
+    "crew_meal": "",
+    "arrival_station": "CLT",
+    "arrival_time": {
+     "lcl": "1914",
+     "hbt": "1714"
+    },
+    "block": "1.54",
+    "synth": "0.00",
+    "ground": "1.46",
+    "equipment_change": true,
+    "calendar_entries": [
+     "\u2212\u2212",
+     "\u2212\u2212",
+     "\u2212\u2212",
+     "\u2212\u2212",
+     "\u2212\u2212",
+     "\u2212\u2212",
+     "\u2212\u2212"
+    ]
+   }
+  },
+  {
+   "id": "flight",
+   "indexed_string": {
+    "idx": 2797,
+    "txt": "1  1/1 77 1337  CLT 2100/1900    RDU 2159/1959   0.59                                  \u2212\u2212 \u2212\u2212 \u2212\u2212 \u2212\u2212 \u2212\u2212 \u2212\u2212 \u2212\u2212 \n"
+   },
+   "data": {
+    "dutyperiod_idx": "1",
+    "depart_day": "1",
+    "arrive_day": "1",
+    "equipment_code": "77",
+    "flight_number": "1337",
+    "deadhead": false,
+    "deadhead_code": "",
+    "departure_station": "CLT",
+    "departure_time": {
+     "lcl": "2100",
+     "hbt": "1900"
+    },
+    "crew_meal": "",
+    "arrival_station": "RDU",
+    "arrival_time": {
+     "lcl": "2159",
+     "hbt": "1959"
+    },
+    "block": "0.59",
+    "synth": "0.00",
+    "ground": "0.00",
+    "equipment_change": false,
+    "calendar_entries": [
+     "\u2212\u2212",
+     "\u2212\u2212",
+     "\u2212\u2212",
+     "\u2212\u2212",
+     "\u2212\u2212",
+     "\u2212\u2212",
+     "\u2212\u2212"
+    ]
+   }
+  },
+  {
+   "id": "duty_period_release",
+   "indexed_string": {
+    "idx": 2798,
+    "txt": "                                 RLS 2229/2029   6.52   0.00   6.52  11.14       10.44 \u2212\u2212 \u2212\u2212 \u2212\u2212 \u2212\u2212 \u2212\u2212 \u2212\u2212 \u2212\u2212 \n"
+   },
+   "data": {
+    "release": {
+     "lcl": "2229",
+     "hbt": "2029"
+    },
+    "block": "6.52",
+    "synth": "0.00",
+    "total_pay": "6.52",
+    "duty": "11.14",
+    "flight_duty": "10.44",
+    "calendar_entries": [
+     "\u2212\u2212",
+     "\u2212\u2212",
+     "\u2212\u2212",
+     "\u2212\u2212",
+     "\u2212\u2212",
+     "\u2212\u2212",
+     "\u2212\u2212"
+    ]
+   }
+  },
+  {
+   "id": "layover",
+   "indexed_string": {
+    "idx": 2799,
+    "txt": "                RDU SHERATON IMPERIAL HOTEL                 19199415050    13.53       \u2212\u2212                   \n"
+   },
+   "data": {
+    "layover_city": "RDU",
+    "hotel_name": "SHERATON IMPERIAL HOTEL",
+    "hotel_phone": "19199415050",
+    "rest": "13.53",
+    "calendar_entries": [
+     "\u2212\u2212"
+    ]
+   }
+  },
+  {
+   "id": "transportation",
+   "indexed_string": {
+    "idx": 2800,
+    "txt": "                    SHUTTLE                                                                                 \n"
+   },
+   "data": {
+    "name": "SHUTTLE",
+    "phone": "",
+    "calendar_entries": []
+   }
+  },
+  {
+   "id": "duty_period_report",
+   "indexed_string": {
+    "idx": 2801,
+    "txt": "                RPT 1222/1022                                                                               \n"
+   },
+   "data": {
+    "report": {
+     "lcl": "1222",
+     "hbt": "1022"
+    },
+    "calendar_entries": []
+   }
+  },
+  {
+   "id": "flight",
+   "indexed_string": {
+    "idx": 2802,
+    "txt": "2  2/2 63 2688D RDU 1252/1052    CLT 1400/1200    AA    1.08   2.59X                                        \n"
+   },
+   "data": {
+    "dutyperiod_idx": "2",
+    "depart_day": "2",
+    "arrive_day": "2",
+    "equipment_code": "63",
+    "flight_number": "2688",
+    "deadhead": true,
+    "deadhead_code": "AA",
+    "departure_station": "RDU",
+    "departure_time": {
+     "lcl": "1252",
+     "hbt": "1052"
+    },
+    "crew_meal": "",
+    "arrival_station": "CLT",
+    "arrival_time": {
+     "lcl": "1400",
+     "hbt": "1200"
+    },
+    "block": "0.00",
+    "synth": "1.08",
+    "ground": "2.59",
+    "equipment_change": true,
+    "calendar_entries": []
+   }
+  },
+  {
+   "id": "flight",
+   "indexed_string": {
+    "idx": 2803,
+    "txt": "2  2/2 63 1501  CLT 1659/1459  D SFO 2000/2100   6.01                                                       \n"
+   },
+   "data": {
+    "dutyperiod_idx": "2",
+    "depart_day": "2",
+    "arrive_day": "2",
+    "equipment_code": "63",
+    "flight_number": "1501",
+    "deadhead": false,
+    "deadhead_code": "",
+    "departure_station": "CLT",
+    "departure_time": {
+     "lcl": "1659",
+     "hbt": "1459"
+    },
+    "crew_meal": "",
+    "arrival_station": "SFO",
+    "arrival_time": {
+     "lcl": "2000",
+     "hbt": "2100"
+    },
+    "block": "6.01",
+    "synth": "0.00",
+    "ground": "0.00",
+    "equipment_change": false,
+    "calendar_entries": []
+   }
+  },
+  {
+   "id": "duty_period_release",
+   "indexed_string": {
+    "idx": 2804,
+    "txt": "                                 RLS 2030/2130   6.01   1.08   7.09  11.08       10.38                      \n"
+   },
+   "data": {
+    "release": {
+     "lcl": "2030",
+     "hbt": "2130"
+    },
+    "block": "6.01",
+    "synth": "1.08",
+    "total_pay": "7.09",
+    "duty": "11.08",
+    "flight_duty": "10.38",
+    "calendar_entries": []
+   }
+  },
+  {
+   "id": "layover",
+   "indexed_string": {
+    "idx": 2805,
+    "txt": "                SFO GRAND HYATT AT SFO                      16504521234    11.21                            \n"
+   },
+   "data": {
+    "layover_city": "SFO",
+    "hotel_name": "GRAND HYATT AT SFO",
+    "hotel_phone": "16504521234",
+    "rest": "11.21",
+    "calendar_entries": []
+   }
+  },
+  {
+   "id": "transportation",
+   "indexed_string": {
+    "idx": 2806,
+    "txt": "                    SHUTTLE                                                                                 \n"
+   },
+   "data": {
+    "name": "SHUTTLE",
+    "phone": "",
+    "calendar_entries": []
+   }
+  },
+  {
+   "id": "duty_period_report",
+   "indexed_string": {
+    "idx": 2807,
+    "txt": "                RPT 0751/0851                                                                               \n"
+   },
+   "data": {
+    "report": {
+     "lcl": "0751",
+     "hbt": "0851"
+    },
+    "calendar_entries": []
+   }
+  },
+  {
+   "id": "flight",
+   "indexed_string": {
+    "idx": 2808,
+    "txt": "3  3/3 29 2414  SFO 0851/0951    PHX 1148/1148   1.57                                                       \n"
+   },
+   "data": {
+    "dutyperiod_idx": "3",
+    "depart_day": "3",
+    "arrive_day": "3",
+    "equipment_code": "29",
+    "flight_number": "2414",
+    "deadhead": false,
+    "deadhead_code": "",
+    "departure_station": "SFO",
+    "departure_time": {
+     "lcl": "0851",
+     "hbt": "0951"
+    },
+    "crew_meal": "",
+    "arrival_station": "PHX",
+    "arrival_time": {
+     "lcl": "1148",
+     "hbt": "1148"
+    },
+    "block": "1.57",
+    "synth": "0.00",
+    "ground": "0.00",
+    "equipment_change": false,
+    "calendar_entries": []
+   }
+  },
+  {
+   "id": "duty_period_release",
+   "indexed_string": {
+    "idx": 2809,
+    "txt": "                                 RLS 1218/1218   1.57   0.03   2.00   3.27        2.57                      \n"
+   },
+   "data": {
+    "release": {
+     "lcl": "1218",
+     "hbt": "1218"
+    },
+    "block": "1.57",
+    "synth": "0.03",
+    "total_pay": "2.00",
+    "duty": "3.27",
+    "flight_duty": "2.57",
+    "calendar_entries": []
+   }
+  },
+  {
+   "id": "trip_footer",
+   "indexed_string": {
+    "idx": 2810,
+    "txt": "TTL                                             14.50   1.11  16.01        51.03                            \n"
+   },
+   "data": {
+    "block": "14.50",
+    "synth": "1.11",
+    "total_pay": "16.01",
+    "tafb": "51.03",
+    "calendar_entries": []
+   }
+  },
+  {
+   "id": "page_footer",
+   "indexed_string": {
+    "idx": 2813,
+    "txt": "COCKPIT  ISSUED 04FEB2025  EFF 02MAR2025               PHX 320  INTL                             PAGE  3234\n"
+   },
+   "data": {
+    "issued": "04FEB2025",
+    "effective": "02MAR2025",
+    "base": "PHX",
+    "satellite_base": "",
+    "equipment": "320",
+    "division": "INTL",
+    "page": "3234"
+   }
+  }
+ ],
+ "calendar_entries": [
+  "2",
+  "\u2212\u2212",
+  "\u2212\u2212",
+  "\u2212\u2212",
+  "\u2212\u2212",
+  "\u2212\u2212",
+  "\u2212\u2212",
+  "\u2212\u2212",
+  "\u2212\u2212",
+  "\u2212\u2212",
+  "\u2212\u2212",
+  "\u2212\u2212",
+  "\u2212\u2212",
+  "\u2212\u2212",
+  "\u2212\u2212",
+  "\u2212\u2212",
+  "\u2212\u2212",
+  "\u2212\u2212",
+  "\u2212\u2212",
+  "\u2212\u2212",
+  "\u2212\u2212",
+  "\u2212\u2212",
+  "\u2212\u2212",
+  "\u2212\u2212",
+  "\u2212\u2212",
+  "\u2212\u2212",
+  "\u2212\u2212",
+  "\u2212\u2212",
+  "\u2212\u2212",
+  "\u2212\u2212"
+ ],
+ "start_dates": [
+  "2025-03-02"
+ ],
+ "errors": []
+}

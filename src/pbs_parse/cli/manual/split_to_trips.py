@@ -18,7 +18,7 @@ app = typer.Typer()
 
 
 @app.command()
-def split_to_trips(
+def pages_to_trips(
     ctx: typer.Context,
     path_in: Annotated[
         Path,

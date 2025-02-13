@@ -42,9 +42,14 @@ class PageLines:
     """PageLines."""
 
     source: PageLinesSource
+    """The source of the page_lines."""
     bid: BidData
+    """The details of the bid package that the page falls in."""
     idx: str
+    """The index of the page as it was parsed from the bid package. Starts at 00001-00.
+    The -00 suffix is a place holder for the indexes of trips found in the page."""
     lines: list[IndexedString] = field(default_factory=list)
+    """The indexed lines of text found in the page."""
 
     def make_uuid(self) -> UUID:
         """Make a uuid from a namespace and the lines."""

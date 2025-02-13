@@ -18,7 +18,7 @@ app = typer.Typer()
 
 
 @app.command()
-def parse(
+def parse_trips(
     ctx: typer.Context,
     path_in: Annotated[
         Path,

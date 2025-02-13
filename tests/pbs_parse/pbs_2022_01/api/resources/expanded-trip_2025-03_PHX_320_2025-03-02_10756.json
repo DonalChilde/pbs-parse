@@ -1,0 +1,307 @@
+{
+ "source": {
+  "txt_file": "PBS_PHX_March_2025_20250205124557.txt",
+  "page_lines": "page-lines_2025-03_PHX_00022-00.json",
+  "trip_lines": "trip-lines_2025-03_PHX_00022-03.json",
+  "parsed_trip": "parsed-trip_2025-03_PHX_00022-03.json"
+ },
+ "bid": {
+  "name": "2025-03",
+  "base": "PHX",
+  "effective": {
+   "start": "2025-03-02",
+   "end": "2025-03-31"
+  }
+ },
+ "trip_number": "10756",
+ "base_equipment": {
+  "base": {
+   "iata": "PHX",
+   "icao": "KPHX",
+   "tz_name": "America/Phoenix"
+  },
+  "satellite_base": null,
+  "equipment": "320"
+ },
+ "positions": [
+  {
+   "name": "CA"
+  },
+  {
+   "name": "FO"
+  }
+ ],
+ "operations": [],
+ "special_qual": false,
+ "start_station": {
+  "iata": "PHX",
+  "icao": "KPHX",
+  "tz_name": "America/Phoenix"
+ },
+ "start": "2025-03-02T09:15:00-07:00[America/Phoenix]",
+ "end_station": {
+  "iata": "PHX",
+  "icao": "KPHX",
+  "tz_name": "America/Phoenix"
+ },
+ "end": "2025-03-04T12:18:00-07:00[America/Phoenix]",
+ "flight_time": "PT15H58M",
+ "operating_time": "PT14H50M",
+ "soft_time": "PT1H11M",
+ "tafb": "PT51H3M",
+ "dutyperiods": [
+  {
+   "report_station": {
+    "iata": "PHX",
+    "icao": "KPHX",
+    "tz_name": "America/Phoenix"
+   },
+   "report": "2025-03-02T09:15:00-07:00[America/Phoenix]",
+   "release_station": {
+    "iata": "RDU",
+    "icao": "KRDU",
+    "tz_name": "America/New_York"
+   },
+   "release": "2025-03-02T22:29:00-05:00[America/New_York]",
+   "flights": [
+    {
+     "eq_code": "63",
+     "number": "3268",
+     "departure_station": {
+      "iata": "PHX",
+      "icao": "KPHX",
+      "tz_name": "America/Phoenix"
+     },
+     "departure": "2025-03-02T10:15:00-07:00[America/Phoenix]",
+     "arrival_station": {
+      "iata": "MCO",
+      "icao": "KMCO",
+      "tz_name": "America/New_York"
+     },
+     "arrival": "2025-03-02T16:14:00-05:00[America/New_York]",
+     "deadhead": false,
+     "deadhead_code": "",
+     "crewmeal": "",
+     "eq_change": false,
+     "flight_time": "PT3H59M",
+     "operating_time": "PT3H59M",
+     "soft_time": "PT0S",
+     "ground_time": "PT1H6M"
+    },
+    {
+     "eq_code": "63",
+     "number": "2149",
+     "departure_station": {
+      "iata": "MCO",
+      "icao": "KMCO",
+      "tz_name": "America/New_York"
+     },
+     "departure": "2025-03-02T17:20:00-05:00[America/New_York]",
+     "arrival_station": {
+      "iata": "CLT",
+      "icao": "KCLT",
+      "tz_name": "America/New_York"
+     },
+     "arrival": "2025-03-02T19:14:00-05:00[America/New_York]",
+     "deadhead": false,
+     "deadhead_code": "",
+     "crewmeal": "",
+     "eq_change": true,
+     "flight_time": "PT1H54M",
+     "operating_time": "PT1H54M",
+     "soft_time": "PT0S",
+     "ground_time": "PT1H46M"
+    },
+    {
+     "eq_code": "77",
+     "number": "1337",
+     "departure_station": {
+      "iata": "CLT",
+      "icao": "KCLT",
+      "tz_name": "America/New_York"
+     },
+     "departure": "2025-03-02T21:00:00-05:00[America/New_York]",
+     "arrival_station": {
+      "iata": "RDU",
+      "icao": "KRDU",
+      "tz_name": "America/New_York"
+     },
+     "arrival": "2025-03-02T21:59:00-05:00[America/New_York]",
+     "deadhead": false,
+     "deadhead_code": "",
+     "crewmeal": "",
+     "eq_change": false,
+     "flight_time": "PT59M",
+     "operating_time": "PT59M",
+     "soft_time": "PT0S",
+     "ground_time": "PT0S"
+    }
+   ],
+   "duty": "PT11H14M",
+   "flight_duty": "PT10H44M",
+   "operating_time": "PT6H52M",
+   "flight_time": "PT6H52M",
+   "soft_time": "PT0S",
+   "layover": {
+    "layover_station": {
+     "iata": "RDU",
+     "icao": "KRDU",
+     "tz_name": "America/New_York"
+    },
+    "start": "2025-03-02T22:29:00-05:00[America/New_York]",
+    "end": "2025-03-03T12:22:00-05:00[America/New_York]",
+    "hotels": [
+     {
+      "name": "SHERATON IMPERIAL HOTEL",
+      "phone": "19199415050",
+      "transportation": [
+       {
+        "name": "SHUTTLE",
+        "phone": ""
+       }
+      ]
+     }
+    ],
+    "rest": "PT13H53M"
+   }
+  },
+  {
+   "report_station": {
+    "iata": "RDU",
+    "icao": "KRDU",
+    "tz_name": "America/New_York"
+   },
+   "report": "2025-03-03T12:22:00-05:00[America/New_York]",
+   "release_station": {
+    "iata": "SFO",
+    "icao": "KSFO",
+    "tz_name": "America/Los_Angeles"
+   },
+   "release": "2025-03-03T20:30:00-08:00[America/Los_Angeles]",
+   "flights": [
+    {
+     "eq_code": "63",
+     "number": "2688",
+     "departure_station": {
+      "iata": "RDU",
+      "icao": "KRDU",
+      "tz_name": "America/New_York"
+     },
+     "departure": "2025-03-03T12:52:00-05:00[America/New_York]",
+     "arrival_station": {
+      "iata": "CLT",
+      "icao": "KCLT",
+      "tz_name": "America/New_York"
+     },
+     "arrival": "2025-03-03T14:00:00-05:00[America/New_York]",
+     "deadhead": true,
+     "deadhead_code": "AA",
+     "crewmeal": "",
+     "eq_change": true,
+     "flight_time": "PT1H8M",
+     "operating_time": "PT0S",
+     "soft_time": "PT1H8M",
+     "ground_time": "PT2H59M"
+    },
+    {
+     "eq_code": "63",
+     "number": "1501",
+     "departure_station": {
+      "iata": "CLT",
+      "icao": "KCLT",
+      "tz_name": "America/New_York"
+     },
+     "departure": "2025-03-03T16:59:00-05:00[America/New_York]",
+     "arrival_station": {
+      "iata": "SFO",
+      "icao": "KSFO",
+      "tz_name": "America/Los_Angeles"
+     },
+     "arrival": "2025-03-03T20:00:00-08:00[America/Los_Angeles]",
+     "deadhead": false,
+     "deadhead_code": "",
+     "crewmeal": "",
+     "eq_change": false,
+     "flight_time": "PT6H1M",
+     "operating_time": "PT6H1M",
+     "soft_time": "PT0S",
+     "ground_time": "PT0S"
+    }
+   ],
+   "duty": "PT11H8M",
+   "flight_duty": "PT10H38M",
+   "operating_time": "PT6H1M",
+   "flight_time": "PT6H1M",
+   "soft_time": "PT1H8M",
+   "layover": {
+    "layover_station": {
+     "iata": "SFO",
+     "icao": "KSFO",
+     "tz_name": "America/Los_Angeles"
+    },
+    "start": "2025-03-03T20:30:00-08:00[America/Los_Angeles]",
+    "end": "2025-03-04T07:51:00-08:00[America/Los_Angeles]",
+    "hotels": [
+     {
+      "name": "GRAND HYATT AT SFO",
+      "phone": "16504521234",
+      "transportation": [
+       {
+        "name": "SHUTTLE",
+        "phone": ""
+       }
+      ]
+     }
+    ],
+    "rest": "PT11H21M"
+   }
+  },
+  {
+   "report_station": {
+    "iata": "SFO",
+    "icao": "KSFO",
+    "tz_name": "America/Los_Angeles"
+   },
+   "report": "2025-03-04T07:51:00-08:00[America/Los_Angeles]",
+   "release_station": {
+    "iata": "PHX",
+    "icao": "KPHX",
+    "tz_name": "America/Phoenix"
+   },
+   "release": "2025-03-04T12:18:00-07:00[America/Phoenix]",
+   "flights": [
+    {
+     "eq_code": "29",
+     "number": "2414",
+     "departure_station": {
+      "iata": "SFO",
+      "icao": "KSFO",
+      "tz_name": "America/Los_Angeles"
+     },
+     "departure": "2025-03-04T08:51:00-08:00[America/Los_Angeles]",
+     "arrival_station": {
+      "iata": "PHX",
+      "icao": "KPHX",
+      "tz_name": "America/Phoenix"
+     },
+     "arrival": "2025-03-04T11:48:00-07:00[America/Phoenix]",
+     "deadhead": false,
+     "deadhead_code": "",
+     "crewmeal": "",
+     "eq_change": false,
+     "flight_time": "PT1H57M",
+     "operating_time": "PT1H57M",
+     "soft_time": "PT0S",
+     "ground_time": "PT0S"
+    }
+   ],
+   "duty": "PT3H27M",
+   "flight_duty": "PT2H57M",
+   "operating_time": "PT1H57M",
+   "flight_time": "PT1H57M",
+   "soft_time": "PT3M",
+   "layover": null
+  }
+ ],
+ "errors": []
+}

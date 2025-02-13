@@ -5,9 +5,9 @@ from typer.testing import CliRunner
 from pbs_parse.cli.main_typer import app
 
 
-def test_app(runner: CliRunner) -> None:
+def test_app() -> None:
     """It exits with a status code of zero."""
-    result = runner.invoke(app, ["--help"])
+    result = CliRunner().invoke(app, ["--help"])
     print(result.stdout)
     if result.stderr_bytes is not None:
         print(result.stderr)
@@ -15,9 +15,9 @@ def test_app(runner: CliRunner) -> None:
     # assert False
 
 
-def test_default_options(runner: CliRunner) -> None:
+def test_default_options() -> None:
     """It exits with a status code of zero."""
-    result = runner.invoke(app, ["-vvv", "manual", "--help"])
+    result = CliRunner().invoke(app, ["-vvv", "manual", "--help"])
     assert "Verbosity: 3" in result.stdout
     assert "Debug" in result.stdout
     print(result.stdout)
@@ -26,18 +26,18 @@ def test_default_options(runner: CliRunner) -> None:
     assert result.exit_code == 0
 
 
-def test_pages(runner: CliRunner) -> None:
+def test_pages() -> None:
     """It exits with a status code of zero."""
-    result = runner.invoke(app, ["manual", "split-to-pages", "--help"])
+    result = CliRunner().invoke(app, ["manual", "bid-to-pages", "--help"])
     print(result.stdout)
     if result.stderr_bytes is not None:
         print(result.stderr)
     assert result.exit_code == 0
 
 
-def test_trips(runner: CliRunner) -> None:
+def test_trips() -> None:
     """It exits with a status code of zero."""
-    result = runner.invoke(app, ["manual", "split-to-trips", "--help"])
+    result = CliRunner().invoke(app, ["manual", "pages-to-trips", "--help"])
     print(result.stdout)
     if result.stderr_bytes is not None:
         print(result.stderr)

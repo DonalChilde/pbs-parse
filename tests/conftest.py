@@ -10,10 +10,10 @@ from typer.testing import CliRunner
 logger = logging.getLogger(__name__)
 
 
-@pytest.fixture
-def runner() -> CliRunner:
-    """Fixture for invoking Typer command-line interfaces."""
-    return CliRunner()
+# @pytest.fixture(scope="fixture")
+# def runner() -> CliRunner:
+#     """Fixture for invoking Typer command-line interfaces."""
+#     return CliRunner()
 
 
 @pytest.fixture(scope="session", name="test_output_dir")

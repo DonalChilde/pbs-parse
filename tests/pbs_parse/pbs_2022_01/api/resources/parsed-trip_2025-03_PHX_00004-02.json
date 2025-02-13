@@ -1,0 +1,451 @@
+{
+ "source": {
+  "txt_file": "PBS_PHX_March_2025_20250205124557.txt",
+  "page_lines": "page-lines_2025-03_PHX_00004-00.json",
+  "trip_lines": "trip-lines_2025-03_PHX_00004-02.json"
+ },
+ "bid": {
+  "name": "2025-03",
+  "base": "PHX",
+  "effective": {
+   "start": "2025-03-02",
+   "end": "2025-03-31"
+  }
+ },
+ "idx": "00004-02",
+ "parsed_lines": [
+  {
+   "id": "page_header_1",
+   "indexed_string": {
+    "idx": 1402,
+    "txt": "\f   DAY          \u2212\u2212DEPARTURE\u2212\u2212    \u2212\u2212\u2212ARRIVAL\u2212\u2212\u2212                GRND/        REST/\n"
+   },
+   "data": {}
+  },
+  {
+   "id": "page_header_2",
+   "indexed_string": {
+    "idx": 1403,
+    "txt": "DP D/A EQ FLT#  STA DLCL/DHBT ML STA ALCL/AHBT  BLOCK  SYNTH   TPAY   DUTY  TAFB   FDP CALENDAR 03/02\u221203/31\n"
+   },
+   "data": {
+    "from_date": {
+     "month": "03",
+     "day": "02"
+    },
+    "to_date": {
+     "month": "03",
+     "day": "31"
+    }
+   }
+  },
+  {
+   "id": "trip_header",
+   "indexed_string": {
+    "idx": 1420,
+    "txt": "SEQ 10652   5 OPS   POSN CA FO                                                         MO TU WE TH FR SA SU \n"
+   },
+   "data": {
+    "trip_number": "10652",
+    "ops_count": "5",
+    "positions": [
+     "CA",
+     "FO"
+    ],
+    "operations": [],
+    "special_qual": false,
+    "prior_month_trip": false
+   }
+  },
+  {
+   "id": "duty_period_report",
+   "indexed_string": {
+    "idx": 1421,
+    "txt": "                RPT 0625/0625                                                                            \u2212\u2212 \n"
+   },
+   "data": {
+    "report": {
+     "lcl": "0625",
+     "hbt": "0625"
+    },
+    "calendar_entries": [
+     "\u2212\u2212"
+    ]
+   }
+  },
+  {
+   "id": "flight",
+   "indexed_string": {
+    "idx": 1422,
+    "txt": "1  1/1 92 3208  PHX 0725/0725  B SLC 1006/0906   1.41          0.54                    \u2212\u2212 \u2212\u2212 \u2212\u2212 \u2212\u2212 \u2212\u2212 \u2212\u2212 \u2212\u2212 \n"
+   },
+   "data": {
+    "dutyperiod_idx": "1",
+    "depart_day": "1",
+    "arrive_day": "1",
+    "equipment_code": "92",
+    "flight_number": "3208",
+    "deadhead": false,
+    "deadhead_code": "",
+    "departure_station": "PHX",
+    "departure_time": {
+     "lcl": "0725",
+     "hbt": "0725"
+    },
+    "crew_meal": "",
+    "arrival_station": "SLC",
+    "arrival_time": {
+     "lcl": "1006",
+     "hbt": "0906"
+    },
+    "block": "1.41",
+    "synth": "0.00",
+    "ground": "0.54",
+    "equipment_change": false,
+    "calendar_entries": [
+     "\u2212\u2212",
+     "\u2212\u2212",
+     "\u2212\u2212",
+     "\u2212\u2212",
+     "\u2212\u2212",
+     "\u2212\u2212",
+     "\u2212\u2212"
+    ]
+   }
+  },
+  {
+   "id": "flight",
+   "indexed_string": {
+    "idx": 1423,
+    "txt": "1  1/1 92 1848  SLC 1100/1000    PHX 1144/1144   1.44          3.31X                   \u2212\u2212 \u2212\u2212 \u2212\u2212 \u2212\u2212 \u2212\u2212 \u2212\u2212 \u2212\u2212 \n"
+   },
+   "data": {
+    "dutyperiod_idx": "1",
+    "depart_day": "1",
+    "arrive_day": "1",
+    "equipment_code": "92",
+    "flight_number": "1848",
+    "deadhead": false,
+    "deadhead_code": "",
+    "departure_station": "SLC",
+    "departure_time": {
+     "lcl": "1100",
+     "hbt": "1000"
+    },
+    "crew_meal": "",
+    "arrival_station": "PHX",
+    "arrival_time": {
+     "lcl": "1144",
+     "hbt": "1144"
+    },
+    "block": "1.44",
+    "synth": "0.00",
+    "ground": "3.31",
+    "equipment_change": true,
+    "calendar_entries": [
+     "\u2212\u2212",
+     "\u2212\u2212",
+     "\u2212\u2212",
+     "\u2212\u2212",
+     "\u2212\u2212",
+     "\u2212\u2212",
+     "\u2212\u2212"
+    ]
+   }
+  },
+  {
+   "id": "flight",
+   "indexed_string": {
+    "idx": 1424,
+    "txt": "1  1/1 29 1767  PHX 1515/1515    SAT 1918/1718   2.03                                  \u2212\u2212 \u2212\u2212 \u2212\u2212 \u2212\u2212 \u2212\u2212 \u2212\u2212 23 \n"
+   },
+   "data": {
+    "dutyperiod_idx": "1",
+    "depart_day": "1",
+    "arrive_day": "1",
+    "equipment_code": "29",
+    "flight_number": "1767",
+    "deadhead": false,
+    "deadhead_code": "",
+    "departure_station": "PHX",
+    "departure_time": {
+     "lcl": "1515",
+     "hbt": "1515"
+    },
+    "crew_meal": "",
+    "arrival_station": "SAT",
+    "arrival_time": {
+     "lcl": "1918",
+     "hbt": "1718"
+    },
+    "block": "2.03",
+    "synth": "0.00",
+    "ground": "0.00",
+    "equipment_change": false,
+    "calendar_entries": [
+     "\u2212\u2212",
+     "\u2212\u2212",
+     "\u2212\u2212",
+     "\u2212\u2212",
+     "\u2212\u2212",
+     "\u2212\u2212",
+     "23"
+    ]
+   }
+  },
+  {
+   "id": "duty_period_release",
+   "indexed_string": {
+    "idx": 1425,
+    "txt": "                                 RLS 1948/1748   5.28   0.13   5.41  11.23       10.53 24 25 26 \u2212\u2212 28 \u2212\u2212 \u2212\u2212 \n"
+   },
+   "data": {
+    "release": {
+     "lcl": "1948",
+     "hbt": "1748"
+    },
+    "block": "5.28",
+    "synth": "0.13",
+    "total_pay": "5.41",
+    "duty": "11.23",
+    "flight_duty": "10.53",
+    "calendar_entries": [
+     "24",
+     "25",
+     "26",
+     "\u2212\u2212",
+     "28",
+     "\u2212\u2212",
+     "\u2212\u2212"
+    ]
+   }
+  },
+  {
+   "id": "layover",
+   "indexed_string": {
+    "idx": 1426,
+    "txt": "                SAT DOUBLETREE SAN ANTONIO AIRPORT          12103406060    12.10       \u2212\u2212                   \n"
+   },
+   "data": {
+    "layover_city": "SAT",
+    "hotel_name": "DOUBLETREE SAN ANTONIO AIRPORT",
+    "hotel_phone": "12103406060",
+    "rest": "12.10",
+    "calendar_entries": [
+     "\u2212\u2212"
+    ]
+   }
+  },
+  {
+   "id": "transportation",
+   "indexed_string": {
+    "idx": 1427,
+    "txt": "                    SHUTTLE                                                                                 \n"
+   },
+   "data": {
+    "name": "SHUTTLE",
+    "phone": "",
+    "calendar_entries": []
+   }
+  },
+  {
+   "id": "duty_period_report",
+   "indexed_string": {
+    "idx": 1428,
+    "txt": "                RPT 0758/0558                                                                               \n"
+   },
+   "data": {
+    "report": {
+     "lcl": "0758",
+     "hbt": "0558"
+    },
+    "calendar_entries": []
+   }
+  },
+  {
+   "id": "flight",
+   "indexed_string": {
+    "idx": 1429,
+    "txt": "2  2/2 92 2053  SAT 0858/0658  L PHX 0935/0935   2.37          0.58                                         \n"
+   },
+   "data": {
+    "dutyperiod_idx": "2",
+    "depart_day": "2",
+    "arrive_day": "2",
+    "equipment_code": "92",
+    "flight_number": "2053",
+    "deadhead": false,
+    "deadhead_code": "",
+    "departure_station": "SAT",
+    "departure_time": {
+     "lcl": "0858",
+     "hbt": "0658"
+    },
+    "crew_meal": "",
+    "arrival_station": "PHX",
+    "arrival_time": {
+     "lcl": "0935",
+     "hbt": "0935"
+    },
+    "block": "2.37",
+    "synth": "0.00",
+    "ground": "0.58",
+    "equipment_change": false,
+    "calendar_entries": []
+   }
+  },
+  {
+   "id": "flight",
+   "indexed_string": {
+    "idx": 1430,
+    "txt": "2  2/2 92 1792  PHX 1033/1033    ONT 1159/1159   1.26          0.50                                         \n"
+   },
+   "data": {
+    "dutyperiod_idx": "2",
+    "depart_day": "2",
+    "arrive_day": "2",
+    "equipment_code": "92",
+    "flight_number": "1792",
+    "deadhead": false,
+    "deadhead_code": "",
+    "departure_station": "PHX",
+    "departure_time": {
+     "lcl": "1033",
+     "hbt": "1033"
+    },
+    "crew_meal": "",
+    "arrival_station": "ONT",
+    "arrival_time": {
+     "lcl": "1159",
+     "hbt": "1159"
+    },
+    "block": "1.26",
+    "synth": "0.00",
+    "ground": "0.50",
+    "equipment_change": false,
+    "calendar_entries": []
+   }
+  },
+  {
+   "id": "flight",
+   "indexed_string": {
+    "idx": 1431,
+    "txt": "2  2/2 92 1792  ONT 1249/1249    PHX 1407/1407   1.18                                                       \n"
+   },
+   "data": {
+    "dutyperiod_idx": "2",
+    "depart_day": "2",
+    "arrive_day": "2",
+    "equipment_code": "92",
+    "flight_number": "1792",
+    "deadhead": false,
+    "deadhead_code": "",
+    "departure_station": "ONT",
+    "departure_time": {
+     "lcl": "1249",
+     "hbt": "1249"
+    },
+    "crew_meal": "",
+    "arrival_station": "PHX",
+    "arrival_time": {
+     "lcl": "1407",
+     "hbt": "1407"
+    },
+    "block": "1.18",
+    "synth": "0.00",
+    "ground": "0.00",
+    "equipment_change": false,
+    "calendar_entries": []
+   }
+  },
+  {
+   "id": "duty_period_release",
+   "indexed_string": {
+    "idx": 1432,
+    "txt": "                                 RLS 1437/1437   5.21   0.00   5.21   8.39        8.09                      \n"
+   },
+   "data": {
+    "release": {
+     "lcl": "1437",
+     "hbt": "1437"
+    },
+    "block": "5.21",
+    "synth": "0.00",
+    "total_pay": "5.21",
+    "duty": "8.39",
+    "flight_duty": "8.09",
+    "calendar_entries": []
+   }
+  },
+  {
+   "id": "trip_footer",
+   "indexed_string": {
+    "idx": 1433,
+    "txt": "TTL                                             10.49   0.13  11.02        32.12                            \n"
+   },
+   "data": {
+    "block": "10.49",
+    "synth": "0.13",
+    "total_pay": "11.02",
+    "tafb": "32.12",
+    "calendar_entries": []
+   }
+  },
+  {
+   "id": "page_footer",
+   "indexed_string": {
+    "idx": 1474,
+    "txt": "COCKPIT  ISSUED 04FEB2025  EFF 02MAR2025               PHX 320  INTL                             PAGE  3216\n"
+   },
+   "data": {
+    "issued": "04FEB2025",
+    "effective": "02MAR2025",
+    "base": "PHX",
+    "satellite_base": "",
+    "equipment": "320",
+    "division": "INTL",
+    "page": "3216"
+   }
+  }
+ ],
+ "calendar_entries": [
+  "\u2212\u2212",
+  "\u2212\u2212",
+  "\u2212\u2212",
+  "\u2212\u2212",
+  "\u2212\u2212",
+  "\u2212\u2212",
+  "\u2212\u2212",
+  "\u2212\u2212",
+  "\u2212\u2212",
+  "\u2212\u2212",
+  "\u2212\u2212",
+  "\u2212\u2212",
+  "\u2212\u2212",
+  "\u2212\u2212",
+  "\u2212\u2212",
+  "\u2212\u2212",
+  "\u2212\u2212",
+  "\u2212\u2212",
+  "\u2212\u2212",
+  "\u2212\u2212",
+  "\u2212\u2212",
+  "23",
+  "24",
+  "25",
+  "26",
+  "\u2212\u2212",
+  "28",
+  "\u2212\u2212",
+  "\u2212\u2212",
+  "\u2212\u2212"
+ ],
+ "start_dates": [
+  "2025-03-23",
+  "2025-03-24",
+  "2025-03-25",
+  "2025-03-26",
+  "2025-03-28"
+ ],
+ "errors": []
+}
