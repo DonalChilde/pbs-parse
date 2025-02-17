@@ -25,8 +25,8 @@ def process_parsed(s: str, loc: int, toks: pp.ParseResults) -> grammar_TD.PageHe
     """Process the parsed data."""
     logger.debug("%s -> %s", s, toks.dump())
     return grammar_TD.PageHeader2(
-        from_date=grammar_TD.MonthDay(month=toks.from_date[0], day=toks.from_date[2]),
-        to_date=grammar_TD.MonthDay(month=toks.to_date[0], day=toks.to_date[2]),
+        from_date=grammar_TD.MonthDay(month=toks.from_date[0], day=toks.from_date[2]),  # type: ignore
+        to_date=grammar_TD.MonthDay(month=toks.to_date[0], day=toks.to_date[2]),  # type: ignore
     )
 
 

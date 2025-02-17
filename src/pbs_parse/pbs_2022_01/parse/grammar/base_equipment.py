@@ -24,7 +24,9 @@ def process_parsed(s: str, loc: int, toks: pp.ParseResults) -> grammar_TD.BaseEq
     """Process the parsed data."""
     logger.debug("%s -> %s", s, toks.dump())
     return grammar_TD.BaseEquipment(
-        base=toks.base, satellite_base=toks.satellite_base, equipment=toks.equipment
+        base=toks.base,  # type: ignore
+        satellite_base=toks.satellite_base,  # type: ignore
+        equipment=toks.equipment,  # type: ignore
     )
 
 

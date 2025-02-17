@@ -28,8 +28,6 @@ dependencies = [
     "pyparsing",
     "tzdata",
     "whenever",
-    "pfmsoft-state-parser@git+https://github.com/donalchilde/pfmsoft-state-parser@dev",
-    "pfmsoft-indexed-string@git+https://github.com/donalchilde/pfmsoft-indexed-string@dev",
     "pfmsoft-simple-serializer@git+https://github.com/donalchilde/pfmsoft-simple-serializer@dev",
     "pfmsoft-pdf2txt@git+https://github.com/donalchilde/pdf2txt@dev",
     "airportsdata",

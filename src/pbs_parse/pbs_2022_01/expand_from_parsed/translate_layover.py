@@ -1,12 +1,12 @@
 """FILE: translate_layover.py."""
 
-from pfmsoft.state_parser.model import ParsedIndexedString
 from whenever import ZonedDateTime
 
 from pbs_parse.common.get_airport_info import get_airport_info_from_iata
 from pbs_parse.common.parse_duration_whenever import parse_duration
 from pbs_parse.pbs_2022_01.expand_from_parsed.state import State
 from pbs_parse.pbs_2022_01.models.expanded import Hotel, Layover, Transportation
+from pbs_parse.snippets.indexed_string_state_parser.model import ParsedIndexedString
 
 
 def translate_layover(

@@ -4,14 +4,13 @@ from collections.abc import Iterable, Iterator
 from copy import deepcopy
 from pathlib import Path
 
-from pfmsoft.indexed_string.model import IndexedString
-
 from pbs_parse.pbs_2022_01.models.page_lines import PAGE_LINES_SERIALIZER, PageLines
 from pbs_parse.pbs_2022_01.models.trip_lines import (
     TRIP_LINES_SERIALIZER,
     TripLines,
     TripLinesSource,
 )
+from pbs_parse.snippets.indexed_string import IndexedString
 
 
 def lines_of_page_to_lines_of_trips(

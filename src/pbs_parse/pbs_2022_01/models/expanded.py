@@ -2,7 +2,6 @@
 
 from dataclasses import dataclass, field
 from pathlib import Path
-from uuid import NAMESPACE_DNS, uuid5
 from zoneinfo import ZoneInfo
 
 from pfmsoft.simple_serializer import DataclassSerializer
@@ -14,7 +13,6 @@ from pbs_parse.pbs_2022_01.models.bid_data import BidData
 from pbs_parse.snippets.file.data_file_loader import DataFileLoader
 
 UTC = ZoneInfo("UTC")
-TRIP_NS = uuid5(NAMESPACE_DNS, "pbs_parse.pbs_2022_01.trip")
 
 
 @dataclass(slots=True, kw_only=True)

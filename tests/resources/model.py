@@ -3,7 +3,7 @@
 from dataclasses import dataclass, field
 from typing import Any
 
-from pfmsoft.indexed_string.model import IndexedString
+from pbs_parse.snippets.indexed_string import IndexedString
 
 
 @dataclass

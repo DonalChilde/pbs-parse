@@ -3,10 +3,9 @@
 import logging
 from typing import Any
 
-from pfmsoft.state_parser.model import ParsedIndexedString
-
 from pbs_parse.pbs_2022_01.models.collated_trip import CollatedDutyPeriod, CollatedTrip
 from pbs_parse.pbs_2022_01.models.parsed_trip import ParsedTrip
+from pbs_parse.snippets.indexed_string_state_parser.model import ParsedIndexedString
 
 logger = logging.getLogger(__name__)
 

@@ -2,10 +2,14 @@
 
 import logging
 
-from pfmsoft.indexed_string.model import IndexedString
-from pfmsoft.state_parser.abc import ParseContextABC, ParserABC
-from pfmsoft.state_parser.model import ParsedIndexedString, ParseResult
-from pfmsoft.state_parser.parse_exception import SingleParserFail
+from pbs_parse.snippets.indexed_string import IndexedStringProtocol
+from pbs_parse.snippets.indexed_string_state_parser import protocol as P
+from pbs_parse.snippets.indexed_string_state_parser.exceptions import SingleParserFail
+from pbs_parse.snippets.indexed_string_state_parser.model import (
+    ParsedIndexedString,
+    ParseResult,
+)
+from pbs_parse.snippets.indexed_string_state_parser.parsers import ParserABC
 
 logger = logging.getLogger(__name__)
 logger.addHandler(logging.NullHandler())
@@ -22,15 +26,20 @@ class PageHeader1(ParserABC):
         """
         super().__init__(state)
 
-    def parse(self, ctx: ParseContextABC, input: IndexedString) -> ParseResult:
+    def parse(self, ctx: P.ParseContext, input: IndexedStringProtocol) -> P.ParseResult:
         """Parse."""
         _ = ctx
         if "DEPARTURE" in input.txt:
-            result = ParsedIndexedString(id=self.state, indexed_string=input, data={})
-            return ParseResult(current_state=self.state, parsed_indexed_string=result)
+            result = ParsedIndexedString(
+                id=self.parsed_state, indexed_string=input, data={}
+            )
+            return ParseResult(
+                parsed_state=self.parsed_state, parsed_indexed_string=result
+            )
 
         raise SingleParserFail(
             f"'DEPARTURE' not found in {input!r}.",
-            parser_name=self.__class__.__name__,
+            parser=self,
             indexed_string=input,
+            ctx=ctx,
         )

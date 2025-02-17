@@ -2,7 +2,7 @@
 
 from dataclasses import dataclass, field
 
-from pfmsoft.state_parser.model import ParsedIndexedString
+from pbs_parse.snippets.indexed_string_state_parser.model import ParsedIndexedString
 
 
 @dataclass(slots=True, kw_only=True)

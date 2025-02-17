@@ -3,17 +3,14 @@
 from dataclasses import dataclass, field
 from pathlib import Path
 from typing import TypedDict
-from uuid import NAMESPACE_DNS, uuid5
 
-from pfmsoft.indexed_string.model import IndexedStringTD
 from pfmsoft.simple_serializer import DataclassSerializer
-from pfmsoft.state_parser import model
 from whenever import Date
 
 from pbs_parse.pbs_2022_01.models.bid_data import BidData, BidDataTD
 from pbs_parse.snippets.file.data_file_loader import DataFileLoader
-
-PARSED_TRIP_NS = uuid5(NAMESPACE_DNS, "pbs_parse.pbs_2022_01.parsed_trip")
+from pbs_parse.snippets.indexed_string import IndexedStringTD
+from pbs_parse.snippets.indexed_string_state_parser import model
 
 
 class ParsedTripSourceTD(TypedDict):

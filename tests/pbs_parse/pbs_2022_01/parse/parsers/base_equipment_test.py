@@ -3,19 +3,24 @@
 import logging
 
 import pytest
-from pfmsoft.indexed_string.model import IndexedString
-from pfmsoft.state_parser import ParseContext
-from pfmsoft.state_parser.model import ParsedIndexedString, ParseResult
 
 from pbs_parse.pbs_2022_01.models import grammar_TD
 from pbs_parse.pbs_2022_01.parse import grammar as G
 from pbs_parse.pbs_2022_01.parse import parsers
+from pbs_parse.snippets.indexed_string import IndexedString
+from pbs_parse.snippets.indexed_string_state_parser import ParseContext
+from pbs_parse.snippets.indexed_string_state_parser.model import (
+    ParsedIndexedString,
+    ParseResult,
+)
 from tests.resources.model import ParserTest2
 
 logger = logging.getLogger(__name__)
 
 state = "BaseEquipment"
-parser = parsers.SimplePyparsingParser(state=state, string_parser=G.base_equipment)
+parser = parsers.SimplePyparsingParser(
+    parsed_state=state, string_parser=G.base_equipment
+)
 result_class = grammar_TD.BaseEquipment
 test_name = f"{state} parser "
 test_items = [
@@ -49,7 +54,7 @@ def test_grammar(test_data: ParserTest2[result_class]):
     ctx = ParseContext()
     parse_result = parser.parse(ctx=ctx, input=test_data.input)
     expected = ParseResult(
-        current_state=state,
+        parsed_state=state,
         parsed_indexed_string=ParsedIndexedString(
             id=state,
             indexed_string=test_data.input,

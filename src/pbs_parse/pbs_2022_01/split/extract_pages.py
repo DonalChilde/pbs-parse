@@ -3,15 +3,13 @@
 from collections.abc import Iterable, Iterator
 from pathlib import Path
 
-from pfmsoft.indexed_string.index_strings import index_lines_in_file
-from pfmsoft.indexed_string.model import IndexedString
-
 from pbs_parse.pbs_2022_01.models.bid_data import BidData
 from pbs_parse.pbs_2022_01.models.page_lines import (
     PageLines,
     PageLinesSource,
     page_lines_serializer,
 )
+from pbs_parse.snippets.indexed_string import IndexedString, index_lines_in_file
 
 # def split_to_pages(
 #     path_in: Path,

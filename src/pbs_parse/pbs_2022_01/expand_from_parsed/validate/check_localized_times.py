@@ -1,11 +1,11 @@
 """FILE: check_localized_times.py."""
 
-from pfmsoft.state_parser.model import ParsedIndexedString
 from whenever import ZonedDateTime
 
 from pbs_parse.common.parse_time_whenever import parse_time
 from pbs_parse.pbs_2022_01.models.collated_trip import CollatedDutyPeriod, CollatedTrip
 from pbs_parse.pbs_2022_01.models.expanded import DutyPeriod, ExpandedTrip, Flight
+from pbs_parse.snippets.indexed_string_state_parser.model import ParsedIndexedString
 
 
 def check_localized_times(expanded: ExpandedTrip, collated: CollatedTrip) -> None:
