@@ -7,7 +7,7 @@ from pydantic import BaseModel, ConfigDict
 from pbs_parse.airports import airport_from_iata
 from pbs_parse.pbs_2022_01.models.bid_data import BidData
 
-from .pydantic import PydanticTimeDelta, PydanticZonedDateTime
+from ...snippets.whenever.pydantic import PydanticTimeDelta, PydanticZonedDateTime
 
 UTC = ZoneInfo("UTC")
 

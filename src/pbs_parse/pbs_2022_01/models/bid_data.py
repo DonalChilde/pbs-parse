@@ -2,7 +2,7 @@
 
 from pydantic import BaseModel, ConfigDict
 
-from .pydantic import PydanticDate
+from ...snippets.whenever.pydantic import PydanticDate
 
 
 class Effective(BaseModel):

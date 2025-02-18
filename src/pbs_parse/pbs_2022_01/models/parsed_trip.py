@@ -7,7 +7,7 @@ from pbs_parse.snippets.indexed_string_state_parser.pydantic_model import (
     ParsedIndexedString,
 )
 
-from .pydantic import PydanticDate
+from ...snippets.whenever.pydantic import PydanticDate
 
 
 class ParsedTripSource(BaseModel):
