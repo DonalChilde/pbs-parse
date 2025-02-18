@@ -4,7 +4,7 @@ import logging
 
 import pyparsing as pp
 
-from pbs_parse.pbs_2022_01.models import grammar_TD
+from pbs_parse.pbs_2022_01.models import grammar_td
 
 from .common import CALENDAR_LINE, CITY, SKIP_TO_CALENDAR, SKIP_TO_END, SKIP_TO_PHONE
 
@@ -14,11 +14,11 @@ logger.addHandler(logging.NullHandler())
 
 def process_parsed(
     s: str, loc: int, toks: pp.ParseResults
-) -> grammar_TD.HotelAdditional:
+) -> grammar_td.HotelAdditional:
     """Process the parsed data."""
     logger.debug("%s -> %s", s, toks.dump())
 
-    return grammar_TD.HotelAdditional(
+    return grammar_td.HotelAdditional(
         layover_city=toks.layover_city,  # type: ignore
         name=toks.hotel_name,  # type: ignore
         phone=toks.hotel_phone,  # type: ignore

@@ -4,14 +4,14 @@ import logging
 
 import pytest
 
-from pbs_parse.pbs_2022_01.models import grammar_TD
+from pbs_parse.pbs_2022_01.models import grammar_td
 from pbs_parse.pbs_2022_01.parse import grammar
 from tests.resources.model import ParsingTest
 
 logger = logging.getLogger(__name__)
 
 parser = grammar.flight
-result_class = grammar_TD.Flight
+result_class = grammar_td.Flight
 test_name = "flight" + " grammar "
 test_items = [
     ParsingTest[result_class](
@@ -25,10 +25,10 @@ test_items = [
             deadhead=False,
             deadhead_code="",
             departure_station="SAN",
-            departure_time=grammar_TD.DualTime(lcl="1337", hbt="1337"),
+            departure_time=grammar_td.DualTime(lcl="1337", hbt="1337"),
             crew_meal="",
             arrival_station="ORD",
-            arrival_time=grammar_TD.DualTime(lcl="1935", hbt="1735"),
+            arrival_time=grammar_td.DualTime(lcl="1935", hbt="1735"),
             block="3.58",
             synth="0.00",
             ground="1.10",

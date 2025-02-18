@@ -3,11 +3,12 @@
 from copy import deepcopy
 from pathlib import Path
 
-from pbs_parse.pbs_2022_01.models.expanded import EXPANDED_TRIP_SERIALIZER, ExpandedTrip
+from pbs_parse.pbs_2022_01 import api as API
+from pbs_parse.pbs_2022_01.models.expanded import ExpandedTrip
 from pbs_parse.pbs_2022_01.models.manifest import FileInfo, FileTypes
-from pbs_parse.pbs_2022_01.models.page_lines import PAGE_LINES_SERIALIZER, PageLines
-from pbs_parse.pbs_2022_01.models.parsed_trip import PARSED_TRIP_SERIALIZER, ParsedTrip
-from pbs_parse.pbs_2022_01.models.trip_lines import TRIP_LINES_SERIALIZER, TripLines
+from pbs_parse.pbs_2022_01.models.page_lines import PageLines
+from pbs_parse.pbs_2022_01.models.parsed_trip import ParsedTrip
+from pbs_parse.pbs_2022_01.models.trip_lines import TripLines
 from pbs_parse.pbs_2022_01.pbs_store.exceptions import (
     StoreOperationError,
 )
@@ -28,8 +29,11 @@ def page_lines(
         file_path=f"{base}/pages/{page.default_file_name()}",
     )
     path_out = store.manifest_directory / page_info["file_path"]
-    PAGE_LINES_SERIALIZER.save_as_json(
-        path_out=path_out, complex_obj=page, overwrite=overwrite
+    API.save.page_lines(
+        dir_out=path_out.parent,
+        file_name=path_out.name,
+        page_lines=page,
+        overwrite=overwrite,
     )
     store.record_file(base=base, info=page_info)
     return path_out
@@ -52,8 +56,11 @@ def trip_lines(
         file_path=f"{base}/trip_lines/{trip.default_file_name()}",
     )
     path_out = store.manifest_directory / trip_info["file_path"]
-    TRIP_LINES_SERIALIZER.save_as_json(
-        path_out=path_out, complex_obj=trip, overwrite=overwrite
+    API.save.trip_lines(
+        dir_out=path_out.parent,
+        file_name=path_out.name,
+        trip_lines=trip,
+        overwrite=overwrite,
     )
     store.record_file(base=base, info=trip_info)
     return path_out
@@ -76,8 +83,11 @@ def trip_lines_prior(
         file_path=f"{base}/trip_lines/prior/{trip.default_file_name()}",
     )
     path_out = store.manifest_directory / trip_info["file_path"]
-    TRIP_LINES_SERIALIZER.save_as_json(
-        path_out=path_out, complex_obj=trip, overwrite=overwrite
+    API.save.trip_lines(
+        dir_out=path_out.parent,
+        file_name=path_out.name,
+        trip_lines=trip,
+        overwrite=overwrite,
     )
     store.record_file(base=base, info=trip_info)
     return path_out
@@ -97,32 +107,14 @@ def parsed_trip(
         file_path=f"{base}/parsed/{parsed.default_file_name()}",
     )
     path_out = store.manifest_directory / trip_info["file_path"]
-    PARSED_TRIP_SERIALIZER.save_as_json(
-        path_out=path_out, complex_obj=parsed, overwrite=overwrite
+    API.save.parsed_trip(
+        dir_out=path_out.parent,
+        file_name=path_out.name,
+        parsed_trip=parsed,
+        overwrite=overwrite,
     )
     store.record_file(base=base, info=trip_info)
     return path_out
-
-
-# def parsed_prior_month_trip(
-#     store: StoreManager, base: str, parsed: ParsedTrip, overwrite: bool = False
-# ) -> Path:
-#     """Save a ParsedTrip in the store."""
-#     if store.read_only:
-#         raise StoreOperationError(
-#             "Store is opened in read-only mode. No changes allowed."
-#         )
-#     trip_info = FileInfo(
-#         key=parsed.default_file_name(),
-#         type=FileTypes.PARSED_PRIOR_MONTH_TRIP,
-#         file_path=f"{base}/parsed_prior/{parsed.default_file_name()}",
-#     )
-#     path_out = store.manifest_directory / trip_info["file_path"]
-#     PARSED_TRIP_SERIALIZER.save_as_json(
-#         path_out=path_out, complex_obj=parsed, overwrite=overwrite
-#     )
-#     store.record_file(base=base, info=trip_info)
-#     return path_out
 
 
 def expanded_trip(
@@ -139,8 +131,11 @@ def expanded_trip(
         file_path=f"{base}/expanded/{expanded.default_file_name()}",
     )
     path_out = store.manifest_directory / trip_info["file_path"]
-    EXPANDED_TRIP_SERIALIZER.save_as_json(
-        path_out=path_out, complex_obj=expanded, overwrite=overwrite
+    API.save.expanded_trip(
+        dir_out=path_out.parent,
+        file_name=path_out.name,
+        expanded_trip=expanded,
+        overwrite=overwrite,
     )
     store.record_file(base=base, info=trip_info)
     if expanded.errors:

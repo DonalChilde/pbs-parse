@@ -1,0 +1,159 @@
+"""pages lines."""
+
+from dataclasses import dataclass, field
+from pathlib import Path
+from typing import TypedDict
+
+from pfmsoft.simple_serializer import DataclassSerializer
+
+from pbs_parse.pbs_2022_01.models.bid_data import BidData, BidDataTD
+from pbs_parse.snippets.file.data_file_loader import DataFileLoader
+from pbs_parse.snippets.indexed_string import IndexedStringTD
+from pbs_parse.snippets.indexed_string.pydantic_model import IndexedString
+
+
+class PageLinesSourceTD(TypedDict):
+    """PageLinesSourceTD."""
+
+    txt_file: str
+
+
+class PageLinesTD(TypedDict):
+    """PageLinesTD."""
+
+    source: PageLinesSourceTD
+    bid: BidDataTD
+    idx: str
+    lines: list[IndexedStringTD]
+
+
+@dataclass(slots=True)
+class PageLinesSource:
+    """PageLinesSource."""
+
+    txt_file: str = "TXT_FILE"
+
+
+@dataclass(slots=True, kw_only=True)
+class PageLines:
+    """PageLines."""
+
+    source: PageLinesSource
+    """The source of the page_lines."""
+    bid: BidData
+    """The details of the bid package that the page falls in."""
+    idx: str
+    """The index of the page as it was parsed from the bid package. Starts at 00001-00.
+    The -00 suffix is a place holder for the indexes of trips found in the page."""
+    lines: list[IndexedString] = field(default_factory=list)
+    """The indexed lines of text found in the page."""
+
+    @staticmethod
+    def from_simple(simple_obj: PageLinesTD) -> "PageLines":
+        """from_simple.
+
+        Args:
+            simple_obj (PageLinesTD): _description_
+
+        Returns:
+            PageLines: _description_
+        """
+        result = PageLines(
+            source=PageLinesSource(**simple_obj["source"]),
+            bid=BidData.from_simple(simple_obj["bid"]),
+            idx=simple_obj["idx"],
+            lines=[IndexedString(**x) for x in simple_obj["lines"]],
+        )
+        return result
+
+    def to_simple(self) -> PageLinesTD:
+        """To simple."""
+        return PageLinesTD(
+            source=PageLinesSourceTD(txt_file=self.source.txt_file),
+            bid=self.bid.to_simple(),
+            idx=self.idx,
+            lines=[IndexedStringTD(idx=x.idx, txt=x.txt) for x in self.lines],
+        )
+
+    def default_file_name(self) -> str:
+        """default_file_name.
+
+        Returns:
+            str: _description_
+        """
+        return self.assemble_file_name(idx=self.idx, bid=self.bid)
+
+    @staticmethod
+    def assemble_file_name(idx: str, bid: BidData) -> str:
+        """assemble_file_name.
+
+        Args:
+            idx (str): _description_
+            bid (BidData): _description_
+
+        Returns:
+            str: _description_
+        """
+        return f"page-lines_{bid.name}_{bid.base}_{idx}.json"
+
+
+def page_lines_serializer() -> DataclassSerializer[PageLines, PageLinesTD]:
+    """page_lines_serializer.
+
+    Returns:
+        DataclassSerializer[PageLines, PageLinesTD]: _description_
+    """
+    return DataclassSerializer[PageLines, PageLinesTD](
+        complex_factory=PageLines.from_simple, simple_factory=PageLines.to_simple
+    )
+
+
+PAGE_LINES_SERIALIZER = page_lines_serializer()
+
+
+class PageLinesSaver:
+    """PageLinesSaver."""
+
+    def __init__(self, path_out: Path) -> None:
+        """Save PageLines to a directory using the default file name.
+
+        Args:
+            path_out (Path): The directory to save the PageLines to.
+        """
+        if path_out.is_file():
+            raise ValueError(
+                f"Path out is an existing file, should be a directory. {path_out=}"
+            )
+        self.path_out = path_out
+
+    def __call__(self, page_lines: PageLines, overwrite: bool = False) -> Path:
+        """Save PageLines to a directory using the default file name.
+
+        Args:
+            page_lines (PageLines): The PageLines to save.
+            overwrite (bool): Overwrite existing files.
+
+        Returns:
+            Path: The path to the saved file.
+        """
+        path_out = self.path_out / page_lines.default_file_name()
+        PAGE_LINES_SERIALIZER.save_as_json(
+            path_out=path_out, complex_obj=page_lines, overwrite=overwrite
+        )
+        return path_out
+
+
+class PageLinesLoader(DataFileLoader[PageLines]):
+    """PageLinesLoader."""
+
+    def __init__(self, path_in: Path, glob: str = "page-lines_*.json") -> None:
+        """Load PageLines from directory.
+
+        Args:
+            path_in (Path): The directory to load files from.
+            glob (str, optional): The glob to match files. Defaults to "page-lines_*.json".
+        """
+        super().__init__(path_in, glob)
+
+    def _translate(self, obj_path: Path) -> PageLines:
+        return PAGE_LINES_SERIALIZER.load_from_json(path_in=obj_path)

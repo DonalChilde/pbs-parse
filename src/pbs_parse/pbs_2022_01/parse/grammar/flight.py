@@ -4,7 +4,7 @@ import logging
 
 import pyparsing as pp
 
-from pbs_parse.pbs_2022_01.models import grammar_TD
+from pbs_parse.pbs_2022_01.models import grammar_td
 from pbs_parse.pbs_2022_01.parse.grammar.common import (
     CALENDAR_LINE,
     CITY,
@@ -20,11 +20,11 @@ SPECIAL_QUAL = pp.Literal("SPECIAL") + "QUALIFICATION"
 CALENDAR_HEADER = pp.Literal("MO") + "TU" + "WE" + "TH" + "FR" + "SA" + "SU"
 
 
-def process_parsed_flight(s: str, loc: int, toks: pp.ParseResults) -> grammar_TD.Flight:
+def process_parsed_flight(s: str, loc: int, toks: pp.ParseResults) -> grammar_td.Flight:
     """Process the parsed data."""
     logger.debug("%s -> %s", s, toks.dump())
 
-    return grammar_TD.Flight(
+    return grammar_td.Flight(
         dutyperiod_idx=toks.dutyperiod_idx,  # type: ignore
         depart_day=toks.depart_day,  # type: ignore
         arrive_day=toks.arrive_day,  # type: ignore
@@ -33,13 +33,13 @@ def process_parsed_flight(s: str, loc: int, toks: pp.ParseResults) -> grammar_TD
         deadhead=False,
         deadhead_code="",
         departure_station=toks.departure_station,  # type: ignore
-        departure_time=grammar_TD.DualTime(
+        departure_time=grammar_td.DualTime(
             lcl=toks.departure_time.lcl,  # type: ignore
             hbt=toks.departure_time.hbt,  # type: ignore
         ),
         crew_meal=toks.crewmeal,  # type: ignore
         arrival_station=toks.arrival_station,  # type: ignore
-        arrival_time=grammar_TD.DualTime(
+        arrival_time=grammar_td.DualTime(
             lcl=toks.arrival_time.lcl,  # type: ignore
             hbt=toks.arrival_time.hbt,  # type: ignore
         ),
@@ -83,11 +83,11 @@ Matches:
 
 def process_parsed_flight_deadhead(
     s: str, loc: int, toks: pp.ParseResults
-) -> grammar_TD.Flight:
+) -> grammar_td.Flight:
     """Process the parsed data."""
     logger.debug("%s -> %s", s, toks.dump())
 
-    return grammar_TD.Flight(
+    return grammar_td.Flight(
         dutyperiod_idx=toks.dutyperiod_idx,  # type: ignore
         depart_day=toks.depart_day,  # type: ignore
         arrive_day=toks.arrive_day,  # type: ignore
@@ -96,13 +96,13 @@ def process_parsed_flight_deadhead(
         deadhead=True,
         deadhead_code=toks.deadhead_code,  # type: ignore
         departure_station=toks.departure_station,  # type: ignore
-        departure_time=grammar_TD.DualTime(
+        departure_time=grammar_td.DualTime(
             lcl=toks.departure_time.lcl,  # type: ignore
             hbt=toks.departure_time.hbt,  # type: ignore
         ),
         crew_meal=toks.crewmeal,  # type: ignore
         arrival_station=toks.arrival_station,  # type: ignore
-        arrival_time=grammar_TD.DualTime(
+        arrival_time=grammar_td.DualTime(
             lcl=toks.arrival_time.lcl,  # type: ignore
             hbt=toks.arrival_time.hbt,  # type: ignore
         ),

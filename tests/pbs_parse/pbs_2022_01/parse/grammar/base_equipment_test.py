@@ -4,14 +4,14 @@ import logging
 
 import pytest
 
-from pbs_parse.pbs_2022_01.models import grammar_TD
+from pbs_parse.pbs_2022_01.models import grammar_td
 from pbs_parse.pbs_2022_01.parse import grammar
 from tests.resources.model import ParsingTest
 
 logger = logging.getLogger(__name__)
 
 parser = grammar.base_equipment
-result_class = grammar_TD.BaseEquipment
+result_class = grammar_td.BaseEquipment
 test_name = "base_equipment" + " grammar "
 test_items = [
     ParsingTest[result_class](

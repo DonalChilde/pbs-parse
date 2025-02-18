@@ -4,7 +4,7 @@ import logging
 
 import pyparsing as pp
 
-from pbs_parse.pbs_2022_01.models import grammar_TD
+from pbs_parse.pbs_2022_01.models import grammar_td
 
 from .common import CALENDAR_LINE, DURATION
 
@@ -12,11 +12,11 @@ logger = logging.getLogger(__name__)
 logger.addHandler(logging.NullHandler())
 
 
-def process_parsed(s: str, loc: int, toks: pp.ParseResults) -> grammar_TD.TripFooter:
+def process_parsed(s: str, loc: int, toks: pp.ParseResults) -> grammar_td.TripFooter:
     """Process the parsed data."""
     logger.debug("%s -> %s", s, toks.dump())
 
-    return grammar_TD.TripFooter(
+    return grammar_td.TripFooter(
         block=toks.block,  # type: ignore
         synth=toks.synth,  # type: ignore
         total_pay=toks.total_pay,  # type: ignore

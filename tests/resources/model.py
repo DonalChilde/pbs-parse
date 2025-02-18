@@ -3,7 +3,7 @@
 from dataclasses import dataclass, field
 from typing import Any
 
-from pbs_parse.snippets.indexed_string import IndexedString
+from pbs_parse.snippets.indexed_string.pydantic_model import IndexedString
 
 
 @dataclass

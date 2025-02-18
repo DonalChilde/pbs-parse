@@ -7,31 +7,12 @@ from pbs_parse.pbs_2022_01.models.bid_data import BidData
 from pbs_parse.pbs_2022_01.models.page_lines import (
     PageLines,
     PageLinesSource,
-    page_lines_serializer,
 )
-from pbs_parse.snippets.indexed_string import IndexedString, index_lines_in_file
-
-# def split_to_pages(
-#     path_in: Path,
-#     bid: BidData,
-#     observer: Callable[[PageLines], None] | None = None,
-# ) -> Iterator[PageLines]:
-#     """Split a text file to PageLines, with an optional observer.
-
-#     Args:
-#         path_in (Path): The path to the input text file.
-#         bid (BidData): Base and effective date info.
-#         observer (Callable[[PageLines], None] | None, optional): The optional observer.
-#             Defaults to None.
-
-#     Yields:
-#         Iterator[PageLines]: _description_
-#     """
-#     reader = index_lines_in_file(file_path=path_in, index_start=1)
-#     for page in parse_page_lines(source=path_in.name, bid=bid, lines=reader):
-#         if observer:
-#             observer(page)
-#         yield page
+from pbs_parse.snippets.indexed_string import index_lines_in_file
+from pbs_parse.snippets.indexed_string.pydantic_model import (
+    IndexedString,
+    pydantic_factory,
+)
 
 
 def lines_of_package_to_lines_of_pages(
@@ -72,7 +53,9 @@ def parse_page_lines_from_file(path_in: Path, bid: BidData) -> Iterator[PageLine
     Yields:
         Iterator[PageLines]: The `PageLines`
     """
-    reader = index_lines_in_file(file_path=path_in, index_start=1)
+    reader = index_lines_in_file(
+        file_path=path_in, index_start=1, factory=pydantic_factory
+    )
     yield from parse_page_lines(source=path_in.name, bid=bid, lines=reader)
 
 
@@ -99,26 +82,26 @@ def parse_page_lines(
         yield page
 
 
-def write_page_lines(
-    pages: Iterator[PageLines], path_out: Path, overwrite: bool
-) -> int:
-    """Write the `PageLines` to file with a default file name.
+# def write_page_lines(
+#     pages: Iterator[PageLines], path_out: Path, overwrite: bool
+# ) -> int:
+#     """Write the `PageLines` to file with a default file name.
 
-    Args:
-        pages (Iterator[PageLines]): The PageLines to write to disk.
-        path_out (Path): The directory to write the PageLines to.
-        overwrite (bool): Overwrite existing files if found.
+#     Args:
+#         pages (Iterator[PageLines]): The PageLines to write to disk.
+#         path_out (Path): The directory to write the PageLines to.
+#         overwrite (bool): Overwrite existing files if found.
 
-    Returns:
-        int: The count of the files written.
-    """
-    pages_list = list(pages)
-    count = 0
-    serializer = page_lines_serializer()
-    for idx, page in enumerate(pages_list, start=1):
-        result_path = path_out / page.default_file_name()
-        serializer.save_as_json(
-            path_out=result_path, complex_obj=page, overwrite=overwrite
-        )
-        count = idx
-    return count
+#     Returns:
+#         int: The count of the files written.
+#     """
+#     pages_list = list(pages)
+#     count = 0
+#     serializer = page_lines_serializer()
+#     for idx, page in enumerate(pages_list, start=1):
+#         result_path = path_out / page.default_file_name()
+#         serializer.save_as_json(
+#             path_out=result_path, complex_obj=page, overwrite=overwrite
+#         )
+#         count = idx
+#     return count

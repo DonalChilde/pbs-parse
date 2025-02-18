@@ -4,7 +4,7 @@ import logging
 
 import pyparsing as pp
 
-from pbs_parse.pbs_2022_01.models import grammar_TD
+from pbs_parse.pbs_2022_01.models import grammar_td
 
 logger = logging.getLogger(__name__)
 logger.addHandler(logging.NullHandler())
@@ -14,7 +14,7 @@ SPECIAL_QUAL = pp.Literal("SPECIAL") + "QUALIFICATION"
 CALENDAR_HEADER = pp.Literal("MO") + "TU" + "WE" + "TH" + "FR" + "SA" + "SU"
 
 
-def process_parsed(s: str, loc: int, toks: pp.ParseResults) -> grammar_TD.TripHeader:
+def process_parsed(s: str, loc: int, toks: pp.ParseResults) -> grammar_td.TripHeader:
     """Process the parsed data."""
     logger.debug("%s -> %s", s, toks.dump())
     if toks.special_qual[0] == False:  # type: ignore
@@ -25,7 +25,7 @@ def process_parsed(s: str, loc: int, toks: pp.ParseResults) -> grammar_TD.TripHe
         prior_month_trip = True
     else:
         prior_month_trip = False
-    return grammar_TD.TripHeader(
+    return grammar_td.TripHeader(
         trip_number=toks.number,  # type: ignore
         ops_count=toks.ops_count,  # type: ignore
         positions=toks.positions.as_list(),  # type: ignore

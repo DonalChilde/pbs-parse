@@ -3,11 +3,13 @@
 from collections.abc import Iterable, Iterator
 from pathlib import Path
 
+import yaml
+
 from pbs_parse.pbs_2022_01.api.common import DataType
-from pbs_parse.pbs_2022_01.models.expanded import EXPANDED_TRIP_SERIALIZER, ExpandedTrip
-from pbs_parse.pbs_2022_01.models.page_lines import PAGE_LINES_SERIALIZER, PageLines
-from pbs_parse.pbs_2022_01.models.parsed_trip import PARSED_TRIP_SERIALIZER, ParsedTrip
-from pbs_parse.pbs_2022_01.models.trip_lines import TRIP_LINES_SERIALIZER, TripLines
+from pbs_parse.pbs_2022_01.models.expanded import ExpandedTrip
+from pbs_parse.pbs_2022_01.models.page_lines import PageLines
+from pbs_parse.pbs_2022_01.models.parsed_trip import ParsedTrip
+from pbs_parse.pbs_2022_01.models.trip_lines import TripLines
 
 
 def page_lines(file_in: Path, data_type: DataType = DataType.JSON) -> PageLines:
@@ -26,9 +28,11 @@ def page_lines(file_in: Path, data_type: DataType = DataType.JSON) -> PageLines:
     """
     match data_type:
         case DataType.JSON:
-            page = PAGE_LINES_SERIALIZER.load_from_json(path_in=file_in)
+            page = PageLines.model_validate_json(file_in.read_text())
         case DataType.YAML:
-            page = PAGE_LINES_SERIALIZER.load_from_yaml(path_in=file_in)
+            with open(file=file_in) as fp:
+                data = yaml.safe_load(fp)
+            page = PageLines.model_validate(data)
         case DataType.TXT:
             raise ValueError("PageLines cannot be of type TXT.")
         case _:  # type: ignore
@@ -52,9 +56,11 @@ def trip_lines(file_in: Path, data_type: DataType = DataType.JSON) -> TripLines:
     """
     match data_type:
         case DataType.JSON:
-            trip = TRIP_LINES_SERIALIZER.load_from_json(path_in=file_in)
+            trip = TripLines.model_validate_json(file_in.read_text())
         case DataType.YAML:
-            trip = TRIP_LINES_SERIALIZER.load_from_yaml(path_in=file_in)
+            with open(file=file_in) as fp:
+                data = yaml.safe_load(fp)
+            trip = TripLines.model_validate(data)
         case DataType.TXT:
             raise ValueError("TripLines cannot be of type TXT.")
         case _:  # type: ignore
@@ -78,9 +84,11 @@ def parsed_trip(file_in: Path, data_type: DataType = DataType.JSON) -> ParsedTri
     """
     match data_type:
         case DataType.JSON:
-            parsed = PARSED_TRIP_SERIALIZER.load_from_json(path_in=file_in)
+            parsed = ParsedTrip.model_validate_json(file_in.read_text())
         case DataType.YAML:
-            parsed = PARSED_TRIP_SERIALIZER.load_from_yaml(path_in=file_in)
+            with open(file=file_in) as fp:
+                data = yaml.safe_load(fp)
+            parsed = ParsedTrip.model_validate(data)
         case DataType.TXT:
             raise ValueError("ParsedTrip cannot be of type TXT.")
         case _:  # type: ignore
@@ -104,9 +112,11 @@ def expanded_trip(file_in: Path, data_type: DataType = DataType.JSON) -> Expande
     """
     match data_type:
         case DataType.JSON:
-            expanded = EXPANDED_TRIP_SERIALIZER.load_from_json(path_in=file_in)
+            expanded = ExpandedTrip.model_validate_json(file_in.read_text())
         case DataType.YAML:
-            expanded = EXPANDED_TRIP_SERIALIZER.load_from_yaml(path_in=file_in)
+            with open(file=file_in) as fp:
+                data = yaml.safe_load(fp)
+            expanded = ExpandedTrip.model_validate(data)
         case DataType.TXT:
             raise ValueError("ExpandedTrip cannot be of type TXT.")
         case _:  # type: ignore

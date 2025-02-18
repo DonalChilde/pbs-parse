@@ -4,7 +4,7 @@ import logging
 
 import pyparsing as pp
 
-from pbs_parse.pbs_2022_01.models import grammar_TD
+from pbs_parse.pbs_2022_01.models import grammar_td
 
 from .common import CALENDAR_LINE, DUALTIME, DURATION
 
@@ -14,12 +14,12 @@ logger.addHandler(logging.NullHandler())
 
 def process_parsed(
     s: str, loc: int, toks: pp.ParseResults
-) -> grammar_TD.DutyPeriodRelease:
+) -> grammar_td.DutyPeriodRelease:
     """Process the parsed data."""
     logger.debug("%s -> %s", s, toks.dump())
 
-    return grammar_TD.DutyPeriodRelease(
-        release=grammar_TD.DualTime(lcl=toks.release.lcl, hbt=toks.release.hbt),  # type: ignore
+    return grammar_td.DutyPeriodRelease(
+        release=grammar_td.DualTime(lcl=toks.release.lcl, hbt=toks.release.hbt),  # type: ignore
         block=toks.block,  # type: ignore
         synth=toks.synth,  # type: ignore
         total_pay=toks.total_pay,  # type: ignore

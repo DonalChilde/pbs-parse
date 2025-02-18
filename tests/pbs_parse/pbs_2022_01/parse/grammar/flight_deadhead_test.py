@@ -4,14 +4,14 @@ import logging
 
 import pytest
 
-from pbs_parse.pbs_2022_01.models import grammar_TD
+from pbs_parse.pbs_2022_01.models import grammar_td
 from pbs_parse.pbs_2022_01.parse import grammar
 from tests.resources.model import ParsingTest
 
 logger = logging.getLogger(__name__)
 
 parser = grammar.flight_deadhead
-result_class = grammar_TD.Flight
+result_class = grammar_td.Flight
 test_name = "flight_deadhead" + " grammar "
 test_items = [
     ParsingTest[result_class](
@@ -25,10 +25,10 @@ test_items = [
             deadhead=True,
             deadhead_code="AA",
             departure_station="DFW",
-            departure_time=grammar_TD.DualTime(lcl="1635", hbt="1635"),
+            departure_time=grammar_td.DualTime(lcl="1635", hbt="1635"),
             crew_meal="",
             arrival_station="AUS",
-            arrival_time=grammar_TD.DualTime(lcl="1741", hbt="1741"),
+            arrival_time=grammar_td.DualTime(lcl="1741", hbt="1741"),
             block="0.00",
             synth="1.06",
             ground="0.00",
@@ -47,10 +47,10 @@ test_items = [
             deadhead=True,
             deadhead_code="AA",
             departure_station="MCI",
-            departure_time=grammar_TD.DualTime(lcl="1607", hbt="1407"),
+            departure_time=grammar_td.DualTime(lcl="1607", hbt="1407"),
             crew_meal="",
             arrival_station="DFW",
-            arrival_time=grammar_TD.DualTime(lcl="1800", hbt="1600"),
+            arrival_time=grammar_td.DualTime(lcl="1800", hbt="1600"),
             block="0.00",
             synth="1.53",
             ground="1.27",

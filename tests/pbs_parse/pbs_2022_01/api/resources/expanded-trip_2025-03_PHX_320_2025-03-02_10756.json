@@ -23,15 +23,6 @@
   "satellite_base": null,
   "equipment": "320"
  },
- "positions": [
-  {
-   "name": "CA"
-  },
-  {
-   "name": "FO"
-  }
- ],
- "operations": [],
  "special_qual": false,
  "start_station": {
   "iata": "PHX",
@@ -63,6 +54,33 @@
     "tz_name": "America/New_York"
    },
    "release": "2025-03-02T22:29:00-05:00[America/New_York]",
+   "duty": "PT11H14M",
+   "flight_duty": "PT10H44M",
+   "operating_time": "PT6H52M",
+   "flight_time": "PT6H52M",
+   "soft_time": "PT0S",
+   "layover": {
+    "layover_station": {
+     "iata": "RDU",
+     "icao": "KRDU",
+     "tz_name": "America/New_York"
+    },
+    "start": "2025-03-02T22:29:00-05:00[America/New_York]",
+    "end": "2025-03-03T12:22:00-05:00[America/New_York]",
+    "rest": "PT13H53M",
+    "hotels": [
+     {
+      "name": "SHERATON IMPERIAL HOTEL",
+      "phone": "19199415050",
+      "transportation": [
+       {
+        "name": "SHUTTLE",
+        "phone": ""
+       }
+      ]
+     }
+    ]
+   },
    "flights": [
     {
      "eq_code": "63",
@@ -136,34 +154,7 @@
      "soft_time": "PT0S",
      "ground_time": "PT0S"
     }
-   ],
-   "duty": "PT11H14M",
-   "flight_duty": "PT10H44M",
-   "operating_time": "PT6H52M",
-   "flight_time": "PT6H52M",
-   "soft_time": "PT0S",
-   "layover": {
-    "layover_station": {
-     "iata": "RDU",
-     "icao": "KRDU",
-     "tz_name": "America/New_York"
-    },
-    "start": "2025-03-02T22:29:00-05:00[America/New_York]",
-    "end": "2025-03-03T12:22:00-05:00[America/New_York]",
-    "hotels": [
-     {
-      "name": "SHERATON IMPERIAL HOTEL",
-      "phone": "19199415050",
-      "transportation": [
-       {
-        "name": "SHUTTLE",
-        "phone": ""
-       }
-      ]
-     }
-    ],
-    "rest": "PT13H53M"
-   }
+   ]
   },
   {
    "report_station": {
@@ -178,6 +169,33 @@
     "tz_name": "America/Los_Angeles"
    },
    "release": "2025-03-03T20:30:00-08:00[America/Los_Angeles]",
+   "duty": "PT11H8M",
+   "flight_duty": "PT10H38M",
+   "operating_time": "PT6H1M",
+   "flight_time": "PT7H9M",
+   "soft_time": "PT1H8M",
+   "layover": {
+    "layover_station": {
+     "iata": "SFO",
+     "icao": "KSFO",
+     "tz_name": "America/Los_Angeles"
+    },
+    "start": "2025-03-03T20:30:00-08:00[America/Los_Angeles]",
+    "end": "2025-03-04T07:51:00-08:00[America/Los_Angeles]",
+    "rest": "PT11H21M",
+    "hotels": [
+     {
+      "name": "GRAND HYATT AT SFO",
+      "phone": "16504521234",
+      "transportation": [
+       {
+        "name": "SHUTTLE",
+        "phone": ""
+       }
+      ]
+     }
+    ]
+   },
    "flights": [
     {
      "eq_code": "63",
@@ -227,34 +245,7 @@
      "soft_time": "PT0S",
      "ground_time": "PT0S"
     }
-   ],
-   "duty": "PT11H8M",
-   "flight_duty": "PT10H38M",
-   "operating_time": "PT6H1M",
-   "flight_time": "PT6H1M",
-   "soft_time": "PT1H8M",
-   "layover": {
-    "layover_station": {
-     "iata": "SFO",
-     "icao": "KSFO",
-     "tz_name": "America/Los_Angeles"
-    },
-    "start": "2025-03-03T20:30:00-08:00[America/Los_Angeles]",
-    "end": "2025-03-04T07:51:00-08:00[America/Los_Angeles]",
-    "hotels": [
-     {
-      "name": "GRAND HYATT AT SFO",
-      "phone": "16504521234",
-      "transportation": [
-       {
-        "name": "SHUTTLE",
-        "phone": ""
-       }
-      ]
-     }
-    ],
-    "rest": "PT11H21M"
-   }
+   ]
   },
   {
    "report_station": {
@@ -269,6 +260,12 @@
     "tz_name": "America/Phoenix"
    },
    "release": "2025-03-04T12:18:00-07:00[America/Phoenix]",
+   "duty": "PT3H27M",
+   "flight_duty": "PT2H57M",
+   "operating_time": "PT1H57M",
+   "flight_time": "PT1H57M",
+   "soft_time": "PT3M",
+   "layover": null,
    "flights": [
     {
      "eq_code": "29",
@@ -294,14 +291,17 @@
      "soft_time": "PT0S",
      "ground_time": "PT0S"
     }
-   ],
-   "duty": "PT3H27M",
-   "flight_duty": "PT2H57M",
-   "operating_time": "PT1H57M",
-   "flight_time": "PT1H57M",
-   "soft_time": "PT3M",
-   "layover": null
+   ]
   }
  ],
+ "positions": [
+  {
+   "name": "CA"
+  },
+  {
+   "name": "FO"
+  }
+ ],
+ "operations": [],
  "errors": []
 }

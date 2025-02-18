@@ -28,7 +28,8 @@ dependencies = [
     "pyparsing",
     "tzdata",
     "whenever",
-    "pfmsoft-simple-serializer@git+https://github.com/donalchilde/pfmsoft-simple-serializer@dev",
+    "pydantic",
+    "pyyaml",
     "pfmsoft-pdf2txt@git+https://github.com/donalchilde/pdf2txt@dev",
     "airportsdata",
 ]

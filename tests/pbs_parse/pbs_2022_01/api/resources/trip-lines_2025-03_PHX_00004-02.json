@@ -15,11 +15,11 @@
  "lines": [
   {
    "idx": 1402,
-   "txt": "\f   DAY          \u2212\u2212DEPARTURE\u2212\u2212    \u2212\u2212\u2212ARRIVAL\u2212\u2212\u2212                GRND/        REST/\n"
+   "txt": "\f   DAY          −−DEPARTURE−−    −−−ARRIVAL−−−                GRND/        REST/\n"
   },
   {
    "idx": 1403,
-   "txt": "DP D/A EQ FLT#  STA DLCL/DHBT ML STA ALCL/AHBT  BLOCK  SYNTH   TPAY   DUTY  TAFB   FDP CALENDAR 03/02\u221203/31\n"
+   "txt": "DP D/A EQ FLT#  STA DLCL/DHBT ML STA ALCL/AHBT  BLOCK  SYNTH   TPAY   DUTY  TAFB   FDP CALENDAR 03/02−03/31\n"
   },
   {
    "idx": 1420,
@@ -27,27 +27,27 @@
   },
   {
    "idx": 1421,
-   "txt": "                RPT 0625/0625                                                                            \u2212\u2212 \n"
+   "txt": "                RPT 0625/0625                                                                            −− \n"
   },
   {
    "idx": 1422,
-   "txt": "1  1/1 92 3208  PHX 0725/0725  B SLC 1006/0906   1.41          0.54                    \u2212\u2212 \u2212\u2212 \u2212\u2212 \u2212\u2212 \u2212\u2212 \u2212\u2212 \u2212\u2212 \n"
+   "txt": "1  1/1 92 3208  PHX 0725/0725  B SLC 1006/0906   1.41          0.54                    −− −− −− −− −− −− −− \n"
   },
   {
    "idx": 1423,
-   "txt": "1  1/1 92 1848  SLC 1100/1000    PHX 1144/1144   1.44          3.31X                   \u2212\u2212 \u2212\u2212 \u2212\u2212 \u2212\u2212 \u2212\u2212 \u2212\u2212 \u2212\u2212 \n"
+   "txt": "1  1/1 92 1848  SLC 1100/1000    PHX 1144/1144   1.44          3.31X                   −− −− −− −− −− −− −− \n"
   },
   {
    "idx": 1424,
-   "txt": "1  1/1 29 1767  PHX 1515/1515    SAT 1918/1718   2.03                                  \u2212\u2212 \u2212\u2212 \u2212\u2212 \u2212\u2212 \u2212\u2212 \u2212\u2212 23 \n"
+   "txt": "1  1/1 29 1767  PHX 1515/1515    SAT 1918/1718   2.03                                  −− −− −− −− −− −− 23 \n"
   },
   {
    "idx": 1425,
-   "txt": "                                 RLS 1948/1748   5.28   0.13   5.41  11.23       10.53 24 25 26 \u2212\u2212 28 \u2212\u2212 \u2212\u2212 \n"
+   "txt": "                                 RLS 1948/1748   5.28   0.13   5.41  11.23       10.53 24 25 26 −− 28 −− −− \n"
   },
   {
    "idx": 1426,
-   "txt": "                SAT DOUBLETREE SAN ANTONIO AIRPORT          12103406060    12.10       \u2212\u2212                   \n"
+   "txt": "                SAT DOUBLETREE SAN ANTONIO AIRPORT          12103406060    12.10       −−                   \n"
   },
   {
    "idx": 1427,

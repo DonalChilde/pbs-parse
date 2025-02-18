@@ -5,11 +5,13 @@ from collections.abc import Iterable
 from pathlib import Path
 from typing import Any
 
+import yaml
+
 from pbs_parse.pbs_2022_01.api.common import DataType
-from pbs_parse.pbs_2022_01.models.expanded import EXPANDED_TRIP_SERIALIZER, ExpandedTrip
-from pbs_parse.pbs_2022_01.models.page_lines import PAGE_LINES_SERIALIZER, PageLines
-from pbs_parse.pbs_2022_01.models.parsed_trip import PARSED_TRIP_SERIALIZER, ParsedTrip
-from pbs_parse.pbs_2022_01.models.trip_lines import TRIP_LINES_SERIALIZER, TripLines
+from pbs_parse.pbs_2022_01.models.expanded import ExpandedTrip
+from pbs_parse.pbs_2022_01.models.page_lines import PageLines
+from pbs_parse.pbs_2022_01.models.parsed_trip import ParsedTrip
+from pbs_parse.pbs_2022_01.models.trip_lines import TripLines
 from pbs_parse.snippets.file.check_file import check_file
 
 from . import style
@@ -39,22 +41,19 @@ def page_lines(
             if not file_name:
                 file_name = page_lines.default_file_name()
             file_out = dir_out / file_name
-            PAGE_LINES_SERIALIZER.save_as_json(
-                path_out=file_out,
-                complex_obj=page_lines,
-                overwrite=overwrite,
-            )
+            check_file(path_out=file_out, overwrite=overwrite)
+            data = page_lines.model_dump_json(indent=1)
+            file_out.write_text(data=data, encoding="utf-8")
             return file_out
         case DataType.YAML:
             if not file_name:
                 file_name = page_lines.default_file_name()
             file_out = dir_out / file_name
             file_out = file_out.with_suffix(".yaml")
-            PAGE_LINES_SERIALIZER.save_as_yaml(
-                path_out=file_out,
-                complex_obj=page_lines,
-                overwrite=overwrite,
-            )
+            check_file(path_out=file_out, overwrite=overwrite)
+            data = page_lines.model_dump(mode="json")
+            with open(file_out, mode="w", encoding="utf-8") as fp:
+                yaml.dump(data, fp, indent=1)
             return file_out
         case DataType.TXT:
             if not file_name:
@@ -90,22 +89,19 @@ def trip_lines(
             if not file_name:
                 file_name = trip_lines.default_file_name()
             file_out = dir_out / file_name
-            TRIP_LINES_SERIALIZER.save_as_json(
-                path_out=file_out,
-                complex_obj=trip_lines,
-                overwrite=overwrite,
-            )
+            check_file(path_out=file_out, overwrite=overwrite)
+            data = trip_lines.model_dump_json(indent=1)
+            file_out.write_text(data=data, encoding="utf-8")
             return file_out
         case DataType.YAML:
             if not file_name:
                 file_name = trip_lines.default_file_name()
             file_out = dir_out / file_name
             file_out = file_out.with_suffix(".yaml")
-            TRIP_LINES_SERIALIZER.save_as_yaml(
-                path_out=file_out,
-                complex_obj=trip_lines,
-                overwrite=overwrite,
-            )
+            check_file(path_out=file_out, overwrite=overwrite)
+            data = trip_lines.model_dump(mode="json")
+            with open(file_out, mode="w", encoding="utf-8") as fp:
+                yaml.dump(data, fp, indent=1)
             return file_out
         case DataType.TXT:
             if not file_name:
@@ -141,22 +137,19 @@ def parsed_trip(
             if not file_name:
                 file_name = parsed_trip.default_file_name()
             file_out = dir_out / file_name
-            PARSED_TRIP_SERIALIZER.save_as_json(
-                path_out=file_out,
-                complex_obj=parsed_trip,
-                overwrite=overwrite,
-            )
+            check_file(path_out=file_out, overwrite=overwrite)
+            data = parsed_trip.model_dump_json(indent=1)
+            file_out.write_text(data=data, encoding="utf-8")
             return file_out
         case DataType.YAML:
             if not file_name:
                 file_name = parsed_trip.default_file_name()
             file_out = dir_out / file_name
             file_out = file_out.with_suffix(".yaml")
-            PARSED_TRIP_SERIALIZER.save_as_yaml(
-                path_out=file_out,
-                complex_obj=parsed_trip,
-                overwrite=overwrite,
-            )
+            check_file(path_out=file_out, overwrite=overwrite)
+            data = parsed_trip.model_dump(mode="json")
+            with open(file_out, mode="w", encoding="utf-8") as fp:
+                yaml.dump(data, fp, indent=1)
             return file_out
         case DataType.TXT:
             if not file_name:
@@ -192,22 +185,19 @@ def expanded_trip(
             if not file_name:
                 file_name = expanded_trip.default_file_name()
             file_out = dir_out / file_name
-            EXPANDED_TRIP_SERIALIZER.save_as_json(
-                path_out=file_out,
-                complex_obj=expanded_trip,
-                overwrite=overwrite,
-            )
+            check_file(path_out=file_out, overwrite=overwrite)
+            data = expanded_trip.model_dump_json(indent=1)
+            file_out.write_text(data=data, encoding="utf-8")
             return file_out
         case DataType.YAML:
             if not file_name:
                 file_name = expanded_trip.default_file_name()
             file_out = dir_out / file_name
             file_out = file_out.with_suffix(".yaml")
-            EXPANDED_TRIP_SERIALIZER.save_as_yaml(
-                path_out=file_out,
-                complex_obj=expanded_trip,
-                overwrite=overwrite,
-            )
+            check_file(path_out=file_out, overwrite=overwrite)
+            data = expanded_trip.model_dump(mode="json")
+            with open(file_out, mode="w", encoding="utf-8") as fp:
+                yaml.dump(data, fp, indent=1)
             return file_out
         case DataType.TXT:
             if not file_name:
@@ -235,8 +225,8 @@ def expanded_debug(dir_out: Path, parsed: ParsedTrip, expanded: ExpandedTrip) ->
     check_file(json_out, overwrite=True)
     with open(json_out, mode="w") as fp:
         data: dict[str, Any] = {
-            "parsed": parsed.to_simple(),
-            "expanded": expanded.to_simple(),
+            "parsed": parsed.model_dump(mode="json"),
+            "expanded": expanded.model_dump(mode="json"),
         }
         json.dump(data, fp, indent=1)
     txt_out = json_out.with_suffix(".txt")

@@ -4,21 +4,21 @@ import logging
 
 import pytest
 
-from pbs_parse.pbs_2022_01.models import grammar_TD
+from pbs_parse.pbs_2022_01.models import grammar_td
 from pbs_parse.pbs_2022_01.parse import grammar
 from tests.resources.model import ParsingTest
 
 logger = logging.getLogger(__name__)
 
 parser = grammar.page_header_2
-result_class = grammar_TD.PageHeader2
+result_class = grammar_td.PageHeader2
 test_name = "page_header_2" + " grammar "
 test_items = [
     ParsingTest[result_class](
         txt="DP D/A EQ FLT#  STA DLCL/DHBT ML STA ALCL/AHBT  BLOCK  SYNTH   TPAY   DUTY  TAFB   FDP CALENDAR 05/02−06/01",
-        result=grammar_TD.PageHeader2(
-            from_date=grammar_TD.MonthDay(month="05", day="02"),
-            to_date=grammar_TD.MonthDay(month="06", day="01"),
+        result=grammar_td.PageHeader2(
+            from_date=grammar_td.MonthDay(month="05", day="02"),
+            to_date=grammar_td.MonthDay(month="06", day="01"),
         ),
     )
 ]

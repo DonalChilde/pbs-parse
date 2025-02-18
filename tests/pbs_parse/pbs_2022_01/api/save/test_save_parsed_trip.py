@@ -19,7 +19,7 @@ def test_parsed_trip_save_json(test_output_dir: Path):
     assert path_out.is_file()
     assert path_out.suffix == ".json"
     assert path_out.name == input_filename
-    assert path_out.stat().st_size == 10144
+    assert path_out.stat().st_size == 9661
 
 
 def test_parsed_trip_save_yaml(test_output_dir: Path):

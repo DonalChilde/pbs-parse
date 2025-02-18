@@ -4,20 +4,20 @@ import logging
 
 import pytest
 
-from pbs_parse.pbs_2022_01.models import grammar_TD
+from pbs_parse.pbs_2022_01.models import grammar_td
 from pbs_parse.pbs_2022_01.parse import grammar
 from tests.resources.model import ParsingTest
 
 logger = logging.getLogger(__name__)
 
 parser = grammar.dutyperiod_release
-result_class = grammar_TD.DutyPeriodRelease
+result_class = grammar_td.DutyPeriodRelease
 test_name = "dutyperiod_release" + " grammar "
 test_items = [
     ParsingTest[result_class](
         txt="                                 RLS 0739/0439   4.49   0.00   4.49   6.19        5.49 −− −− −− −− −− −− −−",
         result=result_class(
-            release=grammar_TD.DualTime(lcl="0739", hbt="0439"),
+            release=grammar_td.DualTime(lcl="0739", hbt="0439"),
             block="4.49",
             synth="0.00",
             total_pay="4.49",
@@ -29,7 +29,7 @@ test_items = [
     ParsingTest[result_class](
         txt="                                 RLS 2252/2252   0.00   5.46   5.46   6.46        0.00",
         result=result_class(
-            release=grammar_TD.DualTime(lcl="2252", hbt="2252"),
+            release=grammar_td.DualTime(lcl="2252", hbt="2252"),
             block="0.00",
             synth="5.46",
             total_pay="5.46",

@@ -4,7 +4,7 @@ import logging
 
 import pyparsing as pp
 
-from pbs_parse.pbs_2022_01.models import grammar_TD
+from pbs_parse.pbs_2022_01.models import grammar_td
 
 from .common import CALENDAR_LINE
 
@@ -12,11 +12,11 @@ logger = logging.getLogger(__name__)
 logger.addHandler(logging.NullHandler())
 
 
-def process_parsed(s: str, loc: int, toks: pp.ParseResults) -> grammar_TD.CalendarOnly:
+def process_parsed(s: str, loc: int, toks: pp.ParseResults) -> grammar_td.CalendarOnly:
     """Process the parsed data."""
     logger.debug("%s -> %s", s, toks.dump())
 
-    return grammar_TD.CalendarOnly(calendar_entries=toks.calendar_entries.as_list())  # type: ignore
+    return grammar_td.CalendarOnly(calendar_entries=toks.calendar_entries.as_list())  # type: ignore
 
 
 calendar_only = pp.StringStart() + CALENDAR_LINE("calendar_entries") + pp.StringEnd()

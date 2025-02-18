@@ -1,50 +1,28 @@
 """The models for IndexedString, with some generator functions."""
 
 from collections.abc import Callable, Iterable, Iterator
-from dataclasses import dataclass
 from pathlib import Path
-from typing import Protocol, TypedDict
+
+from .model import IndexedString, IndexedStringProtocol
 
 
-class IndexedStringTD(TypedDict):
-    """A TypedDict version of IndexedString."""
-
-    idx: int
-    txt: str
+def basic_factory(idx: int, txt: str) -> IndexedStringProtocol:
+    """A basic default factory that produces dataclass `IndexedString`s."""
+    return IndexedString(idx=idx, txt=txt)
 
 
-@dataclass(slots=True)
-class IndexedString:
-    """A dataclass version of IndexedString."""
-
-    idx: int
-    txt: str
-
-    def __repr__(self):  # noqa: D105
-        cls_name = self.__class__.__name__
-        return f"{cls_name}(idx={self.idx}, txt={self.txt!r})"
-
-    def __str__(self):  # noqa: D105
-        return f"{self.idx}: {self.txt!r}"
-
-
-class IndexedStringProtocol(Protocol):
-    """A Protocol version of IndexedString."""
-
-    idx: int
-    txt: str
-
-
-def index_strings(
+def index_strings[T: IndexedStringProtocol](
     strings: Iterable[str],
     string_filter: Callable[[IndexedStringProtocol], bool] | None = None,
+    factory: Callable[[int, str], T] = basic_factory,
     index_start: int = 0,
-) -> Iterator[IndexedString]:
+) -> Iterator[T]:
     """Enumerate and filter a string iterable, yields an `IndexedString`.
 
     Args:
         strings (Iterable[str]): _description_
         string_filter (Callable[[IndexedStringProtocol], bool] | None, optional): _description_. Defaults to None.
+        factory (Callable[[int, str], T], optional): _description_. Defaults to basic_factory.
         index_start (int, optional): _description_. Defaults to 0.
 
     Yields:
@@ -54,22 +32,24 @@ def index_strings(
         indexed_string = IndexedString(idx=idx, txt=txt)
         if string_filter is not None:
             if string_filter(indexed_string):
-                yield indexed_string
+                yield factory(idx, txt)
             else:
                 continue
-        yield indexed_string
+        yield factory(idx, txt)
 
 
-def index_lines_in_file(
+def index_lines_in_file[T: IndexedStringProtocol](
     file_path: Path,
     string_filter: Callable[[IndexedStringProtocol], bool] | None = None,
+    factory: Callable[[int, str], T] = basic_factory,
     index_start: int = 1,
-) -> Iterator[IndexedString]:
+) -> Iterator[T]:
     """Enumerate and filter a text file, yields an `IndexedString`.
 
     Args:
         file_path (Path): _description_
         string_filter (Callable[[IndexedStringProtocol], bool] | None, optional): _description_. Defaults to None.
+        factory (Callable[[int, str], T], optional): _description_. Defaults to basic_factory.
         index_start (int, optional): _description_. Defaults to 1.
 
     Yields:
@@ -80,7 +60,7 @@ def index_lines_in_file(
             indexed_string = IndexedString(idx=idx, txt=line)
             if string_filter is not None:
                 if string_filter(indexed_string):
-                    yield indexed_string
+                    yield factory(idx, line)
                 else:
                     continue
-            yield indexed_string
+            yield factory(idx, line)

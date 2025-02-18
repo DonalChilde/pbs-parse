@@ -4,7 +4,7 @@ import logging
 
 import pyparsing as pp
 
-from pbs_parse.pbs_2022_01.models import grammar_TD
+from pbs_parse.pbs_2022_01.models import grammar_td
 
 from .common import (
     CALENDAR_LINE,
@@ -19,11 +19,11 @@ logger = logging.getLogger(__name__)
 logger.addHandler(logging.NullHandler())
 
 
-def process_parsed(s: str, loc: int, toks: pp.ParseResults) -> grammar_TD.Layover:
+def process_parsed(s: str, loc: int, toks: pp.ParseResults) -> grammar_td.Layover:
     """Process the parsed data."""
     logger.debug("%s -> %s", s, toks.dump())
 
-    return grammar_TD.Layover(
+    return grammar_td.Layover(
         layover_city=toks.layover_city,  # type: ignore
         hotel_name=toks.hotel_name,  # type: ignore
         hotel_phone=toks.hotel_phone,  # type: ignore

@@ -4,12 +4,12 @@ import logging
 
 import pytest
 
-from pbs_parse.pbs_2022_01.models import grammar_TD
+from pbs_parse.pbs_2022_01.models import grammar_td
 from pbs_parse.pbs_2022_01.parse import grammar as G
 from pbs_parse.pbs_2022_01.parse import parsers
-from pbs_parse.snippets.indexed_string import IndexedString
+from pbs_parse.snippets.indexed_string.pydantic_model import IndexedString
 from pbs_parse.snippets.indexed_string_state_parser import ParseContext
-from pbs_parse.snippets.indexed_string_state_parser.model import (
+from pbs_parse.snippets.indexed_string_state_parser.pydantic_model import (
     ParsedIndexedString,
     ParseResult,
 )
@@ -21,7 +21,7 @@ state = "BaseEquipment"
 parser = parsers.SimplePyparsingParser(
     parsed_state=state, string_parser=G.base_equipment
 )
-result_class = grammar_TD.BaseEquipment
+result_class = grammar_td.BaseEquipment
 test_name = f"{state} parser "
 test_items = [
     ParserTest2[result_class](

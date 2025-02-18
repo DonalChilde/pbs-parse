@@ -13,7 +13,7 @@ import logging
 
 import pyparsing as pp
 
-from pbs_parse.pbs_2022_01.models import grammar_TD
+from pbs_parse.pbs_2022_01.models import grammar_td
 
 from .common import DASH_UNICODE, DAY_NUMERAL, MONTH_NUMERAL
 
@@ -21,12 +21,12 @@ logger = logging.getLogger(__name__)
 DATE_MM_SLASH_DD = MONTH_NUMERAL + "/" + DAY_NUMERAL
 
 
-def process_parsed(s: str, loc: int, toks: pp.ParseResults) -> grammar_TD.PageHeader2:
+def process_parsed(s: str, loc: int, toks: pp.ParseResults) -> grammar_td.PageHeader2:
     """Process the parsed data."""
     logger.debug("%s -> %s", s, toks.dump())
-    return grammar_TD.PageHeader2(
-        from_date=grammar_TD.MonthDay(month=toks.from_date[0], day=toks.from_date[2]),  # type: ignore
-        to_date=grammar_TD.MonthDay(month=toks.to_date[0], day=toks.to_date[2]),  # type: ignore
+    return grammar_td.PageHeader2(
+        from_date=grammar_td.MonthDay(month=toks.from_date[0], day=toks.from_date[2]),  # type: ignore
+        to_date=grammar_td.MonthDay(month=toks.to_date[0], day=toks.to_date[2]),  # type: ignore
     )
 
 

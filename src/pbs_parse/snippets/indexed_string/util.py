@@ -2,7 +2,7 @@
 
 from uuid import NAMESPACE_DNS, UUID, uuid5
 
-from .indexed_string import IndexedStringProtocol, IndexedStringTD
+from .model import IndexedStringProtocol, IndexedStringTD
 
 
 def make_uuid5(
