@@ -23,12 +23,12 @@ def expanded_debug(
     Returns:
         int: _description_
     """
-    error_keys = expanded_errors_keys(store=store, base=base)
+    error_keys = expanded_errors_keys(store=store, base_name=base)
     error_count = len(error_keys)
     for key in error_keys:
-        expanded = load.expanded_trip(store=store, base=base, key=key)
+        expanded = load.expanded_trip(store=store, base_name=base, key=key)
         parsed = load.parsed_trip(
-            store=store, base=base, key=expanded.source.parsed_trip
+            store=store, base_name=base, key=expanded.source.parsed_trip
         )
         API.save.expanded_debug(dir_out=dir_out, parsed=parsed, expanded=expanded)
 

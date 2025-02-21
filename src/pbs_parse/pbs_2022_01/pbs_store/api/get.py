@@ -2,9 +2,9 @@
 
 from whenever import Date
 
-from pbs_parse.pbs_2022_01.models.manifest import FileTypes
-from pbs_parse.pbs_2022_01.pbs_store.stats import make_stats
 from pbs_parse.pbs_2022_01.pbs_store.store_manager import StoreManager
+
+from .stats import make_stats
 
 
 def effective_dates(store: StoreManager) -> tuple[Date, Date]:
@@ -16,20 +16,17 @@ def effective_dates(store: StoreManager) -> tuple[Date, Date]:
     Returns:
         tuple[Date, Date]: (from,to))
     """
-    return (
-        Date.parse_common_iso(store.manifest["effective_from"]),
-        Date.parse_common_iso(store.manifest["effective_to"]),
-    )
+    return (store.manifest.effective_from, store.manifest.effective_to)
 
 
 def bases(store: StoreManager) -> list[str]:
     """Get a list of base keys."""
-    return list(store.manifest["bases"].keys())
+    return list(store.manifest.bases.keys())
 
 
 def name(store: StoreManager) -> str:
     """Get store name."""
-    return store.manifest["name"]
+    return store.manifest.name
 
 
 def stats(store: StoreManager) -> str:
@@ -46,9 +43,8 @@ def stats(store: StoreManager) -> str:
     return stats
 
 
-def expanded_errors_keys(store: StoreManager, base: str) -> list[str]:
+def expanded_errors_keys(store: StoreManager, base_name: str) -> list[str]:
     """Get a list of expanded trip keys with errors."""
-    base_data = store.manifest["bases"][base]
-    base_errors = base_data["errors"]
-    error_infos = base_errors.get(FileTypes.EXPANDED_TRIP, {})
-    return list(error_infos.keys())
+    base = store.get_base(base_name=base_name)
+    base_errors = base.details.expanded_errors
+    return list(base_errors.keys())

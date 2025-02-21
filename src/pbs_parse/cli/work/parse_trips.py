@@ -7,7 +7,6 @@ from rich.progress import Progress, TaskID
 
 import pbs_parse.pbs_2022_01.pbs_store as STORE
 from pbs_parse.pbs_2022_01 import api as API
-from pbs_parse.pbs_2022_01.models import manifest
 from pbs_parse.pbs_2022_01.models.parsed_trip import ParsedTrip
 from pbs_parse.pbs_2022_01.models.trip_lines import TripLines
 
@@ -36,7 +35,7 @@ def parse_trips(
 
 
 def parse_trips_store(
-    base: str,
+    base_name: str,
     store: STORE.StoreManager,
     task_id: TaskID,
     progress: Progress,
@@ -45,28 +44,24 @@ def parse_trips_store(
     """parse_trips_store.
 
     Args:
-        base (str): _description_
+        base_name (str): _description_
         store (StoreManager): _description_
         task_id (TaskID): _description_
         progress (Progress): _description_
         overwrite (bool, optional): _description_. Defaults to False.
     """
-    trip_infos = store.get_file_info_by_type(
-        base=base, file_type=manifest.FileTypes.SPLIT_TRIP
-    )
+    trip_lines = list(STORE.load.all_raw_trips(store=store, base_name=base_name))
     progress.update(
-        task_id=task_id, total=len(trip_infos), description="Parsing Trips...."
+        task_id=task_id, total=len(trip_lines), description="Parsing Trips...."
     )
-    trip_lines = (
-        STORE.load.trip_lines(store=store, base=base, key=x["key"]) for x in trip_infos
-    )
+
     for parsed_trip in parse_trips(
         trip_lines=trip_lines,
         task_id=task_id,
         progress=progress,
     ):
         STORE.save.parsed_trip(
-            store=store, base=base, parsed=parsed_trip, overwrite=overwrite
+            store=store, base_name=base_name, parsed=parsed_trip, overwrite=overwrite
         )
 
 

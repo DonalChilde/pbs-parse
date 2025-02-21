@@ -57,7 +57,7 @@ class ActionItem:
 class ParseJob:
     """Definition of a parse job, breaks down into action items."""
 
-    base: str
+    base_name: str
     start: ParseActions = ParseActions.SPLIT_TO_PAGES
     end: ParseActions = ParseActions.EXPAND_TRIPS
     overwrite: bool = False
@@ -79,7 +79,7 @@ def expand_actions(job: ParseJob) -> list[ActionItem]:
     action_items: list[ActionItem] = []
     for parse_action in parse_actions:
         action_item = ActionItem(
-            base=job.base,
+            base=job.base_name,
             action=parse_action,
             task_id=progress.add_task(description=">>>Waiting<<<", total=None),
         )
@@ -99,7 +99,7 @@ def do_jobs(jobs: list[ParseJob], store: STORE.StoreManager) -> None:
     for job in jobs:
         with progress:
             task_id = progress.add_task(
-                description=f"[blue]..... {store_name}-{job.base} ....."
+                description=f"[blue]..... {store_name}-{job.base_name} ....."
             )
             expand_actions(job=job)
             progress.update(task_id=task_id, total=len(job.action_items))
@@ -118,7 +118,7 @@ def action_dispatch(action: ActionItem, store: STORE.StoreManager):
     match action.action:
         case ParseActions.SPLIT_TO_PAGES:
             split_to_pages_store(
-                base=action.base,
+                base_name=action.base,
                 store=store,
                 task_id=action.task_id,
                 progress=progress,
@@ -126,7 +126,7 @@ def action_dispatch(action: ActionItem, store: STORE.StoreManager):
             )
         case ParseActions.SPLIT_TO_TRIPS:
             split_to_trips_store(
-                base=action.base,
+                base_name=action.base,
                 store=store,
                 task_id=action.task_id,
                 progress=progress,
@@ -134,7 +134,7 @@ def action_dispatch(action: ActionItem, store: STORE.StoreManager):
             )
         case ParseActions.PARSE_TRIPS:
             parse_trips_store(
-                base=action.base,
+                base_name=action.base,
                 store=store,
                 task_id=action.task_id,
                 progress=progress,
@@ -142,7 +142,7 @@ def action_dispatch(action: ActionItem, store: STORE.StoreManager):
             )
         case ParseActions.EXPAND_TRIPS:
             expand_trips_store(
-                base=action.base,
+                base_name=action.base,
                 store=store,
                 task_id=action.task_id,
                 progress=progress,

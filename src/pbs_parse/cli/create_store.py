@@ -6,6 +6,7 @@ from pathlib import Path
 from typing import Annotated
 
 import typer
+from whenever import Date
 
 from pbs_parse.pbs_2022_01.pbs_store.store_manager import StoreManager
 
@@ -40,7 +41,7 @@ def create_store(
     StoreManager.init_manifest(
         manifest_directory=store_dir,
         name=name,
-        effective_from=effective_from.date(),
-        effective_to=effective_to.date(),
+        effective_from=Date.from_py_date(effective_from.date()),
+        effective_to=Date.from_py_date(effective_to.date()),
     )
     typer.echo(f"Created a new pbs data store at {store_dir}")

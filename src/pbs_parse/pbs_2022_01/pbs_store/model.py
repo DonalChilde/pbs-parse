@@ -2,7 +2,7 @@
 
 from pathlib import Path
 
-from pydantic import BaseModel
+from pydantic import BaseModel, ConfigDict
 
 from pbs_parse.snippets.whenever.pydantic import PydanticDate, PydanticTimeDelta
 
@@ -28,8 +28,10 @@ class FileInfo(BaseModel):
     file_path: Path
 
 
-class ExpandedTripStatistics:
+class ExpandedTripStatistics(BaseModel):
     """A collection of precalculated statistics for ExpandedTrips."""
+
+    model_config = ConfigDict(arbitrary_types_allowed=True)
 
     flight_time: PydanticTimeDelta
     operating_time: PydanticTimeDelta
@@ -42,12 +44,12 @@ class ExpandedTripStatistics:
 class BaseDetails(BaseModel):
     """Details pulled from parsed and expanded Trips."""
 
-    expanded_errors: dict[str, list[str]]
-    satellite_bases: set[str]
-    equipment: set[str]
-    expanded_trips_by_base: dict[str, str]
-    expanded_trips_by_equipment: dict[str, str]
-    expanded_trip_statistics: dict[str, ExpandedTripStatistics]
+    expanded_errors: dict[str, list[str]] = {}
+    satellite_bases: set[str] = set()
+    equipment: set[str] = set()
+    expanded_trips_by_base: dict[str, str] = {}
+    expanded_trips_by_equipment: dict[str, str] = {}
+    expanded_trip_statistics: dict[str, ExpandedTripStatistics] = {}
 
 
 class Base(BaseModel):
@@ -61,11 +63,13 @@ class Base(BaseModel):
     prior_month_raw_trips: dict[str, FileInfo] = {}
     parsed_trips: dict[str, FileInfo] = {}
     expanded_trips: dict[str, FileInfo] = {}
-    details: BaseDetails | None = None
+    details: BaseDetails = BaseDetails()
 
 
 class BidPeriodManifest(BaseModel):
     """Manifest for all the bids in a month."""
+
+    model_config = ConfigDict(arbitrary_types_allowed=True)
 
     name: str
     effective_from: PydanticDate

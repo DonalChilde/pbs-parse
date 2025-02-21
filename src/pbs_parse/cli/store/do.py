@@ -57,7 +57,7 @@ def do(
                     )
         jobs: list[ParseJob] = []
         for base in bases:
-            job = ParseJob(base=base, start=start, end=end, overwrite=overwrite)
+            job = ParseJob(base_name=base, start=start, end=end, overwrite=overwrite)
             jobs.append(job)
         try:
             do_jobs(jobs=jobs, store=store)

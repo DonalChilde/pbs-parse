@@ -23,7 +23,7 @@ class FilePair(TypedDict):
 
     source_pdf: Path
     source_txt: Path
-    name: str
+    base_name: str
 
 
 @app.command()
@@ -68,7 +68,7 @@ def add_all_bases(
         txt_file = pdf_file.with_suffix(".txt")
         if txt_file.is_file():
             file_pairs.append(
-                FilePair(source_pdf=pdf_file, source_txt=txt_file, name=base)
+                FilePair(source_pdf=pdf_file, source_txt=txt_file, base_name=base)
             )
         else:
             typer.echo(
@@ -79,7 +79,7 @@ def add_all_bases(
     with store:
         store_name = STORE.get.name(store=store)
         for pair in file_pairs:
-            typer.echo(f"Adding {pair['name']} to {store_name} store.")
+            typer.echo(f"Adding {pair['base_name']} to {store_name} store.")
             store.create_base_bid(**pair)
     start_perf = ctx.obj[APP_NAME]["start_perf"]
     task_complete(start_perf=start_perf)

@@ -7,7 +7,6 @@ from rich.progress import Progress, TaskID
 
 import pbs_parse.pbs_2022_01.pbs_store as STORE
 from pbs_parse.pbs_2022_01 import api as API
-from pbs_parse.pbs_2022_01.models import manifest
 from pbs_parse.pbs_2022_01.models.bid_data import BidData, Effective
 from pbs_parse.pbs_2022_01.models.page_lines import PageLines
 
@@ -37,7 +36,7 @@ def split_to_pages(
 
 
 def split_to_pages_store(
-    base: str,
+    base_name: str,
     store: STORE.StoreManager,
     task_id: TaskID,
     progress: Progress,
@@ -46,21 +45,18 @@ def split_to_pages_store(
     """split_to_pages_store.
 
     Args:
-        base (str): _description_
+        base_name (str): _description_
         store (StoreManager): _description_
         task_id (TaskID): _description_
         progress (Progress): _description_
         overwrite (bool, optional): _description_. Defaults to False.
     """
-    source_info = store.get_file_info_by_type(
-        base=base, file_type=manifest.FileTypes.TXT_PACKAGE
-    )
     effective_from, effective_to = STORE.get.effective_dates(store=store)
     name = STORE.get.name(store=store)
-    source_path = source_info[0]["file_path"]
+    source_path = store.get_source_txt_path(base_name=base_name)
     bid = BidData(
         name=name,
-        base=base,
+        base=base_name,
         effective=Effective(start=effective_from, end=effective_to),
     )
     progress.update(
@@ -71,7 +67,9 @@ def split_to_pages_store(
         split_to_pages(path_in=path_in, bid=bid, task_id=task_id, progress=progress),
         start=1,
     ):
-        STORE.save.page_lines(store=store, base=base, page=page, overwrite=overwrite)
+        STORE.save.page_lines(
+            store=store, base_name=base_name, page=page, overwrite=overwrite
+        )
         progress.update(task_id=task_id, completed=idx)
 
 

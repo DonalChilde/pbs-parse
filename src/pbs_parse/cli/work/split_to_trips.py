@@ -7,7 +7,6 @@ from rich.progress import Progress, TaskID
 
 import pbs_parse.pbs_2022_01.pbs_store as STORE
 from pbs_parse.pbs_2022_01 import api as API
-from pbs_parse.pbs_2022_01.models import manifest
 from pbs_parse.pbs_2022_01.models.page_lines import PageLines
 from pbs_parse.pbs_2022_01.models.trip_lines import TripLines, is_prior_month
 
@@ -39,7 +38,7 @@ def split_to_trips(
 
 
 def split_to_trips_store(
-    base: str,
+    base_name: str,
     store: STORE.StoreManager,
     task_id: TaskID,
     progress: Progress,
@@ -48,21 +47,17 @@ def split_to_trips_store(
     """split_to_trips_store.
 
     Args:
-        base (str): _description_
+        base_name (str): _description_
         store (StoreManager): _description_
         task_id (TaskID): _description_
         progress (Progress): _description_
         overwrite (bool, optional): _description_. Defaults to False.
     """
-    page_infos = store.get_file_info_by_type(
-        base=base, file_type=manifest.FileTypes.SPLIT_PAGE
-    )
+    pages = list(STORE.load.all_pages(store=store, base_name=base_name))
     progress.update(
-        task_id=task_id, total=len(page_infos), description="Splitting pages...."
+        task_id=task_id, total=len(pages), description="Splitting pages...."
     )
-    pages = (
-        STORE.load.page_lines(store=store, base=base, key=x["key"]) for x in page_infos
-    )
+
     for trip in split_to_trips(
         pages=pages,
         task_id=task_id,
@@ -70,11 +65,11 @@ def split_to_trips_store(
     ):
         if is_prior_month(trip):
             STORE.save.trip_lines_prior(
-                store=store, base=base, trip=trip, overwrite=overwrite
+                store=store, base_name=base_name, trip=trip, overwrite=overwrite
             )
         else:
             STORE.save.trip_lines(
-                store=store, base=base, trip=trip, overwrite=overwrite
+                store=store, base_name=base_name, trip=trip, overwrite=overwrite
             )
 
 

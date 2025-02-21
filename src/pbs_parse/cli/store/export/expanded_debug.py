@@ -42,7 +42,7 @@ def expanded_debug(
     error_count = 0
     bases_with_errors: list[str] = []
     for base in bases:
-        expanded_keys = STORE.get.expanded_errors_keys(store=store, base=base)
+        expanded_keys = STORE.get.expanded_errors_keys(store=store, base_name=base)
         if expanded_keys:
             error_count += len(expanded_keys)
             bases_with_errors.append(base)

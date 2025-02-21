@@ -68,7 +68,7 @@ def make_base_errors(
         Sequence[str]: _description_
     """
     stats: list[str] = []
-    expanded_errors = query.expanded_trip_errors(store=store, base=base)
+    expanded_errors = query.expanded_trip_errors(store=store, base_name=base)
     stats.append(f"Errors:")
     stats.append(f"{indent}Number of trips with errors: {len(expanded_errors)}")
     if expanded_errors:

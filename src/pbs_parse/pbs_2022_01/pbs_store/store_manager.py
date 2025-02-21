@@ -81,19 +81,129 @@ class StoreManager:
         self.manifest_path.write_text(self.manifest.model_dump_json(indent=1))
 
     def get_base(self, base_name: str) -> M.Base:
+        """get_base.
+
+        Args:
+            base_name (str): _description_
+
+        Raises:
+            NotInManifestError: _description_
+
+        Returns:
+            M.Base: _description_
+        """
         base = self.manifest.bases.get(base_name, None)
         if base is None:
             raise NotInManifestError(f"{base_name} is not in this pbs_store.")
         return base
 
     def get_source_txt_path(self, base_name: str) -> Path:
-        base = self.get_base(base_name=base_name)
+        """get_source_txt_path.
 
-    def get_source_pdf_path(self, base_name: str) -> Path: ...
-    def get_page(self, base_name: str, key: str) -> Path: ...
-    def get_raw_trip(self, base_name: str, key: str) -> Path: ...
-    def get_parsed_trip(self, base_name: str, key: str) -> Path: ...
-    def get_expanded_trip(self, base_name: str, key: str) -> Path: ...
+        Args:
+            base_name (str): _description_
+
+        Returns:
+            Path: _description_
+        """
+        base = self.get_base(base_name=base_name)
+        return self.manifest_directory / base.source_txt.file_path
+
+    def get_source_pdf_path(self, base_name: str) -> Path:
+        """get_source_pdf_path.
+
+        Args:
+            base_name (str): _description_
+
+        Returns:
+            Path: _description_
+        """
+        base = self.get_base(base_name=base_name)
+        return self.manifest_directory / base.source_pdf.file_path
+
+    def get_page_path(self, base_name: str, key: str) -> Path:
+        """get_page_path.
+
+        Args:
+            base_name (str): _description_
+            key (str): _description_
+
+        Raises:
+            NotInManifestError: _description_
+
+        Returns:
+            Path: _description_
+        """
+        base = self.get_base(base_name=base_name)
+        item = base.pages.get(key, None)
+        if item is None:
+            raise NotInManifestError(
+                f"Page was not found in pbs_store using {base_name=}, {key=}."
+            )
+        return self.manifest_directory / item.file_path
+
+    def get_raw_trip_path(self, base_name: str, key: str) -> Path:
+        """get_raw_trip_path.
+
+        Args:
+            base_name (str): _description_
+            key (str): _description_
+
+        Raises:
+            NotInManifestError: _description_
+
+        Returns:
+            Path: _description_
+        """
+        base = self.get_base(base_name=base_name)
+        item = base.raw_trips.get(key, None)
+        if item is None:
+            raise NotInManifestError(
+                f"Raw trip was not found in pbs_store using {base_name=}, {key=}."
+            )
+        return self.manifest_directory / item.file_path
+
+    def get_parsed_trip_path(self, base_name: str, key: str) -> Path:
+        """get_parsed_trip_path.
+
+        Args:
+            base_name (str): _description_
+            key (str): _description_
+
+        Raises:
+            NotInManifestError: _description_
+
+        Returns:
+            Path: _description_
+        """
+        base = self.get_base(base_name=base_name)
+        item = base.parsed_trips.get(key, None)
+        if item is None:
+            raise NotInManifestError(
+                f"Parsed trip was not found in pbs_store using {base_name=}, {key=}."
+            )
+        return self.manifest_directory / item.file_path
+
+    def get_expanded_trip_path(self, base_name: str, key: str) -> Path:
+        """get_expanded_trip_path.
+
+        Args:
+            base_name (str): _description_
+            key (str): _description_
+
+        Raises:
+            NotInManifestError: _description_
+
+        Returns:
+            Path: _description_
+        """
+        base = self.get_base(base_name=base_name)
+        item = base.expanded_trips.get(key, None)
+        if item is None:
+            raise NotInManifestError(
+                f"Expanded trip was not found in pbs_store using {base_name=}, {key=}."
+            )
+        return self.manifest_directory / item.file_path
 
     # def clean(self, base: str, file_types: Sequence[M.FileTypes]):
     #     """Remove files of these types from store."""

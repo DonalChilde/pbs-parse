@@ -1,9 +1,10 @@
 """FILE: load.py."""
 
 import logging
+from collections.abc import Iterable
 
+from pbs_parse.pbs_2022_01 import api as API
 from pbs_parse.pbs_2022_01.models.expanded import ExpandedTrip
-from pbs_parse.pbs_2022_01.models.manifest import FileTypes
 from pbs_parse.pbs_2022_01.models.page_lines import PageLines
 from pbs_parse.pbs_2022_01.models.parsed_trip import ParsedTrip
 from pbs_parse.pbs_2022_01.models.trip_lines import TripLines
@@ -13,12 +14,12 @@ from pbs_parse.pbs_2022_01.pbs_store.store_manager import StoreManager
 logger = logging.getLogger(__name__)
 
 
-def page_lines(store: StoreManager, base: str, key: str) -> PageLines:
+def page(store: StoreManager, base_name: str, key: str) -> PageLines:
     """page_lines.
 
     Args:
         store (StoreManager): _description_
-        base (str): _description_
+        base_name (str): _description_
         key (str): _description_
 
     Raises:
@@ -27,25 +28,101 @@ def page_lines(store: StoreManager, base: str, key: str) -> PageLines:
     Returns:
         PageLines: _description_
     """
-    data = store.load_resource(base=base, key=key)
     try:
-        value = PageLines.model_validate(data)
+        path_in = store.get_page_path(base_name=base_name, key=key)
+        value = API.load.page_lines(file_in=path_in)
         return value
     except Exception as e:
         msg = (
             f"Tried to make PageLines from json, but there was an error. "
-            f"error={(e,)} {store=}, {base=}, {key=}"
+            f"error={(e,)} {store=}, {base_name=}, {key=}"
         )
         logger.exception(msg)
         raise UnableToLoadError(msg) from e
 
 
-def trip_lines(store: StoreManager, base: str, key: str) -> TripLines:
+def all_pages(store: StoreManager, base_name: str) -> Iterable[PageLines]:
+    """all_pages.
+
+    Args:
+        store (StoreManager): _description_
+        base_name (str): _description_
+
+    Returns:
+        Iterable[PageLines]: _description_
+
+    Yields:
+        Iterator[Iterable[PageLines]]: _description_
+    """
+    base = store.get_base(base_name=base_name)
+    file_infos = base.pages
+    for info in file_infos.values():
+        yield page(store=store, base_name=base_name, key=info.key)
+
+
+def all_raw_trips(store: StoreManager, base_name: str) -> Iterable[TripLines]:
+    """all_raw_trips.
+
+    Args:
+        store (StoreManager): _description_
+        base_name (str): _description_
+
+    Returns:
+        Iterable[TripLines]: _description_
+
+    Yields:
+        Iterator[Iterable[TripLines]]: _description_
+    """
+    base = store.get_base(base_name=base_name)
+    file_infos = base.raw_trips
+    for info in file_infos.values():
+        yield raw_trip(store=store, base_name=base_name, key=info.key)
+
+
+def all_parsed_trips(store: StoreManager, base_name: str) -> Iterable[ParsedTrip]:
+    """all_parsed_trips.
+
+    Args:
+        store (StoreManager): _description_
+        base_name (str): _description_
+
+    Returns:
+        Iterable[ParsedTrip]: _description_
+
+    Yields:
+        Iterator[Iterable[ParsedTrip]]: _description_
+    """
+    base = store.get_base(base_name=base_name)
+    file_infos = base.parsed_trips
+    for info in file_infos.values():
+        yield parsed_trip(store=store, base_name=base_name, key=info.key)
+
+
+def all_expanded_trips(store: StoreManager, base_name: str) -> Iterable[ExpandedTrip]:
+    """all_expanded_trips.
+
+    Args:
+        store (StoreManager): _description_
+        base_name (str): _description_
+
+    Returns:
+        Iterable[ExpandedTrip]: _description_
+
+    Yields:
+        Iterator[Iterable[ExpandedTrip]]: _description_
+    """
+    base = store.get_base(base_name=base_name)
+    file_infos = base.expanded_trips
+    for info in file_infos.values():
+        yield expanded_trip(store=store, base_name=base_name, key=info.key)
+
+
+def raw_trip(store: StoreManager, base_name: str, key: str) -> TripLines:
     """trip_lines.
 
     Args:
         store (StoreManager): _description_
-        base (str): _description_
+        base_name (str): _description_
         key (str): _description_
 
     Raises:
@@ -54,25 +131,25 @@ def trip_lines(store: StoreManager, base: str, key: str) -> TripLines:
     Returns:
         TripLines: _description_
     """
-    data = store.load_resource(base=base, key=key)
     try:
-        value = TripLines.model_validate(data)
+        path_in = store.get_raw_trip_path(base_name=base_name, key=key)
+        value = API.load.trip_lines(file_in=path_in)
         return value
     except Exception as e:
         msg = (
             f"Tried to make TripLines from json, but there was an error. "
-            f"error={(e,)} {store=}, {base=}, {key=}"
+            f"error={(e,)} {store=}, {base_name=}, {key=}"
         )
         logger.exception(msg)
         raise UnableToLoadError(msg) from e
 
 
-def parsed_trip(store: StoreManager, base: str, key: str) -> ParsedTrip:
+def parsed_trip(store: StoreManager, base_name: str, key: str) -> ParsedTrip:
     """parsed_trip.
 
     Args:
         store (StoreManager): _description_
-        base (str): _description_
+        base_name (str): _description_
         key (str): _description_
 
     Raises:
@@ -81,26 +158,25 @@ def parsed_trip(store: StoreManager, base: str, key: str) -> ParsedTrip:
     Returns:
         ParsedTrip: _description_
     """
-    data = store.load_resource(base=base, key=key)
     try:
-        logger.info(data)
-        value = ParsedTrip.model_validate(data)
+        path_in = store.get_parsed_trip_path(base_name=base_name, key=key)
+        value = API.load.parsed_trip(file_in=path_in)
         return value
     except Exception as e:
         msg = (
             f"Tried to make ParsedTrip from json, but there was an error. "
-            f"error={(e,)} {store=}, {base=}, {key=}"
+            f"error={(e,)} {store=}, {base_name=}, {key=}"
         )
         logger.exception(msg)
         raise UnableToLoadError(msg) from e
 
 
-def expanded_trip(store: StoreManager, base: str, key: str) -> ExpandedTrip:
+def expanded_trip(store: StoreManager, base_name: str, key: str) -> ExpandedTrip:
     """expanded_trip.
 
     Args:
         store (StoreManager): _description_
-        base (str): _description_
+        base_name (str): _description_
         key (str): _description_
 
     Raises:
@@ -109,28 +185,25 @@ def expanded_trip(store: StoreManager, base: str, key: str) -> ExpandedTrip:
     Returns:
         ExpandedTrip: _description_
     """
-    data = store.load_resource(base=base, key=key)
     try:
-        value = ExpandedTrip.model_validate(data)
+        path_in = store.get_expanded_trip_path(base_name=base_name, key=key)
+        value = API.load.expanded_trip(file_in=path_in)
         return value
     except Exception as e:
         msg = (
             f"Tried to make ExpandedTrip from json, but there was an error. "
-            f"error={(e,)} {store=}, {base=}, {key=}"
+            f"error={(e,)} {store=}, {base_name=}, {key=}"
         )
         logger.exception(msg)
         raise UnableToLoadError(msg) from e
 
 
-def expanded_trip_errors(store: StoreManager, base: str, key: str) -> list[str]:
+def expanded_trip_errors(store: StoreManager, base_name: str, key: str) -> list[str]:
     """Get the list of errors for an expanded trip.
 
     returns an empty list if no errors found.
     """
-    errors = store.manifest["bases"][base]["errors"].get(FileTypes.EXPANDED_TRIP, None)
-    if errors is None:
-        return []
-    errors = store.manifest["bases"][base]["errors"][FileTypes.EXPANDED_TRIP].get(
-        key, []
-    )
+    base = store.get_base(base_name=base_name)
+    # TODO rethink what this function is guaranteeing. should it error for a bad key?
+    errors = base.details.expanded_errors.get(key, [])
     return errors
