@@ -41,7 +41,7 @@ def add_base(
     store = STORE.StoreManager(manifest_directory=store_directory)
     with store:
         store_name = STORE.get.name(store=store)
-        store.create_base_bid(source_pdf=pdf_path, source_txt=txt_path, name=base)
+        store.create_base_bid(source_pdf=pdf_path, source_txt=txt_path, base_name=base)
         typer.echo(f"Added {base} to {store_name} store.")
     start_perf = ctx.obj[APP_NAME]["start_perf"]
     task_complete(start_perf=start_perf)
