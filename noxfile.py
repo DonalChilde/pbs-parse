@@ -56,15 +56,16 @@ def dev(session: nox.Session) -> None:
     session.run(".venv/bin/pip", "install", "-e", ".[dev,lint,doc,vscode,testing]")
 
 
-@nox.session(name="docs-build")
+@nox.session(name="docs-build", venv_backend="uv|virtualenv")
 def docs_build(session: nox.Session) -> None:
     """Build the documentation."""
     args = session.posargs or ["docs/source", "docs/build"]
     if not session.posargs and "FORCE_COLOR" in os.environ:
         args.insert(0, "--color")
 
-    session.install(".[doc]")
-    # session.install("sphinx", "sphinx-click", "furo", "myst-parser")
+    pyproject = nox.project.load_toml("pyproject.toml")
+    session.install(".")
+    session.install(*nox.project.dependency_groups(pyproject, "doc"))
 
     build_dir = Path("docs", "build")
     if build_dir.exists():
