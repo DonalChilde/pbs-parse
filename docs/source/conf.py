@@ -41,6 +41,7 @@ version = __version__
 extensions = [
     "sphinx.ext.napoleon",
     "sphinx.ext.autodoc",
+    "sphinx.ext.autosummary",
     "sphinx.ext.viewcode",
     "sphinx_autodoc_typehints",
     "sphinx_rtd_theme",
@@ -48,6 +49,7 @@ extensions = [
     "myst_parser",
     "sphinxcontrib.typer",
 ]
+autosummary_generate = True
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ["_templates"]
 

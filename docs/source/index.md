@@ -9,6 +9,7 @@ maxdepth: 1
 Usage <documentation/usage>
 CLI reference <documentation/cli/main.rst>
 API Reference <documentation/api-generated/modules.rst>
+API Autosummary <documentation/api.rst>
 Changelog <documentation/changelog>
 License <documentation/license>
 Contributing <documentation/contributing>
