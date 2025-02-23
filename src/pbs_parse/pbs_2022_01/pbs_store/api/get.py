@@ -46,5 +46,5 @@ def stats(store: StoreManager) -> str:
 def expanded_errors_keys(store: StoreManager, base_name: str) -> list[str]:
     """Get a list of expanded trip keys with errors."""
     base = store.get_base(base_name=base_name)
-    base_errors = base.details.expanded_errors
-    return list(base_errors.keys())
+
+    return list(base.expanded_trips_with_errors)

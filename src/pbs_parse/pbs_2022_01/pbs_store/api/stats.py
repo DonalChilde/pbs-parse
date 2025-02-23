@@ -4,7 +4,7 @@ from collections.abc import Iterable, Sequence
 
 from pbs_parse.pbs_2022_01.pbs_store.store_manager import StoreManager
 
-from . import get, query
+from . import get, load
 
 
 def make_stats(store: StoreManager, bases: Iterable[str], indent: str = "  ") -> str:
@@ -68,12 +68,14 @@ def make_base_errors(
         Sequence[str]: _description_
     """
     stats: list[str] = []
-    expanded_errors = query.expanded_trip_errors(store=store, base_name=base)
+    expanded_errors = list(
+        load.all_expanded_trips_with_errors(store=store, base_name=base)
+    )
     stats.append(f"Errors:")
     stats.append(f"{indent}Number of trips with errors: {len(expanded_errors)}")
     if expanded_errors:
         stats.append(f"{indent}Expanded trip errors:")
-        for key, value in expanded_errors.items():
-            stats.append(f"{indent * 2}{key}")
-            stats.extend([f"{indent * 3}{x}" for x in value])
+        for trip in expanded_errors:
+            stats.append(f"{indent * 2}{trip.default_file_name()}")
+            stats.extend([f"{indent * 3}{x}" for x in trip.errors])
     return stats

@@ -117,6 +117,27 @@ def all_expanded_trips(store: StoreManager, base_name: str) -> Iterable[Expanded
         yield expanded_trip(store=store, base_name=base_name, key=info.key)
 
 
+def all_expanded_trips_with_errors(
+    store: StoreManager, base_name: str
+) -> Iterable[ExpandedTrip]:
+    """all_expanded_trips_with_errors.
+
+    Args:
+        store (StoreManager): _description_
+        base_name (str): _description_
+
+    Returns:
+        Iterable[ExpandedTrip]: _description_
+
+    Yields:
+        Iterator[Iterable[ExpandedTrip]]: _description_
+    """
+    base = store.get_base(base_name=base_name)
+    error_keys = base.expanded_trips_with_errors
+    for key in error_keys:
+        yield expanded_trip(store=store, base_name=base_name, key=key)
+
+
 def raw_trip(store: StoreManager, base_name: str, key: str) -> TripLines:
     """trip_lines.
 
@@ -196,14 +217,3 @@ def expanded_trip(store: StoreManager, base_name: str, key: str) -> ExpandedTrip
         )
         logger.exception(msg)
         raise UnableToLoadError(msg) from e
-
-
-def expanded_trip_errors(store: StoreManager, base_name: str, key: str) -> list[str]:
-    """Get the list of errors for an expanded trip.
-
-    returns an empty list if no errors found.
-    """
-    base = store.get_base(base_name=base_name)
-    # TODO rethink what this function is guaranteeing. should it error for a bad key?
-    errors = base.details.expanded_errors.get(key, [])
-    return errors

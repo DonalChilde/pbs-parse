@@ -5,6 +5,7 @@ from typing import Annotated
 from pydantic import (
     BeforeValidator,
     PlainSerializer,
+    WithJsonSchema,
 )
 from whenever import Date, TimeDelta, ZonedDateTime
 
@@ -19,8 +20,9 @@ def date_validator(v: str | Date) -> Date:
 
 PydanticDate = Annotated[
     Date,
-    BeforeValidator(date_validator),
+    BeforeValidator(date_validator, json_schema_input_type=str | Date),
     PlainSerializer(lambda x: x.format_common_iso()),
+    WithJsonSchema({"type": "string"}, mode="serialization"),
 ]
 
 
@@ -33,8 +35,9 @@ def zoned_validator(v: str | ZonedDateTime) -> ZonedDateTime:
 
 PydanticZonedDateTime = Annotated[
     ZonedDateTime,
-    BeforeValidator(zoned_validator),
+    BeforeValidator(zoned_validator, json_schema_input_type=str | ZonedDateTime),
     PlainSerializer(lambda x: x.format_common_iso()),
+    WithJsonSchema({"type": "string"}, mode="serialization"),
 ]
 
 
@@ -47,6 +50,7 @@ def timedelta_validator(v: str | TimeDelta) -> TimeDelta:
 
 PydanticTimeDelta = Annotated[
     TimeDelta,
-    BeforeValidator(timedelta_validator),
+    BeforeValidator(timedelta_validator, json_schema_input_type=str | TimeDelta),
     PlainSerializer(lambda x: x.format_common_iso()),
+    WithJsonSchema({"type": "string"}, mode="serialization"),
 ]

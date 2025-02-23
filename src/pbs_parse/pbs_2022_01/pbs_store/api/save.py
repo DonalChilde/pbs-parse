@@ -1,6 +1,5 @@
 """FILE: save.py."""
 
-from copy import deepcopy
 from pathlib import Path
 
 from pbs_parse.pbs_2022_01 import api as API
@@ -121,24 +120,19 @@ def expanded_trip(
     )
     base.expanded_trips[file_info.key] = file_info
     if expanded.errors:
-        _expanded_trip_errors(
-            store=store,
-            base_name=base_name,
-            key=file_info.key,
-            errors=expanded.errors,
-        )
+        base.expanded_trips_with_errors.add(file_info.key)
     return path_out
 
 
-def _expanded_trip_errors(
-    store: StoreManager, base_name: str, key: str, errors: list[str]
-):
-    """Save a copy of the errors found in an expanded trip in the store manifest.
+# def _expanded_trip_errors(
+#     store: StoreManager, base_name: str, key: str, errors: list[str]
+# ):
+#     """Save a copy of the errors found in an expanded trip in the store manifest.
 
-    key should be the default file name for the expanded trip.
-    """
-    store.read_only_check()
-    base = store.get_base(base_name=base_name)
-    # TODO init details?
+#     key should be the default file name for the expanded trip.
+#     """
+#     store.read_only_check()
+#     base = store.get_base(base_name=base_name)
+#     # TODO init details?
 
-    base.details.expanded_errors[key] = deepcopy(errors)
+#     base.details.expanded_errors[key] = deepcopy(errors)
