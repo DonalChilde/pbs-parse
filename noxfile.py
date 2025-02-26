@@ -1,3 +1,5 @@
+"""Nox file."""
+
 import os
 import shutil
 from pathlib import Path
@@ -14,24 +16,21 @@ nox.options.sessions = []
 
 @nox.session(tags=["fix"])
 def black(session: nox.Session) -> None:
-    """
-    run black on code
-    """
+    """Run black on code."""
     session.install("black")
     session.run("black", "src", "tests")
 
 
 @nox.session(tags=["fix"])
 def isort(session: nox.Session) -> None:
-    """
-    run isort on code
-    """
+    """Run isort on code."""
     session.install("isort")
     session.run("isort", "src", "tests")
 
 
 @nox.session()
 def tests(session: nox.Session):
+    """Run pytests."""
     session.install(".[testing]")
     session.run("pytest")
 
@@ -40,10 +39,7 @@ def tests(session: nox.Session):
 # so it's not run twice accidentally
 @nox.session(default=False)
 def dev(session: nox.Session) -> None:
-    """
-    Set up a python development environment for the project at ".venv".
-    """
-
+    """Set up a python development environment for the project at ".venv"."""
     venv_dir = Path(".venv")
     if venv_dir.exists():
         shutil.rmtree(venv_dir)

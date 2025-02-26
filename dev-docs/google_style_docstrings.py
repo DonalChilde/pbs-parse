@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 """Example Google style docstrings.
 
 This module demonstrates documentation as specified by the `Google Python
@@ -78,7 +76,7 @@ def function_with_pep484_type_annotations(param1: int, param2: str) -> bool:
     return True
 
 
-def module_level_function(param1, param2=None, *args, **kwargs):
+def module_level_function(param1: object, param2=None, *args, **kwargs):
     """This is an example of a module level function.
 
     Function parameters should be documented in the ``Args`` section. The name
@@ -146,8 +144,7 @@ def example_generator(n):
         [0, 1, 2, 3]
 
     """
-    for i in range(n):
-        yield i
+    yield from range(n)
 
 
 class ExampleError(Exception):
@@ -172,12 +169,13 @@ class ExampleError(Exception):
 
     """
 
-    def __init__(self, msg, code):
+    def __init__(self, msg: object, code: object):
+        """Place holder."""
         self.msg = msg
         self.code = code
 
 
-class ExampleClass(object):
+class ExampleClass:
     """The summary line for a class docstring should fit on one line.
 
     If the class has public attributes, they may be documented here
@@ -194,7 +192,7 @@ class ExampleClass(object):
 
     """
 
-    def __init__(self, param1, param2, param3):
+    def __init__(self, param1: object, param2: object, param3: object):
         """Example of docstring on the __init__ method.
 
         The __init__ method may be documented in either the class level
@@ -230,8 +228,7 @@ class ExampleClass(object):
 
     @property
     def readwrite_property(self):
-        """:obj:`list` of :obj:`str`: Properties with both a getter and setter
-        should only be documented in their getter method.
+        """:obj:`list` of :obj:`str`: Properties with both a getter and setter should only be documented in their getter method.
 
         If the setter method contains notable behavior, it should be
         mentioned here.
@@ -239,10 +236,10 @@ class ExampleClass(object):
         return ["readwrite_property"]
 
     @readwrite_property.setter
-    def readwrite_property(self, value):
+    def readwrite_property(self, value: object):
         _ = value
 
-    def example_method(self, param1, param2):
+    def example_method(self, param1: object, param2: object):
         """Class methods are similar to regular functions.
 
         Note:
@@ -275,6 +272,7 @@ class ExampleClass(object):
         pass
 
     def __special_without_docstring__(self):
+        """Place holder."""
         pass
 
     def _private(self):
