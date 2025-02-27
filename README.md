@@ -7,18 +7,15 @@
 [![License](https://img.shields.io/pypi/l/pbs-parse)][license]
 
 [![Read the documentation at https://pbs-parse.readthedocs.io/](https://img.shields.io/readthedocs/pbs-parse/latest.svg?label=Read%20the%20Docs)][read the docs]
-[![Tests](https://github.com/DonalChilde/pbs-parse/workflows/Tests/badge.svg)][tests]
-[![Codecov](https://codecov.io/gh/DonalChilde/pbs-parse/branch/main/graph/badge.svg)][codecov]
+[![Tests](https://github.com/DonalChilde/pbs-parse/actions/workflows/pytest.yaml/badge.svg?branch=dev)]
+<!-- [![Codecov](https://codecov.io/gh/DonalChilde/pbs-parse/branch/main/graph/badge.svg)][codecov] -->
 
-[![pre-commit](https://img.shields.io/badge/pre--commit-enabled-brightgreen?logo=pre-commit&logoColor=white)][pre-commit]
-[![Black](https://img.shields.io/badge/code%20style-black-000000.svg)][black]
+[![pre-commit](https://img.shields.io/badge/pre--commit-enabled-brightgreen?logo=pre-commit&logoColor=white)](https://github.com/pre-commit/pre-commit)
+[![Ruff](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/ruff/main/assets/badge/v2.json)](https://github.com/astral-sh/ruff)
+[![uv](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/uv/main/assets/badge/v0.json)](https://github.com/astral-sh/uv)
 
 [pypi status]: https://pypi.org/project/pbs-parse/
 [read the docs]: https://pbs-parse.readthedocs.io/
-[tests]: https://github.com/DonalChilde/pbs-parse/actions?workflow=Tests
-[codecov]: https://app.codecov.io/gh/DonalChilde/pbs-parse
-[pre-commit]: https://github.com/pre-commit/pre-commit
-[black]: https://github.com/psf/black
 
 <!-- badges-end -->
 
