@@ -1,0 +1,101 @@
+{
+ "source": {
+  "txt_file": "PBS_PHX_March_2025_20250205124557.txt",
+  "page_lines": "page-lines_2025-03_PHX_00003-00.json"
+ },
+ "bid": {
+  "name": "2025-03",
+  "base": "PHX",
+  "effective": {
+   "start": "2025-03-02",
+   "end": "2025-03-31"
+  }
+ },
+ "idx": "00003-01",
+ "lines": [
+  {
+   "idx": 1330,
+   "txt": "\f   DAY          −−DEPARTURE−−    −−−ARRIVAL−−−                GRND/        REST/\n"
+  },
+  {
+   "idx": 1331,
+   "txt": "DP D/A EQ FLT#  STA DLCL/DHBT ML STA ALCL/AHBT  BLOCK  SYNTH   TPAY   DUTY  TAFB   FDP CALENDAR 03/02−03/31\n"
+  },
+  {
+   "idx": 1333,
+   "txt": "SEQ 10645   2 OPS   POSN CA FO                                                         MO TU WE TH FR SA SU \n"
+  },
+  {
+   "idx": 1334,
+   "txt": "                RPT 0500/0500                                                                            −− \n"
+  },
+  {
+   "idx": 1335,
+   "txt": "1  1/1 26 1018  PHX 0600/0600  B DFW 1024/0824   2.24          2.14X                   −− −− −− −− −− −− −− \n"
+  },
+  {
+   "idx": 1336,
+   "txt": "1  1/1 64 2214  DFW 1238/1038  L PSP 1358/1358   3.20                                  −− −− −− −− −− −− −− \n"
+  },
+  {
+   "idx": 1337,
+   "txt": "                                 RLS 1428/1428   5.44   0.00   5.44   9.28        8.58 −− −− −− −− −− −− 23 \n"
+  },
+  {
+   "idx": 1338,
+   "txt": "                PSP RENAISSANCE PALM SPRINGS HOTEL          17603226000    14.42       −− −− −− 27 −− −− −− \n"
+  },
+  {
+   "idx": 1339,
+   "txt": "                    SHUTTLE                                                            −−                   \n"
+  },
+  {
+   "idx": 1340,
+   "txt": "                RPT 0510/0510                                                                               \n"
+  },
+  {
+   "idx": 1341,
+   "txt": "2  2/2 64 2425  PSP 0610/0610  B DFW 1058/0858   2.48          1.21X                                        \n"
+  },
+  {
+   "idx": 1342,
+   "txt": "2  2/2 64 2926  DFW 1219/1019  L TUS 1248/1248   2.29                                                       \n"
+  },
+  {
+   "idx": 1343,
+   "txt": "                                 RLS 1318/1318   5.17   0.00   5.17   8.08        7.38                      \n"
+  },
+  {
+   "idx": 1344,
+   "txt": "                TUS HILTON GARDEN INN TUCSON AIRPORT        15207410505    14.42                            \n"
+  },
+  {
+   "idx": 1345,
+   "txt": "                    SHUTTLE                                                                                 \n"
+  },
+  {
+   "idx": 1346,
+   "txt": "                RPT 0400/0400                                                                               \n"
+  },
+  {
+   "idx": 1347,
+   "txt": "3  3/3 64 2193  TUS 0500/0500    DFW 0910/0710   2.10          1.45X                                        \n"
+  },
+  {
+   "idx": 1348,
+   "txt": "3  3/3 26  336  DFW 1055/0855  B PHX 1139/1139   2.44                                                       \n"
+  },
+  {
+   "idx": 1349,
+   "txt": "                                 RLS 1209/1209   4.54   0.00   4.54   8.09        7.39                      \n"
+  },
+  {
+   "idx": 1350,
+   "txt": "TTL                                             15.55   0.00  15.55        55.09                            \n"
+  },
+  {
+   "idx": 1400,
+   "txt": "COCKPIT  ISSUED 04FEB2025  EFF 02MAR2025               PHX 320  INTL                             PAGE  3215\n"
+  }
+ ]
+}

@@ -1,0 +1,507 @@
+{
+ "source": {
+  "txt_file": "PBS_PHX_March_2025_20250205124557.txt",
+  "page_lines": "page-lines_2025-03_PHX_00003-00.json",
+  "trip_lines": "trip-lines_2025-03_PHX_00003-01.json"
+ },
+ "bid": {
+  "name": "2025-03",
+  "base": "PHX",
+  "effective": {
+   "start": "2025-03-02",
+   "end": "2025-03-31"
+  }
+ },
+ "idx": "00003-01",
+ "parsed_lines": [
+  {
+   "id": "page_header_1",
+   "indexed_string": {
+    "idx": 1330,
+    "txt": "\f   DAY          −−DEPARTURE−−    −−−ARRIVAL−−−                GRND/        REST/\n"
+   },
+   "data": {}
+  },
+  {
+   "id": "page_header_2",
+   "indexed_string": {
+    "idx": 1331,
+    "txt": "DP D/A EQ FLT#  STA DLCL/DHBT ML STA ALCL/AHBT  BLOCK  SYNTH   TPAY   DUTY  TAFB   FDP CALENDAR 03/02−03/31\n"
+   },
+   "data": {
+    "from_date": {
+     "month": "03",
+     "day": "02"
+    },
+    "to_date": {
+     "month": "03",
+     "day": "31"
+    }
+   }
+  },
+  {
+   "id": "trip_header",
+   "indexed_string": {
+    "idx": 1333,
+    "txt": "SEQ 10645   2 OPS   POSN CA FO                                                         MO TU WE TH FR SA SU \n"
+   },
+   "data": {
+    "trip_number": "10645",
+    "ops_count": "2",
+    "positions": [
+     "CA",
+     "FO"
+    ],
+    "operations": [],
+    "special_qual": false,
+    "prior_month_trip": false
+   }
+  },
+  {
+   "id": "duty_period_report",
+   "indexed_string": {
+    "idx": 1334,
+    "txt": "                RPT 0500/0500                                                                            −− \n"
+   },
+   "data": {
+    "report": {
+     "lcl": "0500",
+     "hbt": "0500"
+    },
+    "calendar_entries": [
+     "−−"
+    ]
+   }
+  },
+  {
+   "id": "flight",
+   "indexed_string": {
+    "idx": 1335,
+    "txt": "1  1/1 26 1018  PHX 0600/0600  B DFW 1024/0824   2.24          2.14X                   −− −− −− −− −− −− −− \n"
+   },
+   "data": {
+    "dutyperiod_idx": "1",
+    "depart_day": "1",
+    "arrive_day": "1",
+    "equipment_code": "26",
+    "flight_number": "1018",
+    "deadhead": false,
+    "deadhead_code": "",
+    "departure_station": "PHX",
+    "departure_time": {
+     "lcl": "0600",
+     "hbt": "0600"
+    },
+    "crew_meal": "",
+    "arrival_station": "DFW",
+    "arrival_time": {
+     "lcl": "1024",
+     "hbt": "0824"
+    },
+    "block": "2.24",
+    "synth": "0.00",
+    "ground": "2.14",
+    "equipment_change": true,
+    "calendar_entries": [
+     "−−",
+     "−−",
+     "−−",
+     "−−",
+     "−−",
+     "−−",
+     "−−"
+    ]
+   }
+  },
+  {
+   "id": "flight",
+   "indexed_string": {
+    "idx": 1336,
+    "txt": "1  1/1 64 2214  DFW 1238/1038  L PSP 1358/1358   3.20                                  −− −− −− −− −− −− −− \n"
+   },
+   "data": {
+    "dutyperiod_idx": "1",
+    "depart_day": "1",
+    "arrive_day": "1",
+    "equipment_code": "64",
+    "flight_number": "2214",
+    "deadhead": false,
+    "deadhead_code": "",
+    "departure_station": "DFW",
+    "departure_time": {
+     "lcl": "1238",
+     "hbt": "1038"
+    },
+    "crew_meal": "",
+    "arrival_station": "PSP",
+    "arrival_time": {
+     "lcl": "1358",
+     "hbt": "1358"
+    },
+    "block": "3.20",
+    "synth": "0.00",
+    "ground": "0.00",
+    "equipment_change": false,
+    "calendar_entries": [
+     "−−",
+     "−−",
+     "−−",
+     "−−",
+     "−−",
+     "−−",
+     "−−"
+    ]
+   }
+  },
+  {
+   "id": "duty_period_release",
+   "indexed_string": {
+    "idx": 1337,
+    "txt": "                                 RLS 1428/1428   5.44   0.00   5.44   9.28        8.58 −− −− −− −− −− −− 23 \n"
+   },
+   "data": {
+    "release": {
+     "lcl": "1428",
+     "hbt": "1428"
+    },
+    "block": "5.44",
+    "synth": "0.00",
+    "total_pay": "5.44",
+    "duty": "9.28",
+    "flight_duty": "8.58",
+    "calendar_entries": [
+     "−−",
+     "−−",
+     "−−",
+     "−−",
+     "−−",
+     "−−",
+     "23"
+    ]
+   }
+  },
+  {
+   "id": "layover",
+   "indexed_string": {
+    "idx": 1338,
+    "txt": "                PSP RENAISSANCE PALM SPRINGS HOTEL          17603226000    14.42       −− −− −− 27 −− −− −− \n"
+   },
+   "data": {
+    "layover_city": "PSP",
+    "hotel_name": "RENAISSANCE PALM SPRINGS HOTEL",
+    "hotel_phone": "17603226000",
+    "rest": "14.42",
+    "calendar_entries": [
+     "−−",
+     "−−",
+     "−−",
+     "27",
+     "−−",
+     "−−",
+     "−−"
+    ]
+   }
+  },
+  {
+   "id": "transportation",
+   "indexed_string": {
+    "idx": 1339,
+    "txt": "                    SHUTTLE                                                            −−                   \n"
+   },
+   "data": {
+    "name": "SHUTTLE",
+    "phone": "",
+    "calendar_entries": [
+     "−−"
+    ]
+   }
+  },
+  {
+   "id": "duty_period_report",
+   "indexed_string": {
+    "idx": 1340,
+    "txt": "                RPT 0510/0510                                                                               \n"
+   },
+   "data": {
+    "report": {
+     "lcl": "0510",
+     "hbt": "0510"
+    },
+    "calendar_entries": []
+   }
+  },
+  {
+   "id": "flight",
+   "indexed_string": {
+    "idx": 1341,
+    "txt": "2  2/2 64 2425  PSP 0610/0610  B DFW 1058/0858   2.48          1.21X                                        \n"
+   },
+   "data": {
+    "dutyperiod_idx": "2",
+    "depart_day": "2",
+    "arrive_day": "2",
+    "equipment_code": "64",
+    "flight_number": "2425",
+    "deadhead": false,
+    "deadhead_code": "",
+    "departure_station": "PSP",
+    "departure_time": {
+     "lcl": "0610",
+     "hbt": "0610"
+    },
+    "crew_meal": "",
+    "arrival_station": "DFW",
+    "arrival_time": {
+     "lcl": "1058",
+     "hbt": "0858"
+    },
+    "block": "2.48",
+    "synth": "0.00",
+    "ground": "1.21",
+    "equipment_change": true,
+    "calendar_entries": []
+   }
+  },
+  {
+   "id": "flight",
+   "indexed_string": {
+    "idx": 1342,
+    "txt": "2  2/2 64 2926  DFW 1219/1019  L TUS 1248/1248   2.29                                                       \n"
+   },
+   "data": {
+    "dutyperiod_idx": "2",
+    "depart_day": "2",
+    "arrive_day": "2",
+    "equipment_code": "64",
+    "flight_number": "2926",
+    "deadhead": false,
+    "deadhead_code": "",
+    "departure_station": "DFW",
+    "departure_time": {
+     "lcl": "1219",
+     "hbt": "1019"
+    },
+    "crew_meal": "",
+    "arrival_station": "TUS",
+    "arrival_time": {
+     "lcl": "1248",
+     "hbt": "1248"
+    },
+    "block": "2.29",
+    "synth": "0.00",
+    "ground": "0.00",
+    "equipment_change": false,
+    "calendar_entries": []
+   }
+  },
+  {
+   "id": "duty_period_release",
+   "indexed_string": {
+    "idx": 1343,
+    "txt": "                                 RLS 1318/1318   5.17   0.00   5.17   8.08        7.38                      \n"
+   },
+   "data": {
+    "release": {
+     "lcl": "1318",
+     "hbt": "1318"
+    },
+    "block": "5.17",
+    "synth": "0.00",
+    "total_pay": "5.17",
+    "duty": "8.08",
+    "flight_duty": "7.38",
+    "calendar_entries": []
+   }
+  },
+  {
+   "id": "layover",
+   "indexed_string": {
+    "idx": 1344,
+    "txt": "                TUS HILTON GARDEN INN TUCSON AIRPORT        15207410505    14.42                            \n"
+   },
+   "data": {
+    "layover_city": "TUS",
+    "hotel_name": "HILTON GARDEN INN TUCSON AIRPORT",
+    "hotel_phone": "15207410505",
+    "rest": "14.42",
+    "calendar_entries": []
+   }
+  },
+  {
+   "id": "transportation",
+   "indexed_string": {
+    "idx": 1345,
+    "txt": "                    SHUTTLE                                                                                 \n"
+   },
+   "data": {
+    "name": "SHUTTLE",
+    "phone": "",
+    "calendar_entries": []
+   }
+  },
+  {
+   "id": "duty_period_report",
+   "indexed_string": {
+    "idx": 1346,
+    "txt": "                RPT 0400/0400                                                                               \n"
+   },
+   "data": {
+    "report": {
+     "lcl": "0400",
+     "hbt": "0400"
+    },
+    "calendar_entries": []
+   }
+  },
+  {
+   "id": "flight",
+   "indexed_string": {
+    "idx": 1347,
+    "txt": "3  3/3 64 2193  TUS 0500/0500    DFW 0910/0710   2.10          1.45X                                        \n"
+   },
+   "data": {
+    "dutyperiod_idx": "3",
+    "depart_day": "3",
+    "arrive_day": "3",
+    "equipment_code": "64",
+    "flight_number": "2193",
+    "deadhead": false,
+    "deadhead_code": "",
+    "departure_station": "TUS",
+    "departure_time": {
+     "lcl": "0500",
+     "hbt": "0500"
+    },
+    "crew_meal": "",
+    "arrival_station": "DFW",
+    "arrival_time": {
+     "lcl": "0910",
+     "hbt": "0710"
+    },
+    "block": "2.10",
+    "synth": "0.00",
+    "ground": "1.45",
+    "equipment_change": true,
+    "calendar_entries": []
+   }
+  },
+  {
+   "id": "flight",
+   "indexed_string": {
+    "idx": 1348,
+    "txt": "3  3/3 26  336  DFW 1055/0855  B PHX 1139/1139   2.44                                                       \n"
+   },
+   "data": {
+    "dutyperiod_idx": "3",
+    "depart_day": "3",
+    "arrive_day": "3",
+    "equipment_code": "26",
+    "flight_number": "336",
+    "deadhead": false,
+    "deadhead_code": "",
+    "departure_station": "DFW",
+    "departure_time": {
+     "lcl": "1055",
+     "hbt": "0855"
+    },
+    "crew_meal": "",
+    "arrival_station": "PHX",
+    "arrival_time": {
+     "lcl": "1139",
+     "hbt": "1139"
+    },
+    "block": "2.44",
+    "synth": "0.00",
+    "ground": "0.00",
+    "equipment_change": false,
+    "calendar_entries": []
+   }
+  },
+  {
+   "id": "duty_period_release",
+   "indexed_string": {
+    "idx": 1349,
+    "txt": "                                 RLS 1209/1209   4.54   0.00   4.54   8.09        7.39                      \n"
+   },
+   "data": {
+    "release": {
+     "lcl": "1209",
+     "hbt": "1209"
+    },
+    "block": "4.54",
+    "synth": "0.00",
+    "total_pay": "4.54",
+    "duty": "8.09",
+    "flight_duty": "7.39",
+    "calendar_entries": []
+   }
+  },
+  {
+   "id": "trip_footer",
+   "indexed_string": {
+    "idx": 1350,
+    "txt": "TTL                                             15.55   0.00  15.55        55.09                            \n"
+   },
+   "data": {
+    "block": "15.55",
+    "synth": "0.00",
+    "total_pay": "15.55",
+    "tafb": "55.09",
+    "calendar_entries": []
+   }
+  },
+  {
+   "id": "page_footer",
+   "indexed_string": {
+    "idx": 1400,
+    "txt": "COCKPIT  ISSUED 04FEB2025  EFF 02MAR2025               PHX 320  INTL                             PAGE  3215\n"
+   },
+   "data": {
+    "issued": "04FEB2025",
+    "effective": "02MAR2025",
+    "base": "PHX",
+    "satellite_base": "",
+    "equipment": "320",
+    "division": "INTL",
+    "page": "3215"
+   }
+  }
+ ],
+ "calendar_entries": [
+  "−−",
+  "−−",
+  "−−",
+  "−−",
+  "−−",
+  "−−",
+  "−−",
+  "−−",
+  "−−",
+  "−−",
+  "−−",
+  "−−",
+  "−−",
+  "−−",
+  "−−",
+  "−−",
+  "−−",
+  "−−",
+  "−−",
+  "−−",
+  "−−",
+  "23",
+  "−−",
+  "−−",
+  "−−",
+  "27",
+  "−−",
+  "−−",
+  "−−",
+  "−−"
+ ],
+ "start_dates": [
+  "2025-03-23",
+  "2025-03-27"
+ ],
+ "errors": []
+}

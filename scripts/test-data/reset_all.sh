@@ -6,6 +6,7 @@ time {
     SCRIPT_DIR="$(dirname "$(readlink -f "$0")")"
     STATS_FILE="$HOME/projects/tmp/stats-all.txt"
     STD_CAP_DIR="$HOME/projects/tmp/reset-cap-logs"
+    rm -rf $STD_CAP_DIR
     mkdir $STD_CAP_DIR
     echo "**** Resetting all bids ****"
 

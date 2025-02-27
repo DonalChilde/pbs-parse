@@ -49,7 +49,7 @@ extensions = [
     "myst_parser",
     "sphinxcontrib.typer",
 ]
-autosummary_generate = True
+# autosummary_generate = True
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ["_templates"]
 

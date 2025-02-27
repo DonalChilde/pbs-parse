@@ -1,0 +1,307 @@
+{
+ "source": {
+  "txt_file": "PBS_PHX_March_2025_20250205124557.txt",
+  "page_lines": "page-lines_2025-03_PHX_00003-00.json",
+  "trip_lines": "trip-lines_2025-03_PHX_00003-01.json",
+  "parsed_trip": "parsed-trip_2025-03_PHX_00003-01.json"
+ },
+ "bid": {
+  "name": "2025-03",
+  "base": "PHX",
+  "effective": {
+   "start": "2025-03-02",
+   "end": "2025-03-31"
+  }
+ },
+ "trip_number": "10645",
+ "base_equipment": {
+  "base": {
+   "iata": "PHX",
+   "icao": "KPHX",
+   "tz_name": "America/Phoenix"
+  },
+  "satellite_base": null,
+  "equipment": "320"
+ },
+ "special_qual": false,
+ "start_station": {
+  "iata": "PHX",
+  "icao": "KPHX",
+  "tz_name": "America/Phoenix"
+ },
+ "start": "2025-03-23T05:00:00-07:00[America/Phoenix]",
+ "end_station": {
+  "iata": "PHX",
+  "icao": "KPHX",
+  "tz_name": "America/Phoenix"
+ },
+ "end": "2025-03-25T12:09:00-07:00[America/Phoenix]",
+ "flight_time": "PT15H55M",
+ "operating_time": "PT15H55M",
+ "soft_time": "PT0S",
+ "tafb": "PT55H9M",
+ "dutyperiods": [
+  {
+   "report_station": {
+    "iata": "PHX",
+    "icao": "KPHX",
+    "tz_name": "America/Phoenix"
+   },
+   "report": "2025-03-23T05:00:00-07:00[America/Phoenix]",
+   "release_station": {
+    "iata": "PSP",
+    "icao": "KPSP",
+    "tz_name": "America/Los_Angeles"
+   },
+   "release": "2025-03-23T14:28:00-07:00[America/Los_Angeles]",
+   "duty": "PT9H28M",
+   "flight_duty": "PT8H58M",
+   "operating_time": "PT5H44M",
+   "flight_time": "PT5H44M",
+   "soft_time": "PT0S",
+   "layover": {
+    "layover_station": {
+     "iata": "PSP",
+     "icao": "KPSP",
+     "tz_name": "America/Los_Angeles"
+    },
+    "start": "2025-03-23T14:28:00-07:00[America/Los_Angeles]",
+    "end": "2025-03-24T05:10:00-07:00[America/Los_Angeles]",
+    "rest": "PT14H42M",
+    "hotels": [
+     {
+      "name": "RENAISSANCE PALM SPRINGS HOTEL",
+      "phone": "17603226000",
+      "transportation": [
+       {
+        "name": "SHUTTLE",
+        "phone": ""
+       }
+      ]
+     }
+    ]
+   },
+   "flights": [
+    {
+     "eq_code": "26",
+     "number": "1018",
+     "departure_station": {
+      "iata": "PHX",
+      "icao": "KPHX",
+      "tz_name": "America/Phoenix"
+     },
+     "departure": "2025-03-23T06:00:00-07:00[America/Phoenix]",
+     "arrival_station": {
+      "iata": "DFW",
+      "icao": "KDFW",
+      "tz_name": "America/Chicago"
+     },
+     "arrival": "2025-03-23T10:24:00-05:00[America/Chicago]",
+     "deadhead": false,
+     "deadhead_code": "",
+     "crewmeal": "",
+     "eq_change": true,
+     "flight_time": "PT2H24M",
+     "operating_time": "PT2H24M",
+     "soft_time": "PT0S",
+     "ground_time": "PT2H14M"
+    },
+    {
+     "eq_code": "64",
+     "number": "2214",
+     "departure_station": {
+      "iata": "DFW",
+      "icao": "KDFW",
+      "tz_name": "America/Chicago"
+     },
+     "departure": "2025-03-23T12:38:00-05:00[America/Chicago]",
+     "arrival_station": {
+      "iata": "PSP",
+      "icao": "KPSP",
+      "tz_name": "America/Los_Angeles"
+     },
+     "arrival": "2025-03-23T13:58:00-07:00[America/Los_Angeles]",
+     "deadhead": false,
+     "deadhead_code": "",
+     "crewmeal": "",
+     "eq_change": false,
+     "flight_time": "PT3H20M",
+     "operating_time": "PT3H20M",
+     "soft_time": "PT0S",
+     "ground_time": "PT0S"
+    }
+   ]
+  },
+  {
+   "report_station": {
+    "iata": "PSP",
+    "icao": "KPSP",
+    "tz_name": "America/Los_Angeles"
+   },
+   "report": "2025-03-24T05:10:00-07:00[America/Los_Angeles]",
+   "release_station": {
+    "iata": "TUS",
+    "icao": "KTUS",
+    "tz_name": "America/Phoenix"
+   },
+   "release": "2025-03-24T13:18:00-07:00[America/Phoenix]",
+   "duty": "PT8H8M",
+   "flight_duty": "PT7H38M",
+   "operating_time": "PT5H17M",
+   "flight_time": "PT5H17M",
+   "soft_time": "PT0S",
+   "layover": {
+    "layover_station": {
+     "iata": "TUS",
+     "icao": "KTUS",
+     "tz_name": "America/Phoenix"
+    },
+    "start": "2025-03-24T13:18:00-07:00[America/Phoenix]",
+    "end": "2025-03-25T04:00:00-07:00[America/Phoenix]",
+    "rest": "PT14H42M",
+    "hotels": [
+     {
+      "name": "HILTON GARDEN INN TUCSON AIRPORT",
+      "phone": "15207410505",
+      "transportation": [
+       {
+        "name": "SHUTTLE",
+        "phone": ""
+       }
+      ]
+     }
+    ]
+   },
+   "flights": [
+    {
+     "eq_code": "64",
+     "number": "2425",
+     "departure_station": {
+      "iata": "PSP",
+      "icao": "KPSP",
+      "tz_name": "America/Los_Angeles"
+     },
+     "departure": "2025-03-24T06:10:00-07:00[America/Los_Angeles]",
+     "arrival_station": {
+      "iata": "DFW",
+      "icao": "KDFW",
+      "tz_name": "America/Chicago"
+     },
+     "arrival": "2025-03-24T10:58:00-05:00[America/Chicago]",
+     "deadhead": false,
+     "deadhead_code": "",
+     "crewmeal": "",
+     "eq_change": true,
+     "flight_time": "PT2H48M",
+     "operating_time": "PT2H48M",
+     "soft_time": "PT0S",
+     "ground_time": "PT1H21M"
+    },
+    {
+     "eq_code": "64",
+     "number": "2926",
+     "departure_station": {
+      "iata": "DFW",
+      "icao": "KDFW",
+      "tz_name": "America/Chicago"
+     },
+     "departure": "2025-03-24T12:19:00-05:00[America/Chicago]",
+     "arrival_station": {
+      "iata": "TUS",
+      "icao": "KTUS",
+      "tz_name": "America/Phoenix"
+     },
+     "arrival": "2025-03-24T12:48:00-07:00[America/Phoenix]",
+     "deadhead": false,
+     "deadhead_code": "",
+     "crewmeal": "",
+     "eq_change": false,
+     "flight_time": "PT2H29M",
+     "operating_time": "PT2H29M",
+     "soft_time": "PT0S",
+     "ground_time": "PT0S"
+    }
+   ]
+  },
+  {
+   "report_station": {
+    "iata": "TUS",
+    "icao": "KTUS",
+    "tz_name": "America/Phoenix"
+   },
+   "report": "2025-03-25T04:00:00-07:00[America/Phoenix]",
+   "release_station": {
+    "iata": "PHX",
+    "icao": "KPHX",
+    "tz_name": "America/Phoenix"
+   },
+   "release": "2025-03-25T12:09:00-07:00[America/Phoenix]",
+   "duty": "PT8H9M",
+   "flight_duty": "PT7H39M",
+   "operating_time": "PT4H54M",
+   "flight_time": "PT4H54M",
+   "soft_time": "PT0S",
+   "layover": null,
+   "flights": [
+    {
+     "eq_code": "64",
+     "number": "2193",
+     "departure_station": {
+      "iata": "TUS",
+      "icao": "KTUS",
+      "tz_name": "America/Phoenix"
+     },
+     "departure": "2025-03-25T05:00:00-07:00[America/Phoenix]",
+     "arrival_station": {
+      "iata": "DFW",
+      "icao": "KDFW",
+      "tz_name": "America/Chicago"
+     },
+     "arrival": "2025-03-25T09:10:00-05:00[America/Chicago]",
+     "deadhead": false,
+     "deadhead_code": "",
+     "crewmeal": "",
+     "eq_change": true,
+     "flight_time": "PT2H10M",
+     "operating_time": "PT2H10M",
+     "soft_time": "PT0S",
+     "ground_time": "PT1H45M"
+    },
+    {
+     "eq_code": "26",
+     "number": "336",
+     "departure_station": {
+      "iata": "DFW",
+      "icao": "KDFW",
+      "tz_name": "America/Chicago"
+     },
+     "departure": "2025-03-25T10:55:00-05:00[America/Chicago]",
+     "arrival_station": {
+      "iata": "PHX",
+      "icao": "KPHX",
+      "tz_name": "America/Phoenix"
+     },
+     "arrival": "2025-03-25T11:39:00-07:00[America/Phoenix]",
+     "deadhead": false,
+     "deadhead_code": "",
+     "crewmeal": "",
+     "eq_change": false,
+     "flight_time": "PT2H44M",
+     "operating_time": "PT2H44M",
+     "soft_time": "PT0S",
+     "ground_time": "PT0S"
+    }
+   ]
+  }
+ ],
+ "positions": [
+  {
+   "name": "CA"
+  },
+  {
+   "name": "FO"
+  }
+ ],
+ "operations": [],
+ "errors": []
+}
