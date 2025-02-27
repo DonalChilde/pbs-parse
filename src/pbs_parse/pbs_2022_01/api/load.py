@@ -36,7 +36,7 @@ def page_lines(file_in: Path, data_type: DataType = DataType.JSON) -> PageLines:
         case DataType.TXT:
             raise ValueError("PageLines cannot be of type TXT.")
         case _:  # type: ignore
-            raise ValueError(f"{_} is not a valid data type.")
+            raise ValueError(f"{data_type} is not a valid data type.")
     return page
 
 
@@ -64,7 +64,7 @@ def trip_lines(file_in: Path, data_type: DataType = DataType.JSON) -> TripLines:
         case DataType.TXT:
             raise ValueError("TripLines cannot be of type TXT.")
         case _:  # type: ignore
-            raise ValueError(f"{_} is not a valid data type.")
+            raise ValueError(f"{data_type} is not a valid data type.")
     return trip
 
 
@@ -92,7 +92,7 @@ def parsed_trip(file_in: Path, data_type: DataType = DataType.JSON) -> ParsedTri
         case DataType.TXT:
             raise ValueError("ParsedTrip cannot be of type TXT.")
         case _:  # type: ignore
-            raise ValueError(f"{_} is not a valid data type.")
+            raise ValueError(f"{data_type} is not a valid data type.")
     return parsed
 
 
@@ -120,7 +120,7 @@ def expanded_trip(file_in: Path, data_type: DataType = DataType.JSON) -> Expande
         case DataType.TXT:
             raise ValueError("ExpandedTrip cannot be of type TXT.")
         case _:  # type: ignore
-            raise ValueError(f"{_} is not a valid data type.")
+            raise ValueError(f"{data_type} is not a valid data type.")
     return expanded
 
 
