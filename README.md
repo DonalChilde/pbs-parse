@@ -1,8 +1,8 @@
 # Pbs Parse
 
 <!-- badges-begin -->
-[![Tests](https://github.com/DonalChilde/pbs-parse/actions/workflows/pytest.yaml/badge.svg?branch=dev)]
-[![Codecov](https://codecov.io/gh/DonalChilde/pbs-parse/branch/main/graph/badge.svg)][codecov]
+[![Tests](https://github.com/DonalChilde/pbs-parse/actions/workflows/pytest.yaml/badge.svg?branch=dev)](https://github.com/DonalChilde/pbs-parse/actions/workflows/pytest.yaml/badge.svg?branch=dev)
+[![Codecov](https://codecov.io/gh/DonalChilde/pbs-parse/branch/main/graph/badge.svg)](https://codecov.io/gh/DonalChilde/pbs-parse/branch/main/graph/badge.svg)
 
 [![Ruff](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/ruff/main/assets/badge/v2.json)](https://github.com/astral-sh/ruff)
 [![uv](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/uv/main/assets/badge/v0.json)](https://github.com/astral-sh/uv)
